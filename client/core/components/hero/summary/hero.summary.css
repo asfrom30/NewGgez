@@ -1,0 +1,181 @@
+.hero-summary {
+
+}
+
+/* Layout */
+/* Trend Layout */
+.hero-summary .trend-diff-cptpt {
+    
+}
+
+
+/* Height */
+/* Profile Section Height */
+section.profile .content {
+    height : 80px;
+}
+
+.hero-summary section.profile .divided-content {
+    height : 100%
+}
+
+.hero-summary section.profile .content .tier-icon {
+    max-height : 100%;
+}
+
+/* margin */
+
+
+
+/* Padding */
+/* Profile Section Padding */
+.hero-summary section.profile .divided-content {
+    padding-top     : 5px;
+    padding-bottom  : 5px;
+}
+
+.hero-summary section.profile .content .tier-icon {
+    padding-bottom : 15px;
+}
+
+/* Font */
+
+/**
+    Section Header
+*/
+.hero-summary section .header {
+    margin-top:10px;
+    margin-bottom:5px;
+    display:flex; 
+    align-items:center; 
+    justify-content:flex-start
+}
+
+.hero-summary section .header .title {
+    border-radius: 5px;
+    font-size : large;
+    flex : 0 0 auto;
+}
+
+.hero-summary section .header .line {
+    flex : 1 0 auto;
+}
+.hero-summary section .header .line > div {
+    height:50%;
+    border-bottom:2px solid;
+}
+
+/**
+* Section Header Color
+*/
+.hero-summary section.profile .header .title {background-color : #337AB7;}
+.hero-summary section.profile .header .line > div {border-bottom-color: #337AB7;}
+
+.hero-summary section.recent .header .title {background-color : deepskyblue;}
+.hero-summary section.recent .header .line > div {border-bottom-color: deepskyblue;}
+
+.hero-summary section.most3 .header .title {background-color : #D9534F;}
+.hero-summary section.most3 .header .line > div {border-bottom-color: #D9534F;}
+
+.hero-summary section.trend .header .title {background-color : orange;}
+.hero-summary section.trend .header .line > div {border-bottom-color: orange;}
+
+
+.hero-summary section.profile .divided-content {
+    text-align : center;
+    flex-grow : 1;
+	overflow:hidden;
+	border-radius:2px;
+	background-color: #404040 ;
+}
+
+.hero-summary section.profile .divider {
+    flex-grow : 0;
+	width:1px;
+	border:1px solid grey;
+	margin-left:0.5rem;
+	margin-right:0.5rem;
+}
+
+/* Border */
+.hero-summary section.most3 .content {
+    border-left: 3px solid #999999;
+}
+
+
+/**
+* Trend
+*/
+
+.hero-summary section.trend button.active {
+    border : 1px solid white;
+    color:white;
+}
+
+.hero-summary section.trend button:focus {
+    outline: none;
+}
+
+.hero-summary section.trend .content-row-box {
+    background-color: #404040 ;
+    border-left: 3px solid #999999;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Table */
+/* Most3 Table */
+/* Most3 Table Layout */
+.hero-summary section.most3 table {
+    table-layout: fixed;
+    width       : 100%;
+}
+
+/* Most3 Table Width */
+.hero-summary section.most3 table th {
+    width : 20%;
+}
+
+.hero-summary section.most3 img {
+    width : 50px;
+}
+
+/* Most3 Table Height */
+.hero-summary section.most3 table th {
+    height : 50px;
+}
+
+.hero-summary section.most3 table td {
+    height : 50px;
+}
+
+
+
+/* Most3 Table Background */
+.hero-summary section.most3 table {
+    background-color : #404040;
+}
+
+/* Most3 Table border */
+.hero-summary section.most3 table {
+    border-collapse: collapse;
+}
+
+.hero-summary section.most3 table,
+.hero-summary section.most3 table th,
+.hero-summary section.most3 table td {
+    border-bottom : 1px solid white;
+}
+
+/* font */
+
+
+
+
+.hero-summary section.most3 {
+    text-align : center;
+}
+
+.hero-summary section.most3 .win-rate > div:nth-child(2){
+    color:DarkGray ;
+}

@@ -1,0 +1,33 @@
+/* Structure */
+.hero-main {
+    background-color: black;
+    color: white;
+	overflow-x:hidden;
+    overflow-y:hidden;
+}
+
+.hero-nav-tabs {
+    margin-top : 3px;
+    margin-left : 3px;
+    margin-right : 3px;
+}
+
+.hero-main > .base-padding {
+    padding-left    : 15px;
+    padding-right   : 15px;
+}
+
+.nav.nav-tabs .nav-link {
+    color : #404040
+}
+
+/* Overide Bootstrap Style */
+/* .hero-main .nav>li>a:hover,
+.hero-main .nav>li>a:hover {
+    background-color : transparent;
+} */
+
+.hero-main .nav>li.active > a {
+    background-color : black;
+    color : white;
+}

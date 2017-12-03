@@ -1,0 +1,22 @@
+<h1>Test Page</h1>
+<h2>Knob</h2>
+<knob ng-model="$ctrl.rating"></knob>
+<h1>{{$ctrl.rating}}</h1>
+
+<h2>Toolbar</h2>
+<button class="settings-button" toolbar-tip="{content: '#toolbar-options', position: 'top'}" id="format-toolbar1">
+        <i class="fa fa-cog">Jsaer</i>
+</button>
+
+<div id="toolbar-options" style="display:none">
+    <a href="#"><span class="glyphicon glyphicon-asterisk"></span></a>
+    <a href="#"><span class="glyphicon glyphicon-trash"></span></a>
+    <a href="#"><span class="glyphicon glyphicon-trash"></span></a>
+    <a href="#"><span class="glyphicon glyphicon-trash"></span></a>
+    <a href="#"><span class="glyphicon glyphicon-trash"></span></a>
+</div>
+
+<h2>Loading Progress</h2>
+<button ng-click="$ctrl.click()">Click</button>
+<button ng-click="$ctrl.hide()">Hide</button>
+<ui-view></ui-view>

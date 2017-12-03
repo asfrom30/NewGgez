@@ -1,0 +1,195 @@
+.border{
+	border : 1px solid cyan;
+}
+
+.no-margin{
+	margin:0;	
+}
+
+.no-padding{
+	padding:0;
+}
+
+/* Common CSS */
+.text-align-center{ text-align:center; }
+.f-w-b{ font-weight:bold; }
+
+
+/* Cusor Change */
+.cursor-pointer{ cursor: pointer; }
+
+/* Position */
+.pos-relative{position:relative;}
+.pos-absolute{position:absolute;}
+
+
+/* Display */
+.display-table{display:table}
+.display-table-cell{display:table-cell}
+
+/* Flex CSS */
+.display-none{ display:none; }
+.flex{ display:-webkit-box; display:-ms-flexbox; display:flex; }
+.flex-r { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:vertical; -webkit-box-direction:normal; -ms-flex-direction:column; flex-direction:column; }
+.flex-row-wrap { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -ms-flex-flow:row wrap; flex-flow:row wrap; }
+
+.f-align-w-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; }
+.f-align-w-start {-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start; }
+.f-align-w-end {-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end; }
+.f-align-w-between {-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;}
+
+.f-align-h-center {-webkit-box-align:center;-ms-flex-align:center;align-items:center; }
+.f-align-h-start {-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start; }
+.f-align-h-end {-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end; }
+
+.flexAlignSelf-v-center {-ms-flex-item-align:center;align-self:center; }
+.flexAlignSelf-v-start {-ms-flex-item-align:start;align-self:flex-start; }
+.flexAlignSelf-v-end {-ms-flex-item-align:end;align-self:flex-end; }
+ 
+ /* View Port */
+.v-100-vw {width:100vw;}
+.h-100-vh {height:100vh;}
+
+.w-5-pct{ width:5%; }
+.w-10-pct{ width:10%; }
+.w-15-pct{ width:15%; }
+.w-20-pct{ width:20%; }
+.w-25-pct{ width:25%; }
+.w-30-pct{ width:30%; }
+.w-33-pct{ width:33%; }
+.w-35-pct{ width:35%; }
+.w-40-pct{ width:40%; }
+.w-45-pct{ width:45%; }
+.w-49-pct{ width:49%; }
+.w-50-pct{ width:50%; }
+.w-55-pct{ width:55%; }
+.w-60-pct{ width:60%; }
+.w-65-pct{ width:65%; }
+.w-70-pct{ width:70%; }
+.w-75-pct{ width:75%; }
+.w-80-pct{ width:80%; }
+.w-85-pct{ width:85%; }
+.w-90-pct{ width:90%; }
+.w-95-pct{ width:95%; }
+.w-100-pct{ width:100%; }
+
+.w-60-px{width:60px}
+
+.h-100-pct{height:100%}
+.h-50-pct{height:50%}
+
+.h-30-px{height:30px}
+.h-50-px{height:50px}
+.h-100-px{height:100px}
+.h-150-px{height:150px}
+ 
+.m-t-0{ margin-top:0px; }
+.m-t-2{ margin-top:2px; }
+.m-t-4{ margin-top:4px; }
+.m-t-5{ margin-top:5px; }
+.m-t-10{ margin-top:10px; }
+.m-t-15{ margin-top:10px; }
+
+.m-b-0{ margin-bottom:0px; }
+.m-b-2{ margin-bottom:2px; }
+.m-b-4{ margin-bottom:4px; }
+.m-b-5{ margin-bottom:5px; }
+.m-b-10{ margin-bottom:10px; }
+.m-b-20{ margin-bottom:20px; }
+.m-b-30{ margin-bottom:30px; }
+.m-b-40{ margin-bottom:40px; }
+
+/* over flow */
+.overflow-hidden{overflow:hidden}
+
+/* color */
+.c-black{color:black}
+
+/* Common Layout CSS */
+/* Mobile 1 column, Desktop 2 column */
+.m1-d2{width:100%}
+@media all and (min-width:768px){.m1-d2{width:49%}}
+@media all and (min-width:768px){.m1-d2:nth-child(2){margin-left:1%}}  
+/* Mobile 1 column, Desktop 3 column */
+.m1-d3{width:100%}
+@media all and (min-width:768px){.m1-d3{width:33%}}
+@media all and (min-width:768px){.m1-d3:nth-child(2){margin-left:0.5%}}  
+@media all and (min-width:768px){.m1-d3:nth-child(3){margin-left:0.5%}}   
+
+/* Table Layout */
+.table-layout-fixed{table-layout:fixed;}
+
+/* Drop Down */
+.dropdown-position {
+    position: relative;
+}
+.js-dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+}
+.show {display:block;}
+
+
+/* Div Collapsing Overlay */
+.collapse-parent{position:relative;}
+.collapse-child{position:absolute; z-index:100; width:100%}
+
+/* fade in out method */ 
+.fade-02s {
+    -webkit-transition: opacity 0.2s ease-in;
+    transition: opacity 0.2s ease-in;
+}
+
+.fade-in{
+	opacity: 1;
+}
+
+.fade-out{
+	opacity: 0;
+}
+
+/* Loader Screen Overlay */
+.loader-screen-overlay {
+    /* position: fixed; */ /* 전체화면을 off하고 싶으면 활성화, Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.loader {
+    border: 6px solid #f3f3f3; 
+    border-top: 6px solid dimgray;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+/* Common Font Size */
+/* TODO: APPLY TO MEDIA QUEYR */
+.font-xx-small {font-size: xx-small;}
+.font-x-small {font-size: x-small;}
+.font-small {font-size: small;}
+.font-medium {font-size: medium;}
+.font-large {font-size: large;}
+.font-x-large {font-size: x-large;}
+.font-xx-large {font-size: xx-large;}

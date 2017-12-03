@@ -1,0 +1,22 @@
+<div class="hero-main">
+    <hero-header current-player="$ctrl.currentPlayer"></hero-header>
+    <div class="hero-nav-tabs">
+        <ul class="nav nav-tabs">
+            <li class="nav-item active"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('summary')">Summary</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Detail</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Compare</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Rank</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Favorite</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('admin')">Admin</a></li>
+        </ul>
+    </div>
+    <div class="base-padding">
+        <ui-view
+            current-player = "$ctrl.currentPlayer"
+            current-player-datas = "$ctrl.currentPlayerData"
+            all-players="$ctrl.players"
+            all-player-datas="$ctrl.playerDatas"
+            tier-data="$ctrl.tierData">
+        </ui-view>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+/** font declaration **/
+@font-face {
+    font-family: 'NanumBarunGothic';
+    font-style: normal;
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
+   }
+
+/* BeanTown Font*/
+@font-face { 
+    font-family: beantown;
+    src: url(../assets/fonts/Beantown.ttf) format('truetype');
+    font-style: normal;
+    font-weight: normal
+}
+
+body {
+    font-family: NanumBarunGothic;
+}
+
+.beantown {
+    font-family: beantown;
+}

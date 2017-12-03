@@ -1,0 +1,7 @@
+<h1>My detail Page</h1>
+
+<pre>{{$ctrl.selected | json}}</pre>
+
+<!-- <radar-chart selected="$ctrl.selected" dataset="$ctrl.radarDataset"></radar-chart> -->
+<table-chart selected="$ctrl.selected" dataset="$ctrl.tableDataset"></table-chart>
+<hero-selectors check-user-datas="$ctrl.checkUserDatas($id)" store-user-datas="$ctrl.storeUserDatas($id, $userDatas)" user-profile="$ctrl.userDatas[$ctrl.stateParams.id].profile" selected="$ctrl.selected" selector-changed="$ctrl.selectorChanged($selected)"></hero-selectors>

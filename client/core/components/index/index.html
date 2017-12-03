@@ -1,0 +1,16 @@
+<div class="container">
+    <h1>index page</h1>
+    <input ng-model="$ctrl.input" placeholder="Input your btg" ng-enter="$ctrl.search()" ></input>
+    <button type="button" class="btn" ng-click="$ctrl.search()">Search</button>
+    <h1>You entered {{input}}</h1>
+
+    <button type="button" class="btn" ng-click="$ctrl.test()">Test</button>
+    <button type="button" class="btn" ng-click="moveHeroPage(1)">Move id 1</button>
+    <ul class="phones">
+        <li ng-repeat="btn in btns" >
+            <h1>{{btn.id}}</h1>
+            <h1>{{btn.cptpt}}</h1>
+        </li>
+    </ul>
+    <img class="border" style="width:100px; height:100px" ng-src="./assets/images/tier-icon/bronze-badge.png" />
+</div>

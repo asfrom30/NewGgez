@@ -1,0 +1,35 @@
+<h1>My detail Page</h1>
+
+<pre>{{$ctrl.selector | json}}</pre>
+<feature-radar-chart 
+    label-column = "$ctrl.radar.labelColumn"
+    first-column = "$ctrl.radar.firstColumn"
+    second-column = "$ctrl.radar.secondColumn"
+    third-column ="$ctrl.radar.thirdColumn">
+</feature-radar-chart>
+<compare-table
+    label-column = "$ctrl.table.labelColumn"
+    first-column = "$ctrl.table.firsanatColumn"
+    second-column = "$ctrl.table.secondColumn"
+    third-column ="$ctrl.table.thirdColumn"/>
+</compare-table>
+
+<hero-selectors
+
+    p1-total-games = "$ctrl.p1TotalGames",
+    p2-total-games = "$ctrl.p2PlayGames",
+
+    tier-hero-play-games = "$ctrl.playGames.tier",
+
+    p1-hero-play-games = "$ctrl.playGames.p1",
+    p2-hero-play-games = "$ctrl.playGames.p2",
+    
+    check-user-datas    =   "$ctrl.checkUserDatas($id)"
+    store-user-datas    =   "$ctrl.storeUserDatas($id, $userDatas)" 
+    first-user-profile  =   "$ctrl.userDatas[$ctrl.stateParams.id].profile" 
+    second-user-profile =   "$ctrl.userDatas[$ctrl.stateParams.id].profile" 
+    selected            =   "$ctrl.selected" 
+    selector-changed    =   "$ctrl.selectorChanged($selected)">
+</hero-selectors>
+
+<div style="height:300px"></div>

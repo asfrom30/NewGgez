@@ -1,0 +1,51 @@
+
+/* Height */
+.hero-header {
+    height: 80px;
+}
+
+.hero-header .current-player-icon {
+    max-height: 100%
+}
+
+/* Width */
+.hero-header .current-player-info {
+    flex-shrink: 0;
+}
+
+/* margin and padding */
+.hero-header {
+    margin-top : 5px;
+    margin-left : 3px;
+    margin-right : 3px;
+}
+
+.current-player-info {
+    margin-left : 5px;
+}
+
+.current-player-buttons {
+    margin-left : 5px;
+}
+
+.current-player-etc {
+    margin-left : 15px;
+}
+
+.current-player-buttons .glyphicon {
+    padding : 3px
+}
+
+/* Over flow */
+
+/* Font */
+.hero-header .current-player-info .battle-name {
+    font-size: x-large
+}
+.hero-header .current-player-info .level {
+    font-size: x-large
+}
+
+.current-player-buttons {
+    font-size : large;
+}

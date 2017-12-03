@@ -1,0 +1,15 @@
+<h2>Table Chart Component</h2>
+
+<table style="width:100%">
+    <tr>
+        <th>구분</th>
+        <th>어제경기</th> 
+        <th>오늘경기</th>
+    </tr>
+    <tr ng-repeat="data in $ctrl.dataset[$ctrl.selected.hero]">
+        <td>{{data.title}}</td>
+        <td>{{data.my[0]}}</td> 
+        <td>{{data.diff[0]}}</td>
+        <!-- <td>{{data[4] | filter}}</td> -->
+    </tr>
+</table>

@@ -1,0 +1,21 @@
+<h1>Tutorial Page</h1>
+
+<table-chart dataset="$ctrl.dataset"></table-chart>
+
+
+<input type="text" ng-model="inputId"/>
+<button ng-click="$ctrl.fetchData(inputId)">Fetch {{inputId}}</button>
+<ui-view></ui-view>
+<!-- <table-chart></table-chart>
+<button>Test2</button> -->
+
+
+
+<!-- example -->
+<!--
+<table-chart 
+on-delete="$ctrl.tDeltete()" on-update="$ctrl.tUpdate()" on-delete="$ctrl.deleteHero()"
+on-update="$ctrl.updateHero()"
+text="{{$ctrl.testValue}}"
+on-test-click="$ctrl.tUpdate()"></table-chart>
+->

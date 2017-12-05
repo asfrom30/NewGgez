@@ -6,13 +6,13 @@ const momentService = require('../../../services/moment.core.service');
 // const mongoHelperFactory = require('../../common/utils/db/mongo.db.helper.factory');
 // const mongoHelper = mongoHelperFactory.getInstance();
 
-exports.findByBtg = function(req, res, next, btg) {
+exports.findById = function(req, res, next, id) {
     const device = req.device;
     const region = req.region;
-    const Player = require('mongoose').model(`Players_${device}_${region}`); 
+    const Player = require('mongoose').model(`Players_${device}_${region}`);
 
     Player.findOne({
-        btg : btg
+        _id : id
     }, function(err, player) {
         if(err) {
             return next(err);
@@ -23,56 +23,88 @@ exports.findByBtg = function(req, res, next, btg) {
     })
 }
 
-exports.read = function(req, res, next) {
-    if(req.player == undefined) {
-        res.send({key : 'this player is null'});
-    } else {
-        res.send(req.player);
-    }
-}
+exports.idx = function(req, res, next) {
+    const device = req.device;
+    const region = req.region;
+    const btg = req.query.btg;
 
-exports.register = function(req, res, next) {
-    
-    if(req.body.btg === undefined) {
-        res.send({response_status : {err : 'btg_is_undefined'}});
+    if(btg == undefined) {
+        res.status(404).send('btg is not defined');
         return;
     }
 
-    let btg = req.body.btg;
-
-    Player.findOne({ btg : btg }, function(err, player) {
-        if(err) {
-            return next(err);
-        } else {
-            if(player != null) {
-                let resObj = {response_status : {warn : btg + ' is already registered'}};
-                resObj.value = player;
-                res.status(202).send(resObj);
-            } else {
-                crawlAndRefine(btg)
-                    .then(result => {
-                        if(Object.keys(result).length === 0 && result.constructor === Object) {
-                            res.json({response_status : { err : 'this_battle_tag_is_invalid_in_overwatch_reason'}})
-                        } else {
-                            register(btg, result)
-                                .then(player => {
-                                    let resObj = {
-                                        response_status : {},
-                                        value : player,
-                                    };
-                                    res.json(resObj);
-                                }, reject =>{
-                                    //FIXME: ERROR RESPONSE...
-                                    res.json({});
-                                });
-                        }
-                    }, reason => {
-                        console.log(reason);
-                        res.json({status : 'this_battle_tag_is_invalid_in_overwatch_reason2'});
-                    }); 
-            }
-        }
+    findByBtg(device, region, btg).then(player=>{
+        sendPlayer(res, player);
+        return;
+    }).catch(reason => {
+        res.status(500).send(reason);
+        return;
     })
+} 
+
+exports.read = function(req, res, next) {
+    sendPlayer(req.player);
+}
+
+exports.register = function(req, res, next) {
+
+    const device = req.device;
+    const region = req.region;
+    const btg = req.body.btg;
+
+    if(btg == undefined) {
+        res.status(404).send({err: 'register_target_btg_is_undefined'})
+        return;
+    }
+
+    findByBtg(device, region, btg).then(player => {
+        if(player != undefined) {
+            res.status(409).send({err: 'target_resource_is_already_exist'})
+            return;
+        };
+
+        crawlAndRefine(btg).then(result => {
+            if(Object.keys(result).length === 0 && result.constructor === Object) {
+                res.json({response_status : { err : 'this_battle_tag_is_invalid_in_overwatch_reason'}})
+            } else {
+                register(btg, result)
+                    .then(player => {
+                        let resObj = {
+                            response_status : {},
+                            value : player,
+                        };
+                        res.json(resObj);
+                    }, reject =>{
+                        //FIXME: ERROR RESPONSE...
+                        res.json({});
+                    });
+            }
+        }, reason => {
+            console.log(reason);
+            res.json({status : 'this_battle_tag_is_invalid_in_overwatch_reason2'});
+        }); 
+    }).catch(reason=> {
+        res.status(500).send('internal server error');
+    })
+}
+
+function findByBtg(device, region, btg){
+    const Player = require('mongoose').model(`Players_${device}_${region}`); 
+    
+    return new Promise((resolve, reject) => {
+        Player.findOne({ btg : btg }, function(err, player) {
+            if(err) {
+                reject(err)
+                return;
+            } 
+            resolve(player);
+        });
+    })
+}
+
+function sendPlayer(res, player) {
+    if(player == undefined) res.status(404).send('Resource is not exist which you find');
+    else res.status(200).send(player);
 }
 
 function extractPlayerObj(btg, crawlData) {

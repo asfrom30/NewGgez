@@ -26,7 +26,7 @@ Hopefully, enjoy my web application.
 </div>
 
 ### Server architect
-and I seperate crawl-server for not giving a load to web-server. 
+and I seperate crawl-server for not giving a load to web-server. standalone crawl-server.
 
 ### Datas Handling
 It's not easy to analyze many datas. and harder thing is there are so many cases of data type. For example. each data can be separated 8 tier groups. and each data has 22 heroes. and each hero has 10~20 skills.
@@ -56,5 +56,12 @@ It is implemented each datas are stored in each databases but in the one server.
 [See detail clientside readme](./client/README.md)
 
 ## And more..
-### Develop Process
 * Scrum
+
+* eslint
+
+## Tasks
+* 2017.12.03
+    * build and run server..
+        * merging crawl server based on region, device
+    * impl test code in client side..(protractor and jasmine)

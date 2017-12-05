@@ -79,7 +79,7 @@ module.exports = function(){
 
   config.mongo.uriList = {};
 
-  for(let device of shared.devices) {
+  for(let device of shared.devices) {   
     for(let region of shared.regions) {
       const suffix = `_${device}_${region}`;
       config.mongo.uriList[suffix] = config.mongo.baseUri + suffix;

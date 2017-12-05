@@ -1,0 +1,28 @@
+{
+  "name": "crawl-cron-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "crawl-server.js",
+  "dependencies": {
+    "crawler": "^1.0.5",
+    "cron": "^1.2.1",
+    "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
+    "mongodb": "^2.2.30",
+    "mongoose": "^4.13.0",
+    "mongoose-sequence": "^4.0.1",
+    "properties": "^1.2.1"
+  },
+  "devDependencies": {
+    "merge": "^1.2.0",
+    "nodemon": "^1.12.1"
+  },
+  "scripts": {
+    "cron": "nodemon app.js",
+    "start:dev" : "set NODE_ENV=development & nodemon ./index.js",
+    "start:test" : "",
+    "start:prod" : "set NODE_ENV=production & node ./index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

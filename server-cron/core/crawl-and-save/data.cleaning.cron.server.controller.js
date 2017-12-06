@@ -1,12 +1,15 @@
 
-exports.refine = function(lang, objs){
-    /**_meta refine */
+exports.cleanMeta = function() {
 
-    /* _value refine */
+}
+
+exports.getCleanValue = getCleanValue;
+
+function getCleanValue(valueObj, lang) {
     var tempResult = {};
-
-    for(var heroKey in objs._value){
-        var heroObjs = objs._value[heroKey];
+    
+    for(var heroKey in valueObj){
+        var heroObjs = valueObj[heroKey];
         
         var childResult = {};
 
@@ -34,9 +37,8 @@ exports.refine = function(lang, objs){
         }
         tempResult[heroKey.toLowerCase()] = childResult;
     }
-    objs._value = tempResult;
 
-    return objs;
+    return tempResult;
 }
 
 

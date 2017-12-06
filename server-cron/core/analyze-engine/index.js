@@ -1,13 +1,12 @@
-exports.analyzeTier = analyzeTier;
+const tierController = require('./tier.analyzer.cron.server.controller');
+
+exports.analyzeTierDataAsync = analyzeTierDataAsync;
 
 
-function analyzeTier (preResult){
-    return new Promise((resolve, reject)=>{
-        setTimeout(function(S){
-            console.log('anlayze');
-            console.log(preResult);
-            resolve(preResult);
-        }, 1000)
-    })
+function analyzeTierDataAsync (saveConfig){
+    return tierController.analyzeAsync(saveConfig);
 }
 
+function analyzeRankingData () {
+
+}

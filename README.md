@@ -28,6 +28,10 @@ Hopefully, enjoy my web application.
 ### Server architect
 and I seperate crawl-server for not giving a load to web-server. standalone crawl-server.
 
+daily crawlled data has each collection and suffix depending on date...
+
+웹서버는 크론서버와 데이터베이스를 공유하는 동시에 만약의 경우에 대비해서 standalone하게 설계 되었다.
+
 ### Datas Handling
 It's not easy to analyze many datas. and harder thing is there are so many cases of data type. For example. each data can be separated 8 tier groups. and each data has 22 heroes. and each hero has 10~20 skills.
 

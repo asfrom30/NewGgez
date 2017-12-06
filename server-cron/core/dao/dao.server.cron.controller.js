@@ -22,7 +22,7 @@ exports.insertPlayerData = function(databaseName, collectionName, btg, stat, cal
 
 exports.insertCrawlData = function(device, region, collectionSuffix, docs){
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
-    const collectionName = `crawldata-${collectionSuffix}`;
+    const collectionName = `crawldatas-${collectionSuffix}`;
     
     return new Promise((resolve, reject) => {
         client.connect(dbUri).then(function(db){
@@ -36,6 +36,41 @@ exports.insertCrawlData = function(device, region, collectionSuffix, docs){
     })
 }
 
+exports.doAggregate = function(device, region, todaySuffix, aggregateDocs) {
+    if(process.env.NODE_ENV == 'development') todaySuffix = '000000';
+
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const targetCollectionName = `${config.mongo.collectionName.crawlDatas}-${todaySuffix}`;
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then(function(db){
+            db.collection(targetCollectionName).aggregate(aggregateDocs, function(err, result){
+                if(err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+                db.close();
+            })
+        })
+    })
+}
+
+exports.updateTierData = function(device, region, todaySuffix, doc){
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = config.mongo.collectionName.tierDatas;
+
+    client.connect(dbUri).then(function(db){
+        db.collection('tier-datas').update({_id : todaySuffix}, doc, {upsert : true}, function(err, result) {
+            if(err) {
+                console.log(err);
+            } 
+            db.close();
+        })
+    });
+}
+
+
 /**
  *      Read Query
  */
@@ -43,14 +78,29 @@ exports.insertCrawlData = function(device, region, collectionSuffix, docs){
 /* Find All Player in Database(pc_kr, pc_us).... */
 
 exports.findAllPlayers = function(device, region) {
-    console.log('find all player in ' + device, region);
     return new Promise((resolve, reject) => {
-        setTimeout(function() {
-            // resolve([{btg : '냅둬라날-3934'}, {btg : 'Ac8-31846'}, {btg : '냅둬라날-3934'}, {btg : 'Ac8-31846'}, {btg : '냅둬라날-3934'}, {btg : 'Ac8-31846'}])
-            resolve([{btg : '냅둬라날-3934', id : 1}, {btg : 'Ac8-31846', id : 2}, {btg : '냅둬라날-3934', id : 3}])
+        const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+        const collectionName = `players`;
+
+        client.connect(dbUri).then(function(db){
+            db.collection(collectionName).find().sort({_id : 1}).project({ _id: 1, btg: 1 }).toArray().then((docs) => {
+                db.close();
+                resolve(docs);
+            })
         })
-    }, 3000);
+    });
 }
+
+// exports.findAllPlayers = function(device, region) {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(function() {
+//             // resolve([{btg : '냅둬라날-3934'}, {btg : 'Ac8-31846'}, {btg : '냅둬라날-3934'}, {btg : 'Ac8-31846'}, {btg : '냅둬라날-3934'}, {btg : 'Ac8-31846'}])
+//             resolve([{btg : '냅둬라날-3934', id : 1}, {btg : 'Ac8-31846', id : 2}, {btg : '냅둬라날-3934', id : 3}])
+//         })
+//     }, 3000);
+// }
+
+
 //@deprecated 2017.12.05
 // exports.findAllPlayers = function(dbName, callback){
     

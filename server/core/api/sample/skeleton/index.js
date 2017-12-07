@@ -7,7 +7,7 @@ var router = express.Router();
 
 router.param('id', players.findById);
 router.param('btg', players.findByBtg);
-
+    
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.post('/', controller.create);

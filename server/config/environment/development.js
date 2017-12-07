@@ -1,6 +1,9 @@
 module.exports = {
+    // Server port
+    port: process.env.PORT || 9000,
+
     mongo: {
-        uri : 'mongodb://localhost/dev_pc_kr_web',
+        uri : 'mongodb://localhost/dev_web_pc_kr',
         baseUri  : 'mongodb://localhost/dev_web',
     },
 }

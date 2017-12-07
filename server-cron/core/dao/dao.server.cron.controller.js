@@ -1,34 +1,16 @@
 const config = require('../../config/enviroment')
 const client = require('mongodb').MongoClient;
 const mongoHelperFactory = require('../../common/utils/db/mongo-helper-factory');
-/**
- *      Insert Query
- */
 
- /* Insert Player has Auto Incremental */
-exports.insertPlayer = function(databaseName, document, callback/* if null, promise working */){
-    var helper = new mongoDbHelper.MongoDbHelper(databaseName); //TODO: separate outside...
-    var collectionName = "players";
-    if(arguments.length == 2)  return helper.insertOneAI(collectionName, document);// using promise
-    else if(arguments.length == 3) helper.insertOneAI(collectionName, document, callback);
-}
-/* Insert PlayerData */
-exports.insertPlayerData = function(databaseName, collectionName, btg, stat, callback/* if null, promise working */){
-    var helper = new mongoDbHelper.MongoDbHelper(databaseName); //TODO: separate outside...
-    if(arguments.length == 4) return helper.insertOnePK(collectionName, btg, stat);
-    else if(arguments.length == 5) helper.insertOnePK(collectionName, btg, stat, callback);
-    // else (arguments.length == 5)
-}
-
-exports.insertCrawlData = function(device, region, collectionSuffix, docs){
+exports.insertCrawlData = function(device, region, todaySuffix, docs){
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
-    const collectionName = `crawldatas-${collectionSuffix}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${todaySuffix}`;
     
     return new Promise((resolve, reject) => {
         client.connect(dbUri).then(function(db){
             db.collection(collectionName).insertOne(docs).then((r) =>{
                 db.close();
-                resolve();
+                resolve(docs);
             }).catch((err) => {
                 reject(err.errmsg);
             })

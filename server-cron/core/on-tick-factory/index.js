@@ -12,10 +12,6 @@ function getAllPlayerCrawlAndSave(preResult, crawlConfig, saveConfig) {
     saveConfig.todaySuffix = momentTz().tz(saveConfig.timezone).format('YYMMDD');
 
     return new Promise((resolve, reject) => {
-        resolve();
-    });
-
-    return new Promise((resolve, reject) => {
         appDao.findAllPlayer(saveConfig.device, saveConfig.region).then((players) => {
 
             /* If development mode */
@@ -35,7 +31,7 @@ function getAllPlayerCrawlAndSave(preResult, crawlConfig, saveConfig) {
             const playerNum = players.length;
 
             players.reduce(function(prePromise, currentValue, currentIndex, array){
-                const id = currentValue.id;
+                const id = currentValue._id;
                 const btg = currentValue.btg;
                 return prePromise.then(() => {
                     /* end of promise chain */

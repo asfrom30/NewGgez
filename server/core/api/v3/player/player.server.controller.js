@@ -1,29 +1,21 @@
 /* app utils */
+const crawlAndSave = require('../../../../externals').crawlAndSave;
+const appDao = require('../../../services/dao');
 const momentService = require('../../../services/moment.core.service');
 
-/* External Modules */
-// var Crawller = require('../externals/crawller.external.controller');
-// const mongoHelperFactory = require('../../common/utils/db/mongo.db.helper.factory');
-// const mongoHelper = mongoHelperFactory.getInstance();
-
 exports.findById = function(req, res, next, id) {
+
     const device = req.device;
     const region = req.region;
-    const Player = require('mongoose').model(`Players_${device}_${region}`);
+    id = Number.parseInt(id);
 
-    Player.findOne({
-        _id : id
-    }, function(err, player) {
-        if(err) {
-            return next(err);
-        } else {
-            req.player = player;
-            next();
-        }
+    appDao.findPlayerById(device, region, id).then(player => {
+        req.player = player;
+        next();
     })
 }
 
-exports.idx = function(req, res, next) {
+exports.queryInBtg = function(req, res, next) {
     const device = req.device;
     const region = req.region;
     const btg = req.query.btg;
@@ -43,49 +35,45 @@ exports.idx = function(req, res, next) {
 } 
 
 exports.read = function(req, res, next) {
-    sendPlayer(req.player);
+    console.log('adsfasdf');
+    sendPlayer(res, req.player);
 }
 
 exports.register = function(req, res, next) {
-
     const device = req.device;
     const region = req.region;
     const btg = req.body.btg;
 
     if(btg == undefined) {
-        res.status(404).send({err: 'register_target_btg_is_undefined'})
+        res.status(404).send({err: 'wish_to_register_target_btg_is_undefined'});
         return;
     }
 
-    findByBtg(device, region, btg).then(player => {
+    Promise.resolve().then(() => {
+        return appDao.findPlayerByBtg(device, region, btg);
+    }).then((player) => {
         if(player != undefined) {
-            res.status(409).send({err: 'target_resource_is_already_exist'})
-            return;
-        };
-
-        crawlAndRefine(btg).then(result => {
-            if(Object.keys(result).length === 0 && result.constructor === Object) {
-                res.json({response_status : { err : 'this_battle_tag_is_invalid_in_overwatch_reason'}})
-            } else {
-                register(btg, result)
-                    .then(player => {
-                        let resObj = {
-                            response_status : {},
-                            value : player,
-                        };
-                        res.json(resObj);
-                    }, reject =>{
-                        //FIXME: ERROR RESPONSE...
-                        res.json({});
-                    });
-            }
-        }, reason => {
-            console.log(reason);
-            res.json({status : 'this_battle_tag_is_invalid_in_overwatch_reason2'});
-        }); 
-    }).catch(reason=> {
-        res.status(500).send('internal server error');
-    })
+            res.status(409).json({err: 'target_resource_is_already_exist'})
+            return Promise.reject(409);
+        }
+        return crawlAndSave.onlyCrawlForRegister(device, region, btg);
+    }).then((crawlData) => {
+        if(Object.keys(crawlData).length === 0 && crawlData.constructor === Object) {
+            res.status(400).json({err: 'this_battle_tag_is_invalid_in_overwatch_reason'})
+            return Promise.reject(400);
+        }
+        return saveAll(device, region, btg, crawlData);
+    }).then((player) => {
+        res.status(200).json({msg : 'register battle tag is success'});
+    }).catch((reason) => {
+        if(reason == undefined) console.log('reason is undefined');
+        if(Number.isInteger(reason)) {
+            // nothing to do, res is sended already
+        } else {
+            console.log(reason); // reason log for server
+            res.status(500).json({err : 'internal server error'}); // reason for client;
+        }
+    });
 }
 
 function findByBtg(device, region, btg){
@@ -107,7 +95,26 @@ function sendPlayer(res, player) {
     else res.status(200).send(player);
 }
 
-function extractPlayerObj(btg, crawlData) {
+function saveAll(device, region, btg, crawlData){
+    return new Promise((resolve, reject) => {
+        /* Save Player */
+        let promises = [];
+        promises.push(appDao.insertPlayer(device, region, getPlayerObj(btg, crawlData)));
+        promises.push(appDao.insertCurrentCrawlData(device, region, crawlData));
+        promises.push(appDao.insertTodayCrawlData(device, region, crawlData));
+
+        /* All is completed send response */
+        //TODO: transaction needed
+        //TODO: timeout neeeded
+        Promise.all(promises).then(values => {
+            resolve();
+        }, reason => {
+            reject(reason);
+        });
+    })
+}
+
+function getPlayerObj(btg, crawlData) {
     let result = {};
     result.btg = btg;
     result.btn = btg.substring(0, btg.indexOf('-'));
@@ -120,44 +127,3 @@ function extractPlayerObj(btg, crawlData) {
 
     return result;
 }
-
-function crawlAndRefine(btg){
-    return Crawller.doCrawlAndRefine(btg);
-}
-
-function register(btg, result){
-    return new Promise((resolve, reject) => {
-        /* Save Player */
-        let playerObj = extractPlayerObj(btg, result);
-        var player = new Player(playerObj);
-
-        /* Promise Chain */
-        let promises = [];
-
-        /* Save Players */
-        promises.push(player.save());
-
-        /* Save Current */
-        promises.push(mongoHelper.insertOnePK('playerdatas-current', btg, result));
-        
-        /* Save Today player data */
-        let targetCollectionName = 'playerdatas-' + momentService.getCollectionDateIndex();
-        promises.push(mongoHelper.insertOnePK(targetCollectionName, btg, result));
-
-        /* timeout */
-        // var timeoutPromise = new Promise((resolve, reject) => {
-        //     setTimeout(resolve, 4000, 'four');
-        //   });
-        // promises.push(timeoutPromise);
-
-        /* All is completed send response */
-        //TODO: transaction needed
-        Promise.all(promises)
-            .then(values => {
-                resolve(player);
-            }, reason => {
-                reject();
-            });
-    })
-}
-

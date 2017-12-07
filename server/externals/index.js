@@ -1,0 +1,1 @@
+exports.crawlAndSave = require('../../server-cron/core/crawl-and-save');

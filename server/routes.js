@@ -23,6 +23,8 @@ export default function(app) {
 
   /* Insert routes below */
   app.use('/:device/:region/players', require('./core/api/v3/player'));
+  app.use('/:device/:region/crawl-datas', require('./core/api/v3/crawl-data'));
+  app.use('/:device/:region/tier-datas', require('./core/api/v3/tier-data'));
 
   /* For Auth */
   // app.use('/auth', require('./auth').default);

@@ -24,9 +24,8 @@ iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
 
     /* build onTick Chain */
     cronManager.addOnTick(onTickFactory.getAllPlayerCrawlAndSave);
-    cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
-    cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
-    // cronManager.addOnTick(onTickFactory.getRanking;
+    // cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
+    // cronManager.addOnTick(onTickFactory.getRanking);
 
     cronManager.startCron();
 }).then(()=>{

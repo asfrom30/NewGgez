@@ -4,6 +4,9 @@ process.env.NODE_ENV = 'test';
 var logger = require('../../../utils/logger/logger.core.util');
 logger.info('test', 'start player test...');
 
+var chai = require('chai');
+chai.should()
+
 /* globals describe, expect, it, beforeEach, afterEach */
 var app = require('../../../../');
 var request = require('supertest');
@@ -14,9 +17,10 @@ describe('Players API:', function() {
 
     before(function(done){
         // clean data base..
+        done();
     })
 
-    describe('GET /:pc/:kr/players/:id', function() {
+    describe('GET /pc/kr/players/:id', function() {
         var player;
         
         beforeEach(function(done) {
@@ -32,13 +36,12 @@ describe('Players API:', function() {
                 });
         });
 
-        afterEach(function() {
-            player = {};
+        it('should respond with empty object', function() {
+            player.should.to.be.empty;
         });
 
-        it('should respond with the requested thing', function() {
-            player.name.should.equal('New Thing');
-            player.info.should.equal('This is the brand new thing!!!');
+        afterEach(function() {
+            player = {};
         });
     });
 

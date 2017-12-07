@@ -40,11 +40,13 @@ It's not easy to analyze many datas. and harder thing is there are so many cases
 
 ### End Point
 
-URL | VERB | POST BODY | Result |
+URL | VERB | BODY | Result |
 --- | --- | --- | --- |
-/stored-btgs/:btg| GET | empty | Check Player exists
-/stored-btgs/:btg| PUT | empty | Register user based on battle tag if valid user
-/player-datas/:id| GET | empty | require `date query param'
+:device/:region/players/?btg=`btg` | GET | empty | request player resource depend on battle tag
+:device/:region/players/:id | GET | empty |  request plyaer resource depend on id
+:device/:region/players/ | POST | {btg : `btg`} |  try to register new player depend one battle tag()
+:device/:region/player-datas/:id| GET | empty | require `date query param'
+:device/:region/tier-datas/:date| GET | empty | get tier data depend on region, device, date
 
 cf) player-datas/1/?date=17-10-18,17-10-21,17-10-22,17-10-23
 

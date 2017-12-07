@@ -65,6 +65,9 @@ let mocha = lazypipe()
     .pipe(plugins.mocha, {
         reporter: 'spec',
         timeout: 5000,
+        require: [
+            './server/mocha.conf'
+        ]
     });
 
 let transpileServer = lazypipe()
@@ -343,14 +346,22 @@ gulp.task('test:server', cb => {
     runSequence(
         'env:all',
         'env:test',
-        'mocha:unit',
-        // 'mocha:integration',
+        'test:server:unit',
+        'test:server:integration',
         cb);
 });
 
-gulp.task('mocha:unit', () => {
+gulp.task('test:server:unit', () => {
     return gulp.src(paths.server.test.unit)
         .pipe(mocha());
+})
+
+gulp.task('test:server:integration', () => {
+    // plugins.env({
+    //     vars: {NODE_ENV: 'test'}
+    // });
+    return gulp.src(paths.server.test.integration)
+    .pipe(mocha());
 })
 
 gulp.task('test:client', done => {

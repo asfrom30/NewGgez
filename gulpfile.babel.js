@@ -118,7 +118,7 @@ gulp.task('serve', cb => {
             'clean:tmp',
             // 'lint:scripts',
             // 'inject',
-            // 'copy:fonts:dev',
+            'copy:fonts:dev',
             'env:all'
         ],
         // 'webpack:dev', // If this option is enabled, webpack files saved in .tmp folder

@@ -4,13 +4,45 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
+const VENDOR_LIBS = [
+  "@uirouter/angularjs",
+  "angular",
+  "angular-animate",
+  "angular-aria",
+  "angular-cookies",
+  "angular-loader",
+  "angular-mocks",
+  "angular-resource",
+  "angular-route",
+  "angular-sanitize",
+  "angular-socket-io",
+  "angular-ui-bootstrap",
+  "angular-ui-router",
+  "angular-validation-match",
+  "bootstrap",
+  "bootstrap-sass",
+  "bootstrap-social",
+  "d3",
+  "d3-selection",
+  "fast-json-patch",
+  "jquery",
+  "jquery-knob",
+  "lodash",
+  "moment",
+  "noty",
+  "numeral",
+]
+
 const config = {
-    entry: './client/app.module.js',
+    entry: {
+      bundle : './client/app.module.js',
+      vendor : VENDOR_LIBS,
+    },
     output: {
         path: path.resolve(__dirname, 'dist'), // absolute path with Path module
             // path.resolve() return correct path whatever on mac and window
             // __ is constant in nodejs
-        filename: 'bundle.js',
+        filename: '[name].js',
         // chunkFilename: '[name].bundle.js', or '[name].[hash].js'
         // path : '/',
         publicPath : '/' // localhost:3000 + publicPath
@@ -57,6 +89,9 @@ const config = {
           alwaysWriteToDisk: false,
         }),
         // new HtmlWebpackHarddiskPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+          name : 'vendor'
+        }),
 
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),

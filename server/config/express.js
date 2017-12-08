@@ -108,10 +108,9 @@ export default function(app) {
     // }
 
     /* Build Client using webpack middle-ware */
-    return;
     if(process.env.NODE_ENV  === 'development') {
         const webpack = require('webpack');
-        // const stripAnsi = require('strip-ansi');
+        const stripAnsi = require('strip-ansi');
         const webpackDevMiddleware = require('webpack-dev-middleware');
         const webpackDevConfig = require('../../webpack.dev');
         const compiler = webpack(webpackDevConfig);

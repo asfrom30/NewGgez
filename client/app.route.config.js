@@ -6,9 +6,9 @@
 // onUpdate : '&'
 
 export function routeConfig($stateProvider, $urlServiceProvider) {
-    
-    
-    // $urlServiceProvider.rules.otherwise({ state: 'index' });
+
+    /* otherwise redirect to index */
+    $urlServiceProvider.rules.otherwise({ state: 'index' });
     
     var index = {
         name: 'index',

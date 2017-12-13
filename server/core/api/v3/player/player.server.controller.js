@@ -25,17 +25,16 @@ exports.queryInBtg = function(req, res, next) {
         return;
     }
 
-    findByBtg(device, region, btg).then(player=>{
+    appDao.findPlayerByBtg(device, region, btg).then(player =>{
         sendPlayer(res, player);
         return;
     }).catch(reason => {
         res.status(500).send(reason);
         return;
-    })
+    });
 } 
 
 exports.read = function(req, res, next) {
-    console.log('adsfasdf');
     sendPlayer(res, req.player);
 }
 
@@ -45,7 +44,7 @@ exports.register = function(req, res, next) {
     const btg = req.body.btg;
 
     if(btg == undefined) {
-        res.status(404).send({err: 'wish_to_register_target_btg_is_undefined'});
+        res.status(404).send({err: 'target_btg_which_you_wish_to register_is_undefined'});
         return;
     }
 
@@ -53,18 +52,20 @@ exports.register = function(req, res, next) {
         return appDao.findPlayerByBtg(device, region, btg);
     }).then((player) => {
         if(player != undefined) {
-            res.status(409).json({err: 'target_resource_is_already_exist'})
+            res.status(409).json({msg : '', err: 'target_resource_is_already_exist', value :{}})
             return Promise.reject(409);
         }
         return crawlAndSave.onlyCrawlForRegister(device, region, btg);
-    }).then((crawlData) => {
-        if(Object.keys(crawlData).length === 0 && crawlData.constructor === Object) {
-            res.status(400).json({err: 'this_battle_tag_is_invalid_in_overwatch_reason'})
+    }).then(crawlData => {
+        if(crawlData == undefined || (Object.keys(crawlData).length === 0 && crawlData.constructor === Object)) {
+            res.status(400).json({msg : '', err: 'this_battle_tag_is_not_exist_in_overwatch_reason', value :{}});
             return Promise.reject(400);
         }
-        return saveAll(device, region, btg, crawlData);
+        return appendNewPlayerId(device, region, crawlData);
+    }).then(crawlDataWithId => {
+        return saveAll(device, region, btg, crawlDataWithId);
     }).then((player) => {
-        res.status(200).json({msg : 'register battle tag is success'});
+        res.status(200).json({msg : 'register battle tag is success', err : '', value : player});
     }).catch((reason) => {
         if(reason == undefined) console.log('reason is undefined');
         if(Number.isInteger(reason)) {
@@ -77,7 +78,7 @@ exports.register = function(req, res, next) {
 }
 
 function findByBtg(device, region, btg){
-    const Player = require('mongoose').model(`Players_${device}_${region}`); 
+    const Player = require('mongoose').model(`Players_${device}_${region}`);
     
     return new Promise((resolve, reject) => {
         Player.findOne({ btg : btg }, function(err, player) {
@@ -91,12 +92,24 @@ function findByBtg(device, region, btg){
 }
 
 function sendPlayer(res, player) {
-    if(player == undefined) res.status(404).send('Resource is not exist which you find');
-    else res.status(200).send(player);
+    if(player == undefined) res.status(404).json({ msg : '', err : 'resource_is_not_exist_which_you_find', value : {}});
+    else res.status(200).json({msg : 'send player success', err : '', value : player});
+}
+
+function appendNewPlayerId(device, region, crawlData) {
+    return new Promise((resolve, reject) => {
+        appDao.getNewPlayerId('pc', 'kr').then(id => {
+            crawlData._id = id;
+            resolve(crawlData);
+        }, reason => {
+            reject(reason);
+        })
+    })
 }
 
 function saveAll(device, region, btg, crawlData){
     return new Promise((resolve, reject) => {
+        //FIXME: need to synchronize with player id and crawl data, it' different
         /* Save Player */
         let promises = [];
         promises.push(appDao.insertPlayer(device, region, getPlayerObj(btg, crawlData)));

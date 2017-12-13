@@ -26,7 +26,6 @@ function getCleanValue(valueObj, lang) {
             /* Time conversion */
             if(statKey.includes('시간') | value.includes(':')){
                 value = encodeTime(value);
-                value += "%timestamp"
             } else if(value.includes('%')) {
                 // % nothing to do....
             } else {

@@ -11,6 +11,6 @@ module.exports = merge(common, {
         port: 9000
     },
     plugins : [
-        new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify('development')}),
+        new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify('webpack-dev-server')}),
     ]
 });

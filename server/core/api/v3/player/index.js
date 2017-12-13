@@ -9,6 +9,6 @@ router.param('id', controller.findById);
 
 router.get('/', controller.queryInBtg);  // query string... /?btg=
 router.get('/:id', controller.read);
-router.post('/', controller.register);
+router.put('/', controller.register);
 
 module.exports = router;

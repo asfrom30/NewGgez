@@ -3,7 +3,7 @@
 import './index.html';
 
 /* bootstrap */
-import 'bootstrap';
+import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* Basic Angular */

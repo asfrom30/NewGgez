@@ -2,17 +2,6 @@
 
 import angular from 'angular';
 
-/** Fetch Player Data Usage */
-// var dates = [];
-// dates.push('17-10-23');
-// dates.push('17-10-24');
-// Ajax.fetchPlayerDatas(3, dates)
-//     .then(result => {
-//         console.log(result);
-//     }, reason => {
-//         console.log(reason);
-//     });
-
 // TODO: If pas param to export from inner... separate code..
 // fetchUserDatas : fetchUserDatas
 // export function fetchPlayerProfile(id){
@@ -22,63 +11,113 @@ import angular from 'angular';
 //     return promise;
 // }
 
+const logScope = 'ajax-service';
+
+
+//FIXME: must be separated ajax Indicator
 export default angular
     .module('core.services.ajax', [])
-    .factory('Ajax', function(PlayersIdApi, PlayerDatasAPI, PlayersBtgApi, UserDatasAPI, TierDatasApi, CoreUtils, CONFIG){
+    .factory('Ajax', function(AppLogger, IndexInformationApi, PlayersApi, CrawlDatasApi , TierDatasApi, CoreUtils, CONFIG){
         return {
-            fetchTierDatas : function() {
-                let ajaxIndicator = new CoreUtils.ajaxIndicator("Try To fetch Tier Data "
-            );
-                ajaxIndicator.show();
+            fetchIndexInformation : function() {
+                AppLogger.log('Try To fetch Index Information', 'info', logScope);
 
-                return TierDatasApi.get().$promise.then(arrResource => {
-                    let result = {};
-                    for(let resource of arrResource){
-                        result[resource._id] = resource;
-                    }
+                return IndexInformationApi.get().$promise.then(json => {
+                    const result = {};
+                    if (result == undefined) {
+                        AppLogger.log('Fetched Index Information is null', 'error', logScope);
+                        return result;
+                    } 
+                    result.totalPlayerNumber = json.total_player_num;
+                    result.totalGameNumber = json.total_game_num;
                     return result;
-                });
+                })
             },
-            registerPlayer : function(btg) {
-                let ajaxIndicator = new CoreUtils.ajaxIndicator("Try To Register Battle Tag " + Btg);
+            registerPlayer : function(device, region, btg) {
+                let ajaxIndicator = new CoreUtils.ajaxIndicator("Try To Register Battle Tag " + btg);
                 ajaxIndicator.show();
-                
-                return PlayersBtgApi.$save({},{btg : btg}).$promise.then(result => {
-                    // post process
-                    // ajaxIndicator.hide();
-                    return result.toJSON();
-                });
-            },
-            fetchPlayerWithBtg : function(btg) {
-                let ajaxIndicator = new CoreUtils.ajaxIndicator("Fetch Player Profile Btg is " + btg + "from server");
-                ajaxIndicator.show();
-                
-                return PlayersBtgApi.get({btg : btg}).$promise.then(result => {
-                    // post process
-                    ajaxIndicator.hide();
-                    return result.toJSON();
-                });
-            },
-            // TODO: diff fetchPlayer vs fetchUserDatas
-            fetchPlayerWithId : function(id) {
-                let ajaxIndicator = new CoreUtils.ajaxIndicator("Fetch Player Profile " + id + "from server");
-                ajaxIndicator.show();
-                return PlayersIdApi.get({id:id}).$promise
-                    .then(result => {
-                        // console.log(result.toJSON());
-                        ajaxIndicator.hide();
-                        return result.toJSON();
 
-                        // @Maybe not needed
-                        // var obj = {};
-                        // obj[id] = result.toJSON();
-                        // return obj;
-                    }, reason => {
-                        console.log(reason);
-                    })
+                return new Promise((resolve, reject) => {
+                    PlayersApi.register({device : device, region : region}, {btg : btg}).$promise.then(response => {
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        resolve(response.toJSON().value);
+                    }).catch(reason => {
+                        AppLogger.log(reason, 'info', logScope);
+                        
+                        const statusCode = reason.status + ''
+                        let result = reason.data;
+                        if(statusCode.startsWith('4')) {
+                            result.isServerError = false;
+                        } else if (statusCode.startsWith('5')){
+                            result.isServerError = true;
+                        }
+                        reject(result);
+                    }).then( result => {
+                        ajaxIndicator.hide();
+                        return result;
+                    });
+                })
             },
-            fetchPlayerDatas : function(id, dates) {
-                /* Undefined Check */
+            fetchPlayerWithBtg : function(device, region, btg) {
+                AppLogger.log(`Fetch Player(btg : ${btg}) about from server`, 'info', logScope);
+
+                let ajaxIndicator = new CoreUtils.ajaxIndicator(`${btg} 사용자를 검색중입니다.`);
+                ajaxIndicator.show();
+
+                return new Promise((resolve, reject) => {
+                    PlayersApi.get({device:device, region:region, btg:btg}).$promise.then(response => {
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        resolve(response.toJSON().value);
+                    }).catch(reason => {
+                        AppLogger.log(reason, 'info', logScope);
+
+                        const statusCode = reason.status + ''
+                        let result = reason.data;
+                        if(statusCode.startsWith('4')) {
+                            result.isServerError = false;
+                        } else if (statusCode.startsWith('5')){
+                            result.isServerError = true;
+                        }
+                        reject(result);
+                    }).then (() => {
+                        ajaxIndicator.hide();
+                    })
+                })
+            },
+            fetchPlayerWithId : function(device, region, id) {
+                AppLogger.log(`Fetch Player (Id :${id}) about from server`, 'info', logScope);
+
+                let ajaxIndicator = new CoreUtils.ajaxIndicator(`사용자(${id})를 검색중입니다.`);
+                ajaxIndicator.show();
+
+                return new Promise((resolve, reject) => {
+                    PlayersApi.get({device:device, region:region, id:id}).$promise.then(response => {
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        resolve(response.toJSON().value);
+                    }).catch(reason => {
+                        AppLogger.log(reason, 'info', logScope);
+
+                        const statusCode = reason.status + ''
+                        let result = reason.data;
+                        if(statusCode.startsWith('4')) {
+                            result.isServerError = false;
+                        } else if (statusCode.startsWith('5')){
+                            result.isServerError = true;
+                        }
+                        reject(result);
+                    }).then (() => {
+                        ajaxIndicator.hide();
+                    })
+                })
+            },
+            // http://localhost:3000/pc/kr/crawl-datas/1/?date=17-10-18,17-10-21,17-10-22,17-10-23
+            fetchCrawlDatas : function(device, region, id, dates) {
+                AppLogger.log(`Fetch Crawl Data(id : ${id}) about from server`, 'info', logScope);
+
+                let ajaxIndicator = new CoreUtils.ajaxIndicator(`사용자 데이터를 가져오는 중입니다.`);
+                ajaxIndicator.show();
+
+                /* TODO: Undefined Check */
                 if(dates === undefined) return Promise.reject('date is not defined');
                 if(dates.lenght == 0) return Promise.reject('date is not defined');
                 // TODO: Date Valid Check...
@@ -90,43 +129,73 @@ export default angular
                 }
                 strDates = strDates.substring(0, strDates.length-1);
 
-                // cf) http://localhost:3000/player-datas/1/?date=17-10-18,17-10-21,17-10-22,17-10-23
-                let ajaxIndicator = new CoreUtils.ajaxIndicator("Fetch Player Datas " + id + "from server");
+                return new Promise((resolve, reject) => {
+                    CrawlDatasApi.get({device:device, region: region, id:id, date:strDates}).$promise.then(response => {
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        resolve(response.toJSON().value);
+                    }).catch(reason => {
+                        AppLogger.log(reason, 'info', logScope);
+
+                        const statusCode = reason.status + ''
+                        let result = reason.data;
+                        if(statusCode.startsWith('4')) {
+                            result.isServerError = false;
+                        } else if (statusCode.startsWith('5')){
+                            result.isServerError = true;
+                        }
+                        reject(result);
+                    }).then(() => {
+                        ajaxIndicator.hide();
+                    });
+                }) 
+            },
+            fetchTierDatas : function(device, region, date) {
+                let ajaxIndicator = new CoreUtils.ajaxIndicator("Try To fetch Tier Data ");
                 ajaxIndicator.show();
 
-                return PlayerDatasAPI.get({id:id, date:strDates}).$promise
-                    .then(result => {
-                        // console.log(result.toJSON());
-                        ajaxIndicator.hide();
-                        var obj = {};
-                        return result.toJSON();
-                    }, reason => {
-
-                    })
-            },
-            //TODO: very weird replace with other syntax
-            fetchUserDatas : function(id) {
-                let ajaxIndicator = new CoreUtils.ajaxIndicator("Fetch UserDatas " + id + "from server");
-
                 return new Promise((resolve, reject) => {
-                    ajaxIndicator.show();
-                    UserDatasAPI.get({id:id}, function(res){
-                        resolve(res);
-                    },function(response){
-                        // handle 404
+                    TierDatasApi.get({device : device, region : region, date : date}).$promise.then(response => {
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        
+                        //FIXME: if data is no exist in that date
+                        resolve(response.toJSON().value);
+                    }).catch(reason => {
+                        AppLogger.log(reason, 'info', logScope);
+                        
+                        const statusCode = reason.status + ''
+                        let result = reason.data;
+                        if(statusCode.startsWith('4')) {
+                            result.isServerError = false;
+                        } else if (statusCode.startsWith('5')){
+                            result.isServerError = true;
+                        }
+                        reject(result);
+                    }).then( result => {
+                        ajaxIndicator.hide();
+                        return result;
                     });
-                    setTimeout(reject, CONFIG.AJAX_TIME_OUT, 'Default Time out')
-                }).then(result => {
-                    var obj = {}
-                    obj[id] = result.toJSON();
+                })
+            },
+            needToOrganize : function () {
+                AppLogger.log("Fetch Player Id about " + btg + "from server", 'info', logScope);
+                
+                let ajaxIndicator = new CoreUtils.ajaxIndicator(`${btg} 사용자를 검색중입니다.`);
+                ajaxIndicator.show();
+                
+                return PlayersApi.get({device:device, region:region, btg:btg}).$promise.then(response => {
+                    AppLogger.log(response, 'info', logScope);
+                    return {
+                        status_code : response.$status,
+                        body : response.toJSON()
+                    };
+                }).catch(reason => {
+                    return {
+                        status_code : reason.status,
+                        body : {},
+                    };
+                }).then(() => {
                     ajaxIndicator.hide();
-                    // ajaxIndicator.hide();
-                    return obj;
-                }, reason => {
-                    ajaxIndicator.hide();
-                    //TODO: CONST.MSG.ERR
-                    new CoreUtils.ajaxIndicator("서버에서 응답하지 않습니다.").show();
                 });
-            }
+            },
         }
     }).name;

@@ -66,8 +66,31 @@ It is implemented each datas are stored in each databases but in the one server.
 
 * eslint
 
-## Tasks
-* 2017.12.03
-    * build and run server..
-        * merging crawl server based on region, device
-    * impl test code in client side..(protractor and jasmine)
+## Remain Tasks and Trouble Shooting
+
+### Trouble shooting
+- [ ] hero summary with dev server
+- [ ] check why cron-server did now excutes, tier data task.
+
+### Refactoring
+- [ ] insert crawl-data id
+- [ ] collection prefix in client 
+    - in now push manually
+
+### Features
+- [ ] impl hero detail and compare (apply table)
+- [ ] need informat rest api
+- [ ] check crawl current time : it update method rest api
+- [ ] ajax live search
+- [ ] ranking table
+
+### Server Side
+- [x] build and run server..
+    - merging crawl server based on region, device
+
+## Distribution
+
+## And more...
+- [ ] continuous build : travis
+- [ ] impl test code and refactoring impl test code in client side..(protractor and jasmine)
+- [ ] i18n

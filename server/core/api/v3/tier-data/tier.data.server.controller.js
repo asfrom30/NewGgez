@@ -25,8 +25,8 @@ exports.query = function(req, res, next) {
     const date = req.date;
 
     appDao.findTierDataByDate(device, region, date).then(tierData => {
-        res.json(tierData);
+        res.json({msg : `tier date in ${date} get success fully`, err : '', value : tierData});
     }, reject => {
-        res.status(500).send('internal server error in tierdatas...');
+        res.status(500).json({msg:'', err:'internal server error in tierdatas...', value :''});
     })
 }

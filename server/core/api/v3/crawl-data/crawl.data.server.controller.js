@@ -13,8 +13,9 @@ exports.storedId = function(req, res, next, id){
 exports.query = function(req, res, next) {
     const device = req.device;
     const region = req.region;
-    let id = req.id;
+    const id = req.id;
 
+    //TODO: if device | region | id is not defined return 4xx response
 
     /* Date Query Parsing */
     // if query is undefined return {} object...
@@ -26,16 +27,13 @@ exports.query = function(req, res, next) {
     let promises = [];
 
     
-    id = '냅둬라날-3934';
     for(let date of dates){
         promises.push(appDao.findCrawlDataById(device, region, date, id));
     }
 
-    Promise.all(promises).then(values => { 
-        res.json(values);
-        return;
+    Promise.all(promises).then(values => {
+        res.status(200).json({msg : 'Get Crawl Datas success', err : '', value : values});
     }, reason => {
-        res.status(500).send('Promise is not all resolved');
-        return;
+        res.status(500).send('Internal Server Error : Promise is not all resolved');
     });
 }

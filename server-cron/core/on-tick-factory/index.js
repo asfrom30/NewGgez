@@ -18,7 +18,7 @@ function getAllPlayerCrawlAndSave(preResult, crawlConfig, saveConfig) {
             const nodeEnv = process.env.NODE_ENV;
             if(nodeEnv == 'development' || nodeEnv == 'test') {
                 const partOfPlayers = [];
-                for(let i=0; i < 1; i++){
+                for(let i=0; i < 100; i++){
                     if(players[i] != undefined) partOfPlayers.push(players[i]);
                 }
                 players = partOfPlayers;

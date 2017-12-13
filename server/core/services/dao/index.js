@@ -1,5 +1,6 @@
 const controller = require('./dao.server.controller');
 
+exports.getNewPlayerId = controller.getNewPlayerId;
 
 exports.findPlayerById = controller.findPlayerById;
 exports.findPlayerByBtg = controller.findPlayerByBtg;

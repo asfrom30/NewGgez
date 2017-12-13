@@ -14,10 +14,24 @@
     font-weight: normal
 }
 
+html, body {
+    height: 100%;
+}
+
+html, body, #index {
+    height: 100%;
+  }
+
 body {
     font-family: NanumBarunGothic;
 }
 
 .beantown {
     font-family: beantown;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Josefin+Sans:300,400);
+* {
+  margin: 0;
+  padding: 0;
 }

@@ -14,7 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 </head>
 <body ng-app="ggezkrApp">
-  <nav class="navbar navbar-inverse  navbar-fixed-top">
+  <!-- <nav class="navbar navbar-inverse  navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" ui-sref="index"><span class="glyphicon glyphicon-home"></span></a>
@@ -33,11 +33,10 @@
         </ul>
       </div>
     </div>
-  </nav>
+  </nav> -->
   <!-- <ul class="menu"></ul> -->
-  <div style="margin-top:50px">
-      <ui-view current-player="root.currentPlayer" bind-current-player="root.currentPlayer = $event.player"></ui-view>  
-  </div>
-  <div>Angular seed app: v<span app-version></span></div>
+  <ui-view current-player="root.currentPlayer" bind-current-player="root.currentPlayer = $event.player"></ui-view>      
+  
+  <!-- <div>Angular seed app: v<span app-version></span></div> -->
 </body>
 </html>

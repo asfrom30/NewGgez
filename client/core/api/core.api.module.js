@@ -14,17 +14,15 @@ import angular from 'angular';
 // import UserDatasModule from './v2/user-datas/user-datas.module'
 // import UsersModule from './v2/users/users.module';
 
-/* For Sample */
-import UserDatasModule from './sample/user-datas/api.user-datas.service';
-
 /* v3 */
 // import UserListModule from './v3/userlist/api.v3.userlist.service';
-import StoredBtgsModule from './v3/stored-btgs/api.stored-btgs.service';
-import PlayersIdApiModule from './v3/players/api.players.id.service';
-import PlayersBtgApiModule from './v3/players/api.players.btg.service';
-import PlayerDatasModule from './v3/player-datas/api.player-datas.service';
+import IndexInformation from './v3/index-information/api.index.information.service';
+
+import PlayersApiModule from './v3/players/api.players.service';
+import CrawlDatasModule from './v3/crawl-datas/api.crawl.datas.service';
+
 import TierDatasModule from './v3/tier-datas/api.tier.datas.service';
 
 export default angular
-    .module('ggez.core.api', [UserDatasModule, PlayersIdApiModule, PlayersBtgApiModule, PlayerDatasModule, TierDatasModule])
+    .module('ggez.core.api', [IndexInformation, PlayersApiModule, CrawlDatasModule, TierDatasModule])
     .name;

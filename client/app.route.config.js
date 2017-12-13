@@ -5,75 +5,41 @@
 // filedType : '@?', // = two-way binding, @ one-way
 // onUpdate : '&'
 
+const logScope = 'app-route-config';
+
+//FIXME: DI is not wokring in routeConfig param
+
 export function routeConfig($stateProvider, $urlServiceProvider) {
 
     /* otherwise redirect to index */
     $urlServiceProvider.rules.otherwise({ state: 'index' });
     
-    var index = {
-        name: 'index',
-        url: '/index',
-        component: 'index',
-    }
+    /* Index Component */
+    $stateProvider.state(getIndexState());
 
-    var heroState = {
-        name: 'hero',
-        url : '/hero',
-        component : 'hero',
-        resolve: {
-
-            /* Sample Code */
-            // people : function(){
-            //     return {value: 'simple!'};
-            // },
-            // userDatas   : function($stateParams, Ajax) {
-            //     let id = $stateParams.id;
-            //     return Ajax.fetchUserDatas(id); // return Promise
-            // },
-            resolvedTierData   : function(Ajax){
-                return Ajax.fetchTierDatas();
-            },
-            resolvedPlayer     : function($stateParams, Ajax) {
-                let id = $stateParams.id;
-                return Ajax.fetchPlayerWithId(id);
-            },
-            resolvedPlayerData : function($stateParams, Ajax, CoreUtils) {
-                let id = $stateParams.id;
-                let dates = [];
-                dates.push('17-11-04');
-                dates.push('17-11-05');
-                dates.push('17-11-06');
-                dates.push('17-11-07');
-                dates.push('current');
-                // dates.push(CoreUtils.getTodayIndex());
-                // dates.push(CoreUtils.getYesterIndex());
-                return Ajax.fetchPlayerDatas(id, dates);
-            },
-        },
-    }
+    /* Hero Paerent and Child */
+    $stateProvider.state(getHeroParentState());
+    
 
     var heroSummaryState = {
-        // name: 'hero.summary',
-        // url : '/{id}',
         name: 'hero.summary',
-        url : '/summary/{id}',
+        url : '/summary/{device}/{region}/{id}',
         component : 'heroSummary',
     }
 
     var heroDetailState = {
         name: 'hero.detail',
-        url : '/detail/{id}',
+        url : '/detail/{device}/{region}/{id}',
         component : 'heroDetail',
     }
 
     var heroCompareState = {
         name: 'hero.compare',
-        url : '/compare/{id}',
+        url : 'compare/{device}/{region}/{id}',
         component : 'heroCompare',
     }
 
-    $stateProvider.state(index);
-    $stateProvider.state(heroState);
+    
     $stateProvider.state(heroSummaryState);
     $stateProvider.state(heroDetailState);
     $stateProvider.state(heroCompareState);
@@ -108,28 +74,86 @@ export function routeConfig($stateProvider, $urlServiceProvider) {
     $stateProvider.state(testState);
     $stateProvider.state(testPercentLoader);
 
-    // $stateProvider.state('userlist', {
-    //     url: '/users',
-    //     templateUrl: './partials/users.html',
-    //     controller: 'UsersController',
-    //     resolve: {
-    //       users: function(UserService) {
-    //         return UserService.list();
-    //       }
-    //     }
-    //   });
-        
-    // $stateProvider.state('userlist.detail', {
-    //     url: '/:userId',
-    //     templateUrl: './partials/userDetail.html',
-    //     controller: 'UserDetailController',
-    //     resolve: {
-    //         user: function($transition$, users) {
-    //         return users.find(user => user.id == $transition$.params().userId);
-    //         }
-    //     }
-    // });
+}
 
+function getIndexState() {
+    return {
+        name: 'index',
+        url: '/index',
+        component: 'index',
+        resolve: {
+            indexInformation : function(Ajax) {
+                return Ajax.fetchIndexInformation();
+            }
+        },
+    }
+}
+
+function getHeroParentState() {
+    return {
+        name: 'hero',
+        url : '/hero',
+        component : 'hero',
+        resolve: {
+            resolvedTierData : function($stateParams, Ajax){
+                const device = $stateParams.device;
+                const region = $stateParams.region;
+                const date = '171206';
+                if(device == undefined || region == undefined) {
+                    console.log('one of device, region is undefind in resolved TierData');
+                    return;
+                }
+                return Ajax.fetchTierDatas(device, region, date);
+                
+            },
+            resolvedPlayer : function($stateParams, Ajax) {
+                const device = $stateParams.device;
+                const region = $stateParams.region;
+                const id = $stateParams.id;
+                
+                if(device == undefined || region == undefined || id == undefined) {
+                    // if(device == undefined) AppLogger.log('device is undefined', 'warn', logScope)
+                    // if(region == undefined) AppLogger.log('region is undefined', 'warn', logScope)
+                    // if(id == undefined) AppLogger.log('id is undefined', 'warn', logScope)
+
+                    if(device == undefined) console.log('device is undefined');
+                    if(region == undefined) console.log('region is undefined');
+                    if(id == undefined) console.log('id is undefined');
+                    //move another page
+                    return;
+                }
+                
+                return Ajax.fetchPlayerWithId(device, region, id);
+            },
+            resolvedPlayerData : function($stateParams, Ajax, CoreUtils) {
+                const device = $stateParams.device;
+                const region = $stateParams.region;
+                const id = $stateParams.id;
+                
+                if(device == undefined || region == undefined || id == undefined) {
+                    // if(device == undefined) AppLogger.log('device is undefined', 'warn', logScope)
+                    // if(region == undefined) AppLogger.log('region is undefined', 'warn', logScope)
+                    // if(id == undefined) AppLogger.log('id is undefined', 'warn', logScope)
+
+                    if(device == undefined) console.log('device is undefined');
+                    if(region == undefined) console.log('region is undefined');
+                    if(id == undefined) console.log('id is undefined');
+                    //move another page
+                    return;
+                }
+
+                let dates = [];
+                dates.push('171104');
+                dates.push('171105');
+                dates.push('171106');
+                dates.push('171212');
+                dates.push('current');
+                // dates.push(CoreUtils.getTodayIndex());
+                // dates.push(CoreUtils.getYesterIndex());
+                return Ajax.fetchCrawlDatas(device, region, id, dates);
+            },
+        },
+    }
 }
 
 /* preload resources in case plunker times out */

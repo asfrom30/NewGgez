@@ -20,8 +20,6 @@ const VENDOR_LIBS = [
   "angular-ui-router",
   "angular-validation-match",
   "bootstrap",
-  "bootstrap-sass",
-  "bootstrap-social",
   "d3",
   "d3-selection",
   "fast-json-patch",

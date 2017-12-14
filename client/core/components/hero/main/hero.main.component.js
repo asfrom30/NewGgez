@@ -3,29 +3,37 @@
 import angular from 'angular';
 import './hero.main.css';
 
+const logScope = 'hero-main';
+
 export default angular
     .module('hero.component', [])
     .component('hero', {
         controller : HeroMainCtrl,
         template : require('./hero.main.html'),
         bindings : {
-            resolvedTierData : '<',
             resolvedPlayer : '<',
-            resolvedPlayerData : '<',
+            resolvedTierData : '<',
+            resolvedCrawlDatas : '<',
         }
     }).name;
 
-export function HeroMainCtrl($document, $window, $state, $stateParams){
+export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger){
     var $ctrl = this;
 
     $ctrl.$onInit = function(){
+        AppLogger.log($ctrl.resolvedPlayer, 'info', logScope);
+        AppLogger.log($ctrl.resolvedCrawlDatas, 'info', logScope);
+        AppLogger.log($ctrl.resolvedTierData, 'info', logScope);
 
-        console.log('Check Resolved Data in Hero main');
-        console.log($ctrl.resolvedPlayer);
-        console.log($ctrl.resolvedPlayerData);
-        console.log($ctrl.resolvedTierData);
-
+        $ctrl.device = $stateParams.device;
+        $ctrl.region = $stateParams.region;
         $ctrl.id = $stateParams.id;
+
+        if(!checkDataIsExist()) {
+            //FIXME: IF Current Data is null.. noty and move index page
+            // If not try to get data again
+            return;
+        }
 
         /* Move Player from current to players */
         if($ctrl.resolvedPlayer === undefined) {
@@ -37,24 +45,7 @@ export function HeroMainCtrl($document, $window, $state, $stateParams){
             $ctrl.players.id = $ctrl.resolvedPlayer;
         }
 
-        /* Move player data from resolved to current and players */
-        if($ctrl.resolvedPlayerData === undefined) {
-            $ctrl.currentPlayerData = {};
-            $ctrl.currentPlayerData.id = {};
-        } else {
-            $ctrl.currentPlayerData = {};
-            //TODO: make reponse check util
-            /* Array to Object Bind */
-            for(let playerData of $ctrl.resolvedPlayerData.datas){
-                $ctrl.currentPlayerData[playerData.date] = {};
-                $ctrl.currentPlayerData[playerData.date].meta = playerData.meta;
-                $ctrl.currentPlayerData[playerData.date].data = playerData.data;
-            }
-
-            //TODO: undefined check..
-            // $ctrl.playerDatas = {};
-            // $ctrl.playerDatas.id = $ctrl.resolvedPlayerData.datas;
-        }
+        transferResolvedCrawlDatasToCurrentPlayerDatas();
 
         /* Move Resolved `tierDatas` to `$ctrl`*/
         if($ctrl.resolvedTierData === undefined) {
@@ -87,6 +78,32 @@ export function HeroMainCtrl($document, $window, $state, $stateParams){
 
     $ctrl.onTabClicked = function($event) {
         // let $_targetDom = $event.curren
+    }
+
+    function checkDataIsExist() {
+        return true;
+    }
+
+    function transferResolvedCrawlDatasToCurrentPlayerDatas() {
+        /* currentPlayerData Format */
+        // $ctrl.currentPlayerData = {
+        //     171213 : {meta : {}, data : {}},
+        //     171214 : {meta : {}, data : {}}
+        // };
+
+        /* Move player data from resolved to current and players */
+        if($ctrl.resolvedCrawlDatas == undefined) {
+            $ctrl.currentPlayerData = {};
+            $ctrl.currentPlayerData.id = {};
+            return;
+        }
+
+        $ctrl.currentPlayerData = {};
+        for(let playerData of $ctrl.resolvedCrawlDatas){
+            $ctrl.currentPlayerData[playerData.date] = {};
+            $ctrl.currentPlayerData[playerData.date].meta = playerData.meta;
+            $ctrl.currentPlayerData[playerData.date].data = playerData.data;
+        }
     }
 
     function hideNavBar(){

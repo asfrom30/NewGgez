@@ -8,9 +8,9 @@ export default angular
         controller : HeroDetailCtrl,
         template : require('./hero.detail.html'),
         bindings : {
-            tierData : '<',
             currentPlayer : '<',
             currentPlayerDatas : '<',
+            tierData : '<',
             allPlayers : '<',
             allPlayerDatas : '<',
         }

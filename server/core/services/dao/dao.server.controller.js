@@ -38,6 +38,7 @@ exports.insertTodayCrawlData = function(device, region, doc) {
                 db.close();
                 resolve(doc);
             }, (reason) => {
+                db.close();
                 reject(reason);
             });
         })
@@ -54,6 +55,7 @@ exports.insertCurrentCrawlData = function(device, region, doc) {
                 db.close();
                 resolve(doc);
             }, (reason) => {
+                db.close();
                 reject(reason);
             });
         })
@@ -61,6 +63,8 @@ exports.insertCurrentCrawlData = function(device, region, doc) {
 }
 
 exports.findPlayerById = function(device, region, id) {
+
+    // TODO: id integer check neede
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
     const collectionName = 'players';
 
@@ -70,6 +74,7 @@ exports.findPlayerById = function(device, region, id) {
                 db.close();
                 resolve(doc);
             }, reason => {
+                db.close();
                 reject(reason);
             });
         })
@@ -86,6 +91,7 @@ exports.findPlayerByBtg = function(device, region, btg) {
                 db.close();
                 resolve(doc);
             }, reason => {
+                db.close();
                 reject(reason);
             });
         })
@@ -93,6 +99,7 @@ exports.findPlayerByBtg = function(device, region, btg) {
 }
 
 exports.findCrawlDataById = function(device, region, collectionSuffix, id) {
+    // TODO: id integer check neede
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
     const collectionName = `${config.mongo.collectionName.crawlDatas}-${collectionSuffix}`;
 
@@ -101,11 +108,14 @@ exports.findCrawlDataById = function(device, region, collectionSuffix, id) {
             db.collection(collectionName).findOne({_id : id}, {_id :0, _btg : 0}).then(doc =>{
                 db.close();
 
-                let result = {};
-                result[collectionSuffix] = doc;
-                resolve(result);
+                if(doc == undefined) resolve({date : collectionSuffix, meta : {}, data : {}});
+                else resolve({date : collectionSuffix, meta : doc._meta, data : doc._value});
+                return;
+                // console.log(doc);
+                // let result = {};
+                // result[collectionSuffix] = doc;
             }, reason => {
-                rejct(reason);
+                reject(reason);
             })
         })
     })
@@ -137,6 +147,7 @@ exports.findTierDataByDate = function(device, region, date) {
                 db.close();
                 resolve(doc);
             }, reason => {
+                db.close();
                 reject(reason);
             })
         })

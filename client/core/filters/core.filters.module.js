@@ -121,82 +121,85 @@ export function heroImageSrc() {
 
         switch(input){
             case "doomfist" : 
-                result = "./assets/hero-icon/icon-doomfist.png";
+                result = "./assets/images/hero-icon/icon-doomfist.png";
                 break;
             case "genji" :
-                result = "./assets/hero-icon/icon-genji.png";
+                result = "./assets/images/hero-icon/icon-genji.png";
                 break;
             case "mccree" :
-                result = "./assets/hero-icon/icon-mccree.png";
+                result = "./assets/images/hero-icon/icon-mccree.png";
                 break;
             case "pharah" :
-                result = "./assets/hero-icon/icon-pharah.png";
+                result = "./assets/images/hero-icon/icon-pharah.png";
                 break;
             case "reaper" : 
-                result = "./assets/hero-icon/icon-reaper.png";
+                result = "./assets/images/hero-icon/icon-reaper.png";
                 break;
             case "soldier76" : 
-                result = "./assets/hero-icon/icon-soldier76.png";
+                result = "./assets/images/hero-icon/icon-soldier76.png";
                 break;
             case "sombra" : 
-                result = "./assets/hero-icon/icon-sombra.png";
+                result = "./assets/images/hero-icon/icon-sombra.png";
                 break;
             case "tracer" : 
-                result = "./assets/hero-icon/icon-tracer.png";
+                result = "./assets/images/hero-icon/icon-tracer.png";
                 break;
             case "bastion" : 
-                result = "./assets/hero-icon/icon-bastion.png";
+                result = "./assets/images/hero-icon/icon-bastion.png";
                 break;
             case "hanzo" : 
-                result = "./assets/hero-icon/icon-hanzo.png";
+                result = "./assets/images/hero-icon/icon-hanzo.png";
                 break;
             case "junkrat" : 
-                result = "./assets/hero-icon/icon-junkrat.png";
+                result = "./assets/images/hero-icon/icon-junkrat.png";
                 break;
             case "mei" : 
-                result = "./assets/hero-icon/icon-mei.png";
+                result = "./assets/images/hero-icon/icon-mei.png";
                 break;
             case "torbjorn" : 
-                result = "./assets/hero-icon/icon-torbjorn.png";
+                result = "./assets/images/hero-icon/icon-torbjorn.png";
                 break;
             case "widowmaker" : 
-                result = "./assets/hero-icon/icon-widowmaker.png";
+                result = "./assets/images/hero-icon/icon-widowmaker.png";
                 break;
             case "dva" : 
-                result = "./assets/hero-icon/icon-dva.png";
+                result = "./assets/images/hero-icon/icon-dva.png";
                 break;
             case "orisa" : 
-                result = "./assets/hero-icon/icon-orisa.png";
+                result = "./assets/images/hero-icon/icon-orisa.png";
                 break;
             case "reinhardt" : 
-                result = "./assets/hero-icon/icon-reinhardt.png";
+                result = "./assets/images/hero-icon/icon-reinhardt.png";
                 break;
             case "roadhog" : 
-                result = "./assets/hero-icon/icon-roadhog.png";
+                result = "./assets/images/hero-icon/icon-roadhog.png";
                 break;
             case "winston" : 
-                result = "./assets/hero-icon/icon-winston.png";
+                result = "./assets/images/hero-icon/icon-winston.png";
                 break;
             case "zarya" : 
-                result = "./assets/hero-icon/icon-zarya.png";
+                result = "./assets/images/hero-icon/icon-zarya.png";
                 break;
             case "ana" : 
-                result = "./assets/hero-icon/icon-ana.png";
+                result = "./assets/images/hero-icon/icon-ana.png";
                 break;
             case "lucio" : 
-                result = "./assets/hero-icon/icon-lucio.png";
+                result = "./assets/images/hero-icon/icon-lucio.png";
                 break;
             case "mercy" : 
-                result = "./assets/hero-icon/icon-mercy.png"
-                ;break;
+                result = "./assets/images/hero-icon/icon-mercy.png";
+                break;
             case "symmetra" :
-                result = "./assets/hero-icon/icon-symmetra.png";
+                result = "./assets/images/hero-icon/icon-symmetra.png";
                 break;
             case "zenyatta" : 
-                result = "./assets/hero-icon/icon-zenyatta.png";
+                result = "./assets/images/hero-icon/icon-zenyatta.png";
+                break;
+            case "moira" : 
+                result = "./assets/images/hero-icon/icon-moira.png";
                 break;
             default : 
-                result = "./assets/hero-icon/icon-default.png";
+                result = "./assets/images/hero-icon/icon-default.png";
                 break;
             }
         return result;
@@ -206,21 +209,21 @@ export function heroImageSrc() {
 export function tierImageSrc(){
     return function(cptpt) {
         if(1 <= cptpt && cptpt <= 1499) {
-            return "./assets/tier-icon/bronze-badge.png";
+            return "./assets/images/tier-icon/bronze-badge.png";
         } else if(1500 <= cptpt && cptpt <= 1999) {
-            return "./assets/tier-icon/silver-badge.png";
+            return "./assets/images/tier-icon/silver-badge.png";
         } else if(2000 <= cptpt && cptpt <= 2499) {
-            return "./assets/tier-icon/gold-badge.png";
+            return "./assets/images/tier-icon/gold-badge.png";
         } else if(2500 <= cptpt && cptpt <= 2999) {
-            return "./assets/tier-icon/platinum-badge.png";
+            return "./assets/images/tier-icon/platinum-badge.png";
         } else if(3000 <= cptpt && cptpt <= 3499) {
-            return "./assets/tier-icon/master-badge.png";
+            return "./assets/images/tier-icon/master-badge.png";
         } else if(3500 <= cptpt && cptpt <= 3999) {
-            return "./assets/tier-icon/grandmaster-badge.png";
+            return "./assets/images/tier-icon/grandmaster-badge.png";
         } else if(4000 <= cptpt && cptpt <= 5000) {
-            return "./assets/tier-icon/heroic-badge.png";
+            return "./assets/images/tier-icon/heroic-badge.png";
         } else {
-            return "./assets/tier-icon/default-badge.png";
+            return "./assets/images/tier-icon/default-badge.png";
         }
     }
 }

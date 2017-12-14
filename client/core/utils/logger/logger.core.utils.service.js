@@ -3,7 +3,8 @@
 import angular from 'angular';
 
 const logLevel = 'info';
-const logScopes = ['ajax-service'];
+// const logScopes = ['ajax-service', 'hero-main'];
+const logScopes = [];
 
 export default angular
     .module('logger.core.utils.service', [])
@@ -12,7 +13,6 @@ export default angular
         // logLevel = [info, warn, error];
         // logScope = [class name];
         this.log = function(msg, logLevel, logScope){
-            
             if(process.env.NODE_ENV == 'production') return;
 
             for(let _logScope of logScopes) {

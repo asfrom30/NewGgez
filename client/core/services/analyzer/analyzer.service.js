@@ -221,8 +221,6 @@ export function SummaryMost3Analyzer(diffGamesMap, statMap) {
 
     this.getResult = function(playerData){
 
-        console.log(playerData);
-
         let heroDatas = playerData.current.data;
 
         /* Build Playtimes */
@@ -232,8 +230,6 @@ export function SummaryMost3Analyzer(diffGamesMap, statMap) {
 
             /* Calculate Current TS */
             let currentTs = heroDatas[heroKey].플레이시간;
-            currentTs = currentTs.substring(0, currentTs.indexOf('%timestamp'));
-            currentTs = parseInt(currentTs);
 
             /* Calculate Win Rate */
             let winRates = getWinRates(heroDatas[heroKey]);
@@ -361,13 +357,18 @@ function getDiffWinRates (heroDataA, heroDataB) {
     let loseGamesLabel = "패배한게임";
 
     //FIXME: undeifined....
-    let totalGames = heroDataA[totalGamesLabel] - heroDataB[totalGamesLabel];
-    let winGames = heroDataA[winGamesLabel] - heroDataB[drawGamesLabel];
-    let drawGames = heroDataA[drawGamesLabel] - heroDataB[drawGamesLabel];
-    let loseGames = heroDataA[loseGamesLabel] - heroDataB[loseGamesLabel];
-
-    let result = makeWinRatesObj(defaultResult, totalGames, winGames, drawGames, loseGames);
-    return result;
+    try {
+        let totalGames = heroDataA[totalGamesLabel] - heroDataB[totalGamesLabel];
+        let winGames = heroDataA[winGamesLabel] - heroDataB[drawGamesLabel];
+        let drawGames = heroDataA[drawGamesLabel] - heroDataB[drawGamesLabel];
+        let loseGames = heroDataA[loseGamesLabel] - heroDataB[loseGamesLabel];
+    
+        let result = makeWinRatesObj(defaultResult, totalGames, winGames, drawGames, loseGames);
+        return result;
+    } catch (error) {
+        return defaultResult;
+    }
+    
 }
 
 /* TODO: Need test Code*/

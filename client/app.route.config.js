@@ -125,7 +125,7 @@ function getHeroParentState() {
                 
                 return Ajax.fetchPlayerWithId(device, region, id);
             },
-            resolvedPlayerData : function($stateParams, Ajax, CoreUtils) {
+            resolvedCrawlDatas : function($stateParams, Ajax, CoreUtils) {
                 const device = $stateParams.device;
                 const region = $stateParams.region;
                 const id = $stateParams.id;

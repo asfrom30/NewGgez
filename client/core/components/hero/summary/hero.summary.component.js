@@ -14,7 +14,7 @@ export default angular.module('hero.summary' ,[])
     })
     .name;
 
-export function heroSummaryCtrl($element, $timeout, $rootScope, $stateParams, Analyzer, Indexer, CoreUtils, LABEL_SUMMARY_PAGE){
+export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stateParams, Analyzer, Indexer, AppLogger, CoreUtils, LABEL_SUMMARY_PAGE){
     /* @ngInject */
 
     'ngInject';
@@ -41,7 +41,10 @@ export function heroSummaryCtrl($element, $timeout, $rootScope, $stateParams, An
         /* Calculate Trend Data */
         $ctrl.cache = {};
         $ctrl.cache.summary = Analyzer.getSummaryTrend($ctrl.currentPlayerDatas);
-    }
+
+        // console.log($ctrl.cache);
+        // console.log($ctrl.summaryData);
+    }   
 
     $ctrl.$onChanges = function(changesObj){
         

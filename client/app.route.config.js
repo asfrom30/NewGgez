@@ -17,40 +17,20 @@ export function routeConfig($stateProvider, $urlServiceProvider) {
     /* Index Component */
     $stateProvider.state(getIndexState());
 
-    /* Hero Paerent and Child */
+    /* Hero Paerent */
     $stateProvider.state(getHeroParentState());
-    
-
-    var heroSummaryState = {
-        name: 'hero.summary',
-        url : '/summary/{device}/{region}/{id}',
-        component : 'heroSummary',
-    }
-
-    var heroDetailState = {
-        name: 'hero.detail',
-        url : '/detail/{device}/{region}/{id}',
-        component : 'heroDetail',
-    }
-
-    var heroCompareState = {
-        name: 'hero.compare',
-        url : 'compare/{device}/{region}/{id}',
-        component : 'heroCompare',
-    }
-
-    
-    $stateProvider.state(heroSummaryState);
-    $stateProvider.state(heroDetailState);
-    $stateProvider.state(heroCompareState);
+    /* Hero Child */
+    $stateProvider.state(getHeroSummaryState());
+    $stateProvider.state(getHeroDetailState());
+    $stateProvider.state(getHeroCompareState());
+    $stateProvider.state(getHeroRankState());
 
     /* Hero Admin Page */
     var heroAdminState = {
         name : 'hero.admin',
-        url  : '/admin/{id}',
+        url  : '/admin/{device}/{region}/{id}',
         template: '<h1>Hero Admin</h1><pre>{{$root.players | json}}</pre>',
         controller : function($rootScope, $scope, people, userDatas, players, Ajax) {
-            console.log($rootScope.players);
             $scope.userDatas = userDatas;
             $rootScope.players = players;
         }
@@ -142,17 +122,46 @@ function getHeroParentState() {
                     return;
                 }
 
-                let dates = [];
-                dates.push('171104');
-                dates.push('171105');
-                dates.push('171106');
-                dates.push('171212');
-                dates.push('current');
-                // dates.push(CoreUtils.getTodayIndex());
-                // dates.push(CoreUtils.getYesterIndex());
+                let dates = [CoreUtils.getTodayIndex()
+                    , CoreUtils.getCurrentIndex()
+                    , CoreUtils.getYesterIndex()
+                    , CoreUtils.getWeekIndex()
+                ];
                 return Ajax.fetchCrawlDatas(device, region, id, dates);
             },
         },
+    }
+}
+
+function getHeroSummaryState() {
+    return {
+        name: 'hero.summary',
+        url : '/summary/{device}/{region}/{id}',
+        component : 'heroSummary',
+    }
+}
+
+function getHeroDetailState() {
+    return {
+        name: 'hero.detail',
+        url : '/detail/{device}/{region}/{id}',
+        component : 'heroDetail',
+    }
+}
+
+function getHeroCompareState() {
+    return {
+        name: 'hero.compare',
+        url : '/compare/{device}/{region}/{id}',
+        component : 'heroCompare',
+    }
+}
+
+function getHeroRankState() {
+    return {
+        name: 'hero.rank',
+        url : 'rank/{device}/{region}/{id}',
+        component : 'heroRank',
     }
 }
 

@@ -1,9 +1,6 @@
 'use strict';
-
+require('./feature.radar.chart.css');
 import angular from 'angular';
-// import { RadarChartRedesign } from './radar-chart-redesign';
-
-import RadarChartRedesign from './radar-chart-redesign';
 
 export default angular
     .module('feature.radar.chart',[]) // to be d3.radarChart
@@ -33,12 +30,15 @@ export function RadarChart($element, $attrs){
         /* Set RadarChartOptions */
         let radarChartOptions = {};
         
-        var margin = {top: 10, right: 10, bottom: 10, left: 10},
-            width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+        console.log($('hero-detail .first-section').width())
+        var margin = {top: 100, right: 30, bottom: 30, left: 30},
+            // width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+            //FIXME: NOT DEPEND ON JQUERY, DEPEND ON ELEMENT
+            width = $('hero-detail .first-section').width() - margin.left - margin.right,
             height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
                 
         var color = d3.scale.ordinal()
-            .range(["#CC333F","#00A0B0", "#EDC951"]);
+            .range(["#CC333F", "#CC333F","#00A0B0", "#EDC951"]);
     
         radarChartOptions = {
             w: width,
@@ -56,12 +56,25 @@ export function RadarChart($element, $attrs){
     $ctrl.$onChanges = function(changesObj){
         /* Set Data */
         let dataset = [];
+        dataset.push(makeLabelset($ctrl.labelColumn));
         dataset.push(makeDataset($ctrl.labelColumn, $ctrl.firstColumn));
         dataset.push(makeDataset($ctrl.labelColumn, $ctrl.secondColumn));
         dataset.push(makeDataset($ctrl.labelColumn, $ctrl.thirdColumn));
 
         $ctrl.dataset = dataset;
     }
+}
+
+function makeLabelset(labelColumn) {
+    let result = [];
+
+    if(labelColumn == undefined) return [];
+
+    for(let i=0; i < labelColumn.length; i++){
+        let axis = (labelColumn[i] == undefined) ? '-' : labelColumn[i];
+        result.push({axis : axis, value : 0});
+    }
+    return result;
 }
 
 function makeDataset(labelColumn, dataColumn) {

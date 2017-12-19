@@ -4,7 +4,7 @@ import angular from 'angular';
 
 import RadarChartRedesign from './lib/radar.chart.redesign';
 // TODO: difference?
-// import { RadarChartRedesign } from './radar-chart-redesign';
+// import { RadarChartRedesign } from './lib/radar.chart.redesign';
 
 export default angular
     .module('d3.radar.chart.common.components',[]) // to be d3.radarChart
@@ -24,24 +24,28 @@ export function RadarChart($element, $attrs){
     
     $ctrl.$onInit = function(){
 
-        if($ctrl.radarChartOptions == undefined) $ctrl.radarChartOptions = getDefaultRadarChartOptions();
+    }
+    
+    $ctrl.$onChanges = function(changesObj) {
+        console.log('on changes in common d3.js')
 
-        /* The way to change d3 dom <- angular dom */
+        /* set default chart options */
+        if($ctrl.radarChartOptions == undefined) $ctrl.radarChartOptions = getDefaultRadarChartOptions();
+        
+        /* replace angular dom select */
+        let targetDom = $element.find(".radar-chart-redesign")[0];
+        console.log($ctrl.dataset);
+        RadarChartRedesign($element.find(targetDom)[0], $ctrl.dataset, $ctrl.radarChartOptions);
+         /* The way to change d3 dom <- angular dom */
         /* first */
         // if(d3.select("<.class>") == d3.select($element.find(<.class>)[0]) // true
         /* second */
         // if(d3.select("<#id>") == d3.select($element.find(<#id>) // true
-
-        /* replace angular dom select */
-        let targetDom = $element.find(".radar-chart-redesign")[0];
-        RadarChartRedesign($element.find(targetDom)[0], $ctrl.dataset, $ctrl.radarChartOptions);
-    }
-
-    $ctrl.$onChanges = function(changesObj) {
-        let targetDom = $element.find(".radar-chart-redesign")[0];
-        RadarChartRedesign($element.find(targetDom)[0], $ctrl.dataset, $ctrl.radarChartOptions);   
     }
 }
+
+/* View */
+// function show
 
 function getDefaultRadarChartOptions(){
 

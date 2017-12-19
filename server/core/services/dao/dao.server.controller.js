@@ -102,10 +102,11 @@ exports.findCrawlDataById = function(device, region, collectionSuffix, id) {
     // TODO: id integer check neede
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
     const collectionName = `${config.mongo.collectionName.crawlDatas}-${collectionSuffix}`;
+    const query = {_id :0, _btg : 0};
 
     return new Promise((resolve, reject) =>{
         client.connect(dbUri).then(db => {
-            db.collection(collectionName).findOne({_id : id}, {_id :0, _btg : 0}).then(doc =>{
+            db.collection(collectionName).findOne({_id : id}, query).then(doc =>{
                 db.close();
 
                 if(doc == undefined) resolve({date : collectionSuffix, meta : {}, data : {}});

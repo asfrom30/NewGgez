@@ -1,12 +1,12 @@
 <div class="hero-main">
     <hero-header current-player="$ctrl.currentPlayer"></hero-header>
-    <div class="hero-nav-tabs">
+    <div id="local-hero-tabs" class="hero-nav-tabs">
         <ul class="nav nav-tabs">
-            <li class="nav-item active"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('summary')">Summary</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link active" ui-sref-active="active" ng-click="$ctrl.moveTab('summary')">Summary</a></li>
             <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Detail</a></li>
-            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Compare</a></li>
-            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Rank</a></li>
-            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Favorite</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('compare')">Compare</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('rank')">Rank</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('favorite')">Favorite</a></li>
             <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('admin')">Admin</a></li>
         </ul>
     </div>

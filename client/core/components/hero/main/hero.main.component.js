@@ -61,17 +61,16 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger
 
     $ctrl.moveTab = function(stateName){
     
-        let id = $stateParams.id;
-        
+        const params = {device : $stateParams.device, region : $stateParams.region, id : $stateParams.id};
         switch(stateName) {
             case 'summary' : 
-                $state.go('hero.summary', {id:id});
+                $state.go('hero.summary', params);
                 break;
             case 'detail' : 
-                $state.go('hero.detail', {id:id});
+                $state.go('hero.detail', params);
                 break;
             case 'admin' :
-                $state.go('hero.admin', {id:id});
+                $state.go('hero.admin', params);
                 break;
         }
     }

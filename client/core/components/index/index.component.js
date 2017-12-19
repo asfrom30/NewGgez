@@ -22,9 +22,6 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     var $ctrl = this;
     $ctrl.search = search;
     $ctrl.moveHeroPage = moveHeroPage;
-
-    $ctrl.moveHeroPage = moveHeroPage;
-
     $ctrl.$onInit = function() {
         initView();
     }
@@ -94,8 +91,12 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         const btg = input.replace("#", "-");
 
         Ajax.fetchPlayerWithBtg(device, region, btg).then(response => {
-            console.log('move hero page with ' + device + ', ' + region + ', ' + response._id);
-            // moveHeroPage(device, region, id);
+            if(response._id == undefined) {
+                CoreUtils.noty('존재 하지 않는 ID 입니다. 관리자에게 알려주세요. 조치해드리겠습니다.');
+                consoel.log('id is undefined');
+                return;
+            };
+            moveHeroPage(device, region, response._id);
         }, reason => {
             if(reason.isServerError) {
                 CoreUtils.noty("서버에서 응답하지 않습니다.", "type");
@@ -148,6 +149,8 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     }
 
     function moveHeroPage(device, region, id){
+        // console.log('move hero page with ' + device + ', ' + region + ', ' + response._id);
+        // return;
         if(device == undefined | region == undefined | id == undefined) {
             if(device == undefined) AppLogger.log('device is undefined, can not go hero page', 'error', logScope);
             if(region == undefined) AppLogger.log('device is undefined, can not go hero page', 'error', logScope);
@@ -157,7 +160,7 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         // FIXME: Impl service for transfer profile data        
         // bind Current player only battle tag
         // $ctrl.bindCurrentPlayer({$event : {player : player}});
-        $window.location.href = `#!/hero/summary/${device}/${region}`;
+        $window.location.href = `#!/hero/summary/${device}/${region}/${id}`;
     }
 
     $ctrl.test = function(){

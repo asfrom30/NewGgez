@@ -1,19 +1,27 @@
-<h1>My detail Page</h1>
+<button ng-click='$ctrl.preSelected()'>Pre Selector</button>
+<pre style="color:white">{{$ctrl.selector | json}}</pre>
 
-<pre>{{$ctrl.selector | json}}</pre>
-<feature-radar-chart 
-    label-column = "$ctrl.radar.labelColumn"
-    first-column = "$ctrl.radar.firstColumn"
-    second-column = "$ctrl.radar.secondColumn"
-    third-column ="$ctrl.radar.thirdColumn">
-</feature-radar-chart>
-<compare-table
-    label-column = "$ctrl.table.labelColumn"
-    first-column = "$ctrl.table.firsanatColumn"
-    second-column = "$ctrl.table.secondColumn"
-    third-column ="$ctrl.table.thirdColumn"/>
-</compare-table>
-
+<div class="wrapper-section-layout wrapper-section-position">
+    <div class="loading-section flex f-align-w-center f-align-h-center"> 
+        <div style="font-size:45px; color:white">데이터를 선택해 주세요</div>
+    </div>
+    <div class="first-section">
+        <feature-radar-chart
+            label-column = "$ctrl.radar.labelColumn"
+            first-column = "$ctrl.radar.firstColumn"
+            second-column = "$ctrl.radar.secondColumn"
+            third-column ="$ctrl.radar.thirdColumn">
+        </feature-radar-chart>
+    </div>
+    <div class="second-section">
+        <compare-table 
+            label-column = "$ctrl.table.labelColumn"
+            first-column = "$ctrl.table.firsanatColumn"
+            second-column = "$ctrl.table.secondColumn"
+            third-column ="$ctrl.table.thirdColumn"/>
+        </compare-table>
+    </div>
+</div>
 <hero-selectors
 
     p1-total-games = "$ctrl.p1TotalGames",

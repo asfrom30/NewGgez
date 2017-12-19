@@ -9,29 +9,15 @@ export default angular
                 switch(selectedDate) {
                     case 'week' : 
                         result.A = "current";
-                        result.B = CoreUtils.getDateIndex(7);
-                        result.B = '171105';
-
-                        /* for dummy data*/
-                        result.A = 'current';
-                        result.B = '171105';
+                        result.B = CoreUtils.getWeekIndex();
                         break;
                     case 'yesterday' : 
-                        result.A = CoreUtils.getDateIndex(0);
-                        result.B = CoreUtils.getDateIndex(1);
-
-                        /* dummy 25,26,27,28(current)*/
-                        result.A = '171106';      
-                        result.B = '171105';
+                        result.A = CoreUtils.getTodayIndex();
+                        result.B = CoreUtils.getYesterIndex();
                         break;
                     case 'today' :
                         result.A = "current";
-                        result.B = CoreUtils.getDateIndex(0);
-
-                        /* dummy 25,26,27,28(current)*/
-                        result.A = "current";      
-                        result.B = '171106';
-
+                        result.B = CoreUtils.getTodayIndex();
                         break;
                     default :
                         result.A = "current";

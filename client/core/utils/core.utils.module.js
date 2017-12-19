@@ -37,19 +37,22 @@ export default angular
         }
 
         this.getTodayIndex = function(){
-            return moment().subtract(0, 'days').format('YY-MM-DD');
+            return '171113';
+            // return moment().subtract(0, 'days').format('YYMMDD');
         }   
 
         this.getYesterIndex = function(){
-            return moment().subtract(1, 'days').format('YY-MM-DD');
+            return '171105';
+            // return moment().subtract(1, 'days').format('YYMMDD');
         }
         
         this.getWeekIndex = function(){
-            return moment().subtract(7, 'days').format('YY-MM-DD');
+            return '171027';
+            // return moment().subtract(7, 'days').format('YYMMDD');
         }
         
         this.getDateIndex = function(daysAgo){
-            return moment().subtract(daysAgo, 'days').format('YY-MM-DD');
+            return moment().subtract(daysAgo, 'days').format('YYMMDD');
         }
 
         /* Noty Util*/

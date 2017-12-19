@@ -26,8 +26,7 @@
 .hero-main .nav>li>a:hover {
     background-color : transparent;
 } */
-
-.hero-main .nav>li.active > a {
+#local-hero-tabs a.active {
     background-color : black;
     color : white;
 }

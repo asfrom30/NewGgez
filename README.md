@@ -91,6 +91,7 @@ It is implemented each datas are stored in each databases but in the one server.
 ## Distribution
 
 ## And more...
+- [ ] client cache storage using Stack(Max stack limitation)
 - [ ] continuous build : travis
 - [ ] impl test code and refactoring impl test code in client side..(protractor and jasmine)
 - [ ] i18n

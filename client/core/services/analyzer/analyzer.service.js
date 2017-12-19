@@ -228,8 +228,13 @@ export function SummaryMost3Analyzer(diffGamesMap, statMap) {
         for(let heroKey in heroDatas) {
             if(heroKey == 'all') continue;
 
+            /* Hero data is empty object */
+            const heroData = heroDatas[heroKey];
+            if(Object.keys(heroData).length === 0 && heroData.constructor === Object || heroData == undefined) continue;
+
             /* Calculate Current TS */
             let currentTs = heroDatas[heroKey].플레이시간;
+            currentTs = convertToInteger(currentTs);
 
             /* Calculate Win Rate */
             let winRates = getWinRates(heroDatas[heroKey]);
@@ -427,4 +432,16 @@ function makeWinRatesObj (defaultResult, totalGames, winGames, drawGames, loseGa
         }
     }
     return defaultResult;
+}
+
+function convertToInteger(input) {
+    if(!Number.isInteger(input)) {
+        const index = input.indexOf('%timestamp');
+        if( index != -1 ) {
+            input = input.slice(0, index);
+        }
+        return Number.parseInt(input);
+    } else {
+        return input
+    }
 }

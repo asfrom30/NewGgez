@@ -3,8 +3,8 @@
 import angular from 'angular';
 
 const logLevel = 'info';
-// const logScopes = ['ajax-service', 'hero-main'];
-const logScopes = [];
+const logScopes = ['ajax-service', 'hero-main'];
+// const logScopes = [];
 
 export default angular
     .module('logger.core.utils.service', [])

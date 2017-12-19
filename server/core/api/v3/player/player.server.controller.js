@@ -96,6 +96,7 @@ function sendPlayer(res, player) {
     else res.status(200).json({msg : 'send player success', err : '', value : player});
 }
 
+//FIXME: if counter collection is not exist, upsert : true;
 function appendNewPlayerId(device, region, crawlData) {
     return new Promise((resolve, reject) => {
         appDao.getNewPlayerId('pc', 'kr').then(id => {

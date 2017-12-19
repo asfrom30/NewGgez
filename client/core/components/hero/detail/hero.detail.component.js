@@ -1,5 +1,5 @@
 'use strict';
-
+require('./hero.detail.css');
 import angular from 'angular';
 
 export default angular
@@ -28,6 +28,9 @@ export function HeroDetailCtrl(AppLogger, CONFIG, $scope, $stateParams, Analyzer
     // $ctrl.stateParams.id = $stateParams.id;
 
     $ctrl.$onInit = function(){
+
+        //TODO: Transfer data method (encapsulation)
+        // transferData();
 
         /* Detail Cache Data */
         $ctrl.detail = {};
@@ -58,52 +61,64 @@ export function HeroDetailCtrl(AppLogger, CONFIG, $scope, $stateParams, Analyzer
         /* tier data */
         $ctrl.cache.tier = Analyzer.getTierData($ctrl.tierData);
 
-        /* Preselected */ 
-        $ctrl.selector = {
-            p1Index : "week",
-            p2Index : "week",
-            tierIndex : "gold",
-            heroIndex : "hanzo"
-        }
-
-        $ctrl.selectorChanged($ctrl.selector);
-
         /* Debug */
+        console.log('↓ this is resolved Data');
+        console.log($ctrl.currentPlayer);
+        console.log($ctrl.currentPlayerDatas);
+        console.log($ctrl.tierData);
+        console.log('↓ this is cache');
         console.log($ctrl.cache);
         // console.log($ctrl.currentPlayerDatas);
         // console.log($ctrl.tierData);
-
-        AppLogger.log('heelo', 'success', $ctrl.logScope);
-        AppLogger.log('heelo', 'error', $ctrl.logScope);
-        AppLogger.log('heelo', 'warn', $ctrl.logScope);
-        AppLogger.log('heelo', 'info', $ctrl.logScope);
     }
     
 
     /* Binding Method */
     $ctrl.selectorChanged = function(selector) {
-
-        /* And condition neede(one of column && hero select */
-        let isP1Selected = (selector.p1Index == undefined) ? false : true;
-        let isP2Selected = (selector.p2Index == undefined) ? false : true;;
-        let isTierSelected = (selector.tierIndex == undefined) ? false : true;;
-        let isHeroSelectoed = (selector.heroIndex == undefined) ? false : true;
-
-        if(!((isP1Selected | isP2Selected | isTierSelected) && isHeroSelectoed)) {
-            return;
-        }
-
         // For display
         $ctrl.selector = selector;
+
+        // mapping
         let p1Index = selector.p1Index;
         let p2Index = selector.p2Index;
         let tierIndex = selector.tierIndex;
         let heroIndex = selector.heroIndex;
 
+
+        if(selector.heroIndex == undefined) {
+            // notify 'choose hero'
+            return;
+        }
+
         /* Update radar and table dataset*/
         updateRadarDataset(p1Index, p2Index, tierIndex, heroIndex);
         updateTableDataSet(p1Index, p2Index, tierIndex, heroIndex);
         updatePlayGamesLabel(p1Index, p2Index, tierIndex, heroIndex);
+
+        return;
+
+
+        // /* And condition neede(one of column && hero select */
+        // let isP1Selected = (selector.p1Index == undefined) ? false : true;
+        // let isP2Selected = (selector.p2Index == undefined) ? false : true;;
+        // let isTierSelected = (selector.tierIndex == undefined) ? false : true;;
+        // let isHeroSelectoed = (selector.heroIndex == undefined) ? false : true;
+
+        
+        // if(!((isP1Selected | isP2Selected | isTierSelected) && isHeroSelectoed)) {
+        //     return;
+        // }
+
+        
+        // let p1Index = selector.p1Index;
+        // let p2Index = selector.p2Index;
+        // let tierIndex = selector.tierIndex;
+        // let heroIndex = selector.heroIndex;
+
+        // /* Update radar and table dataset*/
+        // updateRadarDataset(p1Index, p2Index, tierIndex, heroIndex);
+        // updateTableDataSet(p1Index, p2Index, tierIndex, heroIndex);
+        // updatePlayGamesLabel(p1Index, p2Index, tierIndex, heroIndex);
     }
 
     $ctrl.storeUserDatas = function(id, userDatas) {
@@ -127,7 +142,21 @@ export function HeroDetailCtrl(AppLogger, CONFIG, $scope, $stateParams, Analyzer
         }
     }
 
+    $ctrl.preSelected = function() {
+         $ctrl.selector = {
+            p1Index : "week",
+            p2Index : "week",
+            tierIndex : "gold",
+            heroIndex : "hanzo"
+        }
+
+        $ctrl.selectorChanged($ctrl.selector);
+    }
+
     function updateRadarDataset(p1Index, p2Index, tierIndex, heroIndex) {
+        
+        /* heroIndex is basic index */
+        if(heroIndex == undefined) return;
         
         $ctrl.radar = {};
         $ctrl.radar.labelColumn = $ctrl.cache.labels[heroIndex];
@@ -136,14 +165,26 @@ export function HeroDetailCtrl(AppLogger, CONFIG, $scope, $stateParams, Analyzer
         let secondColumn = [];
         let thirdColumn = [];
 
-        if(p1Index != undefined) firstColumn = $ctrl.cache.p1.diffDatas[p1Index][heroIndex];
-        if(p2Index != undefined) secondColumn = $ctrl.cache.p2.diffDatas[p2Index][heroIndex];
-        if(tierIndex != undefined) thirdColumn = $ctrl.cache.tier[tierIndex][heroIndex];
+        try {
+            $ctrl.radar.firstColumn = $ctrl.cache.p1.diffDatas[p1Index][heroIndex];
+        } catch (error) {
+            $ctrl.radar.firstColumn = [];
+            console.log(error);
+        }
 
+        try {
+            $ctrl.radar.secondColumn = $ctrl.cache.p2.diffDatas[p2Index][heroIndex];
+        } catch (error) {
+            $ctrl.radar.secondColumn = [];
+            console.log(error);
+        }
 
-        $ctrl.radar.firstColumn = firstColumn;
-        $ctrl.radar.secondColumn = secondColumn;
-        $ctrl.radar.thirdColumn = thirdColumn;
+        try {
+            $ctrl.radar.thirdColumn = $ctrl.cache.tier[tierIndex][heroIndex];
+        } catch (error) {
+            $ctrl.radar.thirdColumn = [];
+            console.log(error)
+        }
     }
     
     function updateTableDataSet(p1Index, p2Index, tierIndex, heroIndex){

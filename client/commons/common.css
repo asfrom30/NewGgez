@@ -52,9 +52,9 @@
 .f-align-h-start {-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start; }
 .f-align-h-end {-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end; }
 
-.flexAlignSelf-v-center {-ms-flex-item-align:center;align-self:center; }
-.flexAlignSelf-v-start {-ms-flex-item-align:start;align-self:flex-start; }
-.flexAlignSelf-v-end {-ms-flex-item-align:end;align-self:flex-end; }
+.f-align-self-v-center {-ms-flex-item-align:center;align-self:center; }
+.f-align-self-v-start {-ms-flex-item-align:start;align-self:flex-start; }
+.f-align-self-v-end {-ms-flex-item-align:end;align-self:flex-end; }
  
  /* View Port */
 .v-100-vw {width:100vw;}
@@ -108,6 +108,9 @@
 .m-b-20{ margin-bottom:20px; }
 .m-b-30{ margin-bottom:30px; }
 .m-b-40{ margin-bottom:40px; }
+
+.m-l-auto{ margin-left : auto};
+.m-l-auto{ margin-right:auto};
 
 /* over flow */
 .overflow-hidden{overflow:hidden}

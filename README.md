@@ -95,3 +95,4 @@ It is implemented each datas are stored in each databases but in the one server.
 - [ ] continuous build : travis
 - [ ] impl test code and refactoring impl test code in client side..(protractor and jasmine)
 - [ ] i18n
+- [ ] apply local css

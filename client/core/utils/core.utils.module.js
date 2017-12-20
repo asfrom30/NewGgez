@@ -37,17 +37,17 @@ export default angular
         }
 
         this.getTodayIndex = function(){
-            return '171113';
+            return '171212';
             // return moment().subtract(0, 'days').format('YYMMDD');
         }   
 
         this.getYesterIndex = function(){
-            return '171105';
+            return '171111';
             // return moment().subtract(1, 'days').format('YYMMDD');
         }
         
         this.getWeekIndex = function(){
-            return '171027';
+            return '171104';
             // return moment().subtract(7, 'days').format('YYMMDD');
         }
         

@@ -18,9 +18,9 @@ export default angular
                 }
                 return result;
             },
-            getDiffGames : function(heroDataA, heroDataB) {
+            getDiffGames : function(playerDatas, diffIndexes) {
                 let analyzer = new DiffGamesAnalyzer(Indexer, CONST_HERO_MAP, CONST_DIFF_GAMES_MAP);
-                return analyzer.getResult(heroDataA, heroDataB);
+                return analyzer.getResult(playerDatas, diffIndexes);
             },
             getDiffHeroDatas : function(playerDatas, diffIndexes, tierData) {
                 let analyzer = new DiffHeroDatasAnalyzer(STATMAP, Indexer);
@@ -60,14 +60,22 @@ export function DiffGamesAnalyzer(Indexer, heroMap, diffGamesMap) {
             
             result[diffIndex] = {};
     
-            let indexes = Indexer.getIndexes(diffIndex);
+            const indexes = Indexer.getIndexes(diffIndex);
 
-            let heroDatasA = playerDatas[indexes.A].data;
-            let heroDatasB = playerDatas[indexes.B].data;
+            const heroDatasA = playerDatas[indexes.A].data;
+            const heroDatasB =  (indexes.B == undefined) ? undefined : playerDatas[indexes.B].data;
 
             for(let heroId of heroMap) {
-                if(heroDatasA[heroId] == undefined || heroDatasB[heroId] == undefined) continue;
-                result[diffIndex][heroId] = getWinRates(heroDatasA[heroId], heroDatasB[heroId]);
+                let winRates;
+
+                if(heroDatasA[heroId] == undefined) {
+                    continue;
+                } else {
+                    if(heroDatasB == undefined) winRates = getDiffWinRates(heroDatasA[heroId], undefined);
+                    else winRates = getDiffWinRates(heroDatasA[heroId], heroDatasB[heroId]);
+                    
+                }
+                result[diffIndex][heroId] = winRates;
             }
         }
     
@@ -84,6 +92,8 @@ export function DiffHeroDatasAnalyzer(STATMAP, Indexer) {
         let result = {};
 
         for(let dateIdx of arrDateIdx){
+            if(dateIdx == 'season') continue;
+
             result[dateIdx] = {};
 
             let dates = Indexer.getIndexes(dateIdx);
@@ -356,23 +366,36 @@ function getDiffWinRates (heroDataA, heroDataB) {
         loseGames : "-"
     };
 
+    if(heroDataA == undefined) return defaultResult;
+
     let totalGamesLabel = "치른게임";
     let winGamesLabel = "승리한게임";
     let drawGamesLabel = "무승부게임";
     let loseGamesLabel = "패배한게임";
 
-    //FIXME: undeifined....
-    try {
-        let totalGames = heroDataA[totalGamesLabel] - heroDataB[totalGamesLabel];
-        let winGames = heroDataA[winGamesLabel] - heroDataB[drawGamesLabel];
-        let drawGames = heroDataA[drawGamesLabel] - heroDataB[drawGamesLabel];
-        let loseGames = heroDataA[loseGamesLabel] - heroDataB[loseGamesLabel];
-    
-        let result = makeWinRatesObj(defaultResult, totalGames, winGames, drawGames, loseGames);
-        return result;
-    } catch (error) {
-        return defaultResult;
+    /* make default heroDataB : all of undefined value to be 0 */
+    if(heroDataB == undefined) {
+        heroDataB = {};
+        heroDataB[totalGamesLabel] = 0;
+        heroDataB[winGamesLabel] = 0;
+        heroDataB[drawGamesLabel] = 0;
+        heroDataB[loseGamesLabel] = 0;
+    } else {
+        if (heroDataB[totalGamesLabel] == undefined) heroDataB[totalGamesLabel] = 0;
+        if (heroDataB[winGamesLabel] == undefined) heroDataB[winGamesLabel] = 0;
+        if (heroDataB[drawGamesLabel] == undefined) heroDataB[drawGamesLabel] = 0;
+        if (heroDataB[loseGamesLabel] == undefined) heroDataB[loseGamesLabel] = 0;
     }
+
+
+    const totalGames = (heroDataA[totalGamesLabel] == undefined) ? '-' : heroDataA[totalGamesLabel] - heroDataB[totalGamesLabel];
+    const winGames = (heroDataA[winGamesLabel] == undefined) ? '-' : heroDataA[winGamesLabel] - heroDataB[drawGamesLabel];
+    const drawGames = (heroDataA[drawGamesLabel] == undefined) ? '-' : heroDataA[drawGamesLabel] - heroDataB[drawGamesLabel];
+    const loseGames = (heroDataA[loseGamesLabel] == undefined) ? '-' : heroDataA[loseGamesLabel] - heroDataB[loseGamesLabel];
+    
+
+    const result = makeWinRatesObj(defaultResult, totalGames, winGames, drawGames, loseGames);
+    return result;
     
 }
 
@@ -406,7 +429,10 @@ function getWinRates (heroData) {
 }
 
 function makeWinRatesObj (defaultResult, totalGames, winGames, drawGames, loseGames){
-    if(isNaN(totalGames) || totalGames == 0){
+    if(isNaN(totalGames)){
+        return defaultResult;
+    } else if (totalGames == 0) {
+        defaultResult.totalGames = 0;
         return defaultResult;
     } else {
         defaultResult.totalGames = totalGames;

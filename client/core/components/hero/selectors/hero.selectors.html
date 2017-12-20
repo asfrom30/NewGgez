@@ -1,19 +1,23 @@
-<div class="fixed-bottom">
+<div id="h-s" class="fixed-bottom">
     <div id="fixed-bottom-collapse" class="fixed-bottom-content collapse show">
         <!-- First Player Data -->
         <div id="first-player-selector" class="user-selector">
             <div class="btn-group" role="group">
-                <button id="first-player-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
-                    <div>주간</div>
-                    <div>{{$ctrl.p1TotalGames.week}}</div>
-                </button>
                 <button id="first-player-yesterday-selected"   ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
                     <div>어제</div>
-                    <div>{{$ctrl.p1TotalGames.yesterday}}</div>
+                    <div>{{$ctrl.p1GameLabel.yesterday}}</div>
                 </button>
                 <button id="first-player-today-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
                     <div>오늘</div>
-                    <div>{{$ctrl.p1TotalGames.today}}</div>
+                    <div>{{$ctrl.p1GameLabel.today}}</div>
+                </button>
+                <button id="first-player-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
+                    <div>주간</div>
+                    <div>{{$ctrl.p1GameLabel.week}}</div>
+                </button>
+                <button id="first-player-season-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
+                    <div>시즌전체</div>
+                    <div>{{$ctrl.p1GameLabel.season}}</div>
                 </button>
             </div>
         </div>
@@ -21,17 +25,21 @@
         <!-- Second Player Data -->
         <div id="second-player-selector" class="user-selector">
             <div class="btn-group" role="group">
-                <button id="second-player-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
-                    <div>주간</div>
-                    <div>{{$ctrl.p2TotalGames.week}}</div>
-                </button>
                 <button id="second-player-yesterday-selected"   ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
                     <div>어제</div>
-                    <div>{{$ctrl.p2TotalGames.yesterday}}</div>
+                    <div>{{$ctrl.p2GameLabel.yesterday}}</div>
                 </button>
                 <button id="second-player-today-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
                     <div>오늘</div>
-                    <div>{{$ctrl.p2TotalGames.today}}</div>
+                    <div>{{$ctrl.p2GameLabel.today}}</div>
+                </button>
+                <button id="second-player-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
+                    <div>주간</div>
+                    <div>{{$ctrl.p2GameLabel.week}}</div>
+                </button>
+                <button id="second-player-season-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button" class="btn btn-secondary">
+                    <div>시즌전체</div>
+                    <div>{{$ctrl.p2GameLabel.season}}</div>
                 </button>
             </div>
         </div>
@@ -39,44 +47,70 @@
         <!-- 티어 데이터 -->
         <div id="tier-selector" class="tier-selector">
             <div class="btn-group" role="group">
-                <button ng-click="$ctrl.onSelectorClicked($event)"  id="bronze" type="button" class="btn"><div>브론즈</div><div>{{$ctrl.tierHeroPlayGames.bronze}}</div></button>
-                <button ng-click="$ctrl.onSelectorClicked($event)"  id="silver" type="button" class="btn"><div>실버</div><div>{{$ctrl.tierHeroPlayGames.silver}}</div></button>
-                <button ng-click="$ctrl.onSelectorClicked($event)"  id="gold" type="button" class="btn"><div>골드</div><div>{{$ctrl.tierHeroPlayGames.gold}}</div></button>
-                <button ng-click="$ctrl.onSelectorClicked($event)"  id="platinum" type="button" class="btn"><div>플래티넘</div><div>{{$ctrl.tierHeroPlayGames.platinum}}</div></button>
-                <button ng-click="$ctrl.onSelectorClicked($event)"  id="dia" type="button" class="btn"><div>다이아</div><div></div></button>
-                <button ng-click="$ctrl.onSelectorClicked($event)"  id="grandmaster" type="button" class="btn"><div>그랜드마스터</div><div>{{$ctrl.tierHeroPlayGames.grandmaster}}</div></button>
-                <button ng-click="$ctrl.onSelectorClicked($event)"  id="heroic" type="button" class="btn"><div>전설</div><div>{{$ctrl.tierHeroPlayGames.heroic}}</div></button>
+                <button ng-click="$ctrl.onSelectorClicked($event)"  id="bronze" type="button" class="btn">
+                    <div>브론즈</div>
+                    <div>{{$ctrl.tierGameLabel.bronze}}</div>
+                </button>
+                <button ng-click="$ctrl.onSelectorClicked($event)"  id="silver" type="button" class="btn">
+                    <div>실버</div>
+                    <div>{{$ctrl.tierGameLabel.silver}}</div>
+                </button>
+                <button ng-click="$ctrl.onSelectorClicked($event)"  id="gold" type="button" class="btn">
+                    <div>골드</div>
+                    <div>{{$ctrl.tierGameLabel.gold}}</div>
+                </button>
+                <button ng-click="$ctrl.onSelectorClicked($event)"  id="platinum" type="button" class="btn">
+                    <div>플래티넘</div>
+                    <div>{{$ctrl.tierGameLabel.platinum}}</div>
+                </button>
+                <button ng-click="$ctrl.onSelectorClicked($event)"  id="dia" type="button" class="btn">
+                    <div>다이아</div>
+                    <div>{{$ctrl.tierGameLabel.diamond}}</div>
+                </button>
+                <button ng-click="$ctrl.onSelectorClicked($event)"  id="grandmaster" type="button" class="btn">
+                    <div>그랜드마스터</div>
+                    <div>{{$ctrl.tierGameLabel.grandmaster}}</div>
+                </button>
+                <button ng-click="$ctrl.onSelectorClicked($event)"  id="heroic" type="button" class="btn">
+                    <div>전설</div>
+                    <div>{{$ctrl.tierGameLabel.heroic}}</div>
+                </button>
             </div>
         </div>
 
         <div class="hero-selectors">
             <div class="hero-selectors-row flex" ng-repeat="heroGroup in $root.CONST.RESOURCE">
                 <div id={{hero.id}} ng-repeat="hero in heroGroup.hero" class="hero-selector" ng-click="$ctrl.onHeroClicked($event)">
-                    <div class="first-player-games">{{$ctrl.p1HeroPlayGames[hero.id].totalGames | playGamesLabel}}</div>
-                    <div class="second-player-games">{{$ctrl.p2HeroPlayGames[hero.id].totalGames | playGamesLabel}}</div>
+                    <div class="first-player-games">{{$ctrl.heroGameLabelP1[hero.id].totalGames | playGamesLabel}}</div>
+                    <div class="second-player-games">{{$ctrl.heroGameLabelP2[hero.id].totalGames | playGamesLabel}}</div>
                     <img ng-src="{{hero.iconSrc}}" />
                     <div class="overflow-hidden">{{hero.label}}</div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="friend-search">
+        <input ng-enter="$ctrl.compareSearch($ctrl.serchInput)" ng-model="serchInput"/>
+        <button type="button" class="btn btn-default btn-sm m-l-auto">
+            <i class="material-icons">search</i>
+        </button>
+        <button ng-click="$ctrl.onPlayerClicked(serchInput)" type="button" class="btn btn-default btn-sm m-l-auto">
+            <i class="material-icons">reorder</i>
+        </button>
+    </div>
     <div class="fixed-bottom-title flex border ">
         <div class="flex">
             <!-- Search Button and Collapse Button -->
             <div>
-                <img  ng-src="{{$ctrl.selected.hero | heroImageSrc}}"/>
-            </div>
-            <div>
-                <button type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-search"></span> 
-                </button>
-                <input ng-enter="$ctrl.compareSearch(input)" ng-model="input"/>
-                <div>{{$ctrl.firstUserProfile.btn}}</div>
+                <img  ng-src="{{$ctrl.selected.heroIndex | heroImageSrc}}"/>
             </div>
             <div>
                 <div>{{$ctrl.selected.my}}</div>
             </div>
             <!-- Collapse Button -->
+            <button data-toggle="collapse" data-target="#fixed-bottom-collapse" type="button" class="btn btn-default btn-sm m-l-auto">
+                <i class="material-icons">search</i>
+            </button>
             <button data-toggle="collapse" data-target="#fixed-bottom-collapse" type="button" class="btn btn-default btn-sm">
                 <i class="material-icons">reorder</i>
             </button>

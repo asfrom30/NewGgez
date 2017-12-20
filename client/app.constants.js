@@ -36,6 +36,8 @@ export default angular.module('ggezkrApp.constants', [])
     .constant('CONST_RESOURCE', constants.RESOURCE)
     .constant('CONST_HERO_MAP', constants.HERO_MAP)
     .constant('CONST_DIFF_GAMES_MAP', constants.DIFF_GAMES_MAP)
+
+    .constant('tierMap', constants.tierMap)
     .name;
 
 // (function (){

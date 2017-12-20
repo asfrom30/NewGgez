@@ -1,5 +1,11 @@
+
+<div>
+    <input ng-model="$ctrl.input" ng-enter="$ctrl.console()" style="width:80%">
+</div>
+
 <button ng-click='$ctrl.preSelected()'>Pre Selector</button>
 <pre style="color:white">{{$ctrl.selector | json}}</pre>
+
 
 <div class="wrapper-section-layout wrapper-section-position">
     <div class="loading-section flex f-align-w-center f-align-h-center"> 
@@ -23,21 +29,19 @@
     </div>
 </div>
 <hero-selectors
-
-    p1-total-games = "$ctrl.p1TotalGames",
-    p2-total-games = "$ctrl.p2PlayGames",
-
-    tier-hero-play-games = "$ctrl.playGames.tier",
-
-    p1-hero-play-games = "$ctrl.playGames.p1",
-    p2-hero-play-games = "$ctrl.playGames.p2",
+    p1-game-label = "$ctrl.p1GameLabel"
+    p2-game-label = "$ctrl.p2GameLabel"
+    tier-game-label = "$ctrl.tierGameLabel",
+    hero-game-label-p1 = "$ctrl.heroGameLabel.p1",
+    hero-game-label-p2 = "$ctrl.heroGameLabel.p2",
     
-    check-user-datas    =   "$ctrl.checkUserDatas($id)"
-    store-user-datas    =   "$ctrl.storeUserDatas($id, $userDatas)" 
-    first-user-profile  =   "$ctrl.userDatas[$ctrl.stateParams.id].profile" 
-    second-user-profile =   "$ctrl.userDatas[$ctrl.stateParams.id].profile" 
-    selected            =   "$ctrl.selected" 
-    selector-changed    =   "$ctrl.selectorChanged($selected)">
+    check-user-datas        =   "$ctrl.checkUserDatas($id)"
+    store-user-datas        =   "$ctrl.storeUserDatas($id, $userDatas)" 
+    first-user-profile      =   "$ctrl.userDatas[$ctrl.stateParams.id].profile" 
+    second-user-profile     =   "$ctrl.userDatas[$ctrl.stateParams.id].profile" 
+    selected                =   "$ctrl.selected" 
+    on-selector-changes     =   "$ctrl.onSelectorChanges($selector)"
+    change-p2-player-data   =   "$ctrl.changeP2PlayerData($id)">
 </hero-selectors>
 
 <div style="height:300px"></div>

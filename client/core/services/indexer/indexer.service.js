@@ -19,6 +19,10 @@ export default angular
                         result.A = "current";
                         result.B = CoreUtils.getTodayIndex();
                         break;
+                    case 'season' :
+                        result.A = "current";
+                        result.B = undefined;
+                        break;
                     default :
                         result.A = "current";
                         result.B = selectedDate;

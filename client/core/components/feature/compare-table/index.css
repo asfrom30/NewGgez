@@ -1,0 +1,56 @@
+/* Radar Table Width */
+/* Header Width */
+
+/* Layout */
+compare-table table {
+    table-layout: fixed;
+    width : 100%;
+}
+
+compare-table table th:nth-child(1), compare-table td:nth-child(1){
+    width : 32%
+}
+
+compare-table table th:not(nth-child(1)), compare-table td:not(nth-child(1)) {
+    width : 17%
+}
+
+compare-table table th, compare-table table td {
+    height : 10vh;
+}
+
+/* Table Background Color*/
+compare-table table {background-color : #404040}
+compare-table table th:nth-child(1){background-color:DimGrey}
+compare-table table th:nth-child(2), {background-color:rgba(255,99,132,0.2)}
+compare-table table td:nth-child(2){background-color:rgba(255,99,132,0.4)}
+compare-table table th:nth-child(3){background-color:rgba(154,208,245,0.2)}
+compare-table table td:nth-child(3){background-color:rgba(154,208,245,0.4)}
+compare-table table th:nth-child(4){background-color:rgba(255,230,170,0.2)}
+compare-table table td:nth-child(4){background-color:rgba(255,230,170,0.4)}
+compare-table table th:nth-child(5){background-color:DimGrey}
+
+/* Text Align */
+compare-table table th {text-align: center;}
+compare-table table td {text-align: center;}
+
+/* Border */
+compare-table table th {border : 2px solid rgba(0,0,0,0); border-bottom: 2px solid lightgray}
+compare-table table td {border : 2px solid rgba(0,0,0,0); border-bottom: 2px solid gray;}
+
+/* for calibrate */
+/* table tr:nth-child(2) td:nth-child(2) { border-top : 2px solid rgba(0, 0, 0, 0);}
+table td:nth-child(2) { border-left : 2px solid rgba(0, 0, 0, 0); border-right :2px solid rgba(0, 0, 0, 0)}
+table tr:nth-last-child(2) td:nth-child(2) { border-bottom : 2px solid rgba(0, 0, 0, 0);} */
+
+table tr:nth-child(2) td.active:nth-child(2) { border-top : 2px solid red;}
+table td.active:nth-child(2) { border-left : 2px solid red; border-right :2px solid red}
+table tr:nth-last-child(2) td.active:nth-child(2) { border-bottom : 2px solid red;}
+
+table tr:nth-child(2) td.active:nth-child(3) { border-top : 2px solid blue;}
+table td.active:nth-child(3) { border-left : 2px solid blue; border-right :2px solid blue}
+table tr:nth-last-child(2) td.active:nth-child(3) { border-bottom : 2px solid blue;}
+
+table tr:nth-child(2) td.active:nth-child(4) { border-top : 2px solid yellow;}
+table td.active:nth-child(4) { border-left : 2px solid yellow; border-right :2px solid yellow}
+table tr:nth-last-child(2) td.active:nth-child(4) { border-bottom : 2px solid yellow;}

@@ -17,7 +17,10 @@ export default angular
 
             for(let _logScope of logScopes) {
                 if(_logScope == logScope) {
-                    console.log(msg)
+                    // console.log(this.caller);
+                    // console.log(msg);
+                    // console.debug(arguments.callee.caller.toString());
+                    console.log(msg);
                     break;
                 }
             }

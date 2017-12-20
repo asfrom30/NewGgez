@@ -3,7 +3,8 @@
 }
 
 /* Button Style */
-button{
+#h-s button{
+	padding:2;
 	margin:0;
 	color:grey;
 	background-color : #404040;
@@ -18,15 +19,18 @@ button{
 
 #first-player-selector button.active{
 	color : white;
-    border : 2px solid rgba(255,99,132,1);
+	border : 2px solid rgba(255,99,132,1);
+	padding : 0;
 }
 #second-player-selector button.active{
 	color : white;
-    border : 2px solid rgba(154,208,245,1);	
+	border : 2px solid rgba(154,208,245,1);
+	padding : 0;
 }
 #tier-selector button.active {
 	color : white;
-    border : 2px solid rgba(255,230,170,1);
+	border : 2px solid rgba(255,230,170,1);
+	padding : 0;
 }
 
 /* Hero Container Style */

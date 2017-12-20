@@ -45,19 +45,22 @@
 
 
 /* Fixed Bottom Title */
+.fixed-bottom-title {
+    height: 50px;
+}
 .fixed-bottom-title img{
     width : 50px;
     height : 100%;
 }
 
 /* User Selectors */
-.user-selector .btn-group {
+#h-s .user-selector .btn-group {
     width : 100%;
     display: flex;
 }
 
-.user-selector button {
-    flex-grow : 1;
+#h-s .user-selector button {
+    width : 25%;
     overflow: hidden;
 }
 
@@ -117,12 +120,14 @@
     position : absolute;
     left : 0;
     top : 0;
+    font-size: small;
     text-shadow: -1px 0 red, 0 1px red, 1px 0 red, 0 -1px red;
 }
 
 .hero-selector .second-player-games{
     position : absolute;
     right : 0;
-    top : 0;
+    bottom : 0;
+    font-size: small;
     text-shadow: -1px 0 blue, 0 1px blue, 1px 0 blue, 0 -1px blue;
 }

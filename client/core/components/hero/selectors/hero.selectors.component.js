@@ -15,19 +15,22 @@ export default angular
         controller : HeroSelectorsCtrl,
         template : require('./hero.selectors.html'),
         bindings : {
-            p1TotalGames : '<',
-            p2TotalGames : '<',
+            p1GameLabel : '<',
+            p2GameLabel : '<',
             
-            tierHeroPlayGames : '<',
+            tierGameLabel : '<',
             
-            p1HeroPlayGames : '<',
-            p2HeroPlayGames : '<',
+            heroGameLabelP1 : '<',
+            heroGameLabelP2 : '<',
 
             
             firstUserProfile : '<',
             secondUserProfile : '<',
             selected : '=',
-            selectorChanged : '&',
+
+            onSelectorChanges : '&',
+            changeP2PlayerData : '&',
+
             storeUserDatas : '&',
             checkUserDatas : '&',
         }
@@ -37,55 +40,22 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
 
     var $ctrl = this;
 
-    var $_index = {
+    /* wrap with dom selector */
+    const dom = {
         heroSelector : '.hero-selector'
     }
 
     $ctrl.$onInit = function(){
-
-        $ctrl.logLevel = 'error';
-
-        if($ctrl.preselected === undefined){
-            // Load default selected from server
-            // console.log('preselected is undefined');
-        } else {
-
-        }
+        const selector = getDefaultSelector();
+        onSelectorChanges(selector);
     }
 
     $ctrl.$onChanges = function(changesObj) {
 
     }
 
-    $ctrl.compareSearch = function(input) {
-        /* Prepare ID() */
-        // battle tag or battlen name(id)
-        let id = input;
-
-        /* If data is already existed, not request again. */
-        if($ctrl.checkUserDatas({$id:id})) {
-            console.log(id + " data is already existed");
-            return;
-        } 
-
-        /* Fetch Data from Server */
-        // TODO : update View needed.... IN CALLBACK.
-        Ajax.fetchUserDatas(id)
-            .then(result => {
-                if($ctrl.userDatas === undefined) $ctrl.userDatas = {};
-                $ctrl.storeUserDatas({$id : id, $userDatas : result[id]});
-            }, reason => {
-                console.log('failed');
-            });
-        
-    }
-
-    
-
-    function activeJustOne($_targetDom) {
-        $element.find($_targetDom).siblings().removeClass('active');
-        $element.find($_targetDom).addClass('active');
-    }
+    $ctrl.compareSearch = compareSearch;
+    $ctrl.onPlayerClicked = onPlayerClicked;
 
     $ctrl.onSelectorClicked = function($event){
 
@@ -99,11 +69,40 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
     }
 
     $ctrl.onHeroClicked = function($event){
-        $element.find($_index.heroSelector).removeClass('active');
+        $element.find(dom.heroSelector).removeClass('active');
         $($event.currentTarget).addClass('active');
 
         updateSelected();
     }
+
+
+    function onPlayerClicked(id) {
+        if(id == undefined) return;
+        $ctrl.changeP2PlayerData({$id : id});
+    }
+
+    /* View */
+
+    /* Controller */
+    function onSelectorChanges(selector) {
+        $ctrl.onSelectorChanges({$selector : selector});
+    }
+
+    function getDefaultSelector() {
+        return {
+            p1Index : 'season',
+            p2Index : 'season',
+            tierIndex : undefined,
+            heroIndex : 'all',
+        }
+    }
+
+    function activeJustOne($_targetDom) {
+        $element.find($_targetDom).siblings().removeClass('active');
+        $element.find($_targetDom).addClass('active');
+    }
+
+    
 
     // TODO: 자기버튼먼 업데이트 되게 할 것.
     function updateSelected() {
@@ -116,11 +115,8 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
             tierIndex : getTierIndex(),
             heroIndex : getHeroSelected(),
         }
-        
-        /* call parent method(detail page) */
-        $ctrl.selectorChanged({$selected : $ctrl.selected})          //todo : 항상 업데이트 되는게 아니라, 다른 데이터를 선택했을때 변화가 있게 변경할 것..
 
-        console.log($ctrl.selected);
+        onSelectorChanges($ctrl.selected);//todo : 항상 업데이트 되는게 아니라, 다른 데이터를 선택했을때 변화가 있게 변경할 것..
     }
 
     function getDateIndex(playerNum, domId){
@@ -134,6 +130,9 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
                 break;
             case playerNum + "-player-today-selected" :
                 result = 'today';
+                break;
+            case playerNum + "-player-season-selected" :
+                result = 'season';
                 break;
             case playerNum + "-player-custom-selected" :
                 result = CoreUtils.getDateIndex(1);
@@ -191,5 +190,30 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
         });
 
         return id;
+    }
+
+
+    /* not yet used */
+    function compareSearch(input) {
+        /* Prepare ID() */
+        // battle tag or battlen name(id)
+        let id = input;
+
+        /* If data is already existed, not request again. */
+        if($ctrl.checkUserDatas({$id:id})) {
+            console.log(id + " data is already existed");
+            return;
+        } 
+
+        /* Fetch Data from Server */
+        // TODO : update View needed.... IN CALLBACK.
+        Ajax.fetchUserDatas(id)
+            .then(result => {
+                if($ctrl.userDatas === undefined) $ctrl.userDatas = {};
+                $ctrl.storeUserDatas({$id : id, $userDatas : result[id]});
+            }, reason => {
+                console.log('failed');
+            });
+        
     }
 }

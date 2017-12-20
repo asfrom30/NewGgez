@@ -1,6 +1,7 @@
 import RESOURCE from './resource/resource.const';
 
 import HERO_MAP from './heromap/heromap.const';
+import tierMap from './map/tier.standard.constanat';
 import DIFF_GAMES_MAP from './analyzer-map/diff-games/diff.games.analyzer.map.const';
 
 
@@ -31,6 +32,7 @@ export default {
     RESOURCE : RESOURCE,
 
     /* Const Map */
+    tierMap : tierMap,
     HERO_MAP : HERO_MAP,
     DIFF_GAMES_MAP : DIFF_GAMES_MAP
 

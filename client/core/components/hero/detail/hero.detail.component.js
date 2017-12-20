@@ -21,78 +21,48 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
     $ctrl.logScope = 'hero.detail';
 
     $ctrl.$onInit = function(){
-        onInitAnalyzer();
+        updateLabelData();
+        updateTierData();
+
+        updateP1PlayerData($ctrl.currentPlayerDatas);
         updateP1GamesLabel();
+
+        updateP2PlayerData($ctrl.currentPlayerDatas);
         updateP2GamesLabel();
+        
+        /* Update Data in Fixed Bottom*/
+        updateHeroGameLabelP1()
+        updateHeroGameLabelP2();
+        
     }
 
     /* Binding Method */
     $ctrl.onSelectorChanges = onSelectorChanges;
     $ctrl.changeP2PlayerData = changeP2PlayerData;
 
-    function onInitAnalyzer(){
-        /* Label Data */
-        const labelData = makeAnalyzedLabelData();
-        setLabelData2Cache(labelData);
-
-        /* Tier Data */
-        const tierData = $ctrl.tierData;
-        const analyzedTierData = makeAnalyzedTierData(tierData);
-        setAnalyzedTierData2Cache(analyzedTierData);
-
-        /* Player Data */
-        /* p1 player data */
-        const p1PlayerData = $ctrl.currentPlayerDatas;
-        const analyzedP1PlayerData = makeAnalyzedPlayerData(p1PlayerData, getAnalyzedTierDataFromCache());
-        setAnalyzedP1PlayerData2Cache(analyzedP1PlayerData);
-        /* p2 player data */
-        const p2PlayerData = $ctrl.currentPlayerDatas;
-        const analyzedP2PlayerData = makeAnalyzedPlayerData(p2PlayerData, getAnalyzedTierDataFromCache());
-        setAnalyzedP2PlayerData2Cache(analyzedP2PlayerData);
-    }
-
     function onSelectorChanges(selector) {
-        // For display
-        $ctrl.selector = selector;
+        setCurrentSelector(selector);
 
-        // mapping
-        let p1Selected = selector.p1Index;
-        let p2Selected = selector.p2Index;
-        let tierSelected = selector.tierIndex;
-        let heroSelected = selector.heroIndex;
+        updateHeroGameLabelP1();
+        updateHeroGameLabelP2();
 
-        /* Update Data in Fixed Bottom*/
-        updateHeroGamesLabel(p1Selected, p2Selected);
-
-        if(heroSelected == undefined) {
-            console.error('hero index is not selected');
-            return;
+        if(getCurrentHeroIndex() != undefined) {
+            updateTierGamesLabel();
+            updateRadarDataset();
+            updateTableDataSet();
         }
-        
-        updateTierGamesLabel(heroSelected);
-
-        /* Update radar and table dataset*/
-        updateRadarDataset(p1Selected, p2Selected, tierSelected, heroSelected);
-        updateTableDataSet(p1Selected, p2Selected, tierSelected, heroSelected);
     }
 
     function changeP2PlayerData(id) {
-        const region = 'kr';
-        const device = 'pc';
-        const dates = [CoreUtils.getTodayIndex()
-            , CoreUtils.getCurrentIndex()
-            , CoreUtils.getYesterIndex()
-            , CoreUtils.getWeekIndex()
-        ];
+        const region = $stateParams.region;
+        const device = $stateParams.device;
 
-        Ajax.fetchCrawlDatas(device, region, id, dates).then(crawlDatas => {
+        //FIXME: not yet implement : need to store raw data.
+        Ajax.fetchCrawlDatas(device, region, id).then(crawlDatas => {
             const playerData = transfer(crawlDatas);
-            console.log(playerData);
-            const analyzedPlayerData = makeAnalyzedPlayerData(playerData, getAnalyzedTierDataFromCache());
-            //FIXME: need to store raw data.
-            setAnalyzedP2PlayerData2Cache(analyzedPlayerData);
-
+            updateP2PlayerData(playerData);
             updateP2GamesLabel();
+            updateHeroGameLabelP2();
             $scope.$apply();
         })
     }
@@ -112,6 +82,11 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
     } 
 
     /* Label Data */
+    function updateLabelData() {
+        const labelData = makeAnalyzedLabelData();
+        setLabelData2Cache(labelData);
+    }
+
     function makeAnalyzedLabelData() {
         return Analyzer.getLabels();
     }
@@ -128,10 +103,15 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
             console.warn('$ctrl.cache or $ctrl.cache.labels undefined, can not get label data');
             return undefined;
         }
-        
     }
 
     /* Tier Data */
+    function updateTierData() {
+        const tierData = $ctrl.tierData;
+        const analyzedTierData = makeAnalyzedTierData(tierData);
+        setAnalyzedTierData2Cache(analyzedTierData);
+    }
+    
     function makeAnalyzedTierData(tierData) {
         return Analyzer.getTierData(tierData);
     }
@@ -151,6 +131,16 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
     }
 
     /* Player Data */
+    function updateP1PlayerData(playerData) {
+        const analyzedP1PlayerData = makeAnalyzedPlayerData(playerData, getAnalyzedTierDataFromCache());
+        setAnalyzedP1PlayerData2Cache(analyzedP1PlayerData);
+    }
+    
+    function updateP2PlayerData(playerData) {
+        const analyzedP2PlayerData = makeAnalyzedPlayerData(playerData, getAnalyzedTierDataFromCache());
+        setAnalyzedP2PlayerData2Cache(analyzedP2PlayerData);
+    }
+
     function makeAnalyzedPlayerData(playerData, analyzedTierData) {
         const arrDateIdx = ['week', 'yesterday', 'today', 'season'];  // Dependecy is analyzed tier data
 
@@ -170,10 +160,12 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         $ctrl.cache.p2 = analyzedPlayerData;
     }
 
-    
 
-
-    function updateRadarDataset(p1Index, p2Index, tierIndex, heroIndex) {
+    function updateRadarDataset() {
+        const p1Index = getCurrentP1Index();
+        const p2Index = getCurrentP2Index();
+        const tierIndex = getCurrentTierIndex();
+        const heroIndex = getCurrentHeroIndex();
         
         /* heroIndex is basic index */
         if(heroIndex == undefined) return;
@@ -207,7 +199,16 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         }
     }
     
-    function updateTableDataSet(p1Index, p2Index, tierIndex, heroIndex){
+    function updateTableDataSet(){
+        const p1Index = getCurrentP1Index();
+        const p2Index = getCurrentP2Index();
+        const tierIndex = getCurrentTierIndex();
+        const heroIndex = getCurrentHeroIndex();
+
+        if(heroIndex == undefined || heroIndex == 'all') return;
+
+        // make header;
+        
         $ctrl.table = {};
         $ctrl.table.labelColumn = $ctrl.cache.labels[heroIndex];
         
@@ -238,13 +239,15 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         $ctrl.p2GameLabel = obj;
     }
 
-    function updateTierGamesLabel(heroId) {
+    function updateTierGamesLabel() {
         let result = {};
+
+        const heroIndex = getCurrentHeroIndex();
         
         for(let tierId of tierMap){
             if(tierId == "total") continue;
             try {
-                result[tierId] = $ctrl.tierData[heroId][tierId].count;
+                result[tierId] = $ctrl.tierData[heroIndex][tierId].count;
             } catch (error) {
                 result[tierId] = '-';
             }   
@@ -253,15 +256,22 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         $ctrl.tierGameLabel = result;
     }
 
-    /* Data Binding */
-    function updateHeroGamesLabel(p1Index, p2Index) {
-        const p1Playgames = $ctrl.cache.p1.diffGames[p1Index];
-        const p2Playgames = $ctrl.cache.p2.diffGames[p2Index];
+    function updateHeroGameLabelP1() {
+        const p1Index = getCurrentP1Index();
 
-        /* result binding */
-        $ctrl.heroGameLabel = {};
-        $ctrl.heroGameLabel.p1 = p1Playgames;
-        $ctrl.heroGameLabel.p2 = p2Playgames;
+        if(p1Index != undefined) {
+            const diffGames = getP1DiffGames(p1Index);
+            setHeroGameLabelP1(diffGames);
+        }
+    }
+
+    function updateHeroGameLabelP2() {
+        const p2Index = getCurrentP2Index();
+
+        if(p2Index != undefined) {
+            const diffGames = getP2DiffGames(p2Index);
+            setHeroGameLabelP2(diffGames);
+        }
     }
 
     function getPlayerTotalGames(player, dateIndex){
@@ -270,6 +280,83 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         } catch (error) {
             return '-';
         }
+    }
+
+    function setCurrentSelector(selector) {
+        if(selector == undefined) {
+            console.error('can not set current selector, selector is undefined');
+            return;
+        }
+
+        $ctrl.selector = selector;
+    }
+
+    function getCurrentSelector() {
+        return $ctrl.selector;
+    }
+
+    function getCurrentP1Index() {
+        try {
+            return $ctrl.selector.p1Index;
+        } catch (error) {
+            console.error('can not get current p1Index');
+            return undefined;
+        }
+    }
+
+    function getCurrentP2Index() {
+        try {
+            return $ctrl.selector.p2Index;
+        } catch (error) {
+            console.error('can not get current p2Index');
+            return undefined;
+        }
+    }
+
+    function getCurrentTierIndex() {
+        try {
+            return $ctrl.selector.tierIndex;
+        } catch (error) {
+            console.error('can not get current tierIndex');
+            return undefined;
+        }
+    }
+
+    function getCurrentHeroIndex() {
+        try {
+            return $ctrl.selector.heroIndex;
+        } catch (error) {
+            console.error('can not get current heroIndex');
+            return undefined;
+        }
+    }
+
+    function getP1DiffGames(p1Index) {
+        try {
+            return $ctrl.cache.p1.diffGames[p1Index];
+        } catch (error) {
+            console.error(`can not get p1 ${p1Index} diff games`);
+            return undefined;
+        }
+    }
+
+    function getP2DiffGames(p2Index) {
+        try {
+            return $ctrl.cache.p2.diffGames[p2Index];
+        } catch (error) {
+            console.error(`can not get p2 ${p2Index} diff games`);
+            return undefined;
+        }
+    }
+
+    function setHeroGameLabelP1(p1HeroGameLabel) {
+        if($ctrl.heroGameLabel == undefined) $ctrl.heroGameLabel = {};
+        $ctrl.heroGameLabel.p1 = p1HeroGameLabel;
+    }
+
+    function setHeroGameLabelP2(p2HeroGameLabel) {
+        if($ctrl.heroGameLabel == undefined) $ctrl.heroGameLabel = {};
+        $ctrl.heroGameLabel.p2 = p2HeroGameLabel;
     }
 
     /* TODO: below code must move to util module */

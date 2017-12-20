@@ -122,12 +122,7 @@ function getHeroParentState() {
                     return;
                 }
 
-                let dates = [CoreUtils.getTodayIndex()
-                    , CoreUtils.getCurrentIndex()
-                    , CoreUtils.getYesterIndex()
-                    , CoreUtils.getWeekIndex()
-                ];
-                return Ajax.fetchCrawlDatas(device, region, id, dates);
+                return Ajax.fetchCrawlDatas(device, region, id);
             },
         },
     }

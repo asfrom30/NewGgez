@@ -6,6 +6,10 @@
 export default {
     "all" : [
         { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
     ],
     "soldier76" : [
         // { "label": "명중율", "unit" : "", "numerator" : "", "denominator" : "발사", "description"}

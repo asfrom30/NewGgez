@@ -181,16 +181,7 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         const device = 'pc';
         const region = 'kr';
         const id = 1;
-
-        let dates = [];
-        dates.push('171104');
-        dates.push('171105');
-        dates.push('171106');
-        dates.push('171212');
-        dates.push('current');
-        // dates.push(CoreUtils.getTodayIndex());
-        // dates.push(CoreUtils.getYesterIndex());
-        Ajax.fetchCrawlDatas(device, region, id, dates).then(result => {
+        Ajax.fetchCrawlDatas(device, region, id).then(result => {
             console.log(result);
         }, reason => {
             console.log(reason);

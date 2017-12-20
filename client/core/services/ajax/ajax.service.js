@@ -111,31 +111,27 @@ export default angular
                 })
             },
             // http://localhost:3000/pc/kr/crawl-datas/1/?date=17-10-18,17-10-21,17-10-22,17-10-23
-            fetchCrawlDatas : function(device, region, id, dates) {
+            fetchCrawlDatas : function(device, region, id) {
                 AppLogger.log(`Fetch Crawl Data(id : ${id}) about from server`, 'info', logScope);
 
                 let ajaxIndicator = new CoreUtils.ajaxIndicator(`사용자 데이터를 가져오는 중입니다.`);
                 ajaxIndicator.show();
 
-                /* TODO: Undefined Check */
-                if(dates === undefined) return Promise.reject('date is not defined');
-                if(dates.lenght == 0) return Promise.reject('date is not defined');
-                // TODO: Date Valid Check...
-
-                /* Parse dates array to comma added string */
-                let strDates = "";
-                for(let date of dates){
-                    strDates += date + ","
-                }
-                strDates = strDates.substring(0, strDates.length-1);
-
+                /* Make Defaulat Date Query : yesterday, week, today, current */
+                const dates = [CoreUtils.getTodayIndex()
+                    , CoreUtils.getCurrentIndex()
+                    , CoreUtils.getYesterIndex()
+                    , CoreUtils.getWeekIndex()
+                ];
+                const dateQuery = makeDateQuery(dates);
+                
                 return new Promise((resolve, reject) => {
-                    CrawlDatasApi.get({device:device, region: region, id:id, date:strDates}).$promise.then(response => {
+                    CrawlDatasApi.get({device:device, region: region, id:id, date:dateQuery}).$promise.then(response => {
                         AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
                         resolve(response.toJSON().value);
                     }).catch(reason => {
                         AppLogger.log(reason, 'info', logScope);
-
+                        
                         const statusCode = reason.status + ''
                         let result = reason.data;
                         if(statusCode.startsWith('4')) {
@@ -148,6 +144,14 @@ export default angular
                         ajaxIndicator.hide();
                     });
                 }) 
+            },
+            fetchCrawlDatasWithDates : function(device, region, id, dates) {
+                console.warn('fetch crawl data with dates is not implement yet');
+                
+                // TODO: Date Valid Check...
+                /* TODO: Undefined Check */
+                if(dates === undefined) return Promise.reject('date is not defined');
+                if(dates.lenght == 0) return Promise.reject('date is not defined');
             },
             fetchTierDatas : function(device, region, date) {
                 let ajaxIndicator = new CoreUtils.ajaxIndicator("Try To fetch Tier Data ");
@@ -199,3 +203,12 @@ export default angular
             },
         }
     }).name;
+
+/* Parse dates array to comma added string */
+function makeDateQuery(dates){
+    let result = "";
+    for(let date of dates){
+        result += date + ","
+    }
+    return result.substring(0, result.length-1); // remove last comma
+}

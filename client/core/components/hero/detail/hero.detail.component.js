@@ -121,6 +121,10 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         $ctrl.cache.tier = analyzedTierData;
     }
 
+    function getRawTierData(){
+        return $ctrl.tierData;
+    }
+
     function getAnalyzedTierDataFromCache() {
         try {
             return $ctrl.cache.tier;
@@ -132,21 +136,21 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
 
     /* Player Data */
     function updateP1PlayerData(playerData) {
-        const analyzedP1PlayerData = makeAnalyzedPlayerData(playerData, getAnalyzedTierDataFromCache());
+        const analyzedP1PlayerData = makeAnalyzedPlayerData(playerData, getRawTierData());
         setAnalyzedP1PlayerData2Cache(analyzedP1PlayerData);
     }
     
     function updateP2PlayerData(playerData) {
-        const analyzedP2PlayerData = makeAnalyzedPlayerData(playerData, getAnalyzedTierDataFromCache());
+        const analyzedP2PlayerData = makeAnalyzedPlayerData(playerData, getRawTierData());
         setAnalyzedP2PlayerData2Cache(analyzedP2PlayerData);
     }
 
-    function makeAnalyzedPlayerData(playerData, analyzedTierData) {
+    function makeAnalyzedPlayerData(playerData, tierData) {
         const arrDateIdx = ['week', 'yesterday', 'today', 'season'];  // Dependecy is analyzed tier data
 
         return {
             diffGames : Analyzer.getDiffGames(playerData, arrDateIdx),
-            diffDatas : Analyzer.getDiffHeroDatas(playerData, arrDateIdx, analyzedTierData)
+            diffDatas : Analyzer.getDiffHeroDatas(playerData, arrDateIdx, tierData)
         }
     }
     

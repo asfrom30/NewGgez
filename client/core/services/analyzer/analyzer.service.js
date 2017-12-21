@@ -87,37 +87,79 @@ export function DiffHeroDatasAnalyzer(STATMAP, Indexer) {
 
     this.getResult = function(playerDatas, arrDateIdx, tierData) {
 
-        // diffIndexes = ['week', 'yesterday', 'today']
+        // diffIndexes = ['season', week', 'yesterday', 'today']
 
         let result = {};
 
         for(let dateIdx of arrDateIdx){
-            if(dateIdx == 'season') continue;
+            if(dateIdx == 'season') {
+                let playerData = playerDatas.current.data;
+                const analyzer = new DiffHeroDatasAnalyzerForSeason(STATMAP);
+                result[dateIdx] = analyzer.getResult(playerData, tierData);
+            } else {
+                let dates = Indexer.getIndexes(dateIdx);
+            
+                let playerDataA = playerDatas[dates.A].data;
+                let playerDataB = playerDatas[dates.B].data;
 
-            result[dateIdx] = {};
-
-            let dates = Indexer.getIndexes(dateIdx);
-        
-            let playerDataA = playerDatas[dates.A].data;
-            let playerDataB = playerDatas[dates.B].data;
-
-            /* Get Diff Data*/
-            let diffDatasAnalyzer = new DiffDataAnalyzer(STATMAP);
-            result[dateIdx] = diffDatasAnalyzer.getResult(playerDataA, playerDataB, tierData);
+                /* Get Diff Data*/
+                let analyzer = new DiffHeroDatasAnalyzerForDate(STATMAP);
+                result[dateIdx] = analyzer.getResult(playerDataA, playerDataB, tierData);
+            }
         }
-
         return result;
     }
 
 }
 
-function DiffDataAnalyzer(STATMAP){
+function DiffHeroDatasAnalyzerForSeason(STATMAP) {
+    this.statMap = STATMAP;
+
+    this.getResult = function(heroDataA, tierData) {
+        let result = {};
+        
+        for(var heroId in STATMAP){
+            if(heroDataA[heroId] == undefined) continue;
+
+            result[heroId] = {};
+            
+            result[heroId] = [];
+            for(let stat of STATMAP[heroId]){
+
+                let statId = stat.label;
+                let unit = stat.unit;
+                let denominatorIndex = stat.denominator;
+                let numeratorIndex = stat.numerator;
+                
+                
+                let denominator = heroDataA[heroId][denominatorIndex];
+                let numerator = heroDataA[heroId][numeratorIndex];
+    
+                /* score */
+                //TODO: handling if denominator is 0
+                //TODO: numerator has %timestamp code...
+                let score = "-";
+                if(denominator == 0 || isNaN(numerator) || isNaN(denominator)) score = "-";
+                else score = numerator / denominator;
+                
+                const point = normalizeScore(score, tierData, heroId, statId);
+
+                /* make result object */
+                result[heroId].push({title : statId, score : score, point : point});
+            }
+        }
+        return result;
+    }
+}
+
+function DiffHeroDatasAnalyzerForDate(STATMAP){
     
     this.statMap = STATMAP;
 
     this.getResult = function(heroDataA, heroDataB, tierData) {
+
         let result = {};
-        
+
         for(var heroId in STATMAP){
 
             // if(heroId.indexOf('_') != -1) continue;
@@ -145,7 +187,6 @@ function DiffDataAnalyzer(STATMAP){
                 let denominatorIndex = stat.denominator;
                 let numeratorIndex = stat.numerator;
                 
-                
                 let denominator = heroDataA[heroId][denominatorIndex] - heroDataB[heroId][denominatorIndex];
                 let numerator = heroDataA[heroId][numeratorIndex] - heroDataB[heroId][numeratorIndex];
     
@@ -156,29 +197,43 @@ function DiffDataAnalyzer(STATMAP){
                 if(denominator == 0 || isNaN(numerator) || isNaN(denominator)) score = "-";
                 else score = numerator / denominator;
 
-                
-                /* point */
-                let normalization = '-';
-                if(tierData[heroId] != undefined) {
-                    if(tierData[heroId].total[statId] != undefined) {
-                        let minValue = tierData[heroId].total[statId].min;
-                        let maxValue = tierData[heroId].total[statId].max;
-                        normalization = (score - minValue) / (maxValue - minValue);
-                    }
-                }
+                const point = normalizeScore(score, tierData, heroId, statId);
 
                 /* make result object */
-                result[heroId].push({title : statId, score : score, point : normalization});
-
-                /* Debug */
-                // if(heroId == "ana"){
-                //     console.log("hero : " + heroId + ", statId : " + statId + ", denominator : " + denominatorIndex + ", numerator : " + numeratorIndex);
-                //     console.log(heroDataA.ana);
-                //     console.log("score[" + score + "], numerator [" + numerator +  "], denominator [" +  denominator + "]")
-                // }
+                result[heroId].push({title : statId, score : score, point : point});
             }
         }
         return result;
+    }
+}
+
+function normalizeScore(score, tierData, heroId, statId){
+    
+    let result = '-';
+    if(score == '-') return result;
+    
+    const min = getValueFromTierData(tierData, heroId, statId, 'min');
+    const max = getValueFromTierData(tierData, heroId, statId, 'max');
+    
+    if(!isNaN(score) || !isNaN(min) || !isNaN(max)) {
+        result = normalize(score, min, max);
+    } else {
+        result = 'normalization_err';
+    }
+
+    return result;
+}
+
+function normalize(value, min, max) {
+    return (value - min) / (max - min);
+}
+
+function getValueFromTierData(tierData, heroId, statId, valueName) {
+    try {
+        return tierData[heroId].total[statId][valueName];
+    } catch (error) {
+        console.warn(`can not get value from tier data ${heroId} ${statId}`);
+        return;
     }
 }
 

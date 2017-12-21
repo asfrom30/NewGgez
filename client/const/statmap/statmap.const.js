@@ -5,16 +5,16 @@
 // OVERWATCH.GUID.0X0860000000000033 치명타 (치명타명중률 = 치명타/명중)
 export default {
     "all" : [
-        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
-        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
-        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
-        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
-        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
     ],
     "soldier76" : [
         // { "label": "명중율", "unit" : "", "numerator" : "", "denominator" : "발사", "description"}
-        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
-        { "label": "목숨당처치", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당처치", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
         
         // { "label": "경기당폭주시간",  "unit" : "/", "numerator" : "폭주시간", "denominator" : "치른게임", "description" : ""},
         { "label": "경기당결정타",    "unit" : "/", "numerator" : "결정타",   "denominator" : "치른게임", "description" : ""},

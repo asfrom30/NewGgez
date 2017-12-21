@@ -90,7 +90,7 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
 
     function getDefaultSelector() {
         return {
-            p1Index : 'season',
+            p1Index : 'today',
             p2Index : 'season',
             tierIndex : 'heroic',
             heroIndex : 'tracer',

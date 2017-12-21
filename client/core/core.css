@@ -13,6 +13,9 @@
     font-style: normal;
     font-weight: normal
 }
+:root {
+    font-size : 12px;
+}
 
 html, body {
     height: 100%;

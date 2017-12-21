@@ -1,4 +1,7 @@
-<h1>Compare Table</h1>
+<div>
+    <input ng-model="$ctrl.input" ng-enter="$ctrl.console()" style="width:80%">
+</div>
+
 <div class="overlay-parent">
     <div class="overlay-child flex f-align-w-center f-align-h-center">
         <div class="element">Please, select hero</div>
@@ -7,7 +10,7 @@
     <button ng-click="$ctrl.compareToggle()">테이블 결과 변경 버튼</button>
     <table width="100%">
         <tr>
-            <th ng-repeat="header in $ctrl.header">{{header}}</th>
+            <th ng-repeat="header in $ctrl.tableHeader">{{header.index}}</th>
         </tr>
         <tr ng-repeat="tableRow in $ctrl.tableRows">
             <td>{{tableRow[0]}} <span class="glyphicon glyphicon-question-sign" style="color:lightgray"></span></td>

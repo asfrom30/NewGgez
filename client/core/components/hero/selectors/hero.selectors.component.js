@@ -92,8 +92,8 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
         return {
             p1Index : 'season',
             p2Index : 'season',
-            tierIndex : undefined,
-            heroIndex : 'all',
+            tierIndex : 'heroic',
+            heroIndex : 'tracer',
         }
     }
 

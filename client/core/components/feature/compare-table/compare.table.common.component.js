@@ -10,7 +10,7 @@ export default angular
         template: require('./index.html'),
         controller : controller,
         bindings : {
-            header : '<',
+            tableHeader : '<',
             labelColumn : '<',
             firstColumn : '<',
             secondColumn : '<',
@@ -19,15 +19,31 @@ export default angular
     })
     .filter('upperNumberFormat', upperNumberFormat)
     .filter('lowerNumberFormat', lowerNumberFormat)
+    .filter('headerFilter', )
     .name;
 
 export function controller($element) {
+
     const $ctrl = this;
 
+    /* TODO: below code must move to util module */
+    $ctrl.console = function() {
+
+        const input = $ctrl.input;
+        const indexes = input.split('.');
+        let resultObj = $ctrl;
+        for(let index of indexes) {
+            if(index == '$ctrl') continue;
+            resultObj = resultObj[index];
+        }
+        console.log(resultObj);
+    }
+    
     $ctrl.$onInit = function() {
         init();
         initTable($ctrl.labelColumn, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);
     }
+
 
     $ctrl.$onChanges = function(changes) {
         const labelCol = $ctrl.labelColumn;
@@ -56,17 +72,22 @@ export function controller($element) {
     }
 
     function initTable(labelColumn, firstColumn, secondColumn, thirdColumn){
-        const isValid = convertDatasColumnToRowValidCheck(labelColumn, firstColumn, secondColumn, thirdColumn);
+        const isReady = canInflateTable(labelColumn);
         
         let tableRows;
-        if(!isValid || labelColumn == 0) {
-            tableRows = convertDatasColumnToRow([], [], [], []);
+        if(!isReady) {
+            tableRows = convertDatasColumnToRow([], [], [], []); //
+            showSelectHeroMessage();
         } else {
             tableRows = convertDatasColumnToRow(labelColumn, firstColumn, secondColumn, thirdColumn);
-            
         }
 
         $ctrl.tableRows = tableRows;
+        console.log($ctrl.tableRows)
+    }
+
+    function getLabelColumn() {
+        return $ctrl.labelColumn;
     }
 
 
@@ -91,7 +112,7 @@ export function controller($element) {
             }
             
             let thirdColumn = {};
-            if($ctrl.secondColumn != undefined) {
+            if($ctrl.thirdColumn != undefined) {
                 thirdColumn.score = ($ctrl.thirdColumn[i] == undefined) ? 'no-game' : $ctrl.thirdColumn[i].score;
                 thirdColumn.point = ($ctrl.thirdColumn[i] == undefined) ? 'no-game' : $ctrl.thirdColumn[i].point;
             }
@@ -104,21 +125,19 @@ export function controller($element) {
         return tableRows;
     }
 
-    function convertDatasColumnToRowValidCheck(labelCol, firstCol, secondCol, thirdCol) {
-        if(!Array.isArray(labelCol)) {
-            console.log('labelCol is not array. check binding data');
+    function canInflateTable(labelCol) {
+        if(labelCol == undefined || !Array.isArray(labelCol)) {
+            console.error('table inflate is not ready, label column is undefined or not array');
             return false;
+        } else {
+            return true;
         }
-
-        if(labelCol == undefined) {
-            console.log('labelCol is not undefined. check binding data');
-            return false;
-        }
-
-        return true;
     }
 
     /* View */
+    function showSelectHeroMessage(){
+
+    }
     function showOverlay(msg){
         $element.find('.overlay-child').show();
     }

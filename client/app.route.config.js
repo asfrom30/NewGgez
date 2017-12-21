@@ -30,7 +30,7 @@ export function routeConfig($stateProvider, $urlServiceProvider) {
         name : 'hero.admin',
         url  : '/admin/{device}/{region}/{id}',
         template: '<h1>Hero Admin</h1><pre>{{$root.players | json}}</pre>',
-        controller : function($rootScope, $scope, people, userDatas, players, Ajax) {
+        controller : function($rootScope, $scope, userDatas, players, Ajax) {
             $scope.userDatas = userDatas;
             $rootScope.players = players;
         }

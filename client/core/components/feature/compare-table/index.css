@@ -5,6 +5,9 @@
 compare-table table {
     table-layout: fixed;
     width : 100%;
+    border-collapse: separate;
+    border-spacing: 0px;
+    word-wrap: break-word;
 }
 
 compare-table table th:nth-child(1), compare-table td:nth-child(1){
@@ -36,21 +39,39 @@ compare-table table td {text-align: center;}
 
 /* Border */
 compare-table table th {border : 2px solid rgba(0,0,0,0); border-bottom: 2px solid lightgray}
-compare-table table td {border : 2px solid rgba(0,0,0,0); border-bottom: 2px solid gray;}
+compare-table table td {border-bottom: 2px solid gray;}
+
 
 /* for calibrate */
 /* table tr:nth-child(2) td:nth-child(2) { border-top : 2px solid rgba(0, 0, 0, 0);}
 table td:nth-child(2) { border-left : 2px solid rgba(0, 0, 0, 0); border-right :2px solid rgba(0, 0, 0, 0)}
 table tr:nth-last-child(2) td:nth-child(2) { border-bottom : 2px solid rgba(0, 0, 0, 0);} */
 
-table tr:nth-child(2) td.active:nth-child(2) { border-top : 2px solid red;}
-table td.active:nth-child(2) { border-left : 2px solid red; border-right :2px solid red}
-table tr:nth-last-child(2) td.active:nth-child(2) { border-bottom : 2px solid red;}
 
-table tr:nth-child(2) td.active:nth-child(3) { border-top : 2px solid blue;}
-table td.active:nth-child(3) { border-left : 2px solid blue; border-right :2px solid blue}
-table tr:nth-last-child(2) td.active:nth-child(3) { border-bottom : 2px solid blue;}
+/* first column border : not active */
+compare-table table tr:nth-child(2) td:nth-child(2) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table td:nth-child(2) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
+compare-table table tr:nth-last-child(3) td:nth-child(2) { border-bottom : 2px solid rgba(0,0,0,0);}
 
-table tr:nth-child(2) td.active:nth-child(4) { border-top : 2px solid yellow;}
-table td.active:nth-child(4) { border-left : 2px solid yellow; border-right :2px solid yellow}
-table tr:nth-last-child(2) td.active:nth-child(4) { border-bottom : 2px solid yellow;}
+/* first column border : active */
+compare-table table tr:nth-child(2) td.active:nth-child(2) { border-top : 2px solid red;}
+compare-table table td.active:nth-child(2) { border-left : 2px solid red; border-right :2px solid red}
+compare-table table tr:nth-last-child(3) td.active:nth-child(2) { border-bottom : 2px solid red;}
+
+/* second column border */
+compare-table table tr:nth-child(2) td:nth-child(3) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table td:nth-child(3) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
+compare-table table tr:nth-last-child(3) td:nth-child(3) { border-bottom : 2px solid rgba(0,0,0,0);}
+
+compare-table table tr:nth-child(2) td.active:nth-child(3) { border-top : 2px solid blue;}
+compare-table table td.active:nth-child(3) { border-left : 2px solid blue; border-right :2px solid blue}
+compare-table table tr:nth-last-child(3) td.active:nth-child(3) { border-bottom : 2px solid blue;}
+
+/* third column border */
+compare-table table tr:nth-child(2) td:nth-child(4) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table td:nth-child(4) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
+compare-table table tr:nth-last-child(3) td:nth-child(4) { border-bottom : 2px solid rgba(0,0,0,0);}
+
+compare-table table tr:nth-child(2) td.active:nth-child(4) { border-top : 2px solid yellow;}
+compare-table table td.active:nth-child(4) { border-left : 2px solid yellow; border-right :2px solid yellow}
+compare-table table tr:nth-last-child(3) td.active:nth-child(4) { border-bottom : 2px solid yellow;}

@@ -7,10 +7,7 @@ var router = express.Router();
 
 router.param('id', controller.storedId);
 
-router.get('/', function(req, res, next){
-    res.send({});
-})
-
 router.get('/:id', controller.query);
+router.put('/:id', controller.update);
 
 module.exports = router;

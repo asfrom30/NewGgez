@@ -6,6 +6,34 @@
     overflow-y:hidden;
 }
 
+/* Width and Height for responsive */
+.hero-main .header {
+    width:100%;
+}
+
+.hero-main .hero-nav-tabs {
+    width:100%;
+}
+
+.hero-main .body {
+    width:100%;
+}
+@media (min-width: 1024px) {
+    .hero-main .header {
+        max-width: 1200px;
+    }
+
+    .hero-main .hero-nav-tabs {
+        max-width: 1200px;
+    }
+
+    .hero-main .body {
+        max-width: 1200px;
+    }
+}
+
+
+
 .hero-nav-tabs {
     margin-top : 3px;
     margin-left : 3px;

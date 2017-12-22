@@ -1,6 +1,14 @@
 /* Radar Table Width */
 /* Header Width */
 
+/* font-size */
+compare-table .td-up {
+    font-size: 1.2rem;
+} 
+compare-table .td-down {
+    font-size: 0.9rem;
+    color : lightgray;
+}
 /* Layout */
 compare-table table {
     table-layout: fixed;
@@ -41,13 +49,6 @@ compare-table table td {text-align: center;}
 compare-table table th {border : 2px solid rgba(0,0,0,0); border-bottom: 2px solid lightgray}
 compare-table table td {border-bottom: 2px solid gray;}
 
-
-/* for calibrate */
-/* table tr:nth-child(2) td:nth-child(2) { border-top : 2px solid rgba(0, 0, 0, 0);}
-table td:nth-child(2) { border-left : 2px solid rgba(0, 0, 0, 0); border-right :2px solid rgba(0, 0, 0, 0)}
-table tr:nth-last-child(2) td:nth-child(2) { border-bottom : 2px solid rgba(0, 0, 0, 0);} */
-
-
 /* first column border : not active */
 compare-table table tr:nth-child(2) td:nth-child(2) { border-top : 2px solid rgba(0,0,0,0);}
 compare-table table td:nth-child(2) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
@@ -75,3 +76,21 @@ compare-table table tr:nth-last-child(3) td:nth-child(4) { border-bottom : 2px s
 compare-table table tr:nth-child(2) td.active:nth-child(4) { border-top : 2px solid yellow;}
 compare-table table td.active:nth-child(4) { border-left : 2px solid yellow; border-right :2px solid yellow}
 compare-table table tr:nth-last-child(3) td.active:nth-child(4) { border-bottom : 2px solid yellow;}
+
+
+/* table margin */
+
+.result-percent-symbol {
+    font-size : 1rem;
+}
+
+.result-up-down-arrow {
+    font-size : 1rem;
+    margin-left : 0.5em;
+    margin-right: 0.2em;
+}
+
+.result-percent-text {
+    font-size:1.5rem;
+    font-family: beantown;
+}

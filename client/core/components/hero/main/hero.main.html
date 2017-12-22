@@ -1,6 +1,6 @@
-<div class="hero-main">
-    <hero-header current-player="$ctrl.currentPlayer"></hero-header>
-    <div id="local-hero-tabs" class="hero-nav-tabs">
+<div class="hero-main flex flex-wrap f-align-w-center">
+    <hero-header class="header" current-player="$ctrl.currentPlayer"></hero-header>
+    <div class="hero-nav-tabs" id="local-hero-tabs" >
         <ul class="nav nav-tabs">
             <li class="nav-item"><a data-toggle="tab" class="nav-link active" ui-sref-active="active" ng-click="$ctrl.moveTab('summary')">Summary</a></li>
             <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Detail</a></li>
@@ -10,7 +10,7 @@
             <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('admin')">Admin</a></li>
         </ul>
     </div>
-    <div class="base-padding">
+    <div class="body border base-padding">
         <ui-view
             current-player = "$ctrl.currentPlayer"
             current-player-datas = "$ctrl.currentPlayerData"

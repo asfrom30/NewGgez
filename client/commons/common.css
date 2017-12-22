@@ -53,6 +53,7 @@
 .f-align-h-center {-webkit-box-align:center;-ms-flex-align:center;align-items:center; }
 .f-align-h-start {-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start; }
 .f-align-h-end {-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end; }
+.f-align-h-baseline {-webkit-box-align : baseline; -ms-flex-align : baseline; align-items : baseline;}
 
 .f-align-self-v-center {-ms-flex-item-align:center;align-self:center; }
 .f-align-self-v-start {-ms-flex-item-align:start;align-self:flex-start; }

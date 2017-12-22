@@ -19,7 +19,7 @@ export default angular
     })
     .filter('upperNumberFormat', upperNumberFormat)
     .filter('lowerNumberFormat', lowerNumberFormat)
-    .filter('headerFilter', )
+    .filter('percentForResult', percentForResult)
     .name;
 
 export function controller($element) {
@@ -63,6 +63,8 @@ export function controller($element) {
         initTable($ctrl.labelColumn, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);
     }
 
+    $ctrl.compareToggle = compareToggle;
+    $ctrl.onResultToggle = onResultToggle;
 
     function init(){
         $ctrl.toggleIndex = 0;
@@ -156,7 +158,12 @@ export function controller($element) {
         $element.find('td.row-result').show();
     }
 
-    $ctrl.compareToggle = function() {
+    function onResultToggle() {
+        $element.find('td .result-percent').toggle();
+        $element.find('td .result-diff').toggle();
+    }
+
+    function compareToggle() {
         if($ctrl.toggleIndex == 2){
             $ctrl.toggleIndex = 0;
         } else {
@@ -197,22 +204,40 @@ import numeral from 'numeral';
 
 export function upperNumberFormat() {
     return function(input, format) {
+
+        if(isNaN(input)){
+            console.warn(input);
+            return '-';
+        }
         
-        if(input == 'no-game') return input;
-        if(isNaN(input)) return "-";
         if(format == undefined) format = '0.00';
 
-
-        return numeral(input).format(format);
+        return numeral(input*100).format(format);
     }
 }
 
 export function lowerNumberFormat() {
     return function(input, format) {
         
-        if(input == 'no-game') return;
-        if(isNaN(input)) return "-";
+        if(isNaN(input)){
+            console.warn(input);
+            return;
+        }
+
         if(format == undefined) format = '0.00';
+
         return numeral(input).format(format);
+    }
+}
+
+function percentForResult() {
+    return function(input) {
+        
+        if(isNaN(input)){
+            console.warn(input);
+            return '-';
+        }
+
+        return numeral(input*100).format('xx.0');
     }
 }

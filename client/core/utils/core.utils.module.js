@@ -58,9 +58,12 @@ export default angular
         /* Noty Util*/
         this.noty = function(msg, type){
 
+            if(type == undefined) type = info;
             // alert(msg);
             new noty({
-                timeout : 500,
+                theme : 'mint',
+                type : type,
+                timeout : 1500,
                 text: msg
             }).show();
         }

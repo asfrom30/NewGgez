@@ -33,7 +33,6 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         /* Update Data in Fixed Bottom*/
         updateHeroGameLabelP1()
         updateHeroGameLabelP2();
-        
     }
 
     /* Binding Method */

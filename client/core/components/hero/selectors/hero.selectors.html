@@ -89,26 +89,49 @@
             </div>
         </div>
     </div>
-    <div class="friend-search">
-        <input ng-enter="$ctrl.compareSearch($ctrl.serchInput)" ng-model="serchInput"/>
-        <button type="button" class="btn btn-default btn-sm m-l-auto">
-            <i class="material-icons">search</i>
-        </button>
-        <button ng-click="$ctrl.onPlayerClicked(serchInput)" type="button" class="btn btn-default btn-sm m-l-auto">
-            <i class="material-icons">reorder</i>
-        </button>
+    <div>
+        <div>
+            Ajax Live Search Player List
+        </div>
+        <button ng-click="$ctrl.onPlayerClicked(id)">on player clicked</button>
+    </div>
+    <div id="search-friend-bar" class="friend-search">
+        <div class="input-group">
+            <input ng-enter="$ctrl.onSearchFriend(serchInput)" ng-model="serchInput"/>
+            <button ng-click="$ctrl.onSearchFriend(serchInput)" type="button" class="btn btn-default btn-sm m-l-auto">
+                <i class="material-icons">search</i>
+            </button>
+            <!-- <button ng-click="" type="button" class="btn btn-default btn-sm m-l-auto">
+                <i class="material-icons">list</i>
+            </button> -->
+        </div>
     </div>
     <div class="fixed-bottom-title flex border ">
-        <div class="flex">
-            <!-- Search Button and Collapse Button -->
+        <!-- <div class="fixed-detail-header flex">
             <div>
                 <img  ng-src="{{$ctrl.selected.heroIndex | heroImageSrc}}"/>
             </div>
             <div>
                 <div>{{$ctrl.selected.my}}</div>
             </div>
-            <!-- Collapse Button -->
-            <button data-toggle="collapse" data-target="#fixed-bottom-collapse" type="button" class="btn btn-default btn-sm m-l-auto">
+            <button type="button" ng-click="$ctrl.toggleSearchFriend()" class="btn btn-default btn-sm m-l-auto">
+                <i class="material-icons">search</i>
+            </button>
+            <button data-toggle="collapse" data-target="#fixed-bottom-collapse" type="button" class="btn btn-default btn-sm">
+                <i class="material-icons">reorder</i>
+            </button>
+        </div> -->
+        <div class="fixed-compare-header flex">
+            <div>
+                <img ng-src="{{$ctrl.cache.p1.iconUrl}}"/>
+            </div>
+            <div>{{$ctrl.cache.p1.btn}}</div>
+            <div>VS</div>
+            <div>
+                <img ng-src="{{$ctrl.cache.p2.iconUrl}}"/>
+            </div>
+            <div>{{$ctrl.cache.p2.btn}}</div>
+            <button type="button" ng-click="$ctrl.toggleSearchFriend()" class="btn btn-default btn-sm m-l-auto">
                 <i class="material-icons">search</i>
             </button>
             <button data-toggle="collapse" data-target="#fixed-bottom-collapse" type="button" class="btn btn-default btn-sm">

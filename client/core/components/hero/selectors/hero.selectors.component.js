@@ -24,8 +24,7 @@ export default angular
             heroGameLabelP2 : '<',
 
             
-            firstUserProfile : '<',
-            secondUserProfile : '<',
+            p1Player : '<',
             selected : '=',
 
             onSelectorChanges : '&',
@@ -36,7 +35,12 @@ export default angular
         }
     }).name;
 
-export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
+const errMsg = {
+    err_server_working_is_not_properly : "서버에서 응답하지 않습니다.",
+    err_this_battle_tag_is_not_exist_in_server : "해당 배틀태그는 서버에 등록되어 있지 않습니다."
+}
+
+export function HeroSelectorsCtrl($scope, $element, $stateParams, Ajax, CoreUtils){
 
     var $ctrl = this;
 
@@ -48,13 +52,17 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
     $ctrl.$onInit = function(){
         const selector = getDefaultSelector();
         onSelectorChanges(selector);
+        dataBinding();
     }
 
     $ctrl.$onChanges = function(changesObj) {
 
     }
 
-    $ctrl.compareSearch = compareSearch;
+    /* View */
+    $ctrl.toggleSearchFriend = toggleSearchFriend;
+
+    $ctrl.onSearchFriend = onSearchFriend;
     $ctrl.onPlayerClicked = onPlayerClicked;
 
     $ctrl.onSelectorClicked = function($event){
@@ -77,11 +85,30 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
 
 
     function onPlayerClicked(id) {
-        if(id == undefined) return;
+        if(id == undefined) {
+            console.warn('id is undefined. can not excutes on Player clicked');
+            return;
+        }
+
+        changeP2PlayerData(id);
+    }
+    /* data binding */
+    function dataBinding() {
+        if($ctrl.cache == undefined) $ctrl.cache ={};
+
+        $ctrl.cache.p1 = $ctrl.p1Player;
+    }
+
+    /* method binding */
+    function changeP2PlayerData(id){
         $ctrl.changeP2PlayerData({$id : id});
     }
 
     /* View */
+    function toggleSearchFriend() {
+        console.log('working');
+        getFriendSearchDom().toggle('fast');
+    }
 
     /* Controller */
     function onSelectorChanges(selector) {
@@ -194,26 +221,56 @@ export function HeroSelectorsCtrl($scope, $element, Ajax, CoreUtils){
 
 
     /* not yet used */
-    function compareSearch(input) {
-        /* Prepare ID() */
-        // battle tag or battlen name(id)
-        let id = input;
+    function onSearchFriend(input) {
+        input = 'AcQua#3218';
 
-        /* If data is already existed, not request again. */
-        if($ctrl.checkUserDatas({$id:id})) {
-            console.log(id + " data is already existed");
-            return;
+        const index = input.indexOf('#');
+        if(index == -1) {
+            alert('#을 포함해서 배틀태그를 정확히 입력해주십시오');
+        } else {
+            input = input.replace("#", "-");
         } 
 
-        /* Fetch Data from Server */
-        // TODO : update View needed.... IN CALLBACK.
-        Ajax.fetchUserDatas(id)
-            .then(result => {
-                if($ctrl.userDatas === undefined) $ctrl.userDatas = {};
-                $ctrl.storeUserDatas({$id : id, $userDatas : result[id]});
+        /* If data is already existed, not request again. */
+        const exist = isAlreadyExistInCache();
+
+        if(exist) {
+            // get data from cache
+        } else {
+            /* get player from server */
+            const device = $stateParams.device;
+            const region = $stateParams.region;
+            Ajax.fetchPlayerWithBtg(device, region, input).then(result => {
+                const id = getIdFromResult(result);
+                setP2DataToHeader(result);
+                changeP2PlayerData(id);
             }, reason => {
-                console.log('failed');
-            });
-        
+                if(reason.isServerError) CoreUtils.noty(errMsg.err_server_working_is_not_properly, 'error');
+                else CoreUtils.noty(errMsg.err_this_battle_tag_is_not_exist_in_server, 'warning');
+            })
+        }
     }
+
+    function getFriendSearchDom(){
+        return $element.find('#search-friend-bar');
+    }
+
+    function isAlreadyExistInCache(){
+        // if($ctrl.checkUserDatas({$id:id})) {
+        //     console.log(id + " data is already existed");
+        //     return;
+        // } 
+        return false;
+    }
+
+    function getIdFromResult(result) {
+        return result._id;
+    }
+
+    function setP2DataToHeader(player) {
+        if($ctrl.cache == undefined) $ctrl.cache = {};
+        $ctrl.cache.p2 = player;
+    }
+
+
 }

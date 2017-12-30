@@ -14,6 +14,15 @@ const onTickFactory = require('./core/on-tick-factory');
 
 const serverConfigFilePath = path.join(__dirname, "cron.server.config.ini");
 
+// https://www.npmjs.com/package/console-stamp
+require('console-stamp')(console, { pattern: 'dd/mm/yyyy HH:MM:ss' });
+
+/* print current enviroment */
+console.info(`server is running on ${process.env.NODE_ENV} mode`);
+console.info(`run on init : ${config.cron.runOnInit}, cron job start : ${config.cron.start}`);
+
+// TODO:wait for user input... in dev mode.
+
 iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
     console.log(`${Object.keys(cronJobInfos).length} cron jobs loaded from ini files`);
     

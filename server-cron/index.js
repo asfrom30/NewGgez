@@ -1,7 +1,7 @@
 'use strict';
 
 if(process.env.NODE_ENV === undefined){
-  throw new Error('process.env.NODE_ENV is undefined.')
+  throw new Error('process.env.NODE_ENV is undefined.');
 }
 
 const node_env = process.env.NODE_ENV.trim();

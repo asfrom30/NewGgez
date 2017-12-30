@@ -12,6 +12,7 @@ exports.insertCrawlData = function(device, region, todaySuffix, docs){
                 db.close();
                 resolve(docs);
             }).catch((err) => {
+                db.close();
                 reject(err.errmsg);
             })
         })       

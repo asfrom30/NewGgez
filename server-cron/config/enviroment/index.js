@@ -33,6 +33,10 @@ var all = {
 
   // MongoDB connection options
   mongo: {
+    collectionName : {
+      tierDatas : 'tier-datas',
+      crawlDatas : 'crawl-datas',
+    },
     options: {
       db: {
         safe: true

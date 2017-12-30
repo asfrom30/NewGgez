@@ -8,10 +8,8 @@ module.exports = {
 
     /* Database Config */
     dbBaseUrl : 'mongodb://localhost/',
-    dbName : env.dbName
+    dbName : env.dbName,
 
-
-    
     /* Logger Env */
 
     /* Report Env */

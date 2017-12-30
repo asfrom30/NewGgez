@@ -20,11 +20,12 @@ function doAsync(id, btg, crawlConfig, saveConfig){
         } 
         
         const promise = controller.doCrawl(crawlConfig, btg).then((crawlRes) => {
-            resolve(crawlRes)
+            console.log('crawl compelete');
+            resolve(crawlRes);
         });
-        
         return promise;
     }).then((crawlRes) => {
+        console.log('start cleaning');
         /* Data Selection : Make meta and data */
         if(crawlRes.statusCode != 200) {
             return Promise.reject('This Battle Tag can not found in Blizzard');
@@ -46,9 +47,11 @@ function doAsync(id, btg, crawlConfig, saveConfig){
         /* Data Cleaning : transfrom key lower case..*/
         // TODO: middleware pattern apply
         result._value = dataCleaning.getCleanValue(result._value);
+        console.log('end cleaning');
         return result;
     }).then((result) => {
         /* Save Data */
+        console.log('try to insert data to mongo');
         return appDao.insertCrawlData(saveConfig.device, saveConfig.region, saveConfig.todaySuffix, result);
     }).then((result) => {
         console.log(`${btg} is crawl and save successfully`);

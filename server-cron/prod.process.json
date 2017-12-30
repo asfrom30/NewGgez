@@ -1,0 +1,11 @@
+{
+    "apps": [{
+        "name": "cron:prod",
+        "script": "index.js",
+        "watch": false,
+        "autorestart" : true,
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }]
+}

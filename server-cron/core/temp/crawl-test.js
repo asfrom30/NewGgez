@@ -3,8 +3,7 @@ let args = process.argv;
 let envArg = args[2];
 
 if(!(envArg == 'dev' || envArg == "prod" || envArg == "debug")) {
-    console.log('Enviormetn setting is not proper.. ');
-    return;
+    throw new Error('Enviormetn setting is not proper.. ');
 } else {
     process.env.NODE_ENV = envArg;
     // process.env.NODE_ENV = process.env.NODE_ENV || 'dev';

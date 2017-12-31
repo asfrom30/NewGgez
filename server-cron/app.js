@@ -10,6 +10,7 @@ const path = require('path');
 const CronManager = require('./core/cron-manager');
 const iniFileLoader = require('./core/ini-file-loader');
 const config = require('./config/enviroment')
+
 const onTickFactory = require('./core/on-tick-factory');
 
 const serverConfigFilePath = path.join(__dirname, "cron.server.config.ini");
@@ -32,9 +33,11 @@ iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
     cronManager.buildSaveConfigs(cronJobInfos);
 
     /* build onTick Chain */
+    // cronManager.addOnTick(onTickFactory.needToDropTodayCollection);
     cronManager.addOnTick(onTickFactory.getAllPlayerCrawlAndSave);
     // cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
     // cronManager.addOnTick(onTickFactory.getRanking);
+    cronManager.addOnTick(onTickFactory.getOnTickForLast);
 
     cronManager.startCron();
 }).then(()=>{

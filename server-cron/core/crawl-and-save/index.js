@@ -6,7 +6,18 @@ const dataCleaning  = require('./data.cleaning.cron.server.controller');
 const appDao = require('../dao/index');
 
 exports.doAsync = doAsync;
+exports.doAsyncTest = doAsyncTest;
 exports.onlyCrawlForRegister = onlyCrawlForRegister;
+
+function doAsyncTest(id, btg, crawlConfig, saveConfig){
+    return Promise.resolve().then(result => {
+        console.log(`try to crawl and save test : ${btg}`);
+        return appDao.insertCrawlData(saveConfig.device, saveConfig.region, saveConfig.todaySuffix, {_id:id, _btg:btg});
+    }).catch(reason => {
+        console.log('\x1b[33m%s\x1b[0m', 'error occured in Only Crawl: ' + btg + 'is not inserted');
+        console.log(reason);
+    })
+}
 
 function doAsync(id, btg, crawlConfig, saveConfig){
 

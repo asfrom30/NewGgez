@@ -20,6 +20,7 @@ exports.insertCrawlData = function(device, region, todaySuffix, docs){
 }
 
 exports.doAggregate = function(device, region, todaySuffix, aggregateDocs) {
+    // NEED AGGEGATE FIX ME.
     if(process.env.NODE_ENV == 'development') todaySuffix = '000000';
 
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
@@ -100,7 +101,7 @@ exports.findAllPlayers = function(device, region) {
 //     else throw new Error("Arguments Exception in ggez-crud.js");
 // }
 
-exports.findAllPlayerDatas = function(dbName, collectionName, calback){
+exports.findAllPlayerDatas = function(dbName, collectionName, callback){
     
     var helper = new mongoDbHelper.MongoDbHelper(dbName); //TODO: separate outside...
 
@@ -115,3 +116,39 @@ exports.findPlayer = function(index){
     // findPlayer overloading...
 }
 
+exports.getTodayCrawlDatasCount = function(device, region, todaySuffix){
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${todaySuffix}`;
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then(function(db){
+            db.collection(collectionName).find({}).count().then(result => {
+                db.close();
+                resolve(result);
+            }).catch(reason =>{
+                db.close();
+                reject(err.errmsg);
+            })
+        })       
+    })
+}
+
+exports.dropTodayCollection = function(device, region, todaySuffix) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${todaySuffix}`;
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then(function(db){
+            db.collection(collectionName).drop().then(result => {
+                db.close();
+                resolve(result);
+            }).catch(reason => {
+                db.close();
+
+                console.log(reason);
+                reject(reason.errmsg);
+            });
+        })       
+    });
+
+}

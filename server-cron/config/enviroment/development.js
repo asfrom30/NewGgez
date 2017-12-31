@@ -7,7 +7,11 @@ module.exports = {
         context: null,
         start: false,
         runOnInit: true,
-        // limitCronNumber:
-        // cronSpeed
+    },
+
+    crawl : {
+        speed : 5,
+        limitPlayer : true,
+        limitNumber : 100,
     }
 }

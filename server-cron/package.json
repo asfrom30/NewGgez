@@ -1,6 +1,6 @@
 {
   "name": "crawl-cron-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "crawl-server.js",
   "dependencies": {
@@ -24,11 +24,12 @@
     "nodemon": "^1.12.1"
   },
   "scripts": {
-    "cron": "nodemon app.js",
-    "plain:start:dev": "set NODE_ENV=development & node ./index.js",
-    "start:dev" : "pm2 start dev.process.json",
-    "start:dist": "pm2 start"
+    "nodemon:dev" : "set NODE_ENV=development & nodemon ./index.js",
+    "node:dev" : "set NODE_ENV=development & node ./index.js",
+    "node:prod": "set NODE_ENV=production & node ./index.js",
+    "pm2:dev" : "pm2 restart ./.pm2/dev.process.json",
+    "pm2:prod": "pm2 restart ./.pm2/prod.process.json"
   },
-  "author": "",
+  "author": "asfrom30",
   "license": "ISC"
 }

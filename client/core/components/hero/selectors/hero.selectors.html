@@ -122,11 +122,22 @@
             </button>
         </div> -->
         <div class="fixed-compare-header flex">
-            <div>
+            <div class="flex">
                 <img ng-src="{{$ctrl.cache.p1.iconUrl}}"/>
+                <div>
+                    <div class="flex" style="height:50%">
+                        <div class="border">
+                            <img ng-src="{{$ctrl.cache.p1.cptpt | tierImageSrc}}"/>
+                        </div>
+                        <div>{{$ctrl.cache.p1.btn}}</div>
+                    </div>
+                    <div style="height:50%">{{$ctrl.selected.p1Index}}</div>
+                </div>
             </div>
-            <div>{{$ctrl.cache.p1.btn}}</div>
-            <div>VS</div>
+            <div>
+                <div>VS</div>
+                <div>{{$ctrl.selected.heroIndex}}</div>
+            </div>
             <div>
                 <img ng-src="{{$ctrl.cache.p2.iconUrl}}"/>
             </div>

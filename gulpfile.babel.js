@@ -125,14 +125,12 @@ gulp.task('remote:bluehost:run:cron', function () {
 /********************
  * Custom Task
  ********************/
+gulp.task('auto:deploy:server', cb => {
 
+});
 gulp.task('auto:deploy:cron', cb => {
     runSequence(
-        /* clean dist cron folder */
-        'clean:dist:cron',
-        /* build cron */
-        'transpile:cron',
-        'copy:cron',
+        'build:cron',
         /* clean remote */
         'remote:bluehost:clean:cron',
         /* move dev to remote file */ 
@@ -253,6 +251,23 @@ gulp.task('build', cb => {
         cb);
 });
 
+gulp.task('build:server', cb => {
+    runSequence(
+        ['clean:dist:server', 'clean:dist:package'],
+        ['transpile:server','copy:server']
+    )
+});
+
+gulp.task('build:cron', cb => {
+    runSequence(
+        'clean:dist:cron', // clean dist cron folder
+        'transpile:cron', // copy *.js file without *.spec.js, *.integration.js
+        'copy:cron', // copy package.json, .pm2 files, .ini file
+    )
+})
+
+
+
 
 /********************
  * Tasks
@@ -290,7 +305,10 @@ gulp.task('start:client', cb => {
 /* Clean */
 gulp.task('clean:tmp', () => del(['.tmp/**/*'], {dot: true}));
 gulp.task('clean:dist', () => del([`${paths.dist}/!(.git*|.openshift|Procfile|node_modules)**`], {dot: true}));
-gulp.task('clean:dist:cron', () => del([`${paths.dist}/${cronPath}/!(.git*|.openshift|Procfile)**`], {dot: true}));
+gulp.task('clean:dist:server', () => del([`${paths.dist}/${serverPath}/**`], {dot: true}));
+gulp.task('clean:dist:client', () => del([`${paths.dist}/${clientPath}/**`], {dot: true}));
+gulp.task('clean:dist:cron', () => del([`${paths.dist}/${cronPath}/**`], {dot: true}));
+gulp.task('clean:dist:package', () => del([`${paths.dist}/package.json`], {dot: true}));
 
 /* Server */
 /* move server files without spec.js to dist */

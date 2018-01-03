@@ -39,6 +39,7 @@
     "chai-as-promised": "^5.1.0",
     "chai-things": "^0.2.0",
     "clean-webpack-plugin": "^0.1.17",
+    "console-stamp": "^0.2.6",
     "css-loader": "^0.28.7",
     "del": "^2.0.2",
     "eslint": "^2.12.0",

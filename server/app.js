@@ -3,6 +3,9 @@ import http from 'http';
 import path from 'path';
 import config from './config/environment';
 
+/* Custom Logger */
+setCustomLogger();
+
 // Set Global Variables
 global.appRoot = path.resolve(__dirname);
 
@@ -20,6 +23,11 @@ var server = http.createServer(app);
 // require('./config/socketio').default(socketio);
 require('./config/express').default(app);
 require('./routes').default(app);
+
+/* Path Setting */
+// app.set('utilPath', path.join(config.root, 'client'));
+
+
 
 // Start server
 function startServer() {
@@ -71,3 +79,15 @@ exports = module.exports = app;
 
 // // Expose app
 // exports = module.exports = app;
+
+
+function setCustomLogger() {
+    require('console-stamp')(console, {
+        pattern: 'HH:MM:ss',
+        colors: {
+            stamp: 'yellow',
+            label: 'white',
+            
+        }
+    });
+}

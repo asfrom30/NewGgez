@@ -41,9 +41,8 @@ const config = {
             // path.resolve() return correct path whatever on mac and window
             // __ is constant in nodejs
         filename: '[name].[chunkhash].js',
-        // chunkFilename: '[name].bundle.js', or '[name].[hash].js'
         // path : '/',
-        publicPath : '/' // localhost:3000 + publicPath
+        publicPath : '/'
     },
     module: {
         rules: [

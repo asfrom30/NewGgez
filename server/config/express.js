@@ -112,15 +112,17 @@ export default function(app) {
     // }
 
     /* Build Client using webpack middle-ware */
-    const needWebpack = false;
+    const needWebpack = true;
     if(needWebpack && process.env.NODE_ENV  === 'development') {
+        console.info('Webpack middleware is running');
+        
+        
         const webpack = require('webpack');
         const stripAnsi = require('strip-ansi');
         const webpackDevMiddleware = require('webpack-dev-middleware');
         const webpackDevConfig = require('../../webpack.dev');
         const compiler = webpack(webpackDevConfig);
         const browserSync = require('browser-sync').create();
-
 
         //FIXME: why without this code. can call assets/images...
         // app.use(webpackDevMiddleware(compiler, {
@@ -168,4 +170,6 @@ export default function(app) {
     // if(env === 'development' || env === 'test') {
     //     app.use(errorHandler()); // Error handler - has to be last
     // }
+
+    console.log('express setting ');
 }

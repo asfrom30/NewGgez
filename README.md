@@ -40,12 +40,13 @@ It's not easy to analyze many datas. and harder thing is there are so many cases
 
 ### End Point
 
-URL | VERB | BODY | Result |
+URL | VERB | REQUIRED | Result |
 --- | --- | --- | --- |
 :device/:region/players/?btg=`btg` | GET | empty | request player resource depend on battle tag
 :device/:region/players/:id | GET | empty |  request plyaer resource depend on id
-:device/:region/players/ | POST | {btg : `btg`} |  try to register new player depend one battle tag()
-:device/:region/player-datas/:id| GET | empty | require `date query param'
+:device/:region/players/ | POST | require body `{btg : btg}` |  try to register new player depend one battle tag()
+:device/:region/crawl-datas/:id| GET | require `date query param` | 
+:device/:region/crawl-datas/:id| PUT | empty | update `player profile` and `crwal-datas-current`
 :device/:region/tier-datas/:date| GET | empty | get tier data depend on region, device, date
 
 cf) player-datas/1/?date=17-10-18,17-10-21,17-10-22,17-10-23
@@ -87,6 +88,8 @@ It is implemented each datas are stored in each databases but in the one server.
 ### Server Side
 - [x] build and run server..
     - merging crawl server based on region, device
+- [ ] need crawl status
+    - deprecated, timestamp...
 
 ## Distribution
 

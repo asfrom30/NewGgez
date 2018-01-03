@@ -82,7 +82,7 @@ function onlyCrawlForRegister(device, region, btg) {
     return new Promise((resolve, reject) => {
 
         console.log();
-        console.log(`try to crawl and save : ${btg}`)
+        console.log(`try to only crawl : ${btg}`)
         /* Crawl Page */
         if(typeof btg == 'undefined') {
             reject('btg is undefined');

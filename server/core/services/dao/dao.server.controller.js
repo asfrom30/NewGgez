@@ -81,6 +81,31 @@ exports.findPlayerById = function(device, region, id) {
     })
 }
 
+exports.findPlayerBtgById = function(device, region, id) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = 'players';
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).findOne({_id : id}, {btg : 1}).then(doc => {
+                db.close();
+                if(doc == null) {
+                    reject(`err_${device}_${region}_${id}_doc_is_null_in_mongo_db`);
+                } else {
+                    if(doc.btg == undefined) {
+                        reject(`err_${device}_${region}_${id}_btg_is_null_in_mongo_db`);
+                    } else {
+                        resolve(doc.btg);
+                    }
+                }
+            }, reason => {
+                db.close();
+                reject(reason);
+            });
+        })
+    })
+}
+
 exports.findPlayerByBtg = function(device, region, btg) {
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
     const collectionName = 'players';
@@ -116,6 +141,7 @@ exports.findCrawlDataById = function(device, region, collectionSuffix, id) {
                 // let result = {};
                 // result[collectionSuffix] = doc;
             }, reason => {
+                db.close();
                 reject(reason);
             })
         })
@@ -132,7 +158,26 @@ exports.findCrawlDataByBtg = function(device, region, collectionSuffix, btg) {
                 db.close();
                 resolve(doc);
             }, reason => {
+                db.close();
                 rejct(reason);
+            })
+        })
+    })
+}
+
+exports.findCurrentCrawlDataById = function(device, region, id) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${config.mongo.collectionSuffix.current}`;
+    const query = {_id :0, _btg : 0};
+
+    return new Promise((resolve, reject) =>{
+        client.connect(dbUri).then(db => {
+            db.collection(collectionName).findOne({_id : id}, query).then(doc =>{
+                db.close();
+                resolve(doc);
+            }, reason => {
+                db.close();
+                reject(reason);
             })
         })
     })
@@ -154,6 +199,8 @@ exports.findTierDataByDate = function(device, region, date) {
         })
     })
 }
+
+
 
 function insertOneWithAI(dbUri, collectionName, doc) {
     const counterCollectionName = 'counters';
@@ -177,4 +224,41 @@ function insertOneWithAI(dbUri, collectionName, doc) {
             });
         })
     })
+}
+
+exports.updatePlayer = function(device, region, id, doc) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = 'players';
+    const options = {upsert : true};
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).updateOne({_id : id}, {$set : doc}, options).then(result => {
+                db.close();
+                resolve(doc);
+            }, reason => {
+                db.close();
+                reject(reason);
+            });
+        })
+    })
+}
+
+exports.updateCurrentCrawlData = function(device, region, id, doc) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${config.mongo.collectionSuffix.current}`;
+    const options = {upsert : true}
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).updateOne({_id : id}, doc, options).then((result) => {
+                db.close();
+                resolve(doc);
+            }, (reason) => {
+                db.close();
+                reject(reason);
+            });
+        })
+    })
+
 }

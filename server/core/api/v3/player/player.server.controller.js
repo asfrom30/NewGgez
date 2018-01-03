@@ -136,6 +136,8 @@ function getPlayerObj(btg, crawlData) {
     result.level = crawlData._meta.lowerLevel
     result.cptpt = crawlData._meta.cptpt;
 
+    //FIXME: comment count, star count, thumb coutn = 0;
+
     result.lastUpdateTimeStamp = Date.now();
     result.registerTimeStamp = Date.now();
 

@@ -17,7 +17,7 @@
     "protractor": "protractor e2e-tests/protractor.conf.js",
     "update-index-async": "node -e \"var fs=require('fs'),indexFile='app/index-async.html',loaderFile='app/bower_components/angular-loader/angular-loader.min.js',loaderText=fs.readFileSync(loaderFile,'utf-8').split(/sourceMappingURL=angular-loader.min.js.map/).join('sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map'),indexText=fs.readFileSync(indexFile,'utf-8').split(/\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/).join('//@@NG_LOADER_START@@\\n'+loaderText+'    //@@NG_LOADER_END@@');fs.writeFileSync(indexFile,indexText);\"",
     "webpack-dev-server": "webpack-dev-server --progress --colors --config ./webpack.dev.server.js",
-    "server:prod": "set NODE_ENV=production & node ./server/index.js"
+    "server:prod": "pm2 restart ./server/.pm2/prod.process.json"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.0",
@@ -114,7 +114,7 @@
     "style-loader": "^0.19.0",
     "supertest": "^1.1.0",
     "through2": "^2.0.1",
-    "webpack": "^3.6.0",
+    "webpack": "^3.10.0",
     "webpack-dev-middleware": "^1.5.1",
     "webpack-dev-server": "^2.9.4",
     "webpack-merge": "^4.1.1",

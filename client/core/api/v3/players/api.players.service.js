@@ -6,7 +6,8 @@ import apiConfig from '../../core.api.config';
 export default angular
     .module('api.v3.players', [])
     .factory('PlayersApi', ['$resource', function($resource){
-        const api = `${apiConfig.baseUri}/:device/:region/players/:id`
+        // const api = `${apiConfig.baseUri}/:device/:region/players/:id`
+        const api = `/:device/:region/players/:id`
 
         return $resource(api, {}, {
             get: {

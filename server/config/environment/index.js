@@ -83,6 +83,7 @@ module.exports = function(){
 
   config.mongo.uriList = {};
 
+  /* If you are using mongoose shcema. uncommented below code */
   for(let device of shared.devices) {   
     for(let region of shared.regions) {
       const suffix = `_${device}_${region}`;

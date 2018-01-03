@@ -29,7 +29,11 @@ export default function(app) {
     }
     
     if(env === 'production') {
-        app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
+        try {
+            app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
+        } catch (error) {
+            // console.log(error);
+        }
     }
 
     if(env == 'development') {

@@ -7,7 +7,8 @@ export default angular
     .module('api.v3.indexInformation', [])
     .factory('IndexInformationApi', ['$resource', function($resource){
 
-        var api = `${apiConfig.baseUri}/index-information/1.json`;
+        var api = `/index-information/1.json`;
+        // var api = `${apiConfig.baseUri}/index-information/1.json`;
 
         return $resource(api, {}, {})
         

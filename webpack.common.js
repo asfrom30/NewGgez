@@ -40,7 +40,7 @@ const config = {
         path: path.resolve(__dirname, 'dist'), // absolute path with Path module
             // path.resolve() return correct path whatever on mac and window
             // __ is constant in nodejs
-        filename: '[name].js',
+        filename: '[name].[chunkhash].js',
         // chunkFilename: '[name].bundle.js', or '[name].[hash].js'
         // path : '/',
         publicPath : '/' // localhost:3000 + publicPath
@@ -88,11 +88,10 @@ const config = {
         }),
         // new HtmlWebpackHarddiskPlugin(),
         new webpack.optimize.CommonsChunkPlugin({
-          name : 'vendor'
+          name : ['vendor', 'manifest']
         }),
-
-        new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
+        // new webpack.NamedModulesPlugin(),
+        // new webpack.HotModuleReplacementPlugin(),
         new webpack.ProvidePlugin({
           $: 'jquery',
           jQuery: 'jquery',

@@ -8,7 +8,7 @@ module.exports = merge(common, {
     devServer: {
         contentBase: path.join(__dirname, "client"),
         compress: true,
-        port: 9000
+        port: 9003
     },
     plugins : [
         new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify('webpack-dev-server')}),

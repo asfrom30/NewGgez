@@ -22,29 +22,29 @@ module.exports = function() {
     // autoIncrement.initialize(db);
     
     /* Multipel Database One Schema*/
-    const mongoConnList = {};
-    for(let key in config.mongo.uriList) {
-        mongoConnList[key] = mongoose.connect(config.mongo.uriList[key], {
-            useMongoClient: true,
-        })
-    }
+    // const mongoConnList = {};
+    // for(let key in config.mongo.uriList) {
+    //     mongoConnList[key] = mongoose.connect(config.mongo.uriList[key], {
+    //         useMongoClient: true,
+    //     })
+    // }
 
-    for(let key in mongoConnList) {
-        const playerSchema = require('../core/api/v3/player/player.server.model');
-        // mongoose.model('Player', PlayerSchema);
-        mongoConnList[key].model(`Players${key}`, playerSchema);
-    }
+    // for(let key in mongoConnList) {
+    //     const playerSchema = require('../core/api/v3/player/player.server.model');
+    //     // mongoose.model('Player', PlayerSchema);
+    //     mongoConnList[key].model(`Players${key}`, playerSchema);
+    // }
 
     /* Connect to Mongo */
-    var promise = mongoose.connect(config.mongo.uri, {
-        useMongoClient: true,
-    });
+    // var promise = mongoose.connect(config.mongo.uri, {
+    //     useMongoClient: true,
+    // });
 
     /* for Mongoose Schema */
-    require('../core/api/v3/player/player.server.model');
+    // require('../core/api/v3/player/player.server.model');
 
     /* for Dynamic Schema */
     // mongoHelperFactory.setDbUri(config.mongo.uri);
 
-    return promise;
+    // return promise;
 }

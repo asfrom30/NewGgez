@@ -1,0 +1,11 @@
+{
+    "apps": [{
+        "name": "server:prod",
+        "script": "./server/index.js",
+        "watch": false,
+        "autorestart" : true,
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }]
+}

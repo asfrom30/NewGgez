@@ -277,5 +277,26 @@ exports.updateCurrentCrawlData = function(device, region, id, doc) {
             });
         })
     })
+}
 
+exports.getIndexInformation = function(device, region) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${config.mongo.collectionSuffix.current}`;
+
+    const prepareAggregate = { $group : { _id : '',  count: {$sum: 1}, totalGames: {$sum : "$_value.all.치른게임"}}};
+        
+    
+    return new Promise((resolve, reject) => {
+        
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).aggregate(prepareAggregate, function(err, result){
+                if(err) {
+                    reject(err);
+                } else {
+                    resolve(result[0]);
+                }
+                db.close();
+            })
+        });
+    });
 }

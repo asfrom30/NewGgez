@@ -25,6 +25,7 @@ export default function(app) {
   app.use('/:device/:region/players', require('./core/api/v3/player'));
   app.use('/:device/:region/crawl-datas', require('./core/api/v3/crawl-data'));
   app.use('/:device/:region/tier-datas', require('./core/api/v3/tier-data'));
+  app.use('/:device/:region/index-information', require('./core/api/v3/index-information'));
 
   /* For Auth */
   // app.use('/auth', require('./auth').default);

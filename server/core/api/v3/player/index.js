@@ -7,7 +7,7 @@ var router = express.Router();
 
 router.param('id', controller.findById);
 
-router.get('/', controller.queryInBtg);  // query string... /?btg=
+router.get('/', controller.query);  // query string... /?btg=
 router.get('/:id', controller.read);
 router.put('/', controller.register);
 

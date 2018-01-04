@@ -15,23 +15,32 @@ exports.findById = function(req, res, next, id) {
     })
 }
 
-exports.queryInBtg = function(req, res, next) {
+exports.query = function(req, res, next) {
     const device = req.device;
     const region = req.region;
     const btg = req.query.btg;
+    const startsWith = req.query.startsWith;
 
-    if(btg == undefined) {
-        res.status(404).send('btg is not defined');
-        return;
+    if(btg !== undefined) {
+        appDao.findPlayerByBtg(device, region, btg).then(player =>{
+            sendPlayer(res, player);
+            return;
+        }).catch(reason => {
+            res.status(500).send(reason);
+            return;
+        });
+    } else if(startsWith !== undefined) {
+        const regex = `^${startsWith}`;
+        appDao.findPlayerByRegex(device, region, regex).then(player =>{
+            sendPlayer(res, player);
+            return;
+        }).catch(reason => {
+            res.status(500).send(reason);
+            return;
+        });
+    } else {
+        res.status(404).json({err : 'query is not defined'});
     }
-
-    appDao.findPlayerByBtg(device, region, btg).then(player =>{
-        sendPlayer(res, player);
-        return;
-    }).catch(reason => {
-        res.status(500).send(reason);
-        return;
-    });
 } 
 
 exports.read = function(req, res, next) {

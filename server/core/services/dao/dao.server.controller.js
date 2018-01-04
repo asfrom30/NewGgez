@@ -123,6 +123,23 @@ exports.findPlayerByBtg = function(device, region, btg) {
     })
 }
 
+exports.findPlayerByRegex = function(device, region, regex) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = 'players';
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).find({btg : {$regex : regex}}).project({btg : 0}).toArray().then((doc) => {
+                db.close();
+                resolve(doc);
+            }, reason => {
+                db.close();
+                reject(reason);
+            });
+        })
+    })
+}
+
 exports.findCrawlDataById = function(device, region, collectionSuffix, id) {
     // TODO: id integer check neede
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;

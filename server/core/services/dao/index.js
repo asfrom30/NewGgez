@@ -4,6 +4,7 @@ exports.getNewPlayerId = controller.getNewPlayerId;
 
 exports.findPlayerById = controller.findPlayerById;
 exports.findPlayerByBtg = controller.findPlayerByBtg;
+exports.findPlayerByRegex = controller.findPlayerByRegex;
 
 exports.findPlayerBtgById = controller.findPlayerBtgById;
 

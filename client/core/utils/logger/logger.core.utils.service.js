@@ -2,33 +2,24 @@
 
 import angular from 'angular';
 
+// logLevel = [info, warn, error];
+// logScope = [class name];
+
 const logLevel = 'info';
-const logScopes = ['ajax-service', 'hero-main'];
 // const logScopes = [];
 
 export default angular
     .module('logger.core.utils.service', [])
     .service('AppLogger', function(CommonLogService, CONFIG_LOG){
 
-        // logLevel = [info, warn, error];
-        // logScope = [class name];
-        this.log = function(msg, logLevel, logScope){
-            if(process.env.NODE_ENV == 'production') return;
+        this.log = function(msg, logLevel){
 
-            for(let _logScope of logScopes) {
-                if(_logScope == logScope) {
-                    // console.log(this.caller);
-                    // console.log(msg);
-                    // console.debug(arguments.callee.caller.toString());
-                    console.log(msg);
-                    break;
-                }
-            }
-            return;
-
-            if(!CONFIG_LOG.isActivate) return;
-            if(CONFIG_LOG.logLevel.includes(logLevel) && CONFIG_LOG.logScope.includes(logScope)){
-                CommonLogService.colorLog(msg, logLevel)
+            if(process.env.NODE_ENV == 'production') {
+                // using ajax input error message to server, must be specify.
+                log2Server(msg, logLevel);
+                return;
+            } else {
+                log2Browser(msg, logLevel);
             }
         }
 
@@ -38,6 +29,18 @@ export default angular
             // or table 
             console.table(obj)
         }
-
-
     }).name;
+
+function log2Server(msg, logLevel, logScope) {
+
+}
+
+function log2Browser(msg, logLevel) {
+        console.error(msg);
+    return;
+
+    // if(!CONFIG_LOG.isActivate) return;
+    // if(CONFIG_LOG.logLevel.includes(logLevel) && CONFIG_LOG.logScope.includes(logScope)){
+    //     CommonLogService.colorLog(msg, logLevel)
+    // }
+}

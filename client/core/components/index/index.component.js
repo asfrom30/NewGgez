@@ -3,8 +3,6 @@
 import angular from 'angular';
 import './index.css';
 
-const logScope = 'index-component';
-
 export default angular.module('components.index', [])
     .component('index', {
         template : require("./index.html"),
@@ -34,7 +32,6 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     /* View */
     function initView() {
         scrollDownAnimateInit();
-        startAnimateNumber();
         appendDevElement();
     }
 
@@ -49,9 +46,11 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
 
     function startAnimateNumber(){
         console.log($ctrl.indexInformation);
+        AppLogger.log('hi', 'info');
         if($ctrl.indexInformation == undefined) { AppLogger.log('$ctrl.indexInformation is undefined'); return;}
         if($ctrl.indexInformation.totalGameNumber == undefined) { AppLogger.log('totalGameNumber is undefined'); return;}
         if($ctrl.indexInformation.totalPlayerNumber == undefined) { AppLogger.log('totalGameNumber is undefined'); return;}
+        
         $element.find('#total-player-num').text($ctrl.indexInformation.totalGameNumber);
         $element.find('#total-game-num').text($ctrl.indexInformation.totalPlayerNumber);
     }

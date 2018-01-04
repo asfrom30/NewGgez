@@ -1,14 +1,14 @@
 <div id="index">
-    <section id="search-section">
+    <section id="search-section" class="flex f-align-w-center"><!-- using id is for animate scroll -->
         <div class="title position">
             <div class="information layout style font">
                 <div>
                     <div>Total Players</div>
-                    <div id="total-player-num">-</div>  
+                    <div><animate-number number="$ctrl.indexInformation.totalPlayerNumber" time="1000" has-comma="true"></animate-number></div>  
                 </div>
                 <div>
                     <div>Total Games</div>
-                    <div id="total-game-num">-</div>
+                    <div><animate-number number="$ctrl.indexInformation.totalGameNumber" time="1000" has-comma="true"></animate-number></div> 
                 </div>
             </div>
             <div class="search-group layout">

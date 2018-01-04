@@ -17,6 +17,7 @@ import session from 'express-session';
 // import mongoose from 'mongoose';
 // var MongoStore = connectMongo(session);
 
+import cors from 'cors';
 import config from './environment';
 
 
@@ -71,12 +72,10 @@ export default function(app) {
     app.use(methodOverride());
 
     //TODO: REPLACE WITH COR...
-    app.use(function(req, res, next){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST, OPTIONS');
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        next();
-    })
+    if(env !== 'production') {
+        console.info('setting up cross origin resource sharing');
+        app.use(cors());
+    }
 
     /* from angular full stack */
     /* Persist sessions with MongoStore / sequelizeStore

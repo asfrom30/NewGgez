@@ -87,7 +87,6 @@ function setCustomLogger() {
         colors: {
             stamp: 'yellow',
             label: 'white',
-            
         }
     });
 }

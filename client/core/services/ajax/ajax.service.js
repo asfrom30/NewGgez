@@ -38,6 +38,22 @@ export default angular
                     });
                 });
             },
+            searchPlayer : function(device, region, startsWith) {
+                return new Promise((resolve, reject) => {
+                    PlayersApi.get({device : device, region : region, startsWith : startsWith}).$promise.then(response => {
+
+                        /// Error check in rules of rest api
+                        try {
+                            const list = response.value;
+                            console.log(list);
+                            if(list == undefined) resolve([]); // todo no undefined check.. isArray check is better
+                            else resolve(list);
+                        } catch (error) {
+                            resolve([]);
+                        }
+                    });
+                })
+            },
             registerPlayer : function(device, region, btg) {
                 let ajaxIndicator = new CoreUtils.ajaxIndicator("Try To Register Battle Tag " + btg);
                 ajaxIndicator.show();

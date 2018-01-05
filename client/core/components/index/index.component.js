@@ -18,16 +18,20 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     'ngInject';
     
     var $ctrl = this;
-    $ctrl.search = search;
+    $ctrl.search = onSearchButton;
     $ctrl.moveHeroPage = moveHeroPage;
     
     $ctrl.$onInit = function() {
+        const env = process.env.NODE_ENV;
+        if(env !== 'production') {
+            appendDevElement();
+            doDevAction();
+        }
         initView();
     }
 
     $ctrl.$onChanges = function() {
-        console.log('index information is');
-        console.log($ctrl.indexInformation);
+
     }
 
 
@@ -38,7 +42,6 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     /* View */
     function initView() {
         scrollDownAnimateInit();
-        appendDevElement();
     }
 
     function scrollDownAnimateInit() {
@@ -61,14 +64,6 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         $element.find('#total-game-num').text($ctrl.indexInformation.totalPlayerNumber);
     }
 
-    function appendDevElement() {
-        // how to use angular transclude for
-        const node_env = process.env.NODE_ENV;
-        if(node_env == 'development') {
-            // $(document.body).append('<h1>hi {{$ctrl.input}}</h1>');
-        }
-    }
-
     function updateRegion(region){
         
     }
@@ -80,7 +75,7 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
 
 
     /* Controller */
-    function search(){
+    function onSearchButton(){
         /* If input is null, nothing to do*/
         const input = $ctrl.input;
         if(input === undefined || input == null || input == '' ) {
@@ -93,8 +88,30 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         
         if(!checkSearchValid(device, region, input)) return;
 
-        const btg = input.replace("#", "-");
+        if(input.indexOf('#') == -1){
+            btnSearch(device, region, input);
+        } else {
+            const btg = input.replace("#", "-");
+            btgSearch(device, region, input);
+        }
+        
+    }
 
+    function btnSearch(device, region, input) {
+        Ajax.searchPlayer(device, region, input).then(result => {
+            // is Array? if not...
+            const length = result.length;
+            if(length == undefined || length == 0) {
+                $element.find('table').hide();
+            } else {
+                $element.find('table').show();
+                $ctrl.searchedPlayerList = result;
+                $scope.$apply();
+            }
+        })
+    }   
+
+    function btgSearch(device, region, input) {
         Ajax.fetchPlayerWithBtg(device, region, btg).then(response => {
             if(response._id == undefined) {
                 CoreUtils.noty('존재 하지 않는 ID 입니다. 관리자에게 알려주세요. 조치해드리겠습니다.');
@@ -140,10 +157,6 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
             result = false;
         }
 
-        if(input.indexOf('#') == -1){
-            CoreUtils.noty("#을 포함해서 정확하게 입력하여 주세요", "type");
-            result = false;
-        }
         return result;
     }
 
@@ -168,18 +181,35 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         $window.location.href = `#!/hero/summary/${device}/${region}/${id}`;
     }
 
+    /* For develop */
+    function doDevAction() {
+        $ctrl.input = 'a';
+        $ctrl.region = 'kr';
+        $ctrl.device = 'pc';
+
+        $ctrl.search();
+    }
+
+    function appendDevElement() {
+        // how to use angular transclude for
+        const node_env = process.env.NODE_ENV;
+        if(node_env == 'development') {
+            // $(document.body).append('<h1>hi {{$ctrl.input}}</h1>');
+        }
+    }
+
     $ctrl.test = function(){
         $ctrl.input = '냅둬라날#3934';
         $ctrl.region = 'kr';
         $ctrl.device = 'pc';
-        search();
+        onSearchButton();
     }
 
     $ctrl.test1 = function(){
         $ctrl.input = '냅둬라날#39341';
         $ctrl.region = 'kr';
         $ctrl.device = 'pc';
-        search();
+        onSearchButton();
     }
 
     $ctrl.test2 = function() {

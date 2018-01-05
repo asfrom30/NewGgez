@@ -7,7 +7,11 @@ export default angular
     .module('api.v3.players', [])
     .factory('PlayersApi', ['$resource', function($resource){
         // const api = `${apiConfig.baseUri}/:device/:region/players/:id`
-        const api = `/:device/:region/players/:id`
+        
+        let api = `/:device/:region/players/:id`
+
+        const env = process.env.NODE_ENV;
+        if(env === 'webpack') api = 'http://localhost:9000' + api;
 
         return $resource(api, {}, {
             get: {

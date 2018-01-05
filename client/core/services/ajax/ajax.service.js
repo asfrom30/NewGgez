@@ -19,24 +19,29 @@ export default angular
     .module('core.services.ajax', [])
     .factory('Ajax', function(AppLogger, IndexInformationApi, PlayersApi, CrawlDatasApi , TierDatasApi, CoreUtils, CONFIG){
         return {
-            fetchIndexInformation : function() {
+            fetchIndexInformation : function(device, region) {
                 AppLogger.log('Try To fetch Index Information', 'info', logScope);
 
-                return IndexInformationApi.get().$promise.then(json => {
-                    const result = {};
-                    if (result == undefined) {
-                        AppLogger.log('Fetched Index Information is null', 'error', logScope);
-                        return result;
-                    } 
-                    result.totalPlayerNumber = json.total_player_num;
-                    result.totalGameNumber = json.total_game_num;
-                    return result;
-                })
+                return new Promise((resolve, reject) => {
+                    IndexInformationApi.get({device : device, region : region}).$promise.then(response => {
+                        const result = {};
+                        try {
+                            const value = response.toJSON().value;
+                            result.totalPlayers = value.count;
+                            result.totalGames = value.totalGames;
+                        } catch (error) {
+                            console.log(error); //FIXME: 
+                        }
+                        resolve(result);
+                    }).catch(reason => {
+                        console.log(reason); //FIXME: 
+                    });
+                });
             },
             registerPlayer : function(device, region, btg) {
                 let ajaxIndicator = new CoreUtils.ajaxIndicator("Try To Register Battle Tag " + btg);
                 ajaxIndicator.show();
-
+                
                 return new Promise((resolve, reject) => {
                     PlayersApi.register({device : device, region : region}, {btg : btg}).$promise.then(response => {
                         AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);

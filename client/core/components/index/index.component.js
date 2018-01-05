@@ -20,8 +20,14 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     var $ctrl = this;
     $ctrl.search = search;
     $ctrl.moveHeroPage = moveHeroPage;
+    
     $ctrl.$onInit = function() {
         initView();
+    }
+
+    $ctrl.$onChanges = function() {
+        console.log('index information is');
+        console.log($ctrl.indexInformation);
     }
 
 

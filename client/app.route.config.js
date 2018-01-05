@@ -63,7 +63,10 @@ function getIndexState() {
         component: 'index',
         resolve: {
             indexInformation : function(Ajax) {
-                return Ajax.fetchIndexInformation();
+                //FIXME: MUST BE FIXED... DIFFERENT USER, DIFFERENT INFORMATION
+                const device = 'pc';
+                const region = 'kr';
+                return Ajax.fetchIndexInformation(device, region);
             }
         },
     }

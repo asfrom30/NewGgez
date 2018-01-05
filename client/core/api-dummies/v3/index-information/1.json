@@ -1,4 +1,6 @@
 {
-    "total_player_num" : 120312,
-    "total_game_num" : 20123
+    "value" : {
+        "count" : 20123,
+        "totalGames" : 120312
+    }
 }

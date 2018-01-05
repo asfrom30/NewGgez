@@ -7,12 +7,12 @@ export default angular
     .module('api.v3.indexInformation', [])
     .factory('IndexInformationApi', ['$resource', function($resource){
 
-        let api = `/index-information/1.json`;
+        let api = `/:device/:region/index-information`;
         
         /* if need dummie, not yet impl server */
         const env = process.env.NODE_ENV;
-        if(env === 'webpack') api = apiConfig.baseUri + api;
-        console.log(api);
+        if(env === 'webpack') api = apiConfig.baseUri + '/index-information/1.json';
+
         return $resource(api, {}, {})
         
     }]).name;

@@ -19,6 +19,24 @@ exports.insertCrawlData = function(device, region, todaySuffix, docs){
     })
 }
 
+/* same as server dao*/
+exports.insertCurrentCrawlData = function(device, region, doc) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${config.mongo.collectionSuffix.current}`;
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).insertOne(doc).then((result) => {
+                db.close();
+                resolve(doc);
+            }, (reason) => {
+                db.close();
+                reject(reason);
+            });
+        })
+    })
+}
+
 exports.doAggregate = function(device, region, todaySuffix, aggregateDocs) {
     // NEED AGGEGATE FIX ME.
     if(process.env.NODE_ENV == 'development') todaySuffix = '000000';

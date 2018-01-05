@@ -37,6 +37,9 @@ var all = {
       tierDatas : 'tier-datas',
       crawlDatas : 'crawl-datas',
     },
+    collectionSuffix : {
+      current : 'current'
+    },
     options: {
       db: {
         safe: true

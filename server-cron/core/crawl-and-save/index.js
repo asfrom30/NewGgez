@@ -63,9 +63,14 @@ function doAsync(id, btg, crawlConfig, saveConfig){
     }).then((result) => {
         /* Save Data */
         console.log('try to insert data to mongo');
-        return appDao.insertCrawlData(saveConfig.device, saveConfig.region, saveConfig.todaySuffix, result);
+        const promises = [];
+
+        // TODO:update one needed.... not insert One
+        // promises.push(appDao.insertCurrentCrawlData(saveConfig.device, saveConfig.region, saveConfig.todaySuffix, result));
+        promises.push(appDao.insertCrawlData(saveConfig.device, saveConfig.region, saveConfig.todaySuffix, result));
+        return Promise.all(promises);
     }).then((result) => {
-        console.log(`${btg} is crawl and save successfully`);
+        console.log('\x1b[32m%s\x1b[0m', `${btg} is crawl and save successfully`);
         return result;
     }).catch((reason) => {
         // TODO: Crawling failed... in this battle tag...

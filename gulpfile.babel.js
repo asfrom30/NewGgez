@@ -97,6 +97,7 @@ gulp.task('auto:deploy:server', cb => {
 gulp.task('auto:deploy:cron', cb => {
     runSequence(
         'build:cron',
+        /*TODO: pm2 stop needed */
         /* clean remote */
         'remote:bluehost:clean:cron',
         /* move dev to remote file */ 

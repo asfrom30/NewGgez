@@ -118,8 +118,8 @@ function getCrawlAndSavePromise(players, crawlConfig, saveConfig){
                     resolve();
                     return;
                 }
-                return crawlAndSave.doAsyncTest(id, btg, crawlConfig, saveConfig);
-                // return crawlAndSave.doAsync(id, btg, crawlConfig, saveConfig);
+                // return crawlAndSave.doAsyncTest(id, btg, crawlConfig, saveConfig);
+                return crawlAndSave.doAsync(id, btg, crawlConfig, saveConfig);
             })
         }, Promise.resolve());
     })

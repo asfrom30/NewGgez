@@ -6,55 +6,22 @@
     overflow-y:hidden;
 }
 
-/* Width and Height for responsive */
-.hero-main .header {
-    width:100%;
+/*******
+* Width and Height
+********/
+.hero-main .header-wh {
+    width : 100%;
 }
 
-.hero-main .hero-nav-tabs {
-    width:100%;
+.hero-main .body-wh {
+    width : 100%;
 }
-
-.hero-main .body {
-    width:100%;
-}
-@media (min-width: 1024px) {
-    .hero-main .header {
-        max-width: 1200px;
+@media (min-width: 768px) {
+    .hero-main .header-wh {
+        max-width: 868px;
     }
 
-    .hero-main .hero-nav-tabs {
-        max-width: 1200px;
+    .hero-main .body-wh {
+        max-width: 768px;
     }
-
-    .hero-main .body {
-        max-width: 1200px;
-    }
-}
-
-
-
-.hero-nav-tabs {
-    margin-top : 3px;
-    margin-left : 3px;
-    margin-right : 3px;
-}
-
-.hero-main > .base-padding {
-    padding-left    : 15px;
-    padding-right   : 15px;
-}
-
-.nav.nav-tabs .nav-link {
-    color : #404040
-}
-
-/* Overide Bootstrap Style */
-/* .hero-main .nav>li>a:hover,
-.hero-main .nav>li>a:hover {
-    background-color : transparent;
-} */
-#local-hero-tabs a.active {
-    background-color : black;
-    color : white;
 }

@@ -298,8 +298,8 @@ export function SummaryMost3Analyzer(diffGamesMap, statMap) {
             if(Object.keys(heroData).length === 0 && heroData.constructor === Object || heroData == undefined) continue;
 
             /* Calculate Current TS */
-            let currentTs = heroDatas[heroKey].플레이시간;
-            currentTs = convertToInteger(currentTs);
+            let currentTs = heroDatas[heroKey].치른게임;
+            // currentTs = convertToInteger(currentTs);
 
             /* Calculate Win Rate */
             let winRates = getWinRates(heroDatas[heroKey]);
@@ -333,14 +333,6 @@ export function SummaryMost3Analyzer(diffGamesMap, statMap) {
         });
 
         return playtimes.slice(0,3);
-
-
-        let most3 = [
-            {hero : playtimes[0].key, winRate : 76, totalGame : 30, winGame : 20, loseGame : 10},
-            {hero : playtimes[1].key, winRate : 76, totalGame : 30, winGame : 20, loseGame : 10},
-            {hero : playtimes[2].key, winRate : 76, totalGame : 30, winGame : 20, loseGame : 10},
-        ]
-        return most3; 
     }
 }
 
@@ -369,14 +361,20 @@ export function SummaryTrendAnalyzer(Indexer) {
         for(let dateIndex of dateIndexs){
             let indexes = Indexer.getIndexes(dateIndex);
 
-            let playerDataA = playerDatas[indexes.A];
-            let playerDataB = playerDatas[indexes.B];
+            // let playerDataA = playerDatas[indexes.A];
+            // let playerDataB = playerDatas[indexes.B];
 
-            let heroDataA = playerDataA.data.all;
-            let heroDataB = playerDataB.data.all;
+            // let heroDataA = playerDataA.data.all;
+            // let heroDataB = playerDataB.data.all;
 
+            let heroDataA = getHeroDataFromPlayerDatas(playerDatas, indexes.A, 'all');
+            let heroDataB = getHeroDataFromPlayerDatas(playerDatas, indexes.B, 'all');
+            
+            let metaDataA = getMetaDataFromPlayerDatas(playerDatas, indexes.A);
+            let metaDataB = getMetaDataFromPlayerDatas(playerDatas, indexes.B);
+            
             result.winRates[dateIndex] = getDiffWinRates(heroDataA, heroDataB);
-            result.diffCptpt[dateIndex] = getDiffCptpt(playerDataA, playerDataB);
+            result.diffCptpt[dateIndex] = getDiffCptpt(metaDataA, metaDataB);
         }
 
         
@@ -384,12 +382,40 @@ export function SummaryTrendAnalyzer(Indexer) {
     }
 }
 
-function getDiffCptpt(playerDataA, playerDataB){
-    //FIXME: undefined handling.
+/* {date : {...}, meta : {...}, data : {...}*/
+function getHeroDataFromPlayerDatas(playerDatas, index, hero) {
+    try {
+        return playerDatas[index].data[hero];
+    } catch (error) {
+        return undefined;
+    }
+}
+
+function getMetaDataFromPlayerDatas(playerDatas, index) {
+    try {
+        return playerDatas[index].meta;
+    } catch (error) {
+        return undefined;
+    }
+}
+
+function getCptptFromMetaData(metaData) {
+    try {
+        return parseInt(metaData.cptpt);
+    } catch (error) {
+        return undefined;
+    }
+}
+
+function getDiffCptpt(metaDataA, metaDataB){
+    const before = getCptptFromMetaData(metaDataB);
+    const after = getCptptFromMetaData(metaDataA);
+    const diffCptpt = after - before;
+
     let result = {
-        before : parseInt(playerDataA.meta.cptpt),
-        after : parseInt(playerDataB.meta.cptpt),
-        diffCptpt : parseInt(playerDataA.meta.cptpt) - parseInt(playerDataB.meta.cptpt)
+        before : before,
+        after : after,
+        diffCptpt : diffCptpt, 
     }
     return result;
 }
@@ -427,7 +453,7 @@ function getDiffWinRates (heroDataA, heroDataB) {
     let winGamesLabel = "승리한게임";
     let drawGamesLabel = "무승부게임";
     let loseGamesLabel = "패배한게임";
-
+    
     /* make default heroDataB : all of undefined value to be 0 */
     if(heroDataB == undefined) {
         heroDataB = {};
@@ -444,11 +470,10 @@ function getDiffWinRates (heroDataA, heroDataB) {
 
 
     const totalGames = (heroDataA[totalGamesLabel] == undefined) ? '-' : heroDataA[totalGamesLabel] - heroDataB[totalGamesLabel];
-    const winGames = (heroDataA[winGamesLabel] == undefined) ? '-' : heroDataA[winGamesLabel] - heroDataB[drawGamesLabel];
+    const winGames = (heroDataA[winGamesLabel] == undefined) ? '-' : heroDataA[winGamesLabel] - heroDataB[winGamesLabel];
     const drawGames = (heroDataA[drawGamesLabel] == undefined) ? '-' : heroDataA[drawGamesLabel] - heroDataB[drawGamesLabel];
     const loseGames = (heroDataA[loseGamesLabel] == undefined) ? '-' : heroDataA[loseGamesLabel] - heroDataB[loseGamesLabel];
     
-
     const result = makeWinRatesObj(defaultResult, totalGames, winGames, drawGames, loseGames);
     return result;
     

@@ -2,6 +2,7 @@
 
 import angular from 'angular';
 import './hero.summary.css';
+import numeral from 'numeral';
 
 export default angular.module('hero.summary' ,[])
     .component('heroSummary', {
@@ -11,6 +12,12 @@ export default angular.module('hero.summary' ,[])
             currentPlayer : "<",
             currentPlayerDatas : "<"
         },
+    })
+    .filter('nanFilter', function() {
+        return function(input, defaultValue) {
+            if(isNaN(input)) return defaultValue;
+            else return input;
+        }
     })
     .name;
 
@@ -30,20 +37,25 @@ export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stat
         $ctrl.label = LABEL_SUMMARY_PAGE;
 
         /* Summary Data(Resolve Data Binding) */
-        /* Profile Data Binding */
-        $ctrl.summaryData = {};
-        $ctrl.summaryData.profile = Analyzer.getSummaryProfile($ctrl.currentPlayerDatas);
-
-        /* Most3 Data Binding */
-        $ctrl.summaryData.most3 = Analyzer.getSummaryMost3($ctrl.currentPlayerDatas);
-        // console.log($ctrl.summaryData.most3);
-
-        /* Calculate Trend Data */
         $ctrl.cache = {};
-        $ctrl.cache.summary = Analyzer.getSummaryTrend($ctrl.currentPlayerDatas);
+        $ctrl.cache.profile = Analyzer.getSummaryProfile($ctrl.currentPlayerDatas);
+        $ctrl.cache.most3 = Analyzer.getSummaryMost3($ctrl.currentPlayerDatas);
+        $ctrl.cache.trend = Analyzer.getSummaryTrend($ctrl.currentPlayerDatas);
+        
+        
+        
+        $ctrl.dynCache = {};
 
-        // console.log($ctrl.cache);
-        // console.log($ctrl.summaryData);
+        if(process.env.NODE_ENV !== 'production') {
+            AppLogger.log("== This is $ctrl.label ==");
+            AppLogger.log($ctrl.label);
+            AppLogger.log("== This is $ctrl.summaryData.profile  ==");
+            AppLogger.log($ctrl.cache.profile);
+            AppLogger.log("== $ctrl.summaryData.most3 ==");
+            AppLogger.log($ctrl.cache.most3);
+            AppLogger.log("== $ctrl.summaryData.trend ==");
+            AppLogger.log($ctrl.cache.trend);
+        }
     }   
 
     $ctrl.$onChanges = function(changesObj){
@@ -83,27 +95,39 @@ export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stat
     }
 
     function onTrendDataBind(selectedDate) {
-        /* Result Object Structure */
-        let trendData = {
-            winRates : {
-                totalGames : 0,
-                winGames : 0,
-                drawGames : 0,
-                loseGames : 0,
-            },
-            diffCptpt : {
-                before : 0,
-                after : 0,
-                diffCptpt : 0
-            }
-        };
+        /* diff cptpt in trend label and data bind */
+        $ctrl.dynCache.diffCptptLabel = $ctrl.label.trend.diffCptpt[selectedDate];
+        $ctrl.dynCache.diffCptpt = $ctrl.cache.trend.diffCptpt[selectedDate];
 
-        /* Data Bind */
-        trendData.winRates = $ctrl.cache.summary.winRates[selectedDate];
-        trendData.diffCptpt = $ctrl.cache.summary.diffCptpt[selectedDate];
-
-        $ctrl.summaryData.trend = trendData;
+        /* winrate process bar in trend label and data bind */
+        const currentWinRates = $ctrl.cache.trend.winRates.current;
+        $ctrl.dynCache.currentProcessBar = getProcessbarData(currentWinRates);
+        
+        const selectedWinRates = $ctrl.cache.trend.winRates[selectedDate];
+        $ctrl.dynCache.selectedProcessBar = getProcessbarData(selectedWinRates);
         return;
+    }
+
+    function getProcessbarData(winRates) {
+        let success = 0;
+        let danger = 0;
+        let warning = 0;
+
+        const totalGames = isNaN(winRates.totalGames) ? 0 : winRates.totalGames;
+        const winGames = isNaN(winRates.winGames) ? 0 : winRates.winGames;
+        const drawGames = isNaN(winRates.drawGames) ? 0 : winRates.drawGames;
+        const loseGames = isNaN(winRates.loseGames) ? 0 : winRates.loseGames;
+        
+        success = numeral(winGames/totalGames).format('0.000');
+        danger = numeral(loseGames/totalGames).format('0.000');
+        if(drawGames != 0) warning = 1 - success - danger;
+        
+        return {
+            winRates : success * 100,
+            success : success,
+            danger : danger,
+            warning : warning,
+        }
     }
 
     function initOnButton(){

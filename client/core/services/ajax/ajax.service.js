@@ -45,7 +45,6 @@ export default angular
                         /// Error check in rules of rest api
                         try {
                             const list = response.value;
-                            console.log(list);
                             if(list == undefined) resolve([]); // todo no undefined check.. isArray check is better
                             else resolve(list);
                         } catch (error) {

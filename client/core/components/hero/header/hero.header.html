@@ -1,15 +1,15 @@
 <div class="hero-header">
-    <div class="flex h-100-pct">
+    <div class="flex">
         <img class="current-player-icon" ng-src="{{$ctrl.currentPlayer.iconUrl}}"/>
         <div class="current-player-info flex f-align-h-end">
-            <div class="flex-r">
+            <div class="flex-column">
                 <div class="battle-name">{{$ctrl.currentPlayer.btn}}</div>
                 <div class="level">Lv. 142</div>
             </div>
             <!-- <div class="level">{{$ctrl.currentPlayer.level}}</div> -->
         </div>
         <div class="current-player-buttons flex f-align-h-end">
-            <div class="flex-r">
+            <div class="flex-column">
                 <div class="flex">
                     <div><i class="material-icons">autorenew</i></div>
                     <div><i class="material-icons">star_border</i></div>
@@ -27,5 +27,15 @@
             <div>One Line Comment</div>
             <div>recent update : {{$ctrl.currentPlayer.lastUpdateTimeStamp}}</div>
         </div>
+    </div>
+    <div class="hero-nav-tabs" id="local-hero-tabs" >
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a data-toggle="tab" class="nav-link active" ui-sref-active="active" ng-click="$ctrl.moveTab('summary')">Summary</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Detail</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('compare')">Compare</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('rank')">Rank</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('favorite')">Favorite</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('admin')">Admin</a></li>
+        </ul>
     </div>
 </div>

@@ -40,6 +40,7 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger
             $ctrl.currentPlayer = {};
         } else {
             $ctrl.currentPlayer = $ctrl.resolvedPlayer;
+            if($ctrl.currentPlayer.deprecated) alert('해당 사용자는 만료된 사용자입니다');
             //FIXME: Don't override
             $ctrl.players = {};
             $ctrl.players.id = $ctrl.resolvedPlayer;
@@ -57,22 +58,6 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger
 
     $ctrl.$onChanges = function(obj) {
         
-    }
-
-    $ctrl.moveTab = function(stateName){
-    
-        const params = {device : $stateParams.device, region : $stateParams.region, id : $stateParams.id};
-        switch(stateName) {
-            case 'summary' : 
-                $state.go('hero.summary', params);
-                break;
-            case 'detail' : 
-                $state.go('hero.detail', params);
-                break;
-            case 'admin' :
-                $state.go('hero.admin', params);
-                break;
-        }
     }
 
     $ctrl.onTabClicked = function($event) {

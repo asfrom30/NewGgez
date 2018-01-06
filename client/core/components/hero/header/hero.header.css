@@ -1,11 +1,12 @@
 
 /* Height */
 .hero-header {
-    height: 10vh;
+
 }
 
 .hero-header .current-player-icon {
-    max-height: 100%
+    height : 12vh;
+    max-height: 100px;
 }
 
 /* Width */
@@ -48,4 +49,30 @@
 
 .current-player-buttons {
     font-size : 1rem;
+}
+
+
+.hero-nav-tabs {
+    margin-top : 3px;
+    margin-left : 3px;
+    margin-right : 3px;
+}
+
+.hero-main > .base-padding {
+    padding-left    : 15px;
+    padding-right   : 15px;
+}
+
+.nav.nav-tabs .nav-link {
+    color : #404040
+}
+
+/* Overide Bootstrap Style */
+/* .hero-main .nav>li>a:hover,
+.hero-main .nav>li>a:hover {
+    background-color : transparent;
+} */
+#local-hero-tabs a.active {
+    background-color : black;
+    color : white;
 }

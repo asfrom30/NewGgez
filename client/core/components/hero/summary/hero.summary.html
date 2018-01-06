@@ -9,18 +9,18 @@
         </div>
         <div class="content flex">
             <div class="divided-content">
-                <div>{{$root.CONST.LABEL.summary.profile.cptpt}}</div>
-                <div class="beantown font-xx-large">{{$ctrl.summaryData.profile.cptpt | numberFilter}}</div>
+                <div class="font-l">{{$ctrl.label.profile.cptpt}}</div>
+                <div class="beantown font-x-l">{{$ctrl.cache.profile.cptpt | numberFilter : '-'}}</div>
             </div>
             <div class="divider"></div>
             <div class="divided-content">
-                <div>{{$root.CONST.LABEL.summary.profile.tier}}</div>
-                <img class="tier-icon" ng-src="{{$ctrl.summaryData.profile.cptpt | tierImageSrc }}"/>
+                <div class="font-l">{{$ctrl.label.profile.tier}}</div>
+                <img class="tier-icon" ng-src="{{$ctrl.cache.profile.cptpt | tierImageSrc }}"/>
             </div>
             <div class="divider"></div>
             <div class="divided-content">
-                <div>{{$root.CONST.LABEL.summary.profile.winrate}}</div>
-                <div class="beantown font-xx-large">{{$ctrl.summaryData.profile.winGame / $ctrl.summaryData.profile.totalGame | percent:"0.0%"}}</div>
+                <div class="font-l">{{$ctrl.label.profile.winrate}}</div>
+                <div class="beantown font-x-l">{{$ctrl.cache.profile.winGame / $ctrl.cache.profile.totalGame | percent:"0.0%"}}</div>
             </div>
         </div>
     </section>
@@ -38,21 +38,21 @@
         <div class="content">
             <table>
                 <tr>
-                    <th class="font-medium text-align-center"></th>
-                    <th class="font-medium text-align-center">{{$ctrl.label.most3.winRate}}</th>
+                    <th class="font-l text-align-center"></th>
+                    <th class="font-l text-align-center">{{$ctrl.label.most3.winRate}}</th>
                     <th class="font-medium text-align-center">{{$ctrl.label.most3.avgPt}}</th> 
                     <th class="font-medium text-align-center">{{$ctrl.label.most3.kda}}</th>
                     <th class="font-medium text-align-center">{{$ctrl.label.most3.burnTime}}</th>
                 </tr>
-                <tr ng-repeat="most in $ctrl.summaryData.most3">
+                <tr ng-repeat="most in $ctrl.cache.most3">
                     <td><img ng-src="{{most.key | heroImageSrc}}"/></td>
                     <td class="win-rate">
-                        <div class="beantown font-medium">{{ most.winRate | percent:"0%"}}</div>
-                        <div class="font-small">{{most.totalGames}}/{{most.winGames}}/{{most.loseGames}}</div>
+                        <div class="beantown font-l">{{ most.winRate | percent:"0%"}}</div>
+                        <div class="font-m">{{most.totalGames}}/{{most.winGames}}/{{most.loseGames}}</div>
                     </td>
-                    <td font-large>{{most.avgScore}}</td> 
-                    <td font-large>{{most.kda}}</td>
-                    <td font-large>{{most.burningTime}}</td>
+                    <td class="font-l">{{most.avgScore}}</td> 
+                    <td class="font-l">{{most.kda}}</td>
+                    <td class="font-l">{{most.burningTime}}</td>
                 </tr>
             </table>
         </div>
@@ -64,71 +64,71 @@
         </div>
         <div>
             <!-- Trend Select Button -->
-            <div class="btn-group btn-group-justified" role="group" aria-label="Selct Trend Btn">
-                <div class="btn-group">
-                    <button id="trend-yesterday-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
-                        <div>{{$ctrl.label.trend.yesterday}}</div>
-                        <div>{{$ctrl.cache.summary.winRates.yesterday.totalGames}}</div>
-                    </button>
-                </div>
-                <div class="btn-group">
-                    <button id="trend-today-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
-                        <div>{{$ctrl.label.trend.today}}</div>
-                        <div>{{$ctrl.cache.summary.winRates.today.totalGames}}</div>
-                    </button>
-                </div>
-                <div class="btn-group">
-                    <button id="trend-week-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
-                        <div>{{$ctrl.label.trend.week}}</div>
-                        <div>{{$ctrl.cache.summary.winRates.week.totalGames}}</div>
-                    </button>
-                </div>
+            <div class="btn-group" role="group" aria-label="Select Trend Btn">
+                <button id="trend-yesterday-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
+                    <div>{{$ctrl.label.trend.yesterday}}</div>
+                    <div>{{$ctrl.cache.trend.winRates.yesterday.totalGames}}</div>
+                </button>
+                <button id="trend-today-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
+                    <div>{{$ctrl.label.trend.today}}</div>
+                    <div>{{$ctrl.cache.trend.winRates.today.totalGames}}</div>
+                </button>
+                <button id="trend-week-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
+                    <div>{{$ctrl.label.trend.week}}</div>
+                    <div>{{$ctrl.cache.trend.winRates.week.totalGames}}</div>
+                </button>
             </div>
             <!-- 점수변동 폭 -->
-            <div class="trend-diff-cptpt content-row-box">
-                <div class="font-medium"><span class="glyphicon glyphicon-sort"></span> {{$ctrl.label.trend.diffCptpt}} </div>
+            <div class="content-row-box">
+                <div class="font-medium"><span class="glyphicon glyphicon-sort"></span> {{$ctrl.label.trend.diffCptptTitle}} </div>
                 <div class="flex">
-                    <div class="font-x-large">{{$ctrl.summaryData.trend.diffCptpt.diffCptpt | upDownSymbol}}</div>
-                    <div class="font-xx-large">{{$ctrl.summaryData.trend.diffCptpt.diffCptpt}}</div>
+                    <div class="font-x-large">{{$ctrl.dynCache.diffCptpt.diffCptpt | upDownSymbol}}</div>
+                    <div class="font-xx-large">{{$ctrl.dynCache.diffCptpt.diffCptpt | nanFilter : "-"}}</div>
                     <div>
-                        <div>1주일전</div>
-                        <div>{{$ctrl.summaryData.trend.diffCptpt.before}}</div>
+                        <div>{{$ctrl.dynCache.diffCptptLabel.before}}</div>
+                        <div>{{$ctrl.dynCache.diffCptpt.before | nanFilter : "-"}}</div>
                     </div>
                     <div>-></div>
                     <div>
-                        <div>현재</div>
-                        <div>{{$ctrl.summaryData.trend.diffCptpt.after}}</div>
+                        <div>{{$ctrl.dynCache.diffCptptLabel.after}}</div>
+                        <div>{{$ctrl.dynCache.diffCptpt.after | nanFilter : "-"}}</div>
                     </div>
                 </div>
             </div>
             <div class="content-row-box">
                 <div class="font-medium"><span class="glyphicon glyphicon-tasks"></span> {{$ctrl.label.trend.winRate}} </div>
-                <div style="width:70%;">
-                    <div>시즌3</div>
-                    <div class="flex">
-                        <div style="width:100%;" id="" class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar"
-                                    style="width:{{$ctrl.cache.summary.winRates.current.winGames / $ctrl.cache.summary.winRates.current.totalGames | percent :'0%'}}">Win</div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar"
-                                style="width:{{$ctrl.cache.summary.winRates.current.drawGames / $ctrl.cache.summary.winRates.current.totalGames | percent :'0%'}}">draw</div>
-                            <div class="progress-bar progress-bar-danger" role="progressbar" 
-                                style="width:{{$ctrl.cache.summary.winRates.current.loseGames / $ctrl.cache.summary.winRates.current.totalGames | percent :'0%'}}">lose</div>
+                <div style="width:80%;">
+                    <div>시즌전체</div>
+                    <div class="flex f-align-h-baseline">
+                        <div style="width:100%" class="progress">
+                            <div class="progress-bar bg-success" role="progressbar"
+                                    style="width:{{ $ctrl.dynCache.currentProcessBar.success | percent :'0%'}}"></div>
+                            <div class="progress-bar bg-warning" role="progressbar"
+                                style="width:{{ $ctrl.dynCache.currentProcessBar.warning | percent :'0%'}}"></div>
+                            <div class="progress-bar bg-danger" role="progressbar" 
+                                style="width:{{ $ctrl.dynCache.currentProcessBar.danger | percent :'0%'}}"></div>
                         </div>
-                        <div class="labelNumber"><span id="trend-preWinRatingNum"></span><span>%</span></div>
+                        <div class="labelNumber flex beantown font-x-l">
+                                <animate-number number="$ctrl.dynCache.currentProcessBar.winRates" time="500" has-comma="false"></animate-number>
+                                <span>%</span>
+                            </div>
                     </div>
                 </div>
                 <div style="width:70%;">
                     <div>어제, 오늘, 주간</div>
-                    <div class="flex">
-                        <div style="width:100%;" id="" class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar"
-                                 style="width:{{$ctrl.summaryData.trend.winRates.winGames / $ctrl.summaryData.trend.winRates.totalGames | percent :'0%'}}"></div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar"
-                                style="width:{{$ctrl.summaryData.trend.winRates.drawGames / $ctrl.summaryData.trend.winRates.totalGames | percent :'0%'}}">draw</div>
-                            <div class="progress-bar progress-bar-danger" role="progressbar" 
-                                style="width:{{$ctrl.summaryData.trend.winRates.loseGames / $ctrl.summaryData.trend.winRates.totalGames | percent :'0%'}}">lose</div>
+                    <div class="flex f-align-h-baseline">
+                        <div style="width:60%;" class="progress">
+                            <div class="progress-bar bg-success" role="progressbar"
+                                 style="width:{{ $ctrl.dynCache.selectedProcessBar.success | percent :'0%'}}"></div>
+                            <div class="progress-bar bg-warning" role="progressbar"
+                                style="width:{{ $ctrl.dynCache.selectedProcessBar.warning | percent :'0%'}}"></div>
+                            <div class="progress-bar bg-danger" role="progressbar" 
+                                style="width:{{ $ctrl.dynCache.selectedProcessBar.danger | percent :'0%'}}"></div>
                         </div>
-                        <div class="labelNumber"><span id="trend-preWinRatingNum"></span><span>%</span></div>
+                        <div class="labelNumber flex beantown font-x-l">
+                            <animate-number number="$ctrl.dynCache.selectedProcessBar.winRates" time="500" has-comma="false"></animate-number>
+                            <span>%</span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -16,19 +16,20 @@
 /* font size for responsive */
 :root {font-size : 12px}
 @media (min-width : 768px) and (max-width: 1023px) {
-    :root {font-size : 14px;}
+    :root {font-size : 16px;}
 }
 @media (min-width: 1024px) {
     :root {font-size : 16px;}
 }
 
 html, body {
+    background: black;
     height: 100%;
 }
 
-html, body, #index {
+#index {
     height: 100%;
-  }
+}
 
 body {
     font-family: NanumBarunGothic;

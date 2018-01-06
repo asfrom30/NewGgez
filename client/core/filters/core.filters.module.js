@@ -81,12 +81,13 @@ export function suffixPercent() {
     }
 }
 export function numberFilter() {
-    return function(value) {
+    return function(value, defaultValue) {
         value = parseInt(value);
         if(Number.isInteger(value)){
             return value; 
         } else {
-            return null;
+            if(defaultValue == undefined) return null;
+            else return defaultValue;
         }
     }
 }
@@ -223,7 +224,7 @@ export function tierImageSrc(){
         } else if(4000 <= cptpt && cptpt <= 5000) {
             return "./assets/images/tier-icon/heroic-badge.png";
         } else {
-            return "./assets/images/tier-icon/default-badge.png";
+            return "";
         }
     }
 }

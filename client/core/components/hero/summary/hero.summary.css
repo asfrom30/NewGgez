@@ -1,30 +1,10 @@
-.hero-summary {
+/****************
+* Layout
+****************/
 
+.hero-main .hero-nav-tabs {
+    width:100%;
 }
-
-/* Layout */
-/* Trend Layout */
-.hero-summary .trend-diff-cptpt {
-    
-}
-
-
-/* Height */
-/* Profile Section Height */
-section.profile .content {
-    height : 80px;
-}
-
-.hero-summary section.profile .divided-content {
-    height : 100%
-}
-
-.hero-summary section.profile .content .tier-icon {
-    max-height : 100%;
-}
-
-/* margin */
-
 
 
 /* Padding */
@@ -38,93 +18,33 @@ section.profile .content {
     padding-bottom : 15px;
 }
 
-/* Font */
-
-/**
-    Section Header
-*/
-.hero-summary section .header {
-    margin-top:10px;
-    margin-bottom:5px;
-    display:flex; 
-    align-items:center; 
-    justify-content:flex-start
+/****************
+* Width and Height
+****************/
+/* Profile section : Width and Height */
+section.profile .content {
+    height : 80px;
 }
-
-.hero-summary section .header .title {
-    border-radius: 5px;
-    font-size : large;
-    flex : 0 0 auto;
-}
-
-.hero-summary section .header .line {
-    flex : 1 0 auto;
-}
-.hero-summary section .header .line > div {
-    height:50%;
-    border-bottom:2px solid;
-}
-
-/**
-* Section Header Color
-*/
-.hero-summary section.profile .header .title {background-color : #337AB7;}
-.hero-summary section.profile .header .line > div {border-bottom-color: #337AB7;}
-
-.hero-summary section.recent .header .title {background-color : deepskyblue;}
-.hero-summary section.recent .header .line > div {border-bottom-color: deepskyblue;}
-
-.hero-summary section.most3 .header .title {background-color : #D9534F;}
-.hero-summary section.most3 .header .line > div {border-bottom-color: #D9534F;}
-
-.hero-summary section.trend .header .title {background-color : orange;}
-.hero-summary section.trend .header .line > div {border-bottom-color: orange;}
-
 
 .hero-summary section.profile .divided-content {
-    text-align : center;
-    flex-grow : 1;
-	overflow:hidden;
-	border-radius:2px;
-	background-color: #404040 ;
+    height : 100%
 }
 
-.hero-summary section.profile .divider {
-    flex-grow : 0;
-	width:1px;
-	border:1px solid grey;
-	margin-left:0.5rem;
-	margin-right:0.5rem;
+.hero-summary section.profile .content .tier-icon {
+    max-height : 100%;
 }
 
-/* Border */
-.hero-summary section.most3 .content {
-    border-left: 3px solid #999999;
+/* Width and Height : Trend section */
+.hero-summary section.trend .btn-group {
+    width:100%;
+    height:7vh;
 }
 
-
-/**
-* Trend
-*/
-
-.hero-summary section.trend button.active {
-    border : 1px solid white;
-    color:white;
+.hero-summary section.trend button {
+    width:33.3%;
 }
 
-.hero-summary section.trend button:focus {
-    outline: none;
-}
-
-.hero-summary section.trend .content-row-box {
-    background-color: #404040 ;
-    border-left: 3px solid #999999;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-/* Table */
-/* Most3 Table */
+/* Width and Height : most3 section */
 /* Most3 Table Layout */
 .hero-summary section.most3 table {
     table-layout: fixed;
@@ -149,8 +69,6 @@ section.profile .content {
     height : 50px;
 }
 
-
-
 /* Most3 Table Background */
 .hero-summary section.most3 table {
     background-color : #404040;
@@ -167,10 +85,68 @@ section.profile .content {
     border-bottom : 1px solid white;
 }
 
-/* font */
+/****************
+* Color and Style
+****************/
+/* Each section header color */
+.hero-summary section.profile .header .title {background-color : #337AB7;}
+.hero-summary section.profile .header .line > div {border-bottom-color: #337AB7;}
+
+.hero-summary section.recent .header .title {background-color : deepskyblue;}
+.hero-summary section.recent .header .line > div {border-bottom-color: deepskyblue;}
+
+.hero-summary section.most3 .header .title {background-color : #D9534F;}
+.hero-summary section.most3 .header .line > div {border-bottom-color: #D9534F;}
+
+.hero-summary section.trend .header .title {background-color : orange;}
+.hero-summary section.trend .header .line > div {border-bottom-color: orange;}
 
 
+/* most3 section */
+.hero-summary section.most3 .content {
+    border-left: 3px solid #999999;
+}
 
+/* Trend Button Color */
+.hero-summary section.trend button {
+    color:grey;
+    background-color : #404040;
+}
+.hero-summary section.trend button.active {
+    border : 1px solid white;
+    color:white;
+}
+
+.hero-summary section.trend .btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.hero-summary section.trend .content-row-box {
+    background-color: #404040 ;
+    border-left: 3px solid #999999;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/*************
+* margin and padding
+**************/
+
+/*************
+* fonts
+**************/
+.hero-summary .font-m{
+    font-size: 1rem;
+}
+
+.hero-summary .font-l{
+    font-size: 1.5rem;
+}
+
+.hero-summary .font-x-l{
+    font-size: 2rem;
+}
 
 .hero-summary section.most3 {
     text-align : center;
@@ -178,4 +154,47 @@ section.profile .content {
 
 .hero-summary section.most3 .win-rate > div:nth-child(2){
     color:DarkGray ;
+}
+
+/****************
+* Small Element
+****************/
+/* Section Header */
+.hero-summary section .header {
+    margin-top:10px;
+    margin-bottom:5px;
+    display:flex; 
+    align-items:center; 
+    justify-content:flex-start
+}
+
+.hero-summary section .header .title {
+    border-radius: 5px;
+    font-size : large;
+    flex : 0 0 auto;
+}
+
+.hero-summary section .header .line {
+    flex : 1 0 auto;
+}
+.hero-summary section .header .line > div {
+    height:50%;
+    border-bottom:2px solid;
+}
+
+
+.hero-summary section.profile .divided-content {
+    text-align : center;
+    flex-grow : 1;
+	overflow:hidden;
+	border-radius:2px;
+	background-color: #404040 ;
+}
+
+.hero-summary section.profile .divider {
+    flex-grow : 0;
+	width:1px;
+	border:1px solid grey;
+	margin-left:0.5rem;
+	margin-right:0.5rem;
 }

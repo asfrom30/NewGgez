@@ -42,7 +42,7 @@
 /* Flex CSS */
 .display-none{ display:none; }
 .flex{ display:-webkit-box; display:-ms-flexbox; display:flex; }
-.flex-r { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:vertical; -webkit-box-direction:normal; -ms-flex-direction:column; flex-direction:column; }
+.flex-column { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:vertical; -webkit-box-direction:normal; -ms-flex-direction:column; flex-direction:column; }
 .flex-row-wrap { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -ms-flex-flow:row wrap; flex-flow:row wrap; }
 
 .f-align-w-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; }
@@ -247,5 +247,11 @@
 .font-large {font-size: large;}
 .font-x-large {font-size: x-large;}
 .font-xx-large {font-size: xx-large;}
+
+/* remove outline */
+.btn-remove {
+    outline: none;
+    box-shadow: none;
+}
 
 

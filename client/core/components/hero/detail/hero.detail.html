@@ -1,48 +1,53 @@
+<div class="hero-detail-inner-container pos-relative">
+    <div class="flex-wrap pos-relative">
+        <!-- <div class="loading-screen pos-absolute pos-relative flex f-align-w-center f-align-h-center"> 
+            <div class="back-ground pos-absolute"></div>
+            <div class="message">{{$ctrl.label.please_select_data}}</div>
+        </div> -->
+        <div class="first-section" >
+            <feature-radar-chart
+                label-column = "$ctrl.radar.labelColumn"
+                first-column = "$ctrl.radar.firstColumn"
+                second-column = "$ctrl.radar.secondColumn"
+                third-column ="$ctrl.radar.thirdColumn">
+            </feature-radar-chart>
+        </div>
+        <div class="second-section">
+            <compare-table 
+                table-header = "$ctrl.table.header"
+                label-column = "$ctrl.table.labelColumn"
+                first-column = "$ctrl.table.firstColumn"
+                second-column = "$ctrl.table.secondColumn"
+                third-column ="$ctrl.table.thirdColumn"
+                />
+            </compare-table>
+        </div>
+    </div>
+    <div class="padding-for-fixed-bottom"></div>
+    <div class="hero-selectors-container flex f-align-w-center" style="z-index: 1000">
+        <div class="wh">
+            <hero-selectors
+                p1-game-label = "$ctrl.p1GameLabel"
+                p2-game-label = "$ctrl.p2GameLabel"
+                tier-game-label = "$ctrl.tierGameLabel",
+                hero-game-label-p1 = "$ctrl.heroGameLabel.p1",
+                hero-game-label-p2 = "$ctrl.heroGameLabel.p2",
+                
+                p1-player      =   "$ctrl.currentPlayer" 
+                
+                check-user-datas        =   "$ctrl.checkUserDatas($id)"
+                store-user-datas        =   "$ctrl.storeUserDatas($id, $userDatas)" 
+                selected                =   "$ctrl.selected" 
+                on-selector-changes     =   "$ctrl.onSelectorChanges($selector)"
+                change-p2-player-data   =   "$ctrl.changeP2PlayerData($id)"
 
-<div>
-    <input ng-model="$ctrl.input" ng-enter="$ctrl.console()" style="width:80%">
+                on-table-compare-toggle = "$ctrl.onCompareToggle()"
+                on-table-result-toggle = "$ctrl.onResultToggle()"
+                >
+            </hero-selectors>
+        </div>
+    </div>
 </div>
 
-<button ng-click='$ctrl.preSelected()'>Pre Selector</button>
-<pre style="color:white">{{$ctrl.selector | json}}</pre>
 
 
-<div class="wrapper-section-layout wrapper-section-position">
-    <div class="loading-section flex f-align-w-center f-align-h-center"> 
-        <div style="font-size:45px; color:white">데이터를 선택해 주세요</div>
-    </div>
-    <!-- <div class="first-section border" >
-        <feature-radar-chart
-            label-column = "$ctrl.radar.labelColumn"
-            first-column = "$ctrl.radar.firstColumn"
-            second-column = "$ctrl.radar.secondColumn"
-            third-column ="$ctrl.radar.thirdColumn">
-        </feature-radar-chart>
-    </div> -->
-    <div class="second-section">
-        <compare-table 
-            table-header = "$ctrl.table.header"
-            label-column = "$ctrl.table.labelColumn"
-            first-column = "$ctrl.table.firstColumn"
-            second-column = "$ctrl.table.secondColumn"
-            third-column ="$ctrl.table.thirdColumn"/>
-        </compare-table>
-    </div>
-</div>
-<hero-selectors
-    p1-game-label = "$ctrl.p1GameLabel"
-    p2-game-label = "$ctrl.p2GameLabel"
-    tier-game-label = "$ctrl.tierGameLabel",
-    hero-game-label-p1 = "$ctrl.heroGameLabel.p1",
-    hero-game-label-p2 = "$ctrl.heroGameLabel.p2",
-    
-    p1-player      =   "$ctrl.currentPlayer" 
-    
-    check-user-datas        =   "$ctrl.checkUserDatas($id)"
-    store-user-datas        =   "$ctrl.storeUserDatas($id, $userDatas)" 
-    selected                =   "$ctrl.selected" 
-    on-selector-changes     =   "$ctrl.onSelectorChanges($selector)"
-    change-p2-player-data   =   "$ctrl.changeP2PlayerData($id)">
-</hero-selectors>
-
-<div style="height:300px"></div>

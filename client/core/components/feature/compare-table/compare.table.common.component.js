@@ -14,34 +14,40 @@ export default angular
             labelColumn : '<',
             firstColumn : '<',
             secondColumn : '<',
-            thirdColumn : '<'
+            thirdColumn : '<',
         }
     })
     .filter('upperNumberFormat', upperNumberFormat)
     .filter('lowerNumberFormat', lowerNumberFormat)
     .filter('percentForResult', percentForResult)
+    .filter('percentSymbolForResult', percentSymbolForResult)
+    .filter('ptSymbolForResult', ptSymbolForResult)
+    .filter('roundUp', roundUpFilter)
+    .filter('abs', absFilter)
     .name;
 
-export function controller($element) {
+export function controller($element, $scope, AppLogger) {
 
     const $ctrl = this;
+    const logScope = 'compare.table'
 
-    /* TODO: below code must move to util module */
-    $ctrl.console = function() {
+    $ctrl.onCompareToggle = onCompareToggle;
+    $ctrl.onResultToggle = onResultToggle;
 
-        const input = $ctrl.input;
-        const indexes = input.split('.');
-        let resultObj = $ctrl;
-        for(let index of indexes) {
-            if(index == '$ctrl') continue;
-            resultObj = resultObj[index];
-        }
-        console.log(resultObj);
-    }
-    
     $ctrl.$onInit = function() {
         init();
+        initListener();
         initTable($ctrl.labelColumn, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);
+    }
+
+    function initListener() {
+        $scope.$on("onCompareToggle", function(){
+            onCompareToggle();
+        });
+
+        $scope.$on("onResultToggle", function(){
+            onResultToggle();
+        });
     }
 
 
@@ -51,7 +57,6 @@ export function controller($element) {
         const secondCol = $ctrl.secondColumn;
         const thirdCol = $ctrl.thirdColumn;
 
-        // 
         if(labelCol == undefined) {
             showOverlay();
             showPaddingAndHideResultRow();
@@ -63,8 +68,6 @@ export function controller($element) {
         initTable($ctrl.labelColumn, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);
     }
 
-    $ctrl.compareToggle = compareToggle;
-    $ctrl.onResultToggle = onResultToggle;
 
     function init(){
         $ctrl.toggleIndex = 0;
@@ -85,7 +88,8 @@ export function controller($element) {
         }
 
         $ctrl.tableRows = tableRows;
-        console.log($ctrl.tableRows)
+        AppLogger.log('Init Compare Table Complete', logScope, 'info');
+        AppLogger.log($ctrl.tableRows, logScope, 'info');
     }
 
     function getLabelColumn() {
@@ -136,6 +140,24 @@ export function controller($element) {
         }
     }
 
+    $ctrl.calcPercent = calcPercent;
+    $ctrl.calcDiff = calcDiff;
+    $ctrl.getNgClass = getNgClass;
+
+    function calcPercent(a, b) {
+        return (a - b) / b;
+    }
+
+    function calcDiff(a, b) {
+        return a - b;
+    }
+
+    function getNgClass(a, b){
+        if(a == b) return 'c-green';
+        else if (a > b) return 'c-red';
+        else if (a < b) return 'c-blue';
+    }
+
     /* View */
     function showSelectHeroMessage(){
 
@@ -163,7 +185,7 @@ export function controller($element) {
         $element.find('td .result-diff').toggle();
     }
 
-    function compareToggle() {
+    function onCompareToggle() {
         if($ctrl.toggleIndex == 2){
             $ctrl.toggleIndex = 0;
         } else {
@@ -171,7 +193,6 @@ export function controller($element) {
         }
 
         const toggleIndex = $ctrl.toggleIndex;
-        
         switch (toggleIndex) {
             case 0:
                 $ctrl.isFirstActive = true;
@@ -205,8 +226,7 @@ import numeral from 'numeral';
 export function upperNumberFormat() {
     return function(input, format) {
 
-        if(isNaN(input)){
-            console.warn(input);
+        if(isNaN(input) || input == null){
             return '-';
         }
         
@@ -219,8 +239,7 @@ export function upperNumberFormat() {
 export function lowerNumberFormat() {
     return function(input, format) {
         
-        if(isNaN(input)){
-            console.warn(input);
+        if(isNaN(input) || input == null){
             return;
         }
 
@@ -232,12 +251,59 @@ export function lowerNumberFormat() {
 
 function percentForResult() {
     return function(input) {
-        
+
         if(isNaN(input)){
-            console.warn(input);
             return '-';
+        }
+
+        if(input == Infinity) {
+            return '∞';
         }
 
         return numeral(input*100).format('xx.0');
     }
 }
+
+function percentSymbolForResult() {
+    return function(input) {
+
+        if(isNaN(input)){
+            return '';
+        }
+
+        if(input == Infinity) {
+            return '';
+        }
+
+        return '%';
+    }
+}
+
+function ptSymbolForResult() {
+    return function(input) {
+
+        if(isNaN(input)){
+            return '';
+        }
+
+        if(input == Infinity) {
+            return '';
+        }
+
+        return 'pt';
+    }
+}
+
+
+function roundUpFilter() {
+    return function(input) {
+        numeral(input*100).format('xx.0');
+    }
+}
+function absFilter() {
+    return function(input) {
+        if(isNaN(input)) return input;
+        else return Math.abs(input);
+    }
+}
+

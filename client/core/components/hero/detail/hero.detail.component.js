@@ -14,13 +14,28 @@ export default angular
         }
     }).name;
 
-export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, Indexer, CoreUtils, tierMap){
+export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, Indexer, CoreUtils, tierMap){
 
     /* constants */
     const $ctrl = this;
-    $ctrl.logScope = 'hero.detail';
+    const region = $stateParams.region;
+    const device = $stateParams.device;
+    const stateParams = {device : $stateParams.device, region : $stateParams.region, id : $stateParams.id};
+    const dom = {
+        loadingScreen : '.loading-screen'
+    }
 
-    $ctrl.$onInit = function(){
+    const logScope = 'hero.detail';
+
+    $ctrl.$onInit = onInit;
+    $ctrl.onSelectorChanges = onSelectorChanges;
+    $ctrl.changeP2PlayerData = changeP2PlayerData;
+
+    function onInit() {
+        const mode = getMode();
+        initView(mode);
+        initLabel();
+
         updateLabelData();
         updateTierData();
 
@@ -35,19 +50,20 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         updateHeroGameLabelP2();
     }
 
-    /* Binding Method */
-    $ctrl.onSelectorChanges = onSelectorChanges;
-    $ctrl.changeP2PlayerData = changeP2PlayerData;
-
     function onSelectorChanges(selector) {
+
+        if(selector.heroIndex && (selector.p1Index || selector.p2Index || selector.tierIndex )) {
+            $element.find(dom.loadingScreen).hide();
+        }
+
         setCurrentSelector(selector);
 
         updateHeroGameLabelP1();
         updateHeroGameLabelP2();
 
-        if(getCurrentHeroIndex() != undefined) {
+        if(getHeroIndex() != undefined) {
             updateTierGamesLabel();
-            // updateRadarDataset();
+            updateRadarDataset();
             updateTableDataSet();
         }
     }
@@ -81,6 +97,14 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
     } 
 
     /* Label Data */
+    function initLabel() {
+        // static label
+        $ctrl.label = {};
+        $ctrl.label.please_select_data = '데이터를 선택해주세요';
+
+        // dynamic label
+    }
+
     function updateLabelData() {
         const labelData = makeAnalyzedLabelData();
         setLabelData2Cache(labelData);
@@ -165,10 +189,11 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
 
 
     function updateRadarDataset() {
-        const p1Index = getCurrentP1Index();
-        const p2Index = getCurrentP2Index();
-        const tierIndex = getCurrentTierIndex();
-        const heroIndex = getCurrentHeroIndex();
+        const p1Index = getP1Index();
+        const p2Index = getP2Index();
+        const tierIndex = getTierIndex();
+        const heroIndex = getHeroIndex();
+        
         
         /* heroIndex is basic index */
         if(heroIndex == undefined) return;
@@ -176,49 +201,85 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         $ctrl.radar = {};
         $ctrl.radar.labelColumn = $ctrl.cache.labels[heroIndex];
 
-        let firstColumn = [];
-        let secondColumn = [];
-        let thirdColumn = [];
+        if(heroIndex == undefined || heroIndex == 'all') return;
+        
+        if(p1Index == undefined || !hasP1Game(p1Index, heroIndex)) $ctrl.radar.firstColumn = [];
+        else $ctrl.radar.firstColumn = getP1DiffDatasFromCache(p1Index, heroIndex);
 
-        try {
-            $ctrl.radar.firstColumn = $ctrl.cache.p1.diffDatas[p1Index][heroIndex];
-        } catch (error) {
-            $ctrl.radar.firstColumn = [];
-            console.log('can not read p1 ' + heroIndex + ' data');
-        }
+        if(p2Index == undefined || !hasP2Game(p2Index, heroIndex)) $ctrl.radar.secondColumn = [];
+        else $ctrl.radar.secondColumn = getP2DiffDatasFromCache(p2Index, heroIndex);
 
-        try {
-            $ctrl.radar.secondColumn = $ctrl.cache.p2.diffDatas[p2Index][heroIndex];
-        } catch (error) {
-            $ctrl.radar.secondColumn = [];
-            console.log(error);
-        }
-
-        try {
-            $ctrl.radar.thirdColumn = $ctrl.cache.tier[tierIndex][heroIndex];
-        } catch (error) {
-            $ctrl.radar.thirdColumn = [];
-            console.log(error)
-        }
+        if(tierIndex == undefined) $ctrl.radar.thirdColumn = [];
+        else $ctrl.radar.thirdColumn = getTierDiffDatasFromCache(tierIndex, heroIndex);
     }
-    
+
     function updateTableDataSet(){
-        const p1Index = getCurrentP1Index();
-        const p2Index = getCurrentP2Index();
-        const tierIndex = getCurrentTierIndex();
-        const heroIndex = getCurrentHeroIndex();
+        const p1Index = getP1Index();
+        const p2Index = getP2Index();
+        const tierIndex = getTierIndex();
+        const heroIndex = getHeroIndex();
 
         setTableHeader();
 
         if(heroIndex == undefined || heroIndex == 'all') return;
 
         setTableColumn(0, getTableLabelColumn(heroIndex));
-        if(p1Index != undefined) setTableColumn(1, getP1TableDatasFromCache(p1Index, heroIndex));
-        if(p2Index != undefined) setTableColumn(2, getP2TableDatasFromCache(p2Index, heroIndex)); 
-        if(tierIndex != undefined) setTableColumn(3, getTierTableDatasFromCache(tierIndex, heroIndex)); 
+        
+        if(p1Index == undefined || !hasP1Game(p1Index, heroIndex)) {
+            setTableColumn(1, []);
+        } else {
+            setTableColumn(1, getP1DiffDatasFromCache(p1Index, heroIndex));
+        }
+
+        if(p2Index == undefined || !hasP2Game(p2Index, heroIndex)) {
+            setTableColumn(2, []);
+        } else {
+            setTableColumn(2, getP2DiffDatasFromCache(p2Index, heroIndex));
+        }
+
+        if(tierIndex == undefined) {
+            setTableColumn(3, []); 
+        } else {
+            setTableColumn(3, getTierDiffDatasFromCache(tierIndex, heroIndex)); 
+        }
     }
 
-    function getTierTableDatasFromCache(tierIndex, heroIndex) {
+    /* View */
+    function initView(mode) {
+        if(!(mode == 'detail' || mode == 'compare')) $state.go('hero.summary', stateParams);
+
+        if(mode == 'detail') {
+            $element.find('.mode-detail').show();
+            $element.find('.mode-compare').hide();
+        } else if(mode == 'compare') {
+            $element.find('.mode-detail').hide();
+            $element.find('.mode-compare').show();
+        } 
+    }
+    
+    /* Button */
+    $ctrl.onCompareToggle = onCompareToggle;
+    $ctrl.onResultToggle = onResultToggle;
+    
+    function onCompareToggle(){
+        $scope.$broadcast("onCompareToggle"); 
+    }
+
+    function onResultToggle(){
+        $scope.$broadcast("onResultToggle"); 
+    }
+
+
+    /* Getter and setter */
+
+    function getMode(){
+        const path = $location.path();
+        const index = path.lastIndexOf('/');
+        const mode = path.substring(index + 1).trim();
+        return mode;
+    }
+
+    function getTierDiffDatasFromCache(tierIndex, heroIndex) {
         try {
             return $ctrl.cache.tier[tierIndex][heroIndex];
         } catch (error) {
@@ -226,7 +287,7 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
             return;
         }
     }
-    function getP1TableDatasFromCache(p1Index, heroIndex) {
+    function getP1DiffDatasFromCache(p1Index, heroIndex) {
         try {
             return $ctrl.cache.p1.diffDatas[p1Index][heroIndex];
         } catch (error) {
@@ -235,7 +296,7 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         }
     }
 
-    function getP2TableDatasFromCache(p2Index, heroIndex) {
+    function getP2DiffDatasFromCache(p2Index, heroIndex) {
         try {
             return $ctrl.cache.p2.diffDatas[p2Index][heroIndex];
         } catch (error) {
@@ -300,7 +361,7 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
     function updateTierGamesLabel() {
         let result = {};
 
-        const heroIndex = getCurrentHeroIndex();
+        const heroIndex = getHeroIndex();
         
         for(let tierId of tierMap){
             if(tierId == "total") continue;
@@ -315,7 +376,7 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
     }
 
     function updateHeroGameLabelP1() {
-        const p1Index = getCurrentP1Index();
+        const p1Index = getP1Index();
 
         if(p1Index != undefined) {
             const diffGames = getP1DiffGames(p1Index);
@@ -324,7 +385,7 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
     }
 
     function updateHeroGameLabelP2() {
-        const p2Index = getCurrentP2Index();
+        const p2Index = getP2Index();
 
         if(p2Index != undefined) {
             const diffGames = getP2DiffGames(p2Index);
@@ -353,41 +414,41 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         return $ctrl.selector;
     }
 
-    function getCurrentP1Index() {
+    function getP1Index() {
         let result = 'not_yet_selected'
         try {
             if($ctrl.selector.p1Index != undefined) result = $ctrl.selector.p1Index;
         } catch (error) {
-            console.error('can not get current p1Index');
+            AppLogger.log('p1 index is undefined', logScope, 'warn');
         }
         return result;
     }
 
-    function getCurrentP2Index() {
+    function getP2Index() {
         let result = 'not_yet_selected'
         try {
             if($ctrl.selector.p2Index != undefined) result = $ctrl.selector.p2Index;
         } catch (error) {
-            console.error('can not get current p2Index');
+            AppLogger.log('p2 index is undefined', logScope, 'warn');
         }
         return result;
     }
 
-    function getCurrentTierIndex() {
+    function getTierIndex() {
         let result = 'not_yet_selected'
         try {
             if($ctrl.selector.tierIndex != undefined) result = $ctrl.selector.tierIndex;
         } catch (error) {
-            console.error('can not get current tierIndex');
+            AppLogger.log('tier index is undefined', logScope, 'warn');
         }
         return result;
     }
 
-    function getCurrentHeroIndex() {
+    function getHeroIndex() {
         try {
             return $ctrl.selector.heroIndex;
         } catch (error) {
-            console.error('can not get current heroIndex');
+            AppLogger.log('hero index is undefined', logScope, 'warn');
             return undefined;
         }
     }
@@ -410,6 +471,32 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         }
     }
 
+    function hasP1Game(p1Index, heroIndex) {
+        let game;
+
+        try {
+            game = $ctrl.cache.p1.diffGames[p1Index][heroIndex].totalGames;
+        } catch (error) {
+            game = undefined;
+        }
+
+        if(game == undefined || game == 0) return false;
+        else return true;
+    }
+
+    function hasP2Game(p2Index, heroIndex) {
+        let game;
+        
+        try {
+            game = $ctrl.cache.p2.diffGames[p2Index][heroIndex].totalGames;
+        } catch (error) {
+            game = undefined;
+        }
+
+        if(game == undefined || game == 0) return false;
+        else return true;
+    }
+
     function setHeroGameLabelP1(p1HeroGameLabel) {
         if($ctrl.heroGameLabel == undefined) $ctrl.heroGameLabel = {};
         $ctrl.heroGameLabel.p1 = p1HeroGameLabel;
@@ -424,24 +511,11 @@ export function HeroDetailCtrl(AppLogger, Ajax, CONFIG, $scope, $stateParams, An
         if($ctrl.table == undefined) $ctrl.table ={};
         $ctrl.table.header =[
             {index : ''}, 
-            {index : getCurrentP1Index()}, 
-            {index : getCurrentP2Index()}, 
-            {index : getCurrentTierIndex()}, 
-            {index : 'result'}];
+            {index : getP1Index()}, 
+            {index : getP2Index()}, 
+            {index : getTierIndex()}];
     }
 
-    /* TODO: below code must move to util module */
-    $ctrl.console = function() {
-
-        const input = $ctrl.input;
-        const indexes = input.split('.');
-        let resultObj = $ctrl;
-        for(let index of indexes) {
-            if(index == '$ctrl') continue;
-            resultObj = resultObj[index];
-        }
-        console.log(resultObj);
-    }
 
     /* Not needed Yet */
     $ctrl.storeUserDatas = function(id, userDatas) {

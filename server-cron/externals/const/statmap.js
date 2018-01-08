@@ -5,7 +5,7 @@
 // OVERWATCH.GUID.0X0860000000000033 치명타 (치명타명중률 = 치명타/명중)
 module.exports =  {
     "all" : [
-        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "desc" : "피해량/죽음" ,"unit" : "/", "numerator" : "준피해", "denominator" : "죽음", "description" : ""},
     ],
     "soldier76" : [
         // { "label": "명중율", "unit" : "", "numerator" : "", "denominator" : "발사", "description"}
@@ -264,22 +264,22 @@ module.exports =  {
         /* Accuracy */
 
         /* Per Death */
-        { "label": "목숨당처치", "unit" : "/", "numerator" : "처치", "denominator" : "죽음", "description" : ""},
+        { "label": "처치", "unit" : "/", "numerator" : "처치", "denominator" : "죽음", "description" : ""},
         { "label": "목숨당단독처치", "unit" : "/", "numerator" : "단독처치", "denominator" : "죽음", "description" : ""},
         { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
-
+        // { "label": "목숨당폭주시간", "unit" : "/", "numerator" : "폭주시간", "denominator" : "죽음", "description" : ""},
+        /* Speacial Skill */
+        { "label": "목숨당튕겨낸피해", "unit" : "/", "numerator" : "튕겨낸피해", "denominator" : "치른게임", "description" : ""},
+        { "label": "목숨당용검으로처치", "unit" : "/", "numerator" : "용검으로처치", "denominator" : "죽음", "description" : ""},
+        
         /* Per Game */
         { "label": "경기당결정타",    "unit" : "/", "numerator" : "결정타",   "denominator" : "치른게임", "description" : ""},
-        // { "label": "경기당폭주시간",  "unit" : "/", "numerator" : "폭주시간", "denominator" : "치른게임", "description" : ""},
         { "label": "경기당치명타",    "unit" : "/", "numerator" : "치명타",   "denominator" : "치른게임", "description" : ""},
         { "label": "경기당피해량",    "unit" : "/", "numerator" : "준모든피해",   "denominator" : "치른게임", "description" : ""},
         { "label": "경기당단독처치",  "unit" : "/", "numerator" : "단독처치", "denominator" : "치른게임", "description" : ""},
-
+        // { "label": "경기당폭주시간",  "unit" : "/", "numerator" : "폭주시간", "denominator" : "치른게임", "description" : ""},
         /* Speacial Skill */
-        { "label": "목숨당튕겨낸피해", "unit" : "/", "numerator" : "튕겨낸피해", "denominator" : "치른게임", "description" : ""},
         { "label": "경기당튕겨낸피해", "unit" : "/", "numerator" : "튕겨낸피해", "denominator" : "치른게임", "description" : ""},
-
-        { "label": "목숨당용검으로처치", "unit" : "/", "numerator" : "용검으로처치", "denominator" : "죽음", "description" : ""},
         { "label": "경기당용검으로처치", "unit" : "/", "numerator" : "용검으로처치", "denominator" : "치른게임", "description" : ""},
         
     ], 
@@ -340,6 +340,18 @@ module.exports =  {
     ],
     "doomfist"  : [
         { "label": "목숨당처치", "unit" : "/", "numerator" : "처치", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당단독처치", "unit" : "/", "numerator" : "단독처치", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+
+        /* Per Game */
+        { "label": "경기당결정타",    "unit" : "/", "numerator" : "결정타",   "denominator" : "치른게임", "description" : ""},
+        { "label": "경기당단독처치",  "unit" : "/", "numerator" : "단독처치", "denominator" : "치른게임", "description" : ""},
+        { "label": "경기당피해량",    "unit" : "/", "numerator" : "준모든피해",   "denominator" : "치른게임", "description" : ""},
+
+        /* Speacial Skill */
+        { "label": "목숨당기술로준피해", "unit" : "/", "numerator" : "기술로준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당생성한보호막", "unit" : "/", "numerator" : "생성한 보호막", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당파멸의일격으로처치", "unit" : "/", "numerator" : "파멸의 일격으로 처치", "denominator" : "죽음", "description" : ""},
     ],
     "orisa"     : [
         { "label": "목숨당처치", "unit" : "/", "numerator" : "처치", "denominator" : "죽음", "description" : ""},

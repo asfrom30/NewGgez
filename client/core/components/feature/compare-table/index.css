@@ -1,6 +1,45 @@
 /* Radar Table Width */
 /* Header Width */
 
+compare-table table thead th {
+    height : 10vh;
+}
+
+compare-table table thead th > div {
+    width: 100%;
+    overflow: hidden;
+}
+compare-table table tbody td {
+    height: 10vh;
+}
+compare-table table tfoot td {
+    height : 10vh;
+}
+
+
+/* Fixed Header and Fixed Footer Setting */
+compare-table table {
+    table-layout:fixed;
+    margin:auto;
+}
+compare-table thead, tfoot {
+    display:table;
+    width:100%;
+    width:calc(100% - 12px);
+}
+compare-table tbody {
+    height:43vh;
+    overflow:auto;
+    overflow-x:hidden;
+    display:block;
+    width:100%;
+}
+compare-table tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+
 /* font-size */
 compare-table .td-up {
     font-size: 1.2rem;
@@ -22,13 +61,11 @@ compare-table table th:nth-child(1), compare-table td:nth-child(1){
     width : 32%
 }
 
-compare-table table th:not(nth-child(1)), compare-table td:not(nth-child(1)) {
+compare-table table th:not(:nth-child(1)), compare-table td:not(:nth-child(1)) {
     width : 17%
 }
 
-compare-table table th, compare-table table td {
-    height : 10vh;
-}
+
 
 /* Table Background Color*/
 compare-table table {background-color : #404040}
@@ -46,34 +83,35 @@ compare-table table th {text-align: center;}
 compare-table table td {text-align: center;}
 
 /* Border */
-compare-table table th {border : 2px solid rgba(0,0,0,0); border-bottom: 2px solid lightgray}
+compare-table table th {border-bottom: 2px solid lightgray}
+compare-table table th:not(:nth-child(1)) {border-left : 2px solid rgba(0,0,0,0); border-right : 2px solid rgba(0,0,0,0);}
 compare-table table td {border-bottom: 2px solid gray;}
 
 /* first column border : not active */
-compare-table table tr:nth-child(2) td:nth-child(2) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table tr:nth-child(1) td:nth-child(2) { border-top : 2px solid rgba(0,0,0,0);}
 compare-table table td:nth-child(2) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
 compare-table table tr:nth-last-child(3) td:nth-child(2) { border-bottom : 2px solid rgba(0,0,0,0);}
 
 /* first column border : active */
-compare-table table tr:nth-child(2) td.active:nth-child(2) { border-top : 2px solid red;}
+compare-table table tr:nth-child(1) td.active:nth-child(2) { border-top : 2px solid red;}
 compare-table table td.active:nth-child(2) { border-left : 2px solid red; border-right :2px solid red}
 compare-table table tr:nth-last-child(3) td.active:nth-child(2) { border-bottom : 2px solid red;}
 
 /* second column border */
-compare-table table tr:nth-child(2) td:nth-child(3) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table tr:nth-child(1) td:nth-child(3) { border-top : 2px solid rgba(0,0,0,0);}
 compare-table table td:nth-child(3) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
 compare-table table tr:nth-last-child(3) td:nth-child(3) { border-bottom : 2px solid rgba(0,0,0,0);}
 
-compare-table table tr:nth-child(2) td.active:nth-child(3) { border-top : 2px solid blue;}
+compare-table table tr:nth-child(1) td.active:nth-child(3) { border-top : 2px solid blue;}
 compare-table table td.active:nth-child(3) { border-left : 2px solid blue; border-right :2px solid blue}
 compare-table table tr:nth-last-child(3) td.active:nth-child(3) { border-bottom : 2px solid blue;}
 
 /* third column border */
-compare-table table tr:nth-child(2) td:nth-child(4) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table tr:nth-child(1) td:nth-child(4) { border-top : 2px solid rgba(0,0,0,0);}
 compare-table table td:nth-child(4) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
 compare-table table tr:nth-last-child(3) td:nth-child(4) { border-bottom : 2px solid rgba(0,0,0,0);}
 
-compare-table table tr:nth-child(2) td.active:nth-child(4) { border-top : 2px solid yellow;}
+compare-table table tr:nth-child(1) td.active:nth-child(4) { border-top : 2px solid yellow;}
 compare-table table td.active:nth-child(4) { border-left : 2px solid yellow; border-right :2px solid yellow}
 compare-table table tr:nth-last-child(3) td.active:nth-child(4) { border-bottom : 2px solid yellow;}
 
@@ -94,3 +132,46 @@ compare-table table tr:nth-last-child(3) td.active:nth-child(4) { border-bottom 
     font-size:1.5rem;
     font-family: beantown;
 }
+
+@media (min-width: 768px) {
+    .result-up-down-arrow {
+        font-size : 0.6rem;
+        margin-left : 0.5em;
+        margin-right: 0.2em;
+    }
+    
+    .result-percent-text {
+        font-size:1.0rem;
+        font-family: beantown;
+    }
+
+    .result-percent-symbol {
+        font-size : 0.6rem;
+    }
+}
+
+/* Tooltip text */
+.tooltip-c .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip-c:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+/* <div class="tooltip-c">Hover over me
+<span class="tooltiptext">Tooltip text</span>
+</div> */
+

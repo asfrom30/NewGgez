@@ -1,50 +1,66 @@
-<div>
-    <input ng-model="$ctrl.input" ng-enter="$ctrl.console()" style="width:80%">
-</div>
-
 <div class="overlay-parent">
     <div class="overlay-child flex f-align-w-center f-align-h-center">
         <div class="element">Please, select hero</div>
         <div class="background" style="background-color: black; opacity: 0.7"></div>
     </div>
-    <button ng-click="$ctrl.compareToggle()">테이블 결과 변경 버튼</button>
-    <button ng-click="$ctrl.onResultToggle()">결과 % <-> 등락폭</button>
-    <table width="100%">
-        <tr>
-            <th ng-repeat="header in $ctrl.tableHeader">{{header.index}}</th>
-        </tr>
-        <tr ng-repeat="tableRow in $ctrl.tableRows">
-            <td>{{tableRow[0]}} <span class="glyphicon glyphicon-question-sign" style="color:lightgray"></span></td>
-            <td ng-class="{active : $ctrl.isFirstActive}">
-                <div class="td-up">{{tableRow[1].point  | upperNumberFormat : "00.0"}}</div>
-                <div class="td-down">{{tableRow[1].score | lowerNumberFormat : "0.00"}}</div>
-            </td> 
-            <td ng-class="{active : $ctrl.isSecondActive}">
-                <div class="td-up">{{tableRow[2].point  | upperNumberFormat : "00.0"}}</div>
-                <div class="td-down">{{tableRow[2].score | lowerNumberFormat : "0.00"}}</div>
-            </td> 
-            <td ng-class="{active : $ctrl.isThirdActive}">
-                <div class="td-up">{{tableRow[3].point  | upperNumberFormat : "00.0"}}</div>
-                <div class="td-down">{{tableRow[3].score | lowerNumberFormat : "0.00"}}</div>
-            </td> 
-            <td class="flex flex-wh-center">
-                <div class="result-percent flex f-align-h-baseline">
-                    <div class="result-up-down-arrow" ng-class="{'c-red' : (tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point) > 0, 'c-blue' : (tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point) < 0}">
-                        {{tableRow[$ctrl.indexes.a].point == undefined || tableRow[$ctrl.indexes.b].point == undefined ? '-' : tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point | upDownSymbol}}
-                    </div>
-                    <div class="result-percent-text">{{(tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point) / tableRow[$ctrl.indexes.b].point | percentForResult}}</div>
-                    <div class="result-percent-symbol">%</div>
-                </div>
-                <div class="result-diff" style="display: none">
-                    <!-- <div class="result-up-down-arrow" ng-class="{'c-red' : (tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point) > 0, 'c-blue' : (tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point) < 0}">
-                        {{tableRow[$ctrl.indexes.a].point == undefined || tableRow[$ctrl.indexes.b].point == undefined ? '-' : tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point | upDownSymbol}}
-                    </div> -->
-                    <!-- <div class="h-50-pct">{{tableRow[$ctrl.indexes.a].point == undefined || tableRow[$ctrl.indexes.b].point == undefined ? '-' : tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point | numberFormat : "0.0"}}</div> -->
-                    <!-- <div class="h-50-pct">{{tableRow[$ctrl.indexes.a].point == undefined || tableRow[$ctrl.indexes.b].point == undefined ? '-' : (tableRow[$ctrl.indexes.a].point - tableRow[$ctrl.indexes.b].point / tableRow[$ctrl.indexes.b].point) / 100 | percent}}</div> -->
-                </div>
-            </td>
-        </tr>
-        <tr><td class="row-result" colspan="5">티어 평균보다 얼마를 더 했습니다.</td></tr>
-        <tr><td class="row-padding"colspan="5" style="height:300px"></td></tr>
-    </table>
+    <!-- <button ng-click="$ctrl.compareToggle()">테이블 결과 변경 버튼</button>
+    <button ng-click="$ctrl.onResultToggle()">결과 % <-> 등락폭</button> -->
+    </div>
+    <div class="table-container">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th ng-repeat="header in $ctrl.tableHeader">
+                        <!-- <div>{{header.index}}</div> -->
+                        <div>1</div>
+                    </th>
+                    <th>
+                        <!-- <div class="h-50-pct">{{$ctrl.tableHeader[$ctrl.indexes.b].index}}</div> -->
+                        <!-- <div class="h-50-pct">보다 {{$ctrl.tableHeader[$ctrl.indexes.a].index}}</div> -->
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="tableRow in $ctrl.tableRows">
+                    <td>{{tableRow[0]}} <span class="glyphicon glyphicon-question-sign" style="color:lightgray"></span></td>
+                    <td ng-class="{active : $ctrl.isFirstActive}">
+                        <div class="beantown td-up">{{tableRow[1].point  | upperNumberFormat : "0.0"}}</div>
+                        <div class="td-down">{{tableRow[1].score | lowerNumberFormat : "0.00"}}</div>
+                    </td> 
+                    <td ng-class="{active : $ctrl.isSecondActive}">
+                        <div class="beantown td-up">{{tableRow[2].point  | upperNumberFormat : "0.0"}}</div>
+                        <div class="td-down">{{tableRow[2].score | lowerNumberFormat : "0.00"}}</div>
+                    </td> 
+                    <td ng-class="{active : $ctrl.isThirdActive}">
+                        <div class="beantown td-up">{{tableRow[3].point  | upperNumberFormat : "0.0"}}</div>
+                        <div class="td-down">{{tableRow[3].score | lowerNumberFormat : "0.00"}}</div>
+                    </td> 
+                    <td>
+                        <div class="flex flex-wh-center">
+                            <div class="result-percent flex f-align-h-baseline">
+                                <div class="result-up-down-arrow" 
+                                    ng-class="$ctrl.getNgClass(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point)">
+                                    {{ $ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | upDownSymbol}}
+                                </div>
+                                <div class="result-percent-text">{{ $ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | percentForResult | abs }}</div>
+                                <div class="result-percent-symbol">{{ $ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | percentSymbolForResult}}</div>
+                            </div>
+                            <div class="result-diff flex f-align-h-baseline" style="display: none">
+                                <div class="result-up-down-arrow" 
+                                    ng-class="$ctrl.getNgClass(tableRow[$ctrl.indexes.a].score, tableRow[$ctrl.indexes.b].score)">
+                                    {{ $ctrl.calcDiff(tableRow[$ctrl.indexes.a].score, tableRow[$ctrl.indexes.b].score) | upDownSymbol}}
+                                </div>
+                                <div class="result-percent-text">{{ $ctrl.calcDiff(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | upperNumberFormat : "0.0" | abs }}</div>
+                                <div class="result-percent-symbol">{{ $ctrl.calcDiff(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | ptSymbolForResult}}</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tfoot>
+                    <tr><td class="row-result" colspan="5">티어 평균보다 얼마를 더 했습니다.</td></tr>
+                    <tr><td class="row-padding"colspan="5" style="height:300px"></td></tr>
+                </tfoot>
+            </tbody>
+        </table>
+    </div>
 </div>

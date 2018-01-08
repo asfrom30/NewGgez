@@ -178,7 +178,7 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         // FIXME: Impl service for transfer profile data        
         // bind Current player only battle tag
         // $ctrl.bindCurrentPlayer({$event : {player : player}});
-        $window.location.href = `#!/hero/summary/${device}/${region}/${id}`;
+        $window.location.href = `#!/hero/${device}/${region}/${id}/summary`;
     }
 
     /* For develop */

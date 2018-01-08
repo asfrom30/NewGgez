@@ -61,9 +61,10 @@ export function numberFormat() {
 }
 export function upDownSymbol() {
     return function(value){
-        if(isNaN(value)) {
-            return "-";
-        }
+        if(isNaN(value)) return "";
+        
+        if(value == Infinity) return '';
+
         else {
             if(value > 0 ){
                 return "▲";

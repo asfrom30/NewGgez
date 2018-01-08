@@ -265,12 +265,12 @@ export default {
         { "label": "경기당초월로치유", "unit" : "/", "numerator" : "초월로치유", "denominator" : "치른게임", "description" : ""},
     ],
     "genji"     : [
-        /* Accuracy */
-
         /* Per Death */
-        { "label": "목숨당처치", "unit" : "/", "numerator" : "처치", "denominator" : "죽음", "description" : ""},
-        { "label": "목숨당단독처치", "unit" : "/", "numerator" : "단독처치", "denominator" : "죽음", "description" : ""},
-        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당처치",          "title" : "kill_d",        "unit" : "/", "numerator" : "처치", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당단독처치",       "title" : "solo_kill_d",    "unit" : "/", "numerator" : "단독처치", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량",        "title" : "damage_d",       "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당튕겨낸피해",      "title" : "genji_reflect_damage_d",    "unit" : "/", "numerator" : "튕겨낸피해", "denominator" : "치른게임", "description" : ""},
+        { "label": "목숨당용검으로처치",     "title" : "genji_ultimate_g",       "unit" : "/",                           "numerator" : "용검으로처치", "denominator" : "죽음", "description" : ""},
 
         /* Per Game */
         { "label": "경기당결정타",    "unit" : "/", "numerator" : "결정타",   "denominator" : "치른게임", "description" : ""},
@@ -280,12 +280,8 @@ export default {
         { "label": "경기당단독처치",  "unit" : "/", "numerator" : "단독처치", "denominator" : "치른게임", "description" : ""},
 
         /* Speacial Skill */
-        { "label": "목숨당튕겨낸피해", "unit" : "/", "numerator" : "튕겨낸피해", "denominator" : "치른게임", "description" : ""},
         { "label": "경기당튕겨낸피해", "unit" : "/", "numerator" : "튕겨낸피해", "denominator" : "치른게임", "description" : ""},
-
-        { "label": "목숨당용검으로처치", "unit" : "/", "numerator" : "용검으로처치", "denominator" : "죽음", "description" : ""},
         { "label": "경기당용검으로처치", "unit" : "/", "numerator" : "용검으로처치", "denominator" : "치른게임", "description" : ""},
-        
     ], 
     "ana"       : [
         /* Per Death */
@@ -344,6 +340,18 @@ export default {
     ],
     "doomfist"  : [
         { "label": "목숨당처치", "unit" : "/", "numerator" : "처치", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당단독처치", "unit" : "/", "numerator" : "단독처치", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
+
+        /* Per Game */
+        { "label": "경기당결정타",    "unit" : "/", "numerator" : "결정타",   "denominator" : "치른게임", "description" : ""},
+        { "label": "경기당단독처치",  "unit" : "/", "numerator" : "단독처치", "denominator" : "치른게임", "description" : ""},
+        { "label": "경기당피해량",    "unit" : "/", "numerator" : "준모든피해",   "denominator" : "치른게임", "description" : ""},
+
+        /* Speacial Skill */
+        { "label": "목숨당기술로준피해", "unit" : "/", "numerator" : "기술로준피해", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당생성한보호막", "unit" : "/", "numerator" : "생성한 보호막", "denominator" : "죽음", "description" : ""},
+        { "label": "목숨당파멸의일격으로처치", "unit" : "/", "numerator" : "파멸의 일격으로 처치", "denominator" : "죽음", "description" : ""},
     ],
     "orisa"     : [
         { "label": "목숨당처치", "unit" : "/", "numerator" : "처치", "denominator" : "죽음", "description" : ""},

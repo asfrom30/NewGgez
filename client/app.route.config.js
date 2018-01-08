@@ -134,7 +134,7 @@ function getHeroParentState() {
 function getHeroSummaryState() {
     return {
         name: 'hero.summary',
-        url : '/summary/{device}/{region}/{id}',
+        url : '/{device}/{region}/{id}/summary',
         component : 'heroSummary',
     }
 }
@@ -142,7 +142,7 @@ function getHeroSummaryState() {
 function getHeroDetailState() {
     return {
         name: 'hero.detail',
-        url : '/detail/{device}/{region}/{id}',
+        url : '/{device}/{region}/{id}/detail',
         component : 'heroDetail',
     }
 }
@@ -150,8 +150,8 @@ function getHeroDetailState() {
 function getHeroCompareState() {
     return {
         name: 'hero.compare',
-        url : '/compare/{device}/{region}/{id}',
-        component : 'heroCompare',
+        url : '/{device}/{region}/{id}/compare',
+        component : 'heroDetail',
     }
 }
 

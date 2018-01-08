@@ -2,6 +2,11 @@
 
 import angular from 'angular';
 
+
+const logger = require('../../utils/logger/logger');
+const appLogger = new logger('analyzer');
+
+
 export default angular
     .module('core.analyzer', [])
     .factory('Analyzer', function($rootScope, CONST_DIFF_GAMES_MAP, CONST_HERO_MAP, STATMAP, Indexer){
@@ -142,7 +147,8 @@ function DiffHeroDatasAnalyzerForSeason(STATMAP) {
                 if(denominator == 0 || isNaN(numerator) || isNaN(denominator)) score = "-";
                 else score = numerator / denominator;
                 
-                const point = normalizeScore(score, tierData, heroId, statId);
+                let point = normalizeScore(score, tierData, heroId, statId);
+                if(point < 0) point = 0;
 
                 /* make result object */
                 result[heroId].push({title : statId, score : score, point : point});
@@ -197,8 +203,9 @@ function DiffHeroDatasAnalyzerForDate(STATMAP){
                 if(denominator == 0 || isNaN(numerator) || isNaN(denominator)) score = "-";
                 else score = numerator / denominator;
 
-                const point = normalizeScore(score, tierData, heroId, statId);
-
+                let point = normalizeScore(score, tierData, heroId, statId);
+                if(point < 0) point = 0;
+                
                 /* make result object */
                 result[heroId].push({title : statId, score : score, point : point});
             }
@@ -232,7 +239,7 @@ function getValueFromTierData(tierData, heroId, statId, valueName) {
     try {
         return tierData[heroId].total[statId][valueName];
     } catch (error) {
-        console.warn(`can not get value from tier data ${heroId} ${statId}`);
+        appLogger.log(`can not get value from tier data ${heroId} ${statId}`, 'warn');
         return;
     }
 }

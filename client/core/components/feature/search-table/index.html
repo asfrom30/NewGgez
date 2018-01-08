@@ -1,0 +1,20 @@
+<div style="overflow-y:auto">
+    <table class="w-100-pct" style="color:white; text-align:center;">
+        <thead>
+            <tr>
+                <th>Icon</th>
+                <th>BattleTag</th>
+                <th>Tier</th>
+                <th>Cptpt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="player in $ctrl.playerList" ng-click="$ctrl.onClick({$id : player._id})" style="border-top: 1px solid white">
+                <td><img ng-src="{{player.iconUrl}}"/></td>
+                <td>{{player.btn}}</td>
+                <td><img ng-src="{{player.cptpt | tierImageSrc}}"/></td>
+                <td>{{player.cptpt}}</td> 
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,73 @@
+.hero-selectors-inner-container
+.fixed-bottom-title button {
+    width : 40px;
+    height: 40px;
+    color : white;
+    background-color: #404040;
+    margin-top : 5px;
+    margin-bottom : 5px;
+    margin-right : 2px;
+}
+
+/**
+    mode-detail
+*/
+/* .hero-selectors-inner-container .fixed-bottom-title .mode-compare
+.profile */
+
+/* Fixed Bottom Title */
+.fixed-bottom-title .profile{
+    font-weight: 900;
+}
+.fixed-bottom-title .profile img{
+    height : 100%;
+}
+
+/**
+    mode-compare
+*/
+/* Player */
+.hero-selectors-inner-container .fixed-bottom-title .mode-compare
+.profile .upper {
+    color: black;
+    font-weight: 900;
+}
+
+.hero-selectors-inner-container .fixed-bottom-title .mode-compare
+.profile.p1 .upper {
+    background-color: rgba(255,99,132,1);
+}
+
+.hero-selectors-inner-container .fixed-bottom-title .mode-compare
+.profile.p2 .upper {
+    background-color: rgba(154,208,245,1);
+}
+
+/* vs label font-size*/
+.hero-selectors-inner-container .fixed-bottom-title .mode-compare
+.vs-label {
+    margin-left : 20px;
+    margin-right: 20px;
+}
+
+.hero-selectors-inner-container .fixed-bottom-title .mode-compare
+.vs-label .upper {
+    border-bottom: 1px solid white;
+}
+
+.hero-selectors-inner-container .fixed-bottom-title .mode-compare
+.vs-label .lower {
+
+}
+
+/* Search Box */
+.hero-selectors-inner-container .fixed-bottom-content .mode-compare
+.input-group {
+    margin : 3px;
+}
+
+.hero-selectors-inner-container .fixed-bottom-content .mode-compare
+input {
+    width:100%
+}
+

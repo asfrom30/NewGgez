@@ -22,6 +22,10 @@
 	padding:0;
 }
 
+.display-none {
+    display: none;
+}
+
 /* Common CSS */
 .text-align-center{ text-align:center; }
 .f-w-b{ font-weight:bold; }
@@ -42,6 +46,7 @@
 /* Flex CSS */
 .display-none{ display:none; }
 .flex{ display:-webkit-box; display:-ms-flexbox; display:flex; }
+.flex-wrap{display:flex; flex-wrap: wrap;}
 .flex-column { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:vertical; -webkit-box-direction:normal; -ms-flex-direction:column; flex-direction:column; }
 .flex-row-wrap { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -ms-flex-flow:row wrap; flex-flow:row wrap; }
 
@@ -137,6 +142,7 @@
 .c-black{color:black}
 .c-red{color:red}
 .c-blue{color:blue}
+.c-green{color:chartreuse};
 
 /* Common Layout CSS */
 /* Mobile 1 column, Desktop 2 column */
@@ -254,4 +260,26 @@
     box-shadow: none;
 }
 
+/* absolute pattern */
+.absolute-container {
+    position : relative;
+}
 
+
+/* fixed bottom pattern */
+.fixed-bottom {
+    position    : fixed;
+    left        : 0px;
+    bottom      : 0px;
+}
+
+/* Bootstrap button group same width pattern */
+.player-selector .btn-group {
+    width : 100%;
+    display: flex;
+    justify-content: stretch;
+    height : 55px;
+}
+.player-selector button {
+    width:100%;
+}

@@ -44,6 +44,7 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         $ctrl.device = 'pc';
 
         $ctrl.search();
+        $('html, body').animate({ scrollTop: 2000 }, 50);
     }
 
     /* View */

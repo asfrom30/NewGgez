@@ -36,8 +36,15 @@ export default angular.module('ggez.core.filter', [])
     .filter('suffixPercent', suffixPercent)
     .filter('numberFilter', numberFilter)
     .filter('upDownSymbol', upDownSymbol)
+    .filter('defaultValue', defaultValue)
     .name;
 
+export function defaultValue() {
+    return function(input, defaultValue) {
+        if(input == undefined) return defaultValue;
+        else return input;
+    }
+}
 export function percent() {
     return function(input, format) {
         

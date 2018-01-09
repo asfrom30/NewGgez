@@ -21,6 +21,8 @@ export function controller($element) {
     const $ctrl = this;
 
     $ctrl.$onChanges = function() {
+        if($ctrl.number == undefined) $element.find("#target").text('-');
+        
         if($ctrl.hasComma) $ctrl.commaSeparator = $.animateNumber.numberStepFactories.separator(',');
 
         $element.find("#target").animateNumber({

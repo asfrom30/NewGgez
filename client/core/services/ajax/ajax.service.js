@@ -34,6 +34,7 @@ export default angular
                         }
                         resolve(result);
                     }).catch(reason => {
+                        resolve({});
                         console.log(reason); //FIXME: 
                     });
                 });

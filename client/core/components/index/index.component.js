@@ -1,7 +1,10 @@
 'use strict';
 
 import angular from 'angular';
-import './index.css';
+
+require('./css/index.css');
+require('./css/style.display.info.css');
+require('./css/style.player.table.css');
 
 export default angular.module('components.index', [])
     .component('index', {
@@ -18,26 +21,30 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     'ngInject';
     
     var $ctrl = this;
+    const dom = {
+        searchedPlayerTable : '.player-table-container table',
+        noResultPlayerTable : '#no-result-in-searched-player',
+    }
     $ctrl.search = onSearchButton;
     $ctrl.moveHeroPage = moveHeroPage;
     
     $ctrl.$onInit = function() {
-        const env = process.env.NODE_ENV;
-        if(env !== 'production') {
-            appendDevElement();
-            doDevAction();
-        }
+        excutesForDev(true);
         initView();
     }
 
-    $ctrl.$onChanges = function() {
+    function excutesForDev(flag) {
+        if(flag == false) return;
 
+        const env = process.env.NODE_ENV;
+        if(env === 'production') return;
+
+        $ctrl.input = 'a';
+        $ctrl.region = 'kr';
+        $ctrl.device = 'pc';
+
+        $ctrl.search();
     }
-
-
-    /**
-     * Functions
-     */
 
     /* View */
     function initView() {
@@ -53,32 +60,30 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         });
     }
 
-    function startAnimateNumber(){
-        console.log($ctrl.indexInformation);
-        AppLogger.log('hi', 'info');
-        if($ctrl.indexInformation == undefined) { AppLogger.log('$ctrl.indexInformation is undefined'); return;}
-        if($ctrl.indexInformation.totalGameNumber == undefined) { AppLogger.log('totalGameNumber is undefined'); return;}
-        if($ctrl.indexInformation.totalPlayerNumber == undefined) { AppLogger.log('totalGameNumber is undefined'); return;}
+    function hideNoResultPlayerTable() {
+        $element.find(dom.noResultPlayerTable).slideUp('fast');
+    }
+    
+    function showNoResultPlayerTable() {
+        $element.find(dom.noResultPlayerTable).slideDown('fast');
+    }
+
+    function hideSearchedPlayerTable() {
+        $element.find(dom.searchedPlayerTable).slideUp('fast');
+    }
+
+    function showSearchedPlayerTable() {
+        $element.find(dom.searchedPlayerTable).slideDown('fast');
         
-        $element.find('#total-player-num').text($ctrl.indexInformation.totalGameNumber);
-        $element.find('#total-game-num').text($ctrl.indexInformation.totalPlayerNumber);
     }
-
-    function updateRegion(region){
-        
-    }
-
-    function updateDevice(device){
-
-    }
-
-
 
     /* Controller */
     function onSearchButton(){
         /* If input is null, nothing to do*/
         const input = $ctrl.input;
         if(input === undefined || input == null || input == '' ) {
+            hideSearchedPlayerTable();
+            hideNoResultPlayerTable();
             return ;
         }
 
@@ -92,7 +97,7 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
             btnSearch(device, region, input);
         } else {
             const btg = input.replace("#", "-");
-            btgSearch(device, region, input);
+            btgSearch(device, region, input, btg);
         }
         
     }
@@ -102,16 +107,18 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
             // is Array? if not...
             const length = result.length;
             if(length == undefined || length == 0) {
-                $element.find('table').hide();
+                hideSearchedPlayerTable();
+                showNoResultPlayerTable();
             } else {
-                $element.find('table').show();
+                showSearchedPlayerTable();
+                hideNoResultPlayerTable();
                 $ctrl.searchedPlayerList = result;
                 $scope.$apply();
             }
         })
     }   
 
-    function btgSearch(device, region, input) {
+    function btgSearch(device, region, input, btg) {
         Ajax.fetchPlayerWithBtg(device, region, btg).then(response => {
             if(response._id == undefined) {
                 CoreUtils.noty('존재 하지 않는 ID 입니다. 관리자에게 알려주세요. 조치해드리겠습니다.');
@@ -179,48 +186,5 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         // bind Current player only battle tag
         // $ctrl.bindCurrentPlayer({$event : {player : player}});
         $window.location.href = `#!/hero/${device}/${region}/${id}/summary`;
-    }
-
-    /* For develop */
-    function doDevAction() {
-        $ctrl.input = 'a';
-        $ctrl.region = 'kr';
-        $ctrl.device = 'pc';
-
-        $ctrl.search();
-    }
-
-    function appendDevElement() {
-        // how to use angular transclude for
-        const node_env = process.env.NODE_ENV;
-        if(node_env == 'development') {
-            // $(document.body).append('<h1>hi {{$ctrl.input}}</h1>');
-        }
-    }
-
-    $ctrl.test = function(){
-        $ctrl.input = '냅둬라날#3934';
-        $ctrl.region = 'kr';
-        $ctrl.device = 'pc';
-        onSearchButton();
-    }
-
-    $ctrl.test1 = function(){
-        $ctrl.input = '냅둬라날#39341';
-        $ctrl.region = 'kr';
-        $ctrl.device = 'pc';
-        onSearchButton();
-    }
-
-    $ctrl.test2 = function() {
-        const device = 'pc';
-        const region = 'kr';
-        const id = 1;
-        Ajax.fetchCrawlDatas(device, region, id).then(result => {
-            console.log(result);
-        }, reason => {
-            console.log(reason);
-        });
-
     }
 }

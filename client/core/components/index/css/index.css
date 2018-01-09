@@ -1,0 +1,122 @@
+index {
+    background-color: black;
+    margin : 0;
+}
+
+/* layout */
+index section:nth-child(1)
+.padding {
+    width: 100%;
+    height : 30vh;
+}
+
+index section:nth-child(1)
+.display-info-container {
+    width:100%;
+    height : 15vh;
+    max-height: 105px;
+    z-index: 4;
+}
+
+index section:nth-child(1)
+.search-bar-container {
+    width : 90%;
+    max-width: 768px;
+    height : 5vh;
+    max-height: 50px;
+    z-index: 6;
+}
+
+index section:nth-child(1)
+.player-table-container {
+    width : 85%;
+    max-width: 720px;
+    height : 30vh;
+    max-height: 280px;
+    z-index: 4;
+}
+
+index section:nth-child(1)
+.anchor-container {
+    width:100%;
+    z-index: 2;
+    margin-top: 80vh;
+    height : 20vh;
+    z-index: 4;
+}
+
+/* style */
+/* Background Image */
+/* https://playoverwatch.com/ko-kr/media/ */
+#search-section { background: url('/assets/images/index-background/ana-screenshot-004.jpg') center center / cover no-repeat;}
+#medal-of-honor-section { background: url('/assets/images/index-background/reinhardt-screenshot-007.jpg') center center / cover no-repeat;}
+#ranking-section { background: url('/assets/images/index-background/hanamura-screenshot-003.jpg') center center / cover no-repeat;}
+
+index section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+  
+index section::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    content: '';
+    width: 100%;
+    height: 80%;
+    background: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.8) 80%,rgba(0,0,0,.8) 100%);
+    background: linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.8) 80%,rgba(0,0,0,.8) 100%);
+}
+
+index section h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font : normal 300 64px/1 'Josefin Sans', sans-serif;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  index a:not(.dropdown-item) {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    z-index: 2;
+    display: inline-block;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font : normal 400 20px/1 'Josefin Sans', sans-serif;
+    letter-spacing: .1em;
+    text-decoration: none;
+    transition: opacity .3s;
+  }
+  
+  index a:not(.dropdown-item):hover {
+    opacity: .5;
+  }
+  
+  index a:not(.dropdown-item) span {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    margin-left: -12px;
+    border-left: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-animation: sdb04 2s infinite;
+    animation: sdb04 2s infinite;
+    box-sizing: border-box;
+  }
+  
+  index a:not(.dropdown-item) {
+    padding-top: 60px;
+  }

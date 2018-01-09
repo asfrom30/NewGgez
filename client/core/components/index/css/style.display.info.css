@@ -1,0 +1,12 @@
+
+index .display-info-container {
+    text-align: center;
+    font : normal 300 7vmin/1 'Josefin Sans', sans-serif;
+    color : white;
+}
+
+index .display-info-container > div {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 0.5vmin;
+}

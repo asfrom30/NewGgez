@@ -1,4 +1,4 @@
-/* version 1.0 - 20171215*/
+/* version 1.1 - 20180101*/
 
 /* Small devices (landscape phones, 576px and up) */
 /* Medium devices (tablets, 768px and up) */
@@ -283,3 +283,13 @@
 .player-selector button {
     width:100%;
 }
+
+/* .devide-2-element {
+
+}
+
+.elem-row-2 > div {
+    height: 50%;
+} */
+
+

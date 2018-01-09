@@ -1,113 +1,74 @@
 <div id="index">
-    <section id="search-section" class="flex f-align-w-center"><!-- using id is for animate scroll -->
-        <div class="title position">
-            <div class="information layout style font">
-                <div>
-                    <div>Total Players</div>
-                    <div><animate-number number="$ctrl.indexInformation.totalPlayers" time="1000" has-comma="true"></animate-number></div>  
-                </div>
-                <div>
-                    <div>Total Games</div>
-                    <div><animate-number number="$ctrl.indexInformation.totalGames" time="1000" has-comma="true"></animate-number></div> 
-                </div>
+    <section id="search-section" class="flex flex-column f-align-h-center w-100-pct h-100-pct">
+        <div class="padding"></div>
+        <div class="display-info-container flex f-align-w-center f-align-h-end">
+            <div>
+                <div>Total Players</div>
+                <div><animate-number number="$ctrl.indexInformation.totalPlayers" time="1000" has-comma="true"></animate-number></div>  
             </div>
-            <div class="search-group layout">
-                <div class="input-group">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        device
-                        </button> 
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" ng-click="$ctrl.device='pc'">pc</a>
-                        <a class="dropdown-item" ng-click="$ctrl.device='xbox'">xbox</a>
-                        <a class="dropdown-item" ng-click="$ctrl.device='ps4'">ps4</a>
-                        </div>
+            <div>
+                <div>Total Games</div>
+                <div><animate-number number="$ctrl.indexInformation.totalGames" time="1000" has-comma="true"></animate-number></div> 
+            </div>
+        </div>
+        <div class="search-bar-container">
+            <div class="input-group h-100-pct">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$ctrl.device == undefined ? 'device' : $ctrl.device }}
+                    </button> 
+                    <div class="dropdown-menu">
+                    <a class="dropdown-item" ng-click="$ctrl.device='pc'">pc</a>
+                    <a class="dropdown-item" ng-click="$ctrl.device='xbox'">xbox</a>
+                    <a class="dropdown-item" ng-click="$ctrl.device='ps4'">ps4</a>
                     </div>
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            region
-                        </button> 
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" ng-click="$ctrl.region='kr'">kr</a>
-                            <a class="dropdown-item" ng-click="$ctrl.region='eu'">eu</a>
-                            <a class="dropdown-item" ng-click="$ctrl.region='us'">us</a>
-                            <a class="dropdown-item" ng-click="$ctrl.region='cn'">cn</a>
-                        </div>
-                        </div>
-                    <input type="text" class="form-control" ng-model="$ctrl.input" placeholder="Input your btg" ng-enter="$ctrl.search()" aria-label="Btg input with dropdown button" >
-                    <button type="button" class="btn btn-secondary" ng-click="$ctrl.search()"><i class="material-icons">search</i></button>
                 </div>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$ctrl.region == undefined ? 'region' : $ctrl.region }}
+                    </button> 
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" ng-click="$ctrl.region='kr'">kr</a>
+                        <a class="dropdown-item" ng-click="$ctrl.region='eu'">eu</a>
+                        <a class="dropdown-item" ng-click="$ctrl.region='us'">us</a>
+                        <a class="dropdown-item" ng-click="$ctrl.region='cn'">cn</a>
+                    </div>
+                    </div>
+                <input type="text" class="form-control" ng-model="$ctrl.input" placeholder="Input your btg" ng-enter="$ctrl.search()" aria-label="Btg input with dropdown button" >
+                <button type="button" class="btn btn-secondary" ng-click="$ctrl.search()"><i class="material-icons">search</i></button>
             </div>
-            <div style="max-height:20vh; overflow-y: auto;">
-                <table class="w-100-pct" style="color:white; text-align:center;">
+        </div>
+        <div class="player-table-container">
+            <div id="no-result-in-searched-player" class="flex f-align-w-center" style="display:none; color: white; margin-top : 5px">
+                검색결과가 없습니다.
+            </div>
+            <table class="w-100-pct display-none" style="color:white; text-align:center;">
+                <thead>
                     <tr>
                         <th>Icon</th>
                         <th>BattleTag</th>
                         <th>Tier</th>
                         <th>Cptpt</th>
                     </tr>
+                </thead>
+                <tbody>
                     <tr ng-repeat="player in $ctrl.searchedPlayerList" ng-click="$ctrl.moveHeroPage('pc', 'kr', player._id)" style="border-top: 1px solid white">
                         <td style="height:5vh"><img ng-src="{{player.iconUrl}}" style="height:100%"/></td>
                         <td>{{player.btn}}</td>
                         <td style="height:5vh"><img ng-src="{{player.cptpt | tierImageSrc}}" style="height:100%"/></td>
                         <td>{{player.cptpt}}</td> 
                     </tr>
-                </table>
-            </div>
-            <div style="display: none">
-                <button class="btn btn-default" ng-click="$ctrl.test()">Test Button/ pc / kr / 냅둬라날 #3934</button>
-                <button class="btn btn-default" ng-click="$ctrl.test1()">Test Button/ pc / kr / 냅둬라날 #39341</button>
-                <button class="btn btn-default" ng-click="$ctrl.test2()">fetchPlayerWithId</button>
-            </div>
-            <div style="display: none">
-                <pre style="color:white">
-                    input is : {{$ctrl.input}},
-                    device is : {{$ctrl.device}},
-                    region is : {{$ctrl.region}}
-                </pre>
-            </div>
+                </tbody>
+            </table>
         </div>
-        <a href="#ranking-section"><span></span>See ranking</a>
+        <!-- <div class="anchor-container pos-absolute"> -->
+        <a href="#medal-of-honor-section"><span></span>Medal of Honor</a>
+        <!-- </div> -->
+    </section>
+    <section id="medal-of-honor-section">
+        <a href="#ranking-section"><span></span>Ranking</a>
     </section>
     <section id="ranking-section">
-        <h1>See Ranking</h1>
-        <a href="#qna-section"><span></span>Scroll</a>
-    </section>
-    <section id="qna-section">
-        <h1>Q & A</h1>
+
     </section>
 </div>
-<!-- <div class="container">
-    <div id="#device-selector" class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-            Device
-        <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li><a href="#">PC</a></li>
-            <li><a href="#">PS4</a></li>
-            <li><a href="#">XBOX</a></li>
-        </ul>
-    </div>
-    <div id="#device-selector" class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-            Device
-        <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li><a href="#">KR</a></li>
-            <li><a href="#">US</a></li>
-            <li><a href="#">EU</a></li>
-            <li><a href="#">CN</a></li>
-        </ul>
-    </div>
-    <input " ></input>
-    <button ">Search</button>
-
-
-</div>
-<div>
-
-    <button type="button" class="btn" ng-click="$ctrl.test()">Test</button>
-    <button type="button" class="btn" ng-click="moveHeroPage(1)">Move id 1</button>
-
-    
-</div> -->

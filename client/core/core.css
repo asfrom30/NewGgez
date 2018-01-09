@@ -53,7 +53,7 @@ body {
 
 
 /* Scroll Bar... */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     -webkit-appearance: none;
 }
 
@@ -74,4 +74,4 @@ body {
 ::-webkit-scrollbar-track {
     border-radius: 10px;  
     background-color: #ffffff; 
-}
+} */

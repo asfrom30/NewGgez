@@ -38,9 +38,6 @@ exports.insertCurrentCrawlData = function(device, region, doc) {
 }
 
 exports.doAggregate = function(device, region, todaySuffix, aggregateDocs) {
-    // NEED AGGEGATE FIX ME.
-    if(process.env.NODE_ENV == 'development') todaySuffix = '000000';
-
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
     const targetCollectionName = `${config.mongo.collectionName.crawlDatas}-${todaySuffix}`;
 
@@ -169,4 +166,21 @@ exports.dropTodayCollection = function(device, region, todaySuffix) {
         })       
     });
 
+}
+
+exports.getCrawlDataCount = function(device, region, collectionSuffix) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${collectionSuffix}`;
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then(db => {
+            db.collection(collectionName).count({}).then(result => {
+                resolve(result);
+            }).catch(reason => {
+                reject(reason);
+            }).then(()=>{
+                db.close();
+            });
+        });
+    })
 }

@@ -78,7 +78,7 @@ exports.analyzeAsync = function(saveConfig) {
             // aggregate.push(outStage);
 
             //TODO: refactoring for sequence
-            appDao.doAggregate(device, region, todaySuffix, aggregateDocs).then((result) => {
+            appDao.doAggregate(device, region, todaySuffix, aggregateDocs).then(result => {
                 const docKey = `${heroId}.${tierKey}`;
                 const docValue = result[0];
                 const doc = {$set : {}};

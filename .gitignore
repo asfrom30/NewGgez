@@ -11,3 +11,4 @@ dist
 client/assets
 
 .ssh
+.smtp

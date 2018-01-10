@@ -13,7 +13,6 @@
     "mongoose": "^4.13.0",
     "mongoose-sequence": "^4.0.1",
     "properties": "^1.2.1",
-
     "babel-core": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
@@ -21,13 +20,14 @@
   },
   "devDependencies": {
     "merge": "^1.2.0",
+    "nodemailer": "^4.4.1",
     "nodemon": "^1.12.1"
   },
   "scripts": {
-    "nodemon:dev" : "set NODE_ENV=development & nodemon ./index.js",
-    "node:dev" : "set NODE_ENV=development & node ./index.js",
+    "nodemon:dev": "set NODE_ENV=development & nodemon ./index.js",
+    "node:dev": "set NODE_ENV=development & node ./index.js",
     "node:prod": "set NODE_ENV=production & node ./index.js",
-    "pm2:dev" : "pm2 restart ./.pm2/dev.process.json",
+    "pm2:dev": "pm2 restart ./.pm2/dev.process.json",
     "pm2:prod": "pm2 restart ./.pm2/prod.process.json"
   },
   "author": "asfrom30",

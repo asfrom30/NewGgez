@@ -8,3 +8,6 @@ exports.doAggregate = controller.doAggregate;
 
 exports.getTodayCrawlDatasCount = controller.getTodayCrawlDatasCount;
 exports.dropTodayCollection = controller.dropTodayCollection;
+
+
+exports.getCrawlDataCount = controller.getCrawlDataCount;

@@ -21,6 +21,7 @@ exports.metaParser = function($) {
 
     // cptpt
     let cptpt = $('.competitive-rank .u-align-center', '.masthead-player-progression.hide-for-lg').text();
+    cptpt = parseInt(cptpt);
 
     // Player level
     let rankUrl;
@@ -34,6 +35,7 @@ exports.metaParser = function($) {
     }
 
     let lowerLevel = $('.u-vertical-center', '.masthead-player-progression.hide-for-lg').text();
+    lowerLevel = parseInt(cptpt);
 
     // Crawl Time
     let crawlTimeStamp = Date.now();

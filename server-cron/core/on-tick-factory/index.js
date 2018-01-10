@@ -1,15 +1,19 @@
 const config = require('../../config/enviroment');
 const appDao = require('../dao');
+const appLogger = require('../utils/logger/logger.cron.core.util');
 const crawlAndSave = require('../crawl-and-save');
 const analyzeEngine = require('../analyze-engine');
 const momentTz = require('moment-timezone');
 const readline = require('readline');
-
 exports.getOnTickForLast = getOnTickForLast;
+
 exports.needToDropTodayCollection = needToDropTodayCollection;
 exports.getAllPlayerCrawlAndSave = getAllPlayerCrawlAndSave;
 exports.getAnalyzeTierData = getAnalyzeTierData;
-
+exports.getRanking = getRanking;
+exports.sendReport = sendReport;
+exports.notifyCronStart = notifyCronStart;
+exports.notifyCronFinish = notifyCronFinish;
 
 function needToDropTodayCollection(preResult, crawlConfig, saveConfig) {
     return new Promise((resolve, reject) => {
@@ -125,26 +129,82 @@ function getCrawlAndSavePromise(players, crawlConfig, saveConfig){
     })
 }
 
+// need only saveConfig
 function getAnalyzeTierData(preResult, crawlConfig, saveConfig) {
 
     // saveConfig.todayCollectionSuffix = momentTz().tz(saveConfig.timezone).format('YYMMDD');
+    saveConfig.todaySuffix = '171229';
 
-    return Promise.resolve().then(() => {
-        return analyzeEngine.analyzeTierDataAsync(saveConfig);
-    }).then((tierData) => {
-        return Promise.resolve();
-        // return appDao.insertTierData(saveConfig.device, saveConfig.region, tierData);
-    }).catch((reason) => {
-        console.log('can not create analyze tier data');
-        console.log(reason);
-    })
+    const device = saveConfig.device;
+    const region = saveConfig.region;
+    const suffix = saveConfig.todaySuffix;
+
+    appLogger.log2File(suffix, '');
+    appLogger.log2File(suffix, '== Start Tier Data Analyze ==');
+
+    return appDao.getCrawlDataCount(device, region, suffix).then(result => {
+        appLogger.log2File(suffix, `Crawled Datas Count is ${result}`);
+        if(result == 0) return Promise.reject('Crawled Datas is 0, no target');
+    }).then(result => {
+        analyzeEngine.analyzeTierDataAsync(saveConfig);
+    }).catch(reason => {
+        reason = 'analyze tier data failed :: ' + reason;
+        appLogger.log2File(suffix, reason);
+    }).then(() => {
+        appLogger.log2File(suffix, '== End Tier Data Analyze ==');
+    });
 }
 
-function getOnTickForLast(preResult, crawlConfig, saveConfig){
+const commonMailer = require('../../common/utils/mailer/mailer.cron.common.util');
 
-    return Promise.resolve().then(() => {
-        console.log('end cron flags on');
+const appMailer = require('../utils/mailer/mailer.cron.core.util');
+const path = require('path');
+
+function getOnTickForLast(preResult, crawlConfig, saveConfig){
+    saveConfig.todaySuffix = '171229';
+
+    const suffix = saveConfig.todaySuffix;
+    appLogger.log2File(suffix, '');
+    appLogger.log2File(suffix, '== Get On Tier For Last ==');
+
+    return new Promise((resolve, reject) => {
+        resolve();
+    }).catch(reason=> {
+        console.log(reason);
+        reason = 'result = failed :: ' + reason;
+        appLogger.log2File(suffix, reason);
+    }).then(() => {
+        appLogger.log2File(suffix, '== Get On Tier For Last ==');
     });
+}
+
+function sendReport() {
+    return new Promise((resolve, reject) => {
+        try {
+            const filePath = path.join(__dirname, 'hello.txt');
+            appMailer.sendReport('daily report from ggezkr', filePath); // pass resolve and reject?
+            // resolve();
+        } catch (error){
+            console.log('error occured');
+            console.log(error);
+        }
+    });
+}
+
+function notifyCronStart(preResult, crawlConfig, saveConfig){
+    console.log('start cron job');
+    console.log(crawlConfig);
+    console.log(saveConfig);
+}
+
+function notifyCronFinish(preResult, crawlConfig, saveConfig) {
+    console.log('finish cron job');
+}
+
+function getRanking(preResult, crawlConfig, saveConfig) {
+
+    const todaySuffix  = '171229';
+    // const todaySuffix = saveConfig.todaySuffix;
 }
 
 function getLimitPlayers(players, num) {

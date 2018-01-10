@@ -1,3 +1,6 @@
+const path = require('path');
+setAppRootPath();
+
 /* App Module loading */
 // const appLogger = require('');
 
@@ -6,7 +9,7 @@
 // start server
 // const appCronServer = require('./core');
 // appCronServer.start();
-const path = require('path');
+
 const CronManager = require('./core/cron-manager');
 const iniFileLoader = require('./core/ini-file-loader');
 const config = require('./config/enviroment')
@@ -18,6 +21,8 @@ const serverConfigFilePath = path.join(__dirname, "cron.server.config.ini");
 // https://www.npmjs.com/package/console-stamp
 require('console-stamp')(console, { pattern: 'dd/mm/yyyy HH:MM:ss' });
 
+
+
 /* print current enviroment */
 console.info(`server is running on ${process.env.NODE_ENV} mode`);
 console.info(`run on init : ${config.cron.runOnInit}, cron job start : ${config.cron.start}`);
@@ -25,7 +30,7 @@ console.info(`run on init : ${config.cron.runOnInit}, cron job start : ${config.
 // TODO:wait for user input... in dev mode.
 
 iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
-    console.log(`${Object.keys(cronJobInfos).length} cron jobs loaded from ini files`);
+    console.info(`${Object.keys(cronJobInfos).length} cron jobs loaded from ini files`);
     
     const cronManager = new CronManager();
     cronManager.buildCronParams(cronJobInfos);
@@ -33,11 +38,14 @@ iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
     cronManager.buildSaveConfigs(cronJobInfos);
 
     /* build onTick Chain */
+    cronManager.addOnTick(onTickFactory.notifyCronStart);
     // cronManager.addOnTick(onTickFactory.needToDropTodayCollection);
-    cronManager.addOnTick(onTickFactory.getAllPlayerCrawlAndSave);
+    // cronManager.addOnTick(onTickFactory.getAllPlayerCrawlAndSave);
     // cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
     // cronManager.addOnTick(onTickFactory.getRanking);
-    cronManager.addOnTick(onTickFactory.getOnTickForLast);
+    // cronManager.addOnTick(onTickFactory.getOnTickForLast);
+    // cronManager.addOnTick(onTickFactory.sendReport);
+    cronManager.addOnTick(onTickFactory.notifyCronFinish);
 
     cronManager.startCron();
 }).then(()=>{
@@ -46,3 +54,7 @@ iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
 }).catch((reason)=>{
     console.log(reason);
 })
+
+function setAppRootPath() {
+    global.appRoot = path.resolve(__dirname);
+}

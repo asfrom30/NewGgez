@@ -1,4 +1,4 @@
-const config = require('../../config/enviroment')
+const config = require('../../config/enviroment');
 const client = require('mongodb').MongoClient;
 const mongoHelperFactory = require('../../common/utils/db/mongo-helper-factory');
 
@@ -182,5 +182,40 @@ exports.getCrawlDataCount = function(device, region, collectionSuffix) {
                 db.close();
             });
         });
+    })
+}
+
+exports.getTierData = function(device, region, docId){
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.tierDatas}`;
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then(db => {
+            db.collection(collectionName).findOne({_id : docId}).then(result => {
+                resolve(result);
+            }).catch(reason => {
+                reject(reason);
+            }).then(()=>{
+                db.close();
+            });
+        });
+    });
+}
+
+exports.updateCurrentCrawlData = function(device, region, id, doc) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${config.mongo.collectionSuffix.current}`;
+    const options = {upsert : true}
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).updateOne({_id : id}, doc, options).then((result) => {
+                db.close();
+                resolve(doc);
+            }, (reason) => {
+                db.close();
+                reject(reason);
+            });
+        })
     })
 }

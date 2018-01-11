@@ -7,5 +7,9 @@ module.exports = {
         context: null,
         start: false,
         runOnInit: false,
+    },
+
+    mailing : {
+        flag : false 
     }
 }

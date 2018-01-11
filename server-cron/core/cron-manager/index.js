@@ -77,6 +77,6 @@ function getOnTickFromChain(onTickChain, crawlConfig, saveConfig){
             return prePromise.then((result) => {
                 return currentOnTickPromise(result, crawlConfig, saveConfig);
             });
-        }, Promise.resolve(1));
+        }, Promise.resolve());
     }
 }

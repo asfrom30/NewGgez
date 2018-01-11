@@ -49,6 +49,13 @@ var all = {
 
   crawl : {
     baseUrl : "https://playoverwatch.com/",
+  },
+
+  report : {
+    prefix : 'report',
+    fileType : 'txt',
+    tierPrefix : 'report_tier',
+    basePath : path.join(appRoot, '/.report'),
   }
   
 };

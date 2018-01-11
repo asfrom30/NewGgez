@@ -10,8 +10,14 @@ module.exports = {
     },
 
     crawl : {
-        speed : 5,
-        limitPlayer : true,
-        limitNumber : 100,
+        flag : true,
+        logFlag : false,//TODO: not yet impl
+        speed : 8,
+        limitFlag : true,
+        limitNumber : 10,
+    },
+
+    mailing : {
+        flag : false,
     }
 }

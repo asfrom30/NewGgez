@@ -56,11 +56,13 @@ const paths = {
         }
     },
     cron : {
+        // gulp src doesn't include if folder name starts with .
         scripts: [
             `${cronPath}/**/!(*.spec|*.integration).js`,
             `!${cronPath}/config/local.env.sample.js`,
             `!${cronPath}/node_modules/**`,
-            `!${cronPath}/package.json` // json file is start with .js
+            `!${cronPath}/package.json`, // json file is start with .js
+            `!${cronPath}/package-lock.json` ,
           ],
           json: [`${cronPath}/**/*.json`],
           ini: [`${cronPath}/**/*.ini`],
@@ -99,10 +101,11 @@ gulp.task('auto:deploy:cron', cb => {
         'build:cron',
         /*TODO: pm2 stop needed */
         /* clean remote */
-        'remote:bluehost:clean:cron',
+        'remote:bluehost:clean:cron', // clean without node_modules.
         /* move dev to remote file */ 
         'remote:bluehost:copy:cron',
         'remote:bluehost:copy:pm2',
+        'remote:bluehost:copy:smtp',
         /* remote run (install and run pm2)*/
         'remote:bluehost:run:cron',
         cb
@@ -111,7 +114,16 @@ gulp.task('auto:deploy:cron', cb => {
 
 gulp.task('auto:deploy:client', cb => {
     runSequence(
-        //'build:client'
+        'build:client',
+        'remote:bluehost:clean:client',
+        'remote:bluehost:copy:client',
+        cb
+    );
+});
+
+gulp.task('auto:deploy:client:simple', cb => {
+    runSequence(
+        'build:client:simple',
         'remote:bluehost:clean:client',
         'remote:bluehost:copy:client',
         cb
@@ -244,6 +256,23 @@ gulp.task('build:client', cb => {
     )
 })
 
+gulp.task('build:client:simple', cb => {
+    return runSequence(
+        'clean:dist:client',
+        'inject',
+        'build:images',
+        [
+        'copy:extras',
+        'copy:assets',
+        'copy:fonts:dist',
+        'webpack:dist'
+        ],
+        'revReplaceWebpack',
+        // inject
+    )
+})
+
+
 gulp.task('build:server', cb => {
     return runSequence(
         ['clean:dist:server', 'clean:dist:package'],
@@ -301,7 +330,10 @@ gulp.task('start:client', cb => {
 gulp.task('clean:tmp', () => del(['.tmp/**/*'], {dot: true}));
 gulp.task('clean:dist', () => del([`${paths.dist}/!(.git*|.openshift|Procfile|node_modules)**`], {dot: true}));
 gulp.task('clean:dist:server', () => del([`${paths.dist}/${serverPath}/**`], {dot: true}));
+
 gulp.task('clean:dist:client', () => del([`${paths.dist}/${clientPath}/**`], {dot: true}));
+gulp.task('clean:dist:client:simple', () => del([`${paths.dist}/${clientPath}/!(assets)`], {dot: true}));
+
 gulp.task('clean:dist:cron', () => del([`${paths.dist}/${cronPath}/!(.git*|.openshift|Procfile|node_modules)**`], {dot: true}));
 gulp.task('clean:dist:package', () => del([`${paths.dist}/package.json`], {dot: true}));
 
@@ -314,7 +346,7 @@ gulp.task('transpile:server', () => {
 });
 
 gulp.task('transpile:cron', () => {
-    return gulp.src(_.union(paths.cron.scripts, paths.cron.json,))
+    return gulp.src(_.union(paths.cron.scripts, paths.cron.json))
         .pipe(transpileServer())
         .pipe(gulp.dest(`${paths.dist}/${cronPath}`));
 });
@@ -333,6 +365,7 @@ gulp.task('copy:cron', () => {
         `${cronPath}/package.json`,
         `${cronPath}/*.ini`,
         `${cronPath}/.pm2/**`,
+        `${cronPath}/.smtp/**`,
     ], {cwdbase: true})
         .pipe(gulp.dest(paths.dist));
 });
@@ -570,6 +603,12 @@ gulp.task('remote:bluehost:copy:pm2', function () {
     return gulp
       .src([`${paths.dist}/${cronPath}/.pm2/**`])
       .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${cronPath}/.pm2`))
+});
+
+gulp.task('remote:bluehost:copy:smtp', function () {
+    return gulp
+      .src([`${paths.dist}/${cronPath}/.smtp/**`])
+      .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${cronPath}/.smtp`))
 });
 
 /* REMOTE SHELL COMMAND */

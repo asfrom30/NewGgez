@@ -5,6 +5,7 @@ module.exports = {
     logger : {
         baseName : 'log',
         basePath : path.join(appRoot, '/.log')
-    }
+    },
     /* Report Env */
+    
 }

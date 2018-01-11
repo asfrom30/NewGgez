@@ -7,7 +7,17 @@ exports.sendMail = function(from, to, subject, text) {
 }
 
 exports.sendFile = function(from, to, subject, filePath) {
-    const mailOptions = getMailOptions(from, to, subject, null, filePath);
+    const attachment = [{path : filePath}];
+    const mailOptions = getMailOptions(from, to, subject, null, attachment);
+    send(mailOptions);
+}
+
+exports.sendFiles = function(from, to, subject, filePaths) {
+    let attachments = [];
+    for(let filePath of filePaths){
+        attachments.push({path : filePath});
+    }
+    const mailOptions = getMailOptions(from, to, subject, null, attachments);
     send(mailOptions);
 }
 
@@ -16,16 +26,18 @@ function send(mailOptions) {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
+        } else {
+            console.log('send mail complete');
         }
     });
 }
 
-function getMailOptions(from, to, subject, text, filePath) {
+function getMailOptions(from, to, subject, text, attachments) {
     let mailOptions = {};
     mailOptions.from = from;
     mailOptions.to = to;
     mailOptions.subject = subject;
     mailOptions.text = text;
-    mailOptions.attachments = [{path : filePath}];
+    mailOptions.attachments = attachments;
     return mailOptions;
 }

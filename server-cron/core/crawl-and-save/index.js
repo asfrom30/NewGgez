@@ -1,7 +1,5 @@
 
 const controller = require('./crawl.engine.controller');
-// TODO: controller must be separated two section select and crawl..
-// const dataSelector = require('./')
 const dataCleaning  = require('./data.cleaning.cron.server.controller');
 const appDao = require('../dao/index');
 
@@ -64,9 +62,7 @@ function doAsync(id, btg, crawlConfig, saveConfig){
         /* Save Data */
         console.log('try to insert data to mongo');
         const promises = [];
-
-        // TODO:update one needed.... not insert One
-        // promises.push(appDao.insertCurrentCrawlData(saveConfig.device, saveConfig.region, saveConfig.todaySuffix, result));
+        promises.push(appDao.updateCurrentCrawlData(saveConfig.device, saveConfig.region, id, result));
         promises.push(appDao.insertCrawlData(saveConfig.device, saveConfig.region, saveConfig.todaySuffix, result));
         return Promise.all(promises);
     }).then((result) => {
@@ -81,7 +77,7 @@ function doAsync(id, btg, crawlConfig, saveConfig){
 
 function onlyCrawlForRegister(device, region, btg) {
 
-    //FIXME IT DEPEND ON INI FILE
+    //FIXME: IT DEPEND ON INI FILE
     const crawlConfig = getCrawlConfig(device, region);
 
     return new Promise((resolve, reject) => {

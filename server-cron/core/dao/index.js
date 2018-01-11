@@ -9,5 +9,9 @@ exports.doAggregate = controller.doAggregate;
 exports.getTodayCrawlDatasCount = controller.getTodayCrawlDatasCount;
 exports.dropTodayCollection = controller.dropTodayCollection;
 
-
 exports.getCrawlDataCount = controller.getCrawlDataCount;
+
+/* for report */
+exports.getTierData = controller.getTierData;
+
+exports.updateCurrentCrawlData = controller.updateCurrentCrawlData;

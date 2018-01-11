@@ -1,0 +1,31 @@
+
+
+== history ==
+crawl elapsed time : 00:00:01
+
+== result ==
+crawled data count : 10
+
+== log history ==
+crawl elapsed time : 00:00:01
+
+== mongo result ==
+crawled data count : 10
+
+== log history ==
+crawl elapsed time : 00:00:01
+
+== mongo result ==
+crawled data count : 10
+
+== log history ==
+crawl elapsed time : 00:00:01
+
+== mongo result ==
+crawled data count : 10
+
+== log history ==
+crawl elapsed time : 00:00:12
+
+== mongo result ==
+crawled data count : 10

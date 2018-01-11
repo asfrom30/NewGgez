@@ -30,7 +30,7 @@ console.info(`run on init : ${config.cron.runOnInit}, cron job start : ${config.
 // TODO:wait for user input... in dev mode.
 
 iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
-    console.info(`${Object.keys(cronJobInfos).length} cron jobs loaded from ini files`);
+    console.info(`${Object.keys(cronJobInfos).length} cron jobs loaded from ini files\r\n`);
     
     const cronManager = new CronManager();
     cronManager.buildCronParams(cronJobInfos);
@@ -38,13 +38,13 @@ iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
     cronManager.buildSaveConfigs(cronJobInfos);
 
     /* build onTick Chain */
+    cronManager.addOnTick(onTickFactory.addDailyConfig);
     cronManager.addOnTick(onTickFactory.notifyCronStart);
     // cronManager.addOnTick(onTickFactory.needToDropTodayCollection);
-    // cronManager.addOnTick(onTickFactory.getAllPlayerCrawlAndSave);
-    // cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
+    cronManager.addOnTick(onTickFactory.getAllPlayerCrawlAndSave);
+    cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
     // cronManager.addOnTick(onTickFactory.getRanking);
-    // cronManager.addOnTick(onTickFactory.getOnTickForLast);
-    // cronManager.addOnTick(onTickFactory.sendReport);
+    cronManager.addOnTick(onTickFactory.sendReport);
     cronManager.addOnTick(onTickFactory.notifyCronFinish);
 
     cronManager.startCron();

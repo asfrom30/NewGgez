@@ -124,8 +124,8 @@ gulp.task('auto:deploy:client', cb => {
 gulp.task('auto:deploy:client:simple', cb => {
     runSequence(
         'build:client:simple',
-        'remote:bluehost:clean:client',
-        'remote:bluehost:copy:client',
+        // 'remote:bluehost:clean:client:simple', //TODO: not yet impl
+        'remote:bluehost:copy:client:simple',
         cb
     );
 });
@@ -252,23 +252,22 @@ gulp.task('build:client', cb => {
         'webpack:dist'
         ],
         'revReplaceWebpack',
-        // inject
+        // inject,
+        cb
     )
 })
 
 gulp.task('build:client:simple', cb => {
     return runSequence(
-        'clean:dist:client',
+        'clean:dist:client:simple',
         'inject',
-        'build:images',
         [
         'copy:extras',
-        'copy:assets',
-        'copy:fonts:dist',
         'webpack:dist'
         ],
         'revReplaceWebpack',
-        // inject
+        // inject,
+        cb
     )
 })
 
@@ -595,6 +594,12 @@ gulp.task('remote:bluehost:copy:cron', function () {
 gulp.task('remote:bluehost:copy:client', function () {
     return gulp
       .src(`${paths.dist}/${clientPath}/**/*`) //move all files without spec.js, integration.js, node_modules
+      .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${clientPath}`))
+});
+
+gulp.task('remote:bluehost:copy:client:simple', function () {
+    return gulp
+      .src([`${paths.dist}/${clientPath}/!(assets)`]) // not included other folder, different glop
       .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${clientPath}`))
 });
 

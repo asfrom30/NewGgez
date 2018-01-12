@@ -10,7 +10,7 @@ module.exports = {
     },
 
     crawl : {
-        flag : true,
+        flag : false,
         logFlag : false,//TODO: not yet impl
         speed : 8,
         limitFlag : true,

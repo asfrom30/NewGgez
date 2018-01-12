@@ -28,6 +28,7 @@ export default angular
     .module('core.utils', [AppLogger])
     .service('CoreUtils', function(){
 
+        const env = process.env.NODE_ENV;
         /* ajaxIndicator */
         this.ajaxIndicator = ajaxIndicator;
 
@@ -37,18 +38,27 @@ export default angular
         }
 
         this.getTodayIndex = function(){
-            return '171212';
-            // return moment().subtract(0, 'days').format('YYMMDD');
+            if(env != 'prodcution') {
+                return '171212';
+            } else {
+                return moment().subtract(0, 'days').format('YYMMDD');
+            }
         }   
 
         this.getYesterIndex = function(){
-            return '171111';
-            // return moment().subtract(1, 'days').format('YYMMDD');
+            if(env != 'prodcution') {
+                return '171211';
+            } else {
+                return moment().subtract(1, 'days').format('YYMMDD');
+            }
         }
         
         this.getWeekIndex = function(){
-            return '171104';
-            // return moment().subtract(7, 'days').format('YYMMDD');
+            if(env != 'prodcution') {
+                return '171104';
+            } else {
+                return moment().subtract(7, 'days').format('YYMMDD');
+            }
         }
         
         this.getDateIndex = function(daysAgo){

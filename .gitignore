@@ -1,4 +1,4 @@
-logs/*
+/logs/*
 !.gitkeep
 node_modules/
 bower_components/
@@ -6,11 +6,24 @@ tmp
 .DS_Store
 .idea
 
-.tmp
-dist
-client/assets
+/* dev */
+/client/assets
 
-.ssh
-.smtp
+/* dist */
+/.tmp
+/dist
 
+/* ops */
+.ssh/**
+
+server-cron/.log
+server-cron/.report
+server-cron/.smtp
+
+
+/* sandbox */
 sandbox
+
+/* secret */
+/server/config
+/server-cron/config

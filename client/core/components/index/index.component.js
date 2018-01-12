@@ -24,13 +24,21 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     const dom = {
         searchedPlayerTable : '.player-table-container table',
         noResultPlayerTable : '#no-result-in-searched-player',
+        searchDropDownButton : '#search-section .dropdown-menu',
     }
     $ctrl.search = onSearchButton;
     $ctrl.moveHeroPage = moveHeroPage;
     
     $ctrl.$onInit = function() {
+        onlyRunPcKr();
         excutesForDev(true);
         initView();
+    }
+
+    function onlyRunPcKr() {
+        $element.find(dom.searchDropDownButton).hide();
+        $ctrl.region = 'kr';
+        $ctrl.device = 'pc';
     }
 
     function excutesForDev(flag) {
@@ -40,11 +48,9 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         if(env === 'production') return;
 
         $ctrl.input = 'a';
-        $ctrl.region = 'kr';
-        $ctrl.device = 'pc';
 
         $ctrl.search();
-        $('html, body').animate({ scrollTop: 2000 }, 50);
+        // $('html, body').animate({ scrollTop: 2000 }, 50);
     }
 
     /* View */

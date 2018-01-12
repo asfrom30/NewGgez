@@ -73,7 +73,9 @@ exports.register = function(req, res, next) {
         return appendNewPlayerId(device, region, crawlData);
     }).then(crawlDataWithId => {
         return saveAll(device, region, btg, crawlDataWithId);
-    }).then((player) => {
+    }).then(id => {
+        const player = {};
+        player._id = id;
         res.status(200).json({msg : 'register battle tag is success', err : '', value : player});
     }).catch((reason) => {
         if(reason == undefined) console.log('reason is undefined');
@@ -118,21 +120,14 @@ function appendNewPlayerId(device, region, crawlData) {
 }
 
 function saveAll(device, region, btg, crawlData){
-    return new Promise((resolve, reject) => {
-        //FIXME: need to synchronize with player id and crawl data, it' different
-        /* Save Player */
+    return appDao.insertPlayer(device, region, getPlayerObj(btg, crawlData)).then(result => {
+        return result;
+    }).then(id => {
         let promises = [];
-        promises.push(appDao.insertPlayer(device, region, getPlayerObj(btg, crawlData)));
-        promises.push(appDao.insertCurrentCrawlData(device, region, crawlData));
-        promises.push(appDao.insertTodayCrawlData(device, region, crawlData));
-
-        /* All is completed send response */
-        //TODO: transaction needed
-        //TODO: timeout neeeded
-        Promise.all(promises).then(values => {
-            resolve();
-        }, reason => {
-            reject(reason);
+        promises.push(appDao.updateCurrentCrawlData(device, region, id, crawlData));
+        promises.push(appDao.updateTodayCrawlData(device, region, id, crawlData));
+        return Promise.all(promises).then(() => {
+            return id;
         });
     })
 }

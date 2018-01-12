@@ -55,7 +55,7 @@ export default angular
                 })
             },
             registerPlayer : function(device, region, btg) {
-                let ajaxIndicator = new CoreUtils.ajaxIndicator("Try To Register Battle Tag " + btg);
+                let ajaxIndicator = new CoreUtils.ajaxIndicator("on_registering_battle_tag : " + btg);
                 ajaxIndicator.show();
                 
                 return new Promise((resolve, reject) => {

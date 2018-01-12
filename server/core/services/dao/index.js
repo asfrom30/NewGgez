@@ -20,5 +20,6 @@ exports.findTierDataByDate = controller.findTierDataByDate;
 
 exports.updatePlayer = controller.updatePlayer;
 exports.updateCurrentCrawlData = controller.updateCurrentCrawlData;
+exports.updateTodayCrawlData = controller.updateTodayCrawlData;
 
 exports.getIndexInformation = controller.getIndexInformation;

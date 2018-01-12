@@ -227,10 +227,11 @@ function insertOneWithAI(dbUri, collectionName, doc) {
             const _doc = { $inc: { seq: 1 }};
             const _options = {new : true, upsert : true};
             db.collection(counterCollectionName).findAndModify(_query, {}, _doc, _options).then(result => {
-                doc._id = result.value.seq;
+                const id = result.value.seq;
+                doc._id = id;
                 db.collection(collectionName).insertOne(doc).then(result => {
                     db.close();
-                    resolve(result);
+                    resolve(id);
                 }).catch(reason => {
                     db.close();
                     reject(reason);
@@ -260,6 +261,27 @@ exports.updatePlayer = function(device, region, id, doc) {
         })
     })
 }
+
+
+exports.updateTodayCrawlData = function(device, region, id, doc) {
+    const todaySuffix = collectionSuffix.getTodaySuffix(region);
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = `${config.mongo.collectionName.crawlDatas}-${todaySuffix}`;
+    const options = {upsert : true}
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).updateOne({_id : id}, doc, options).then((result) => {
+                db.close();
+                resolve(doc);
+            }, (reason) => {
+                db.close();
+                reject(reason);
+            });
+        })
+    })
+}
+
 
 exports.updateCurrentCrawlData = function(device, region, id, doc) {
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;

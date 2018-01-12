@@ -47,10 +47,10 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         const env = process.env.NODE_ENV;
         if(env === 'production') return;
 
-        $ctrl.input = 'a';
+        $ctrl.input = '냅둬라날#3934';
 
-        $ctrl.search();
-        // $('html, body').animate({ scrollTop: 2000 }, 50);
+        // $ctrl.search();
+        // $('html, body').animate({ scrollTop: 2000 }, 50); 
     }
 
     /* View */
@@ -146,9 +146,15 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     // 1512627845944.0
 
     function registerPlayer(device, region, btg) {
-        Ajax.registerPlayer(device, region, btg).then(response => {
-            console.log('move hero page with ' + device + ', ' + region + ', ' + response._id);
-            // moveHeroPage(device, region, id);
+        Ajax.registerPlayer(device, region, btg).then(player => {
+            const id = player._id;
+            if(id == undefined) {
+                CoreUtils.noty("cant_recieve_app_id", 'error');
+            } else {
+                // '정상적으로 등록되었습니다. 첫방문을 환영합니다. 잠시후 전적분석 페이지로 이동합니다.'
+                CoreUtils.noty("move_page_automatically_in_seconds", 'success');
+                moveHeroPage(device, region, id);
+            }
         }, reason => {
             if(reason.isServerError) {
                 CoreUtils.noty("서버에서 뭔가 이상합니다. 죄송합니다 코드를 발로 짰습니다. ㅠㅠ", "type");

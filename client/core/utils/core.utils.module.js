@@ -71,10 +71,10 @@ export default angular
             if(type == undefined) type = info;
             // alert(msg);
             new noty({
-                theme : 'mint',
+                theme : 'sunset',
                 type : type,
                 timeout : 1500,
-                text: msg
+                text: msg,
             }).show();
         }
     }).name;

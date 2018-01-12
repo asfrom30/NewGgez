@@ -50,6 +50,18 @@ body {
     box-shadow: none;
 }
 
+.noty_theme__sunset.noty_type__success {
+    color: black;
+    font-family: sans-serif;
+}
+
+.noty_theme__sunset.noty_type__warning {
+    color: black;
+}
+
+.noty_theme__sunset.noty_type__error {
+    color: black;
+}
 
 
 /* Scroll Bar... */

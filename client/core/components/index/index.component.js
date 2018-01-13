@@ -187,8 +187,6 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     }
 
     function moveHeroPage(device, region, id){
-        // console.log('move hero page with ' + device + ', ' + region + ', ' + response._id);
-        // return;
         if(device == undefined | region == undefined | id == undefined) {
             if(device == undefined) AppLogger.log('device is undefined, can not go hero page', 'error', logScope);
             if(region == undefined) AppLogger.log('device is undefined, can not go hero page', 'error', logScope);

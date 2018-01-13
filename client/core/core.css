@@ -57,10 +57,12 @@ body {
 
 .noty_theme__sunset.noty_type__warning {
     color: black;
+    font-family: sans-serif;
 }
 
 .noty_theme__sunset.noty_type__error {
     color: black;
+    font-family: sans-serif;
 }
 
 

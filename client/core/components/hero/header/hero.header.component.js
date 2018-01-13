@@ -13,9 +13,12 @@ export default angular
         }
     }).name;
 
-export function heroHeaderCtrl($location, $stateParams, $state, $rootScope, $scope, $element) {
+export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootScope, $scope, $element) {
 
     const $ctrl = this;
+    const device = $stateParams.device;
+    const region = $stateParams.region;
+
     const dom = {
         summaryNavTab : '#nav-tab-summary',
         detailNavTab : '#nav-tab-detail',
@@ -26,6 +29,7 @@ export function heroHeaderCtrl($location, $stateParams, $state, $rootScope, $sco
     }
 
     $ctrl.id = $stateParams.id;
+    $ctrl.goRandomPage = goRandomPage;
 
     $ctrl.$onInit = function() {
         const mode = getMode();
@@ -85,6 +89,20 @@ export function heroHeaderCtrl($location, $stateParams, $state, $rootScope, $sco
         const index = path.lastIndexOf('/');
         const mode = path.substring(index + 1).trim();
         return mode;
+    }
+
+    function goRandomPage() {
+        const max = 13676;
+        const min = 1;
+        const id = Math.floor((Math.random() * max) + min);
+        // console.log(id);
+        // $location.path('/hero/${device}/${region}/${id}/summary'); // will redirect you to 'yourDomain.xx/home'
+        // $window.location.href = `http://localhost:3000/#!/hero/${device}/${region}/${id}/summary`;
+
+        //FIXME: need to study. apply move page with transition smoothly..
+        const params = {device : device, region : region, id : id};
+        $state.go('hero.summary', params);
+        $state.reload();
     }
 }
 

@@ -17,7 +17,7 @@ export default angular
         }
     }).name;
 
-export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger){
+export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger, CoreUtils){
     var $ctrl = this;
 
     $ctrl.$onInit = function(){
@@ -40,7 +40,11 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger
             $ctrl.currentPlayer = {};
         } else {
             $ctrl.currentPlayer = $ctrl.resolvedPlayer;
-            if($ctrl.currentPlayer.deprecated) alert('해당 사용자는 만료된 사용자입니다');
+            
+            if($ctrl.currentPlayer.deprecated) {
+                CoreUtils.noty('해당 사용자는 만료된 사용자입니다', 'error');
+            }
+                
             //FIXME: Don't override
             $ctrl.players = {};
             $ctrl.players.id = $ctrl.resolvedPlayer;

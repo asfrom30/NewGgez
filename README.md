@@ -47,7 +47,12 @@ URL | VERB | REQUIRED | Result |
 :device/:region/players/ | POST | require body `{btg : btg}` |  try to register new player depend one battle tag()
 :device/:region/crawl-datas/:id| GET | require `date query param` | 
 :device/:region/crawl-datas/:id| PUT | empty | update `player profile` and `crwal-datas-current`
-:device/:region/tier-datas/:date| GET | empty | get tier data depend on region, device, date
+:device/:region/sessions/favorites| GET | empty |  
+:device/:region/sessions/favorites/?id={id}| PUT | empty | 
+:device/:region/sessions/favorites/?id={id}| DELETE | empty |
+:device/:region/sessions/thumbs| GET | empty |  
+:device/:region/sessions/thumbs/?id={id}| PUT | empty | 
+:device/:region/sessions/thumbs/?id={id}| DELETE | empty | 
 
 cf) player-datas/1/?date=17-10-18,17-10-21,17-10-22,17-10-23
 

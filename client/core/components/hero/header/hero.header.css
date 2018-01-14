@@ -76,3 +76,17 @@
     background-color : black;
     color : white;
 }
+
+
+.refresh .active {
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+.favorite .active {
+    color : yellow;
+}
+
+.thumb .active {
+    color : yellow;
+}

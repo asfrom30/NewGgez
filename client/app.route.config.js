@@ -24,6 +24,7 @@ export function routeConfig($stateProvider, $urlServiceProvider) {
     $stateProvider.state(getHeroDetailState());
     $stateProvider.state(getHeroCompareState());
     $stateProvider.state(getHeroRankState());
+    $stateProvider.state(getHeroFavoritesState());
 
     /* Hero Admin Page */
     var heroAdminState = {
@@ -78,6 +79,15 @@ function getHeroParentState() {
         url : '/hero',
         component : 'hero',
         resolve: {
+            resolvedFavorites : function($stateParams, Ajax) {
+                const device = $stateParams.device;
+                const region = $stateParams.region;
+
+                return Ajax.fetchFavorites(device, region);
+            },
+            resolvedThumbs : function($stateParams, Ajax) {
+                return {}
+            },
             resolvedTierData : function($stateParams, Ajax){
                 const device = $stateParams.device;
                 const region = $stateParams.region;
@@ -158,8 +168,16 @@ function getHeroCompareState() {
 function getHeroRankState() {
     return {
         name: 'hero.rank',
-        url : 'rank/{device}/{region}/{id}',
+        url : '{device}/{region}/{id}/rank',
         component : 'heroRank',
+    }
+}
+
+function getHeroFavoritesState() {
+    return {
+        name : 'hero.favorites',
+        url : '{device}/{region}/{id}/favorites',
+        component : 'heroFavorites'
     }
 }
 

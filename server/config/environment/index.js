@@ -3,6 +3,8 @@
 
 import path from 'path';
 import _ from 'lodash';
+import secrets from '../../../.secrets';
+
 
 /*function requiredProcessEnv(name) {
   if(!process.env[name]) {
@@ -31,12 +33,14 @@ var all = {
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {
-    session: 'web-development-env-setting-complex-ref-css-mocha-chai-secret'
+    session: secrets.session
   },
 
   // MongoDB connection options
   mongo: {
+    defaultUri : 'mongodb://localhost/',
     collectionName : {
+      sessions : 'sessions',
       tierDatas : 'tier-datas',
       crawlDatas : 'crawl-datas',
     },

@@ -284,6 +284,8 @@
     width:100%;
 }
 
+a.cursor { cursor: pointer; }
+
 /* .devide-2-element {
 
 }

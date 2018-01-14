@@ -29,7 +29,7 @@ function log2Server(msg, logScope, logLevel) {
 function log2Browser(msg, _logScope, _logLevel) {
     const logFlag = process.env.NODE_ENV !== 'production' ? true : false;
     const logLevel = ['info', 'error']; // logLevel = [info, warn, error];
-    const logScopes = ['hero.detail', 'compare.table']; // logScope = [class name];
+    const logScopes = ['hero.detail', 'compare.table', 'hero.favorites']; // logScope = [class name];
 
     if(!logFlag) return;
     if(_logLevel == undefined) return;

@@ -37,7 +37,27 @@ export default angular.module('ggez.core.filter', [])
     .filter('numberFilter', numberFilter)
     .filter('upDownSymbol', upDownSymbol)
     .filter('defaultValue', defaultValue)
+    .filter('recentUpdate', recentUpdate)
     .name;
+
+export function recentUpdate() {
+    return function(unixTimestamp) {
+        const subtractUnixTime = Date.now() - unixTimestamp/1000;
+        return hhmmss(subtractUnixTime);
+    }
+}
+
+function hhmmss(secs) {
+    var minutes = Math.floor(secs / 60);
+    secs = secs%60;
+    var hours = Math.floor(minutes/60)
+    minutes = minutes%60;
+    return pad(hours)+":"+pad(minutes)+":"+pad(secs);
+}
+
+function pad(num) {
+    return ("0"+num).slice(-2);
+}
 
 export function defaultValue() {
     return function(input, defaultValue) {

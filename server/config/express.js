@@ -12,10 +12,10 @@ import methodOverride from 'method-override';
 import path from 'path';
 // import lusca from 'lusca';
 // import passport from 'passport';
-import session from 'express-session';
-// import connectMongo from 'connect-mongo';
 // import mongoose from 'mongoose';
-// var MongoStore = connectMongo(session);
+
+import session from 'express-session';
+const MongoStore = require('connect-mongo')(session);
 
 import cors from 'cors';
 import config from './environment';
@@ -81,15 +81,15 @@ export default function(app) {
     /* Persist sessions with MongoStore / sequelizeStore
     We need to enable sessions for passport-twitter because it's an
     oauth 1.0 strategy, and Lusca depends on sessions */
-    // app.use(session({
-    //     secret: config.secrets.session,
-    //     saveUninitialized: true,
-    //     resave: false,
-    //     store: new MongoStore({
-    //     mongooseConnection: mongoose.connection,
-    //     db: 'web-development-env-setting-complex-ref-css-mocha-chai'
-    //     })
-    // }));
+    app.use(session({
+        secret: config.secrets.session,
+        saveUninitialized: true,
+        resave: false,
+        store: new MongoStore({
+            url : config.mongo.defaultUri + 'sessions',
+            db : config.mongo.collectionName.sessions,
+        })
+    }));
 
     /**
      * Lusca - express server security

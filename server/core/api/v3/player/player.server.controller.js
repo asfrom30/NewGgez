@@ -20,6 +20,7 @@ exports.query = function(req, res, next) {
     const region = req.region;
     const btg = req.query.btg;
     const startsWith = req.query.startsWith;
+    const ids = req.query.ids;
 
     if(btg !== undefined) {
         appDao.findPlayerByBtg(device, region, btg).then(player =>{
@@ -31,17 +32,34 @@ exports.query = function(req, res, next) {
         });
     } else if(startsWith !== undefined) {
         const regex = `^${startsWith}`;
-        appDao.findPlayerByRegex(device, region, regex).then(player =>{
+        appDao.findPlayerByRegex(device, region, regex).then(player => {
             sendPlayer(res, player);
             return;
         }).catch(reason => {
             res.status(500).send(reason);
             return;
         });
-    } else {
+    } else if(ids !== undefined) {
+        let arrIds = ids.split(",");
+        arrIds = arrStringToInt(arrIds);
+        appDao.findPlayerByIds(device, region, arrIds).then(players => {
+            res.json({err : '', msg : 'success', value : {players : players}});
+        }, reason => {
+            res.status(500).json({err : reason, msg : '', value : ''});
+        });
+    }else {
         res.status(404).json({err : 'query is not defined'});
     }
 } 
+
+function arrStringToInt(arrIds) {
+    let result = [];
+    for(let id of arrIds) {
+        const temp = parseInt(id);
+        if(Number.isInteger(temp)) result.push(temp);
+    }
+    return result;
+}
 
 exports.read = function(req, res, next) {
     sendPlayer(res, req.player);

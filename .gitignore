@@ -27,3 +27,5 @@ sandbox
 /* secret */
 /server/config
 /server-cron/config
+
+.secrets

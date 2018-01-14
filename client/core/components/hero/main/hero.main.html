@@ -1,9 +1,16 @@
 <div class="hero-main flex-column f-align-h-center">
     <div class="header-wh">
-        <hero-header current-player="$ctrl.currentPlayer"></hero-header>
+        <hero-header
+            current-player="$ctrl.currentPlayer" 
+            favorites="$ctrl.resolvedFavorites"
+            add-favorite="$ctrl.addFavorite($id)"
+            remove-favorite="$ctrl.removeFavorite($id)"
+            thumbs="$ctrl.resolvedThumbs">
+        </hero-header>
     </div>
     <div class="body-wh flex f-align-w-center base-padding">
         <ui-view class="w-100-pct h-100-pct"
+            favorites = "$ctrl.resolvedFavorites"
             current-player = "$ctrl.currentPlayer"
             current-player-datas = "$ctrl.currentPlayerData"
             all-players="$ctrl.players"

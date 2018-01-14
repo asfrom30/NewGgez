@@ -81,6 +81,26 @@ exports.findPlayerById = function(device, region, id) {
     })
 }
 
+exports.findPlayerByIds = function(device, region, ids) {
+    const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+    const collectionName = 'players';
+
+    if(!Array.isArray(ids)) return Promise.reject('ids_must_be_array');
+
+    return new Promise((resolve, reject) => {
+        client.connect(dbUri).then((db) => {
+            db.collection(collectionName).find({ _id: { $in: ids }}).toArray().then((doc) => {
+                db.close();
+                resolve(doc);
+            }, reason => {
+                db.close();
+                reject(reason);
+            });
+        })
+    })
+}
+
+
 exports.findPlayerBtgById = function(device, region, id) {
     const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
     const collectionName = 'players';

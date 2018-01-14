@@ -18,7 +18,7 @@ module.exports = function(logScope) {
 
 const logFlag = false;
 const logLevels = ['info', 'warn', 'error']; // logLevel = [info, warn, error];
-const logScopes = [/* 'analyzer' */ ]; // logScope = [class name];
+const logScopes = [/* 'analyzer' */ 'hero.favorites']; // logScope = [class name];
 
 function log2Server(msg, logScope, logLevel) {
     // using ajax input error message to server, must be specify.

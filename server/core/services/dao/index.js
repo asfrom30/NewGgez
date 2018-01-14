@@ -3,6 +3,7 @@ const controller = require('./dao.server.controller');
 exports.getNewPlayerId = controller.getNewPlayerId;
 
 exports.findPlayerById = controller.findPlayerById;
+exports.findPlayerByIds = controller.findPlayerByIds;
 exports.findPlayerByBtg = controller.findPlayerByBtg;
 exports.findPlayerByRegex = controller.findPlayerByRegex;
 

@@ -23,7 +23,7 @@ function ctrl ($element) {
 
     $ctrl.$onChanges = function() {
         if($ctrl.playerList == undefined || $ctrl.playerList.length === 0) {
-            hideTable()
+            hideTable();
         } else {
             showTable();
         }

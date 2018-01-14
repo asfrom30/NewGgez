@@ -11,13 +11,15 @@ export default angular
         controller : HeroMainCtrl,
         template : require('./hero.main.html'),
         bindings : {
+            resolvedFavorites : '<',
+            resolvedThumbs : '<',
             resolvedPlayer : '<',
             resolvedTierData : '<',
             resolvedCrawlDatas : '<',
         }
     }).name;
 
-export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger, CoreUtils){
+export function HeroMainCtrl($document, $window, $state, $stateParams, $scope, AppLogger, CoreUtils){
     var $ctrl = this;
 
     $ctrl.$onInit = function(){
@@ -68,6 +70,9 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger
         // let $_targetDom = $event.curren
     }
 
+    $ctrl.addFavorite = addFavorite;
+    $ctrl.removeFavorite = removeFavorite;
+
     function checkDataIsExist() {
         return true;
     }
@@ -108,6 +113,43 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, AppLogger
             //     $scope.pixelsScrolled = $window.scrollY;
             // })
         });
+    }
+
+    function addFavorite(id) {
+        if(!Array.isArray($ctrl.resolvedFavorites)) {
+            $ctrl.resolvedFavorites = [];
+        }
+        
+        id = parseInt(id);
+        const resolvedFavorites = $ctrl.resolvedFavorites;
+        const index = resolvedFavorites.indexOf(id);
+
+        if(index == -1) {
+            // for firing $onchanges
+            const newFavorites = resolvedFavorites.slice();
+            newFavorites.push(id);
+            $ctrl.resolvedFavorites = newFavorites;
+        }
+        $scope.$apply();
+    }
+
+    function removeFavorite(id) {
+        let resolvedFavorites = $ctrl.resolvedFavorites;
+        id = parseInt(id);
+        
+        if(!Array.isArray(resolvedFavorites) || resolvedFavorites.length == 0) {
+            resolvedFavorites = [];
+        } else {
+            const index = resolvedFavorites.indexOf(id);
+            if(index == -1){
+                // nothing to do
+            } else {
+                resolvedFavorites.splice(index, 1);
+            }
+        }
+        const newFavorites = resolvedFavorites.slice();
+        $ctrl.resolvedFavorites = newFavorites;
+        $scope.$apply();
     }
 }
 

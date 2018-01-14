@@ -11,21 +11,20 @@
         <div class="current-player-buttons flex f-align-h-end">
             <div class="flex-column">
                 <div class="flex">
-                    <div><i class="material-icons">autorenew</i></div>
-                    <div><i class="material-icons">star_border</i></div>
-                    <div><!-- <i class="material-icons">star</i> --></div>
+                    <div ng-click="$ctrl.refreshBtnClicked()" class="refresh"><i class="material-icons">autorenew</i></div>
+                    <div ng-click="$ctrl.starBtnClicked()" class="favorite"><i class="material-icons">star_border</i></div>
                     <div>{{$ctrl.currentPlayer.starCount | prefixPlus}}</div>
                 </div>
                 <div class="flex">
                     <div ng-click="$ctrl.goRandomPage()"><i class="material-icons">explore</i></div>
-                    <div><i class="material-icons">thumb_up</i></div>
+                    <div ng-click="$ctrl.thumbBtnClicked()" class="thumb"><i class="material-icons">thumb_up</i></div>
                     <div>{{$ctrl.currentPlayer.thumbCount | prefixPlus}}</div>
                 </div>
             </div>
         </div>
         <div class="current-player-etc" style="overflow: hidden">
             <div>One Line Comment</div>
-            <div>recent update : {{$ctrl.currentPlayer.lastUpdateTimeStamp}}</div>
+            <div>recent update : {{$ctrl.currentPlayer.lastUpdateTimeStamp | recentUpdate }}</div>
         </div>
     </div>
     <div class="hero-nav-tabs" id="local-hero-tabs" >
@@ -34,7 +33,8 @@
             <li id="nav-tab-detail" class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('detail')">Detail</a></li>
             <li id="nav-tab-compare" class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('compare')">Compare</a></li>
             <li id="nav-tab-rank" class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('rank')">Rank</a></li>
-            <li id="nav-tab-favorite" class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('favorite')">Favorite</a></li>
+            <li id="nav-tab-favorites" class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('favorite')">Favorites</a></li>
+            <li id="nav-tab-admin" class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('insights')">insights</a></li>
             <li id="nav-tab-admin" class="nav-item"><a data-toggle="tab" class="nav-link" ui-sref-active="active" ng-click="$ctrl.moveTab('admin')">Admin</a></li>
         </ul>
     </div>

@@ -17,8 +17,45 @@ const logScope = 'ajax-service';
 //FIXME: must be separated ajax Indicator
 export default angular
     .module('core.services.ajax', [])
-    .factory('Ajax', function(AppLogger, IndexInformationApi, PlayersApi, CrawlDatasApi , TierDatasApi, CoreUtils, CONFIG){
+    .factory('Ajax', function(AppLogger, IndexInformationApi, PlayersApi, CrawlDatasApi , TierDatasApi, FavoritesApi, CoreUtils, CONFIG){
         return {
+            fetchFavorites : function(device, region) {
+                return new Promise((resolve, reject) => {
+                    FavoritesApi.get({device : device, region : region}).$promise.then(response => {
+                        const statusCode = response.$status;
+                        const responseJson = response.toJSON();
+                        if(statusCode != 200) {
+                            // log2server or app logger
+                        }
+                        try {
+                            resolve(responseJson.value.favorites);
+                        } catch (error) {
+                            // log error
+                            resolve([]);
+                        }
+                    }) 
+                })
+            },
+            addFavorite : function(device, region, id) {
+                return new Promise((resolve, reject) => {
+                    FavoritesApi.add({device : device, region : region, id : id}).$promise.then(response => {
+                        const statusCode = response.$status;
+                        const responseJson = response.toJSON();
+                        //FIXME: ERROR HANDLING...
+                        resolve(responseJson.value);
+                    })
+                })
+            },
+            removeFavorite : function(device, region, id) {
+                return new Promise((resolve, reject) => {
+                    FavoritesApi.remove({device : device, region : region, id : id}).$promise.then(response => {
+                        const statusCode = response.$status;
+                        const responseJson = response.toJSON();
+                        //FIXME: ERROR HANDLING...
+                        resolve(responseJson.value);
+                    })
+                })
+            },
             fetchIndexInformation : function(device, region) {
                 AppLogger.log('Try To fetch Index Information', 'info', logScope);
 
@@ -131,6 +168,15 @@ export default angular
                     })
                 })
             },
+            fetchPlayerWithIds : function(device, region, ids) {
+                return new Promise((resolve, reject) => {
+                    PlayersApi.get({device:device, region:region, ids:arrayToStringWithComma(ids)}).$promise.then(response => {
+                        //FIXME: status code check...
+                        const players = response.toJSON().value.players;
+                        resolve(players);
+                    })
+                })
+            },
             // http://localhost:3000/pc/kr/crawl-datas/1/?date=17-10-18,17-10-21,17-10-22,17-10-23
             fetchCrawlDatas : function(device, region, id) {
                 AppLogger.log(`Fetch Crawl Data(id : ${id}) about from server`, 'info', logScope);
@@ -201,6 +247,16 @@ export default angular
                     });
                 })
             },
+            updateCurrentCrawlData : function(device, region, id) {
+                return new Promise((resolve, reject) => {
+                    CrawlDatasApi.update({device : device, region : region, id : id}).$promise.then(response => {
+                        const statusCode = response.$status;
+                        const responseJson = response.toJSON();
+                        if(statusCode != 200) reject(responseJson);
+                        else resolve(responseJson);
+                    })
+                })
+            },
             needToOrganize : function () {
                 AppLogger.log("Fetch Player Id about " + btg + "from server", 'info', logScope);
                 
@@ -230,6 +286,14 @@ function makeDateQuery(dates){
     let result = "";
     for(let date of dates){
         result += date + ","
+    }
+    return result.substring(0, result.length-1); // remove last comma
+}
+
+function arrayToStringWithComma(arr){
+    let result = "";
+    for(let i of arr){
+        result += i + ","
     }
     return result.substring(0, result.length-1); // remove last comma
 }

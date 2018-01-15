@@ -72,6 +72,8 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, $scope, A
 
     $ctrl.addFavorite = addFavorite;
     $ctrl.removeFavorite = removeFavorite;
+    $ctrl.addThumb = addThumb;
+    $ctrl.removeThumb = removeThumb;
 
     function checkDataIsExist() {
         return true;
@@ -149,6 +151,42 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, $scope, A
         }
         const newFavorites = resolvedFavorites.slice();
         $ctrl.resolvedFavorites = newFavorites;
+        $scope.$apply();
+    }
+
+    function addThumb(id) {
+        if(!Array.isArray($ctrl.resolvedThumbs)) {
+            $ctrl.resolvedFavorites = [];
+        }
+        
+        id = parseInt(id);
+        const resolvedThumbs = $ctrl.resolvedThumbs;
+        const index = resolvedThumbs.indexOf(id);
+
+        if(index == -1) {
+            const newThumbs = resolvedThumbs.slice();
+            newThumbs.push(id);
+            $ctrl.resolvedThumbs = newThumbs;
+        }
+        $scope.$apply();
+    }
+
+    function removeThumb(id) {
+        let resolvedThumbs = $ctrl.resolvedThumbs;
+        id = parseInt(id);
+        
+        if(!Array.isArray(resolvedThumbs) || resolvedThumbs.length == 0) {
+            resolvedThumbs = [];
+        } else {
+            const index = resolvedThumbs.indexOf(id);
+            if(index == -1){
+                // nothing to do
+            } else {
+                resolvedThumbs.splice(index, 1);
+            }
+        }
+        const newThumbs = resolvedThumbs.slice();
+        $ctrl.resolvedFavorites = newThumbs;
         $scope.$apply();
     }
 }

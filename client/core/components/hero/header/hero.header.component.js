@@ -13,6 +13,8 @@ export default angular
             addFavorite : '&',
             removeFavorite : '&',
             thumbs : "<",
+            addThumb : '&',
+            removeThumb : '&',
             currentPlayer : "<",
         }
     })
@@ -45,13 +47,15 @@ export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootSc
     $ctrl.$onInit = function() {
         const mode = getMode();
         setActiveTab(mode);
-        updateThumbIcon();
+
+        // init for variables
+        if($ctrl.favorites == undefined || !Array.isArray($ctrl.favorites)) $ctrl.favorites = [];
+        if($ctrl.thumbs == undefined || !Array.isArray($ctrl.thumbs)) $ctrl.thumbs = [];
     }
 
     $ctrl.$onChanges = function(changesObj){
-        // console.log($ctrl.favorites);
-        console.log('on changes compelte');
         updateFavoriteIcon();
+        updateThumbIcon();
     }
 
     function refreshBtnClicked() {
@@ -69,25 +73,37 @@ export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootSc
         const favorites = $ctrl.favorites;
         if(favorites.indexOf(id) == -1) {
             Ajax.addFavorite(device, region, id).then(result => {
-                // if(result) activeFavoriteIcon(true);
-                // $ctrl.favorites.push(id);
                 $ctrl.addFavorite({$id : id});
             })
         } else {
             Ajax.removeFavorite(device, region, id).then(result => {
-                // if(result) activeFavoriteIcon(false);
-                // const index = $ctrl.favorites.indexOf(id);
-                // if(index != -1) $ctrl.favorites.splice(index, 1);
                 $ctrl.removeFavorite({$id : id});
             })
         }
     }
 
     function thumbBtnClicked() {
-        $ctrl.flag = !$ctrl.flag;
-        activeThumbIcon($ctrl.flag);
-
-
+        const thumbs = $ctrl.thumbs;
+        console.log(thumbs.indexOf(id));
+        if(thumbs.indexOf(id) == -1) {
+            Ajax.addThumb(device, region, id).then(result => {
+                if(result) {
+                    $ctrl.thumbs.push(id);
+                    updateThumbIcon();
+                }
+            }, reason => {
+                // noty for user
+            })
+        } else {
+            Ajax.removeThumb(device, region, id).then(result => {
+                console.log(result);
+                if(result) {
+                    const index = thumbs.indexOf(id);
+                    thumbs.splice(index, 1);
+                    updateThumbIcon();
+                }
+            })
+        }
     }
 
     function updateFavoriteIcon() {
@@ -100,7 +116,6 @@ export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootSc
     }
 
     function updateThumbIcon() {
-        return;
         const thumbs = $ctrl.thumbs;
         if(thumbs.indexOf(id) == -1){
             activeThumbIcon(false);

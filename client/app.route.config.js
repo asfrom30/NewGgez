@@ -86,18 +86,21 @@ function getHeroParentState() {
                 return Ajax.fetchFavorites(device, region);
             },
             resolvedThumbs : function($stateParams, Ajax) {
-                return {}
-            },
-            resolvedTierData : function($stateParams, Ajax){
                 const device = $stateParams.device;
                 const region = $stateParams.region;
-                const date = '171206';
+                //TODO: log2server or log2browser
+                return Ajax.fetchThumbs(device, region);
+            },
+            resolvedTierData : function($stateParams, Ajax, CoreUtils){
+                const device = $stateParams.device;
+                const region = $stateParams.region;
+                const date = CoreUtils.getTodayIndex();
                 if(device == undefined || region == undefined) {
+                    //TODO: log2server or log2browser
                     console.log('one of device, region is undefind in resolved TierData');
                     return;
                 }
                 return Ajax.fetchTierDatas(device, region, date);
-                
             },
             resolvedPlayer : function($stateParams, Ajax) {
                 const device = $stateParams.device;

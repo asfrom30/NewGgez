@@ -22,9 +22,9 @@ import PlayersApiModule from './v3/players/api.players.service';
 import CrawlDatasModule from './v3/crawl-datas/api.crawl.datas.service';
 import TierDatasModule from './v3/tier-datas/api.tier.datas.service';
 import FavoritesApiModule from './v3/favorites/api.favorites.service';
-// import ThumbsApiModule from './v3/favorites/';
+import ThumbsApiModule from './v3/thumbs/api.thumbs.service';
 
 
 export default angular
-    .module('ggez.core.api', [IndexInformation, PlayersApiModule, CrawlDatasModule, TierDatasModule, FavoritesApiModule])
+    .module('ggez.core.api', [IndexInformation, PlayersApiModule, CrawlDatasModule, TierDatasModule, FavoritesApiModule, ThumbsApiModule])
     .name;

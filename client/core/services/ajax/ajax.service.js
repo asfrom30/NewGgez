@@ -1,15 +1,7 @@
 'use strict';
 
 import angular from 'angular';
-
-// TODO: If pas param to export from inner... separate code..
-// fetchUserDatas : fetchUserDatas
-// export function fetchPlayerProfile(id){
-//     let promise = new Promise((resolve, reject) => {
-        
-//     })
-//     return promise;
-// }
+import SessionCtrl from './session.core.ajax.controller';
 
 const logScope = 'ajax-service';
 
@@ -17,8 +9,14 @@ const logScope = 'ajax-service';
 //FIXME: must be separated ajax Indicator
 export default angular
     .module('core.services.ajax', [])
-    .factory('Ajax', function(AppLogger, IndexInformationApi, PlayersApi, CrawlDatasApi , TierDatasApi, FavoritesApi, CoreUtils, CONFIG){
+    .factory('Ajax', function(AppLogger, IndexInformationApi, PlayersApi, CrawlDatasApi , TierDatasApi, FavoritesApi, ThumbsApi, CoreUtils, CONFIG){
+
+        const sessionCtrl = new SessionCtrl(FavoritesApi, ThumbsApi);
+
         return {
+            fetchThumbs : sessionCtrl.fetchThumbs,
+            addThumb : sessionCtrl.addThumb,
+            removeThumb : sessionCtrl.removeThumb,
             fetchFavorites : function(device, region) {
                 return new Promise((resolve, reject) => {
                     FavoritesApi.get({device : device, region : region}).$promise.then(response => {
@@ -280,6 +278,7 @@ export default angular
             },
         }
     }).name;
+
 
 /* Parse dates array to comma added string */
 function makeDateQuery(dates){

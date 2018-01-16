@@ -29,3 +29,5 @@ sandbox
 /server-cron/config
 
 .secrets
+
+stat-map-builder

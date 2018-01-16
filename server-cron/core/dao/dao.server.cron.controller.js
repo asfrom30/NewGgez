@@ -90,6 +90,23 @@ exports.findAllPlayers = function(device, region) {
     });
 }
 
+exports.getPlayersCount = function(device, region) {
+    return new Promise((resolve, reject) => {
+        const dbUri = `${config.mongo.baseUri}_${device}_${region}`;
+        const collectionName = `players`;
+
+        client.connect(dbUri).then(function(db){
+            db.collection(collectionName).find().count().then(count => {
+                db.close();
+                resolve(count);
+            }, reason =>{
+                db.close();
+                reject(reason);
+            })
+        })
+    });
+}
+
 // exports.findAllPlayers = function(device, region) {
 //     return new Promise((resolve, reject) => {
 //         setTimeout(function() {

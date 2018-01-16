@@ -4,4 +4,3 @@ export default [
     "mercy", "zenyatta", "genji", "torbjoern", "junkrat", "zarya",
     "mei", "ana", "lucio", "sombra", "doomfist", "orisa"
 ]
-    

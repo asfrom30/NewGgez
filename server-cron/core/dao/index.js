@@ -15,3 +15,6 @@ exports.getCrawlDataCount = controller.getCrawlDataCount;
 exports.getTierData = controller.getTierData;
 
 exports.updateCurrentCrawlData = controller.updateCurrentCrawlData;
+
+/* for count */
+exports.getPlayersCount = controller.getPlayersCount;

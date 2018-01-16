@@ -1,0 +1,94 @@
+{
+	"denominators": [
+		{
+			"id": "death",
+			"ko-kr": "죽음",
+			"en-us": []
+		},
+		{
+			"id": "game",
+			"ko-kr": "치른게임",
+			"en-us": []
+		}
+	],
+	"common": [
+		{
+			"id": "damage_about_all",
+			"ko-kr": "준모든피해",
+			"en-us": []
+		},
+		{
+			"id": "damage_about_hero",
+			"ko-kr": "영웅에게준피해",
+			"en-us": []
+		},
+		{
+			"id": "common_death_1",
+			"ko-kr": "방벽에준피해",
+			"en-us": []
+		},
+		{
+			"id": "common_death_2",
+			"ko-kr": "처치",
+			"en-us": []
+		},
+		{
+			"id": "common_death_3",
+			"ko-kr": "단독처치",
+			"en-us": []
+		}
+	],
+	"heroes": {
+		"all": [
+			{
+				"id": "damage_about_all",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "mission_contribution_time",
+				"ko-kr": "임무기여시간",
+				"en-us": []
+			},
+			{
+				"id": "burning_time",
+				"ko-kr": "폭주시간",
+				"en-us": []
+			},
+			{
+				"id": "healing",
+				"ko-kr": "치유",
+				"en-us": []
+			}
+		],
+		"soldier76": [
+			{
+				"id": "helical_kill",
+				"ko-kr": "나선로켓으로처치",
+				"en-us": []
+			}
+		],
+		"reaper": [],
+		"parah": [],
+		"reinhardt": [],
+		"roadhog": [],
+		"winston": [],
+		"dva": [],
+		"symmetra": [],
+		"widowmaker": [],
+		"tracer": {},
+		"hanzo": {},
+		"mercy": [],
+		"zenyatta": [],
+		"genji": [],
+		"torbjoern": [],
+		"junkrat": [],
+		"zarya": {},
+		"mei": {},
+		"ana": {},
+		"lucio": {},
+		"sombra": {},
+		"doomfist": {},
+		"orisa": {}
+	}
+}

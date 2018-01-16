@@ -4,7 +4,7 @@ import angular from 'angular';
 
 /* Old version */
 import Const from './const/constants';
-import STATMAP from './const/statmap/statmap.const';
+import statMapConstantModule from './const/statmap/statmap.const';
 import CONFIG from './const/config/const.config';
 
 /* New Version */
@@ -19,7 +19,7 @@ export default angular.module('ggezkrApp.constants', [])
     .constant('THINGS_VIEWS', '/views/')
 
     // App Setting Constant
-    .constant('STATMAP', STATMAP)
+    .constant('STATMAP', statMapConstantModule)
     .constant('CONFIG', CONFIG)
 
     /* Must be replaced with CONST_LABEL, CONST_RESOURCE*/

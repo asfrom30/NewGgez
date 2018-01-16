@@ -17,6 +17,10 @@ module.exports = {
         limitNumber : 10,
     },
 
+    onTickFlag : {
+        makeDiffDatas : false,
+    },
+
     mailing : {
         flag : false,
     }

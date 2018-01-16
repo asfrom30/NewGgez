@@ -2,9 +2,14 @@ const writer = require('../writer/writer.cron.core.util');
 const appDao = require('../../dao/index');
 
 module.exports = {
+    appendLine : appendLine,
     saveTierJson : saveTierJson,
     writeHistoryResult : writeHistoryResult,
     writeMongoResult : writeMongoResult
+}
+
+function appendLine(suffix, text) {
+    writer.writeReport(suffix, addLineBreak(text));
 }
 
 function saveTierJson(filePath, crawlConfig, saveConfig) {
@@ -80,4 +85,12 @@ function hhmmss(secs) {
     var hours = Math.floor(minutes/60)
     minutes = minutes%60;
     return pad(hours)+":"+pad(minutes)+":"+pad(secs);
+}
+
+function addLineBreak(text){
+    return `\r\n${text}`
+}
+
+function addTimeLog(text){
+
 }

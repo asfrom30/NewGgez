@@ -43,6 +43,7 @@ iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
     // cronManager.addOnTick(onTickFactory.needToDropTodayCollection);
     cronManager.addOnTick(onTickFactory.getAllPlayerCrawlAndSave);
     cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
+    cronManager.addOnTick(onTickFactory.makeDiffDatas);
     // cronManager.addOnTick(onTickFactory.getRanking);
     cronManager.addOnTick(onTickFactory.sendReport);
     cronManager.addOnTick(onTickFactory.notifyCronFinish);

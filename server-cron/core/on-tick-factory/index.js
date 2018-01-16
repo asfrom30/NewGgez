@@ -7,12 +7,20 @@ const crawlAndSave = require('../crawl-and-save');
 const analyzeEngine = require('../analyze-engine');
 const momentTz = require('moment-timezone');
 const readline = require('readline');
+const fs = require('fs');
+
+const commonMailer = require('../../common/utils/mailer/mailer.cron.common.util');
+const appMailer = require('../utils/mailer/mailer.cron.core.util');
+const path = require('path');
+const util = require('util');
+const appReporter = require('../utils/reporter/reporter.cron.core.util');
 
 exports.addDailyConfig = addDailyConfig;
 
 exports.needToDropTodayCollection = needToDropTodayCollection;
 exports.getAllPlayerCrawlAndSave = getAllPlayerCrawlAndSave;
 exports.getAnalyzeTierData = getAnalyzeTierData;
+exports.makeDiffDatas = makeDiffDatas;
 exports.getRanking = getRanking;
 exports.sendReport = sendReport;
 
@@ -120,10 +128,6 @@ function getAnalyzeTierData(preResult, crawlConfig, saveConfig) {
     });
 }
 
-const commonMailer = require('../../common/utils/mailer/mailer.cron.common.util');
-const appMailer = require('../utils/mailer/mailer.cron.core.util');
-const path = require('path');
-const appReporter = require('../utils/reporter/reporter.cron.core.util');
 
 function sendReport(preResult, crawlConfig, saveConfig) {
 
@@ -255,4 +259,81 @@ function getSlicedPlayers(players, crawlSpeed){
     }
 
     return slicedPlayers;
+}
+
+function makeDiffDatas(preResult, crawlConfig, saveConfig){
+    
+    const flag = getMakeDiffDatasFlag();
+    appReporter.appendLine(saveConfig.todaySuffix, `MakeDiffDatas OnTick Flag : ${flag}`);
+
+    if(!flag) return Promise.resolve();
+
+    const lang = crawlConfig.lang;
+    const device = crawlConfig.device;
+    const region = crawlConfig.region;
+    const diffConfigs = getDiffConfigs(saveConfig.timezone);
+
+    const promises = [];
+    for(let diffConfig of diffConfigs) {
+
+        const aggregateDoc = analyzeEngine.makeDiffAggregateDoc(diffConfig, lang);
+        
+        if(aggregateDoc == undefined) {
+            appReporter.appendLine(saveConfig.todaySuffix, `MakeDiffDatas OnTick Error : ${diffConfig.saveSuffix} aggregate doc is not created, can't do aggregate`);
+        } else {
+            // console.log(util.inspect(aggregateDoc, { depth: null }));
+            promises.push(appDao.doAggregate(device, region, diffConfig.suffixA, aggregateDoc));
+        }
+    }
+
+    return Promise.all(promises).then(result =>{
+        appReporter.appendLine(saveConfig.todaySuffix, `MakeDiffDatas OnTick Result : success`);
+    }, reason => {
+        appReporter.appendLine(saveConfig.todaySuffix, `MakeDiffDatas OnTick Flag : ${fail}`);
+    })
+}
+
+function getDiffConfigs(timezone){
+    return [
+        { saveSuffix : 'yesterday', suffixA : getTodayIndex(timezone), suffixB : getYesterIndex(timezone)},
+        { saveSuffix : 'week', suffixA : 'current', suffixB : getWeekIndex(timezone)},
+        { saveSuffix : 'today', suffixA : 'current', suffixB : getTodayIndex(timezone)},
+    ]
+}
+
+function getTodayIndex(timezone){
+    const env = process.env.NODE_ENV;
+    if(env != 'prodcution') {
+        return '171212';
+    } else {
+        return momentTz().tz(saveConfig.timezone).subtract(0, 'days').format('YYMMDD');
+    }
+}   
+
+function getYesterIndex(timezone) {
+    const env = process.env.NODE_ENV;
+    if(env != 'prodcution') {
+        return '171027';
+    } else {
+        return momentTz().tz(saveConfig.timezone).subtract(1, 'days').format('YYMMDD');
+    }
+}
+
+function getWeekIndex(timezone){
+    const env = process.env.NODE_ENV;
+    if(env != 'prodcution') {
+        return '171104';
+    } else {
+        return momentTz().tz(saveConfig.timezone).subtract(7, 'days').format('YYMMDD');
+    }
+}
+
+
+function getMakeDiffDatasFlag() {
+    try {
+        const flag = config.onTickFlag.makeDiffDatas;
+        return flag;
+    } catch (error) {
+        return true;
+    }
 }

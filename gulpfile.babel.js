@@ -61,8 +61,8 @@ const paths = {
             `${cronPath}/**/!(*.spec|*.integration).js`,
             `!${cronPath}/config/local.env.sample.js`,
             `!${cronPath}/node_modules/**`,
-            `!${cronPath}/package.json`, // json file is start with .js
-            `!${cronPath}/package-lock.json` ,
+            // `!${cronPath}/package.json`, // json file is start with .js
+            // `!${cronPath}/package-lock.json` ,
           ],
           json: [`${cronPath}/**/*.json`],
           ini: [`${cronPath}/**/*.ini`],
@@ -345,7 +345,7 @@ gulp.task('transpile:server', () => {
 });
 
 gulp.task('transpile:cron', () => {
-    return gulp.src(_.union(paths.cron.scripts, paths.cron.json))
+    return gulp.src(_.union(paths.cron.scripts))
         .pipe(transpileServer())
         .pipe(gulp.dest(`${paths.dist}/${cronPath}`));
 });
@@ -360,12 +360,13 @@ gulp.task('copy:server', () => {
 });
 
 gulp.task('copy:cron', () => {
-    return gulp.src([
-        `${cronPath}/package.json`,
+    
+    return gulp.src(_.union([
+        `${paths.cron.json}`,
         `${cronPath}/*.ini`,
         `${cronPath}/.pm2/**`,
-        `${cronPath}/.smtp/**`,
-    ], {cwdbase: true})
+        `${cronPath}/.smtp/**`
+    ]), {cwdbase: true})
         .pipe(gulp.dest(paths.dist));
 });
 

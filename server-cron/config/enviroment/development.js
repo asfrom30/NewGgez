@@ -10,7 +10,6 @@ module.exports = {
     },
 
     crawl : {
-        flag : false,
         logFlag : false,//TODO: not yet impl
         speed : 8,
         limitFlag : true,
@@ -25,9 +24,9 @@ module.exports = {
 
     onTickFlags : {
         crawl : false,
-        tier : false,
+        tier : true,
         diff : false,
-        report : true,
-        mail : true,
+        report : false,
+        mail : false,
     }
 }

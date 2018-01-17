@@ -18,7 +18,7 @@ module.exports = {
     },
 
     onTickFlag : {
-        makeDiffDatas : false,
+        makeDiffDatas : true,
     },
 
     mailing : {

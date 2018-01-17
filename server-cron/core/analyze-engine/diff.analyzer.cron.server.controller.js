@@ -121,7 +121,7 @@ function getMetaProjectOberation(suffixA, suffixB, metaField) {
     const fieldB = `$${suffixB}._meta.${metaField}`;
 
     const subtractOperation = getSubtractOperation(fieldA, fieldB);
-    return wrapConditionOperation(fieldA, fieldB, subtractOperation);
+    return wrapConditionOperationForCptpt(fieldA, fieldB, subtractOperation);
 }
 
 function getValueProjectOperation(suffixA, suffixB, hero, crawledField) {
@@ -144,6 +144,23 @@ function getSubtractOperation(fieldA, fieldB) {
         $subtract : [
             `${fieldA}`,
             `${fieldB}`
+        ]
+    }
+}
+
+function wrapConditionOperationForCptpt(fieldA, fieldB, subtractOperation) {
+    return {
+        $cond : [
+            {
+                $or : [
+                    {$eq : ['string', {$type : fieldA}]},
+                    {$eq : ['string', {$type : fieldB}]},
+                    {$lt : [fieldA, 1]},
+                    {$lt : [fieldB, 1]},
+                ]
+            }
+            , null
+            , subtractOperation
         ]
     }
 }

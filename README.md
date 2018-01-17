@@ -1,3 +1,4 @@
+한국어 사용자라면 여기로 이동해주세요. [링크](./README_kr.md)
 # Introduction
 
 One years ago I developed totally same web application [ggezkr](https://github.com/asfrom30/ggezkr) using `php`, `mysql`, `javascript`. In that time, I think that's the best way for web develop, because I had no idea about.

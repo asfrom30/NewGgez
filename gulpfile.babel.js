@@ -86,7 +86,7 @@ const remotePath = {
  ********************/
 gulp.task('auto:deploy:server', cb => {
     runSequence(
-        'build:server', // runsequence need cb param for next task.
+        'build:server', // run sequence need cb param for next task.
         'remote:bluehost:clean:package.json',
         'remote:bluehost:clean:server',
         'remote:bluehost:copy:server',

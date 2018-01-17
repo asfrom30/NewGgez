@@ -43,15 +43,17 @@ iniFileLoader.getCronJobs(serverConfigFilePath).then(cronJobInfos => {
     // cronManager.addOnTick(onTickFactory.needToDropTodayCollection);
     cronManager.addOnTick(onTickFactory.getAllPlayerCrawlAndSave);
     cronManager.addOnTick(onTickFactory.getAnalyzeTierData);
+    cronManager.addOnTick(onTickFactory.timeBuffer);
     cronManager.addOnTick(onTickFactory.makeDiffDatas);
     // cronManager.addOnTick(onTickFactory.getRanking);
-    cronManager.addOnTick(onTickFactory.sendReport);
+    cronManager.addOnTick(onTickFactory.buildReport);
+    cronManager.addOnTick(onTickFactory.sendMail);
     cronManager.addOnTick(onTickFactory.notifyCronFinish);
 
     cronManager.startCron();
 }).then(()=>{
-    // appLogger.info("   > Welcome doyoon, Now Crawl server on start");
-    // appLogger.info("   > Analyze Properties file");
+    // appLogger.info("   > Welcome doyoon, Now Crawl server on start"); // deprecated
+    // appLogger.info("   > Analyze Properties file"); // deprecated
 }).catch((reason)=>{
     console.log(reason);
 })

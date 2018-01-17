@@ -72,10 +72,12 @@ function startCron() {
 }
 
 function getOnTickFromChain(onTickChain, crawlConfig, saveConfig){
+
     return function(){
+        const resultConfig = {};
         onTickChain.reduce((prePromise, currentOnTickPromise) => {
-            return prePromise.then((result) => {
-                return currentOnTickPromise(result, crawlConfig, saveConfig);
+            return prePromise.then(preResult => {
+                return currentOnTickPromise(preResult, crawlConfig, saveConfig, resultConfig);
             });
         }, Promise.resolve());
     }

@@ -51,11 +51,20 @@ var all = {
     baseUrl : "https://playoverwatch.com/",
   },
 
+  logger : {
+    prefix : 'log',
+    basePath : path.join(appRoot, '/.log')
+  },
+
   report : {
     prefix : 'report',
     fileType : 'txt',
-    tierPrefix : 'report_tier',
     basePath : path.join(appRoot, '/.report'),
+    tierJson : {
+      basePath : path.join(appRoot, '/.report'),
+      fileType : 'json',
+      prefix : 'tier_data',
+    }
   }
   
 };

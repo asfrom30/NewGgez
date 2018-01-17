@@ -1,15 +1,10 @@
-const writer = require('../writer/writer.cron.core.util');
 const appDao = require('../../dao/index');
+const commonWriter = require('../../../common/utils/fs/writer.common.util');
 
 module.exports = {
-    appendLine : appendLine,
     saveTierJson : saveTierJson,
     writeHistoryResult : writeHistoryResult,
     writeMongoResult : writeMongoResult
-}
-
-function appendLine(suffix, text) {
-    writer.writeReport(suffix, addLineBreak(text));
 }
 
 function saveTierJson(filePath, crawlConfig, saveConfig) {
@@ -18,24 +13,30 @@ function saveTierJson(filePath, crawlConfig, saveConfig) {
     const todaySuffix = saveConfig.todaySuffix;
     
     return appDao.getTierData(device, region, todaySuffix).then(doc => {
-        writer.write(filePath, JSON.stringify(doc, null, '\t'));
+        if(doc == undefined) commonWriter.write(filePath, `tier_datas_${todaySuffix} is null`);
+        else commonWriter.write(filePath, JSON.stringify(doc, null, '\t'));
     })
 }
 
-function writeHistoryResult(crawlConfig, saveConfig) {
-    const suffix = saveConfig.todaySuffix;
+function writeHistoryResult(filePath, crawlConfig, saveConfig) {
     const doc = makeHistoryResultDoc(crawlConfig, saveConfig);
-
-    return new Promise((resolve, reject) => {
-        writer.writeReport(suffix, doc);
-        resolve();
-    });
+    commonWriter.write(filePath, doc);
 }
 
-function writeMongoResult(crawlConfig, saveConfig) {
-    const suffix = saveConfig.todaySuffix;
+function writeMongoResult(filePath, crawlConfig, saveConfig) {
 
-    return makeMongoResultDoc(crawlConfig, saveConfig);
+    const device = crawlConfig.device;
+    const region = crawlConfig.region;
+    const todaySuffix = saveConfig.todaySuffix;
+
+    const promises = [];
+    promises.push(appDao.getCrawlDataCount(device, region, todaySuffix));
+    
+    return Promise.all(promises).then(result => {
+        let doc = `\r\n\r\n== mongo result == ${todaySuffix}`;
+        doc += `\r\ncrawled data count : ${result[0]}`;
+        commonWriter.write(filePath, doc);
+    })
 }
 
 function makeHistoryResultDoc(crawlConfig, saveConfig) {
@@ -47,27 +48,10 @@ function makeHistoryResultDoc(crawlConfig, saveConfig) {
     doc += `\r\n\r\n== log history ==`;
     doc += `\r\ncrawl elapsed time : ${elapsedTime}`;
 
-    
     return doc;
 }
 
 
-function makeMongoResultDoc(crawlConfig, saveConfig) {
-
-    const device = crawlConfig.device;
-    const region = crawlConfig.region;
-    const todaySuffix = saveConfig.todaySuffix;
-    
-    let crawlDataCount = appDao.getCrawlDataCount(device, region, todaySuffix);
-    const promises = [crawlDataCount];
-
-    return Promise.all(promises).then(result => {
-        let doc = "\r\n\r\n== mongo result ==";
-        doc += `\r\ncrawled data count : ${result[0]}`;
-
-        writer.writeReport(todaySuffix, doc);
-    })
-}
 
 function getElapsedTime(startTime){
     if(startTime == undefined) return 'start time is undefined';

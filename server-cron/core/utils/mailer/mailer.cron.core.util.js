@@ -1,4 +1,3 @@
-const mailingConfig = require('../../../config/enviroment/index').mailing;
 const commonMailer = require('../../../common/utils/mailer/mailer.cron.common.util');
 
 const config = {
@@ -15,7 +14,6 @@ function sendReport(subject, filePath){
     const from = config.from;
     const to = config.to;
 
-    if(!mailingConfig.flag) return;
     commonMailer.sendFile(from, to, subject, filePath);
 }
 
@@ -23,6 +21,5 @@ function sendReports(subject, filePaths) {
     const from = config.from;
     const to = config.to;
 
-    if(!mailingConfig.flag) return;
     commonMailer.sendFiles(from, to, subject, filePaths);
 }

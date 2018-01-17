@@ -27,7 +27,7 @@ function send(mailOptions) {
         if (error) {
             return console.log(error);
         } else {
-            console.log('send mail complete');
+            console.log('send mail complete, log in common');
         }
     });
 }

@@ -16,12 +16,18 @@ module.exports = {
         limitFlag : true,
         limitNumber : 10,
     },
-
-    onTickFlag : {
-        makeDiffDatas : true,
+    
+    logFlag : {
+        log2Console : true,
+        log2File : true,
+        log2Server : true,
     },
 
-    mailing : {
-        flag : false,
+    onTickFlags : {
+        crawl : false,
+        tier : false,
+        diff : false,
+        report : true,
+        mail : true,
     }
 }

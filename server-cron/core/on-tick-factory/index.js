@@ -1,8 +1,9 @@
 import { setTimeout } from 'timers';
 
+const onTickFlags = require('../../config/enviroment').onTickFlags;
 const config = require('../../config/enviroment');
 const appDao = require('../dao');
-const appLogger = require('../utils/logger/logger.cron.core.util');
+
 const crawlAndSave = require('../crawl-and-save');
 const analyzeEngine = require('../analyze-engine');
 const momentTz = require('moment-timezone');
@@ -13,6 +14,7 @@ const commonMailer = require('../../common/utils/mailer/mailer.cron.common.util'
 const appMailer = require('../utils/mailer/mailer.cron.core.util');
 const path = require('path');
 const util = require('util');
+const appLogger = require('../utils/logger/logger.cron.core.util');
 const appReporter = require('../utils/reporter/reporter.cron.core.util');
 
 exports.addDailyConfig = addDailyConfig;
@@ -22,7 +24,9 @@ exports.getAllPlayerCrawlAndSave = getAllPlayerCrawlAndSave;
 exports.getAnalyzeTierData = getAnalyzeTierData;
 exports.makeDiffDatas = makeDiffDatas;
 exports.getRanking = getRanking;
-exports.sendReport = sendReport;
+exports.timeBuffer = timeBuffer;
+exports.buildReport = buildReport;
+exports.sendMail = sendMail;
 
 exports.notifyCronStart = notifyCronStart;
 exports.notifyCronFinish = notifyCronFinish;
@@ -38,19 +42,17 @@ function addDailyConfig(preResult, crawlConfig, saveConfig){
     crawlConfig.logFlag = config.crawl.logFlag;
 }
 
-function getAllPlayerCrawlAndSave(preResult, crawlConfig, saveConfig) {
+function getAllPlayerCrawlAndSave(preResult, crawlConfig, saveConfig, resultConfig) {
+    
     const crawlLimitFlag = crawlConfig.limitFlag;
     const crawlLimitNumber = crawlConfig.limitNumber;
     let crawlSpeed = crawlConfig.speed;
+    
+    const flag = onTickFlags.crawl;
+    appLogger.log(`== Crawl Flag is [${flag}], try to crawl [crawlLimitFlag=${crawlLimitFlag}, crawlLimitNumber=${crawlLimitNumber}, crawlSpeed=${crawlSpeed}] ==`, 'info');
+    if(!flag) return Promise.resolve();
 
     return new Promise((resolve, reject) => {
-
-        const crawlFlag = config.crawl.flag;
-        if(!crawlFlag) {
-            resolve();
-            return;
-        }
-
         appDao.findAllPlayer(saveConfig.device, saveConfig.region).then( players => {
 
             if(crawlLimitFlag) players = getLimitPlayers(players, crawlLimitNumber);
@@ -70,10 +72,14 @@ function getAllPlayerCrawlAndSave(preResult, crawlConfig, saveConfig) {
             }
 
             Promise.all(arrPromise).then(result => {
+                appLogger.log(`All Players Crawl and Save Finish : success`, 'info');
+                resultConfig.crawlFlag = 'true';
+                resultConfig.crawlResult = 'success';
                 resolve();
             }, reason => {
-                //TODO: HOW TO HANDLE IF CRAWL IS FAILED... SEND TO EMAIL
-                console.log('crawling is failed');
+                appLogger.log(`All Players Crawl and Save Finish : fail`, 'info');
+                resultConfig.crawlFlag = 'true';
+                resultConfig.crawl = 'fail';
                 console.log(reason);
                 resolve()
             })
@@ -105,65 +111,92 @@ function getCrawlAndSavePromise(players, crawlConfig, saveConfig){
     })
 }
 
-// need only saveConfig
-function getAnalyzeTierData(preResult, crawlConfig, saveConfig) {
+function getAnalyzeTierData(preResult, crawlConfig, saveConfig, resultConfig) {
+
+    const flag = onTickFlags.tier;
+    appLogger.log(`== Tier Flag is [${flag}] ==`, 'info');
+    if(!flag) return Promise.resolve();
 
     const device = saveConfig.device;
     const region = saveConfig.region;
     const suffix = saveConfig.todaySuffix;
 
-    appLogger.log2File(suffix, '');
-    appLogger.log2File(suffix, '== Start Tier Data Analyze ==');
-
     return appDao.getCrawlDataCount(device, region, suffix).then(result => {
-        appLogger.log2File(suffix, `Crawled Datas Count is ${result}`);
+        appLogger.log(`onTickTier : Crawled Datas Count is ${result}`, 'info');
         if(result == 0) return Promise.reject('Crawled Datas is 0, no target');
     }).then(result => {
         analyzeEngine.analyzeTierDataAsync(saveConfig);
+        
+        appLogger.log('analyze tier data success ', 'info')
+        resultConfig.tierResult = true;
     }).catch(reason => {
-        reason = 'analyze tier data failed :: ' + reason;
-        appLogger.log2File(suffix, reason);
+        appLogger.log('analyze tier data failed :: ' + reason, 'error');
+        resultConfig.tierResult = false;
     }).then(() => {
-        appLogger.log2File(suffix, '== End Tier Data Analyze ==');
+        resultConfig.tierFlag = true;
+        appLogger.log('== End Tier Data Analyze ==', 'info');
     });
 }
 
+function timeBuffer() {
+     // timeout buffer for tier aggregate
+    return new Promise((resolve, reject)  => {
+        setTimeout(function() {
+            resolve();
+        }, 1000)
+    })
+}
 
-function sendReport(preResult, crawlConfig, saveConfig) {
+function buildReport(preResult, crawlConfig, saveConfig, reportConfig) {
+    const flag = onTickFlags.report;
+    appLogger.log(`== Build Report Flag is [${flag}] ==`, 'info');
+    if(!flag) return Promise.resolve();
 
-    const reportSubject = `daily report from ggezkr : ${saveConfig.todaySuffix}`
-    const reportFilePath = path.join(config.report.basePath, `${config.report.prefix}_${saveConfig.todaySuffix}.${config.report.fileType}`);
-    const reportTierJsonPath = path.join(config.report.basePath, `${config.report.tierPrefix}_${saveConfig.todaySuffix}.json`);
+    return Promise.resolve().then(result => {
+         //FIXME : if foward promise has rejection, but keep going to build.
+        const filePath = getReportFilePath(saveConfig.todaySuffix)
+        return appReporter.writeHistoryResult(filePath, crawlConfig, saveConfig);
+    }).then(result => {
+        const filePath = getReportFilePath(saveConfig.todaySuffix)
+        return appReporter.writeMongoResult(filePath, crawlConfig, saveConfig);
+    }).then(result => {
+        const filePath = getTierJsonFilePath(saveConfig.todaySuffix)
+        return appReporter.saveTierJson(filePath, crawlConfig, saveConfig);
+    }).then(result => {
+        appLogger.log('== build report success ==', 'info');
+    }).catch(reason => {
+        appLogger.log('== build report fail ==', 'error');
+        console.log(reason);
+    })
+}
+
+function sendMail(preResult, crawlConfig, saveConfig) {
+    const flag = onTickFlags.mail;
+    appLogger.log(`== Send Mail Flag is [${flag}] ==`, 'info');
+    if(!flag) return Promise.resolve();
+
+    const reportSubject = `daily report from ggezkr : ${saveConfig.todaySuffix}`;
+    const suffix = saveConfig.todaySuffix;
+    const attachmentFilePaths = [
+        getTierJsonFilePath(suffix),
+        getReportFilePath(suffix)
+    ];
 
     return Promise.resolve().then(() => {
-        // timeout buffer for tier aggregate
-        return new Promise((resolve, reject) => {
-            setTimeout(function(){
-                resolve();
-            }, 1000);
-        })
-    }).then(() => {
-        return appReporter.saveTierJson(reportTierJsonPath, crawlConfig, saveConfig);
-    }).then(() => {
-        return appReporter.writeHistoryResult(crawlConfig, saveConfig);
-    }).then(() => {
-        return appReporter.writeMongoResult(crawlConfig, saveConfig);
-    }).then(() => {
-        const attachmentFilePaths = [reportFilePath, reportTierJsonPath];
-        //TODO: not yet impl promise pattern. pass resolve and reject?
         appMailer.sendReports(reportSubject, attachmentFilePaths);
+        appLogger.log('== Send Mail Success ==', 'info');
     }).catch(reason => {
-        console.error('Error Occured in send report promise chain');
+        appLogger.log('== Send Mail Fail ==', 'error');
         console.log(reason);
     })
 }
 
 function notifyCronStart(preResult, crawlConfig, saveConfig){
-    console.log(`start cron job [todaySuffix = ${saveConfig.todaySuffix}]`);
+    appLogger.log(`start cron job [todaySuffix = ${saveConfig.todaySuffix}]`, 'info');
 }
 
 function notifyCronFinish(preResult, crawlConfig, saveConfig) {
-    console.log(`finish cron job [todaySuffix = ${saveConfig.todaySuffix}]\r\n'`)
+    appLogger.log(`finish cron job [todaySuffix = ${saveConfig.todaySuffix}]\r\n'`, 'info');
 }
 
 function getRanking(preResult, crawlConfig, saveConfig) {
@@ -261,11 +294,10 @@ function getSlicedPlayers(players, crawlSpeed){
     return slicedPlayers;
 }
 
-function makeDiffDatas(preResult, crawlConfig, saveConfig){
+function makeDiffDatas(preResult, crawlConfig, saveConfig, resultConfig){
     
-    const flag = getMakeDiffDatasFlag();
-    appReporter.appendLine(saveConfig.todaySuffix, `MakeDiffDatas OnTick Flag : ${flag}`);
-
+    const flag = onTickFlags.diff;
+    appLogger.log(`== Diff Datas Flag is [${flag}] ==`, 'info');
     if(!flag) return Promise.resolve();
 
     const lang = crawlConfig.lang;
@@ -279,7 +311,7 @@ function makeDiffDatas(preResult, crawlConfig, saveConfig){
         const aggregateDoc = analyzeEngine.makeDiffAggregateDoc(diffConfig, lang);
         
         if(aggregateDoc == undefined) {
-            appReporter.appendLine(saveConfig.todaySuffix, `MakeDiffDatas OnTick Error : ${diffConfig.saveSuffix} aggregate doc is not created, can't do aggregate`);
+            appLogger.log(`MakeDiffDatas OnTick Error : ${diffConfig.saveSuffix} aggregate doc is not created, can't do aggregate`, 'error');
         } else {
             // console.log(util.inspect(aggregateDoc, { depth: null }));
             promises.push(appDao.doAggregate(device, region, diffConfig.suffixA, aggregateDoc));
@@ -287,9 +319,13 @@ function makeDiffDatas(preResult, crawlConfig, saveConfig){
     }
 
     return Promise.all(promises).then(result =>{
-        appReporter.appendLine(saveConfig.todaySuffix, `MakeDiffDatas OnTick Result : success`);
+        resultConfig.diffFlag = true;
+        resultConfig.diffResult = true;
+        appLogger.log(`MakeDiffDatas OnTick Result : success`, 'info');
     }, reason => {
-        appReporter.appendLine(saveConfig.todaySuffix, `MakeDiffDatas OnTick Flag : ${fail}`);
+        resultConfig.diffFlag = true;
+        resultConfig.diffResult = false;
+        appLogger.log(`MakeDiffDatas OnTick Result : fail`, 'info');
     })
 }
 
@@ -328,12 +364,20 @@ function getWeekIndex(timezone){
     }
 }
 
+function getReportFilePath(suffix) {
+    const reportConfig = config.report;
+    const filePath = getFilePath(reportConfig, suffix);
+    return filePath
+}
+function getTierJsonFilePath(suffix) {
+    const jsonConfig = config.report.tierJson;
+    const filePath = getFilePath(jsonConfig, suffix);
+    return filePath;
+}
 
-function getMakeDiffDatasFlag() {
-    try {
-        const flag = config.onTickFlag.makeDiffDatas;
-        return flag;
-    } catch (error) {
-        return true;
-    }
+function getFilePath(fileConfig, suffix){
+    const fileDir = `${fileConfig.basePath}`;
+    const fileName = `${fileConfig.prefix}_${suffix}.${fileConfig.fileType}`;
+    const filePath = path.join(fileDir, fileName);
+    return filePath;
 }

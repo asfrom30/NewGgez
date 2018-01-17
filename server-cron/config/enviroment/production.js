@@ -17,7 +17,17 @@ module.exports = {
         limitNumber : 100,
     },
 
-    mailing : {
-        flag : true 
+    logFlag : {
+        log2Console : true,
+        log2File : true,
+        log2Server : true,
+    },
+
+    onTickFlags : {
+        crawl : true,
+        tier : true,
+        diff : true,
+        report : true,
+        mail : true,
     }
 }

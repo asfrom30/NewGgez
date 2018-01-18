@@ -147,6 +147,8 @@ URL | VERB | REQUIRED | Result |
 
 ### Mongodb Aggregate
 
+### 로그 전략
+
 ## 클라이언트 개발
 
 ### Webpack dev-server

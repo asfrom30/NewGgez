@@ -44,7 +44,8 @@ export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stat
         $ctrl.cache.most3 = Analyzer.getSummaryMost3(crawlDatas);
         $ctrl.cache.trend = Analyzer.getSummaryTrend(crawlDatas);
 
-        if(env != 'production') {
+        const flag = false;
+        if(flag && env != 'production') {
             console.log(crawlDatas);
             console.log($ctrl.cache.profile);
             console.log($ctrl.cache.most3);

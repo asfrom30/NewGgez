@@ -209,6 +209,7 @@ export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootSc
     }
 
     function goRandomPage() {
+        //FIXME: max user fixme
         const max = 13676;
         const min = 1;
         const id = Math.floor((Math.random() * max) + min);
@@ -217,9 +218,9 @@ export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootSc
         // $window.location.href = `http://localhost:3000/#!/hero/${device}/${region}/${id}/summary`;
 
         //FIXME: need to study. apply move page with transition smoothly..
+        const mode = getMode();
         const params = {device : device, region : region, id : id};
-        $state.go('hero.summary', params);
-        $state.reload();
+        $state.go(`hero.${mode}`, params, {reload: true});
     }
 }
 

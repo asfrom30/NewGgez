@@ -21,11 +21,12 @@ export default angular.module('hero.summary' ,[])
     })
     .name;
 
-export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stateParams, Analyzer, Indexer, AppLogger, CoreUtils, LABEL_SUMMARY_PAGE){
+export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stateParams, Analyzer, AppLogger, CoreUtils, LABEL_SUMMARY_PAGE){
     /* @ngInject */
 
     'ngInject';
-    
+    const env = process.env.NODE_ENV;
+    const logScope = 'hero.summary';
     var $ctrl = this;
     $ctrl.id = $stateParams.id;
 
@@ -38,15 +39,16 @@ export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stat
 
         /* Summary Data(Resolve Data Binding) */
         $ctrl.cache = {};
-        $ctrl.cache.profile = Analyzer.getSummaryProfile($ctrl.currentPlayerDatas);
-        $ctrl.cache.most3 = Analyzer.getSummaryMost3($ctrl.currentPlayerDatas);
-        $ctrl.cache.trend = Analyzer.getSummaryTrend($ctrl.currentPlayerDatas);
-        
-        
-        
-        $ctrl.dynCache = {};
+        const crawlDatas = $ctrl.currentPlayerDatas;
+        $ctrl.cache.profile = Analyzer.getSummaryProfile(crawlDatas);
+        $ctrl.cache.most3 = Analyzer.getSummaryMost3(crawlDatas);
+        $ctrl.cache.trend = Analyzer.getSummaryTrend(crawlDatas);
 
-        if(process.env.NODE_ENV !== 'production') {
+        if(env != 'production') {
+            console.log(crawlDatas);
+            console.log($ctrl.cache.profile);
+            console.log($ctrl.cache.most3);
+            console.log($ctrl.cache.trend);
             AppLogger.log("== This is $ctrl.label ==");
             AppLogger.log($ctrl.label);
             AppLogger.log("== This is $ctrl.summaryData.profile  ==");
@@ -56,6 +58,8 @@ export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stat
             AppLogger.log("== $ctrl.summaryData.trend ==");
             AppLogger.log($ctrl.cache.trend);
         }
+        
+        $ctrl.dynCache = {};
     }   
 
     $ctrl.$onChanges = function(changesObj){
@@ -94,16 +98,16 @@ export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stat
         $($event.currentTarget).addClass('active');
     }
 
-    function onTrendDataBind(selectedDate) {
+    function onTrendDataBind(dateIndex) {
         /* diff cptpt in trend label and data bind */
-        $ctrl.dynCache.diffCptptLabel = $ctrl.label.trend.diffCptpt[selectedDate];
-        $ctrl.dynCache.diffCptpt = $ctrl.cache.trend.diffCptpt[selectedDate];
-
+        $ctrl.dynCache.diffCptptLabel = $ctrl.label.trend.diffCptpt[dateIndex];
+        $ctrl.dynCache.diffCptpt = $ctrl.cache.trend.diffCptpt[dateIndex];
+        
         /* winrate process bar in trend label and data bind */
-        const currentWinRates = $ctrl.cache.trend.winRates.current;
+        const currentWinRates = $ctrl.cache.trend.winRates['current'];
         $ctrl.dynCache.currentProcessBar = getProcessbarData(currentWinRates);
         
-        const selectedWinRates = $ctrl.cache.trend.winRates[selectedDate];
+        const selectedWinRates = $ctrl.cache.trend.winRates[dateIndex];
         $ctrl.dynCache.selectedProcessBar = getProcessbarData(selectedWinRates);
         return;
     }

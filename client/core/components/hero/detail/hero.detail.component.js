@@ -14,7 +14,7 @@ export default angular
         }
     }).name;
 
-export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, Indexer, CoreUtils, tierMap){
+export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, CoreUtils, tierMap){
 
     /* constants */
     const $ctrl = this;

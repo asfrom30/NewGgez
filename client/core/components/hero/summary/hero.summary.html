@@ -67,15 +67,15 @@
             <div class="btn-group" role="group" aria-label="Select Trend Btn">
                 <button id="trend-yesterday-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
                     <div>{{$ctrl.label.trend.yesterday}}</div>
-                    <div>{{$ctrl.cache.trend.winRates.yesterday.totalGames}}</div>
+                    <div>{{$ctrl.cache.trend.winRates.yesterday.totalGames | nanFilter : "-"}}</div>
                 </button>
                 <button id="trend-today-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
                     <div>{{$ctrl.label.trend.today}}</div>
-                    <div>{{$ctrl.cache.trend.winRates.today.totalGames}}</div>
+                    <div>{{$ctrl.cache.trend.winRates.today.totalGames | nanFilter : "-"}}</div>
                 </button>
                 <button id="trend-week-btn" type="button" class="btn" ng-click="$ctrl.onTrendBtn($event)">
                     <div>{{$ctrl.label.trend.week}}</div>
-                    <div>{{$ctrl.cache.trend.winRates.week.totalGames}}</div>
+                    <div>{{$ctrl.cache.trend.winRates.week.totalGames | nanFilter : "-"}}</div>
                 </button>
             </div>
             <!-- 점수변동 폭 -->

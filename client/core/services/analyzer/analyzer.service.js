@@ -5,11 +5,16 @@ import angular from 'angular';
 
 const logger = require('../../utils/logger/logger');
 const appLogger = new logger('analyzer');
-
+const SummaryAnalyzerCtrl = require('./summary.analyzer.service.controller');
+const DetailAnalyzerCtrl = require('./detail.analyzer.service.controller');
 
 export default angular
     .module('core.analyzer', [])
-    .factory('Analyzer', function($rootScope, CONST_DIFF_GAMES_MAP, CONST_HERO_MAP, STATMAP, Indexer){
+    .factory('Analyzer', function($rootScope, CONST_DIFF_GAMES_MAP, heroIndexes, STATMAP, Indexer){
+
+        const summaryAnalyzerCtrl = new SummaryAnalyzerCtrl(heroIndexes, Indexer, null, STATMAP);
+        const detailAnalyzerCtrl = new DetailAnalyzerCtrl();
+
         return {
             /* dataA - dataB */
             getLabels : function() {
@@ -24,7 +29,7 @@ export default angular
                 return result;
             },
             getDiffGames : function(playerDatas, diffIndexes) {
-                let analyzer = new DiffGamesAnalyzer(Indexer, CONST_HERO_MAP, CONST_DIFF_GAMES_MAP);
+                let analyzer = new DiffGamesAnalyzer(Indexer, heroIndexes, CONST_DIFF_GAMES_MAP);
                 return analyzer.getResult(playerDatas, diffIndexes);
             },
             getDiffHeroDatas : function(playerDatas, diffIndexes, tierData) {
@@ -32,22 +37,15 @@ export default angular
                 return analyzer.getResult(playerDatas, diffIndexes, tierData);
             },
             getTierData : function(tierDataPerDate) {
-                let analyzer = new TierDataAnalyzer(CONST_HERO_MAP, STATMAP);
+                let analyzer = new TierDataAnalyzer(heroIndexes, STATMAP);
                 return analyzer.getResult(tierDataPerDate);
             },
+
+
             /* Summary Data */
-            getSummaryProfile : function(playerData) {
-                let analyzer = new SummaryProfileAnalyzer(STATMAP);
-                return analyzer.getResult(playerData);
-            },
-            getSummaryMost3 : function(playerData) {
-                let analyzer = new SummaryMost3Analyzer(STATMAP);
-                return analyzer.getResult(playerData);
-            },
-            getSummaryTrend  : function(playerDatas) {
-                let analyzer = new SummaryTrendAnalyzer(Indexer);
-                return analyzer.getResult(playerDatas);
-            }
+            getSummaryProfile : summaryAnalyzerCtrl.getProfile,
+            getSummaryMost3 : summaryAnalyzerCtrl.getMost3,
+            getSummaryTrend : summaryAnalyzerCtrl.getTrend,
         }
     }).name;
 
@@ -287,108 +285,6 @@ export function SummaryProfileAnalyzer(statMap) {
     }
 }
 
-export function SummaryMost3Analyzer(diffGamesMap, statMap) {
-    this.diffGameMap = diffGamesMap;
-    this.statMap = statMap;
-
-    this.getResult = function(playerData){
-
-        let heroDatas = playerData.current.data;
-
-        /* Build Playtimes */
-        let playtimes = [];
-        for(let heroKey in heroDatas) {
-            if(heroKey == 'all') continue;
-
-            /* Hero data is empty object */
-            const heroData = heroDatas[heroKey];
-            if(Object.keys(heroData).length === 0 && heroData.constructor === Object || heroData == undefined) continue;
-
-            /* Calculate Current TS */
-            let currentTs = heroDatas[heroKey].치른게임;
-            // currentTs = convertToInteger(currentTs);
-
-            /* Calculate Win Rate */
-            let winRates = getWinRates(heroDatas[heroKey]);
-
-            /* Calculate Average Score */
-            let avgScore = "-";
-
-            /* Calcaulate KDA */ 
-            let kda = heroDatas[heroKey].목숨당처치;
-
-            /* Calculate Burning Time */
-            let burningTime = heroDatas[heroKey].폭주시간;
-            
-            playtimes.push({
-                key : heroKey, 
-                avgScore : avgScore,
-                burningTime : burningTime,
-                kda : kda,
-                winRate : winRates.winRate,
-                totalGames : winRates.totalGames,
-                winGames : winRates.winGames,
-                drawGames : winRates.drawGames,
-                loseGames : winRates.loseGames,
-                value : currentTs
-            });
-        }
-          
-        /* Sort by Value */
-        playtimes.sort(function (a, b) {
-            return -(a.value - b.value);
-        });
-
-        return playtimes.slice(0,3);
-    }
-}
-
-export function SummaryTrendAnalyzer(Indexer) {
-
-    this.getResult = function(playerDatas){
-
-        let result = {
-            diffCptpt : {
-                yesterday : {},
-                today:{},
-                week : {},
-            },
-            winRates : {
-                yesterday : {},
-                today:{},
-                week : {},
-            }
-        }
-
-        let dateIndexs = ['week', 'yesterday', 'today'];
-
-        let heroData = playerDatas.current.data.all;
-        result.winRates.current = getWinRates(heroData);
-
-        for(let dateIndex of dateIndexs){
-            let indexes = Indexer.getIndexes(dateIndex);
-
-            // let playerDataA = playerDatas[indexes.A];
-            // let playerDataB = playerDatas[indexes.B];
-
-            // let heroDataA = playerDataA.data.all;
-            // let heroDataB = playerDataB.data.all;
-
-            let heroDataA = getHeroDataFromPlayerDatas(playerDatas, indexes.A, 'all');
-            let heroDataB = getHeroDataFromPlayerDatas(playerDatas, indexes.B, 'all');
-            
-            let metaDataA = getMetaDataFromPlayerDatas(playerDatas, indexes.A);
-            let metaDataB = getMetaDataFromPlayerDatas(playerDatas, indexes.B);
-            
-            result.winRates[dateIndex] = getDiffWinRates(heroDataA, heroDataB);
-            result.diffCptpt[dateIndex] = getDiffCptpt(metaDataA, metaDataB);
-        }
-
-        
-        return result;
-    }
-}
-
 /* {date : {...}, meta : {...}, data : {...}*/
 function getHeroDataFromPlayerDatas(playerDatas, index, hero) {
     try {
@@ -486,34 +382,7 @@ function getDiffWinRates (heroDataA, heroDataB) {
     
 }
 
-/* TODO: Need test Code*/
-function getWinRates (heroData) {
-    let defaultResult = {
-        winRate : "-",
-        totalGames : "-",
-        winGames : "-",
-        drawGames : "-",
-        loseGames : "-"
-    };
 
-    // FIXME: use diff gamesmap
-    // for(let mapObj of diffGamesMap){
-    //     result[diffIndex][heroId][mapObj.id] = heroDataA[heroId][mapObj.key] - heroDataB[heroId][mapObj.key];
-    // }
-
-    let totalGamesLabel = "치른게임";
-    let winGamesLabel = "승리한게임";
-    let drawGamesLabel = "무승부게임";
-    let loseGamesLabel = "패배한게임";
-
-    let totalGames = parseInt(heroData[totalGamesLabel]);
-    let winGames = parseInt(heroData[winGamesLabel]);
-    let drawGames = parseInt(heroData[drawGamesLabel]);
-    let loseGames = parseInt(heroData[loseGamesLabel]);
-
-    let result = makeWinRatesObj(defaultResult, totalGames, winGames, drawGames, loseGames);
-    return result;
-}
 
 function makeWinRatesObj (defaultResult, totalGames, winGames, drawGames, loseGames){
     if(isNaN(totalGames)){

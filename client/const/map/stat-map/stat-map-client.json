@@ -1,0 +1,999 @@
+{
+	"denominators": [
+		{
+			"id": "death",
+			"ko-kr": "죽음",
+			"en-us": []
+		},
+		{
+			"id": "game",
+			"ko-kr": "치른게임",
+			"en-us": []
+		}
+	],
+	"heroes": {
+		"all": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "cards",
+				"ko-kr": "칭찬카드",
+				"en-us": []
+			}
+		],
+		"soldier76": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "나선로켓으로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "생체장으로치유",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "전술조준경으로처치",
+				"en-us": []
+			}
+		],
+		"reaper": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "죽음의꽃으로처치",
+				"en-us": []
+			}
+		],
+		"pharah": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "로켓명중",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "포화로처치",
+				"en-us": []
+			}
+		],
+		"reinhardt": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "막은피해",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "돌진으로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "화염강타로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_4",
+				"ko-kr": "대지분쇄로처치",
+				"en-us": []
+			}
+		],
+		"roadhog": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "갈고리로끌어오기",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "돼재앙으로처치",
+				"en-us": []
+			}
+		],
+		"winston": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "막은피해",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "근접공격으로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "점프팩으로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_4",
+				"ko-kr": "원시의분노로처치",
+				"en-us": []
+			}
+		],
+		"dva": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "막은피해",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "자폭으로처치",
+				"en-us": []
+			}
+		],
+		"symmetra": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "감시포탑으로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "순간이동한플레이어",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "보호막생성기가동시간",
+				"en-us": []
+			}
+		],
+		"widowmaker": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "맹독지뢰로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "저격치명타",
+				"en-us": []
+			}
+		],
+		"tracer": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "펄스폭탄부착",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "펄스폭탄으로처치",
+				"en-us": []
+			}
+		],
+		"hanzo": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "갈래화살로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "용의일격으로처치",
+				"en-us": []
+			}
+		],
+		"mercy": [
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "healing_done",
+				"ko-kr": "치유",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "블라스터로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "공격력증폭",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_4",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "부활한플레이어",
+				"en-us": []
+			}
+		],
+		"zenyatta": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "공격형도움",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "방어형도움",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "초월로치유",
+				"en-us": []
+			}
+		],
+		"genji": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "튕겨낸피해",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "용검으로처치",
+				"en-us": []
+			}
+		],
+		"torbjoern": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "생성한방어구팩",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "토르비욘이직접처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "포탑으로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_4",
+				"ko-kr": "초고열용광로로처치",
+				"en-us": []
+			}
+		],
+		"junkrat": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "덫에걸린적",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "죽이는타이어로처치",
+				"en-us": []
+			}
+		],
+		"zarya": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "막은피해",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "방벽씌우기",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "고에너지로처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_4",
+				"ko-kr": "중력자탄으로처치",
+				"en-us": []
+			}
+		],
+		"mei": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "얼린적",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "눈보라로처치",
+				"en-us": []
+			}
+		],
+		"ana": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "healing_done",
+				"ko-kr": "치유",
+				"en-us": []
+			},
+			{
+				"id": "enemies_slept",
+				"ko-kr": "재운적",
+				"en-us": []
+			},
+			{
+				"id": "nano_boost_assists",
+				"ko-kr": "나노강화제도움",
+				"en-us": []
+			}
+		],
+		"lucio": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "healing_done",
+				"ko-kr": "치유",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "환경요소로처치",
+				"en-us": []
+			},
+			{
+				"id": "sound_barriers_provided",
+				"ko-kr": "소리방벽제공",
+				"en-us": []
+			}
+		],
+		"sombra": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "해킹한적",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "EMP맞힌적",
+				"en-us": []
+			}
+		],
+		"doomfist": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "ability_damage_done",
+				"ko-kr": "기술로준피해",
+				"en-us": []
+			},
+			{
+				"id": "shields_created",
+				"ko-kr": "생성한보호막",
+				"en-us": []
+			},
+			{
+				"id": "meteor_strike_kills",
+				"ko-kr": "파멸의일격으로처치",
+				"en-us": []
+			}
+		],
+		"orisa": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_1",
+				"ko-kr": "공격력증폭",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_2",
+				"ko-kr": "막은피해",
+				"en-us": []
+			},
+			{
+				"id": "special_skill_3",
+				"ko-kr": "초강력증폭기도움",
+				"en-us": []
+			}
+		]
+	}
+}

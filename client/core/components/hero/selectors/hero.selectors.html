@@ -64,7 +64,7 @@
                     <div class="h-50-pct"><img src="{{ 2500 | tierImageSrc}}"></div>
                     <div class="h-50-pct">{{$ctrl.tierGameLabel.platinum}}</div>
                 </button>
-                <button class="h-100-pct" ng-click="$ctrl.onSelectorClicked($event)"  id="dia" type="button">
+                <button class="h-100-pct" ng-click="$ctrl.onSelectorClicked($event)"  id="diamond" type="button">
                     <div class="h-50-pct"><img src="{{ 3000 | tierImageSrc}}"></div>
                     <div class="h-50-pct">{{$ctrl.tierGameLabel.diamond}}</div>
                 </button>
@@ -119,13 +119,13 @@
                     <div class="h-50-pct flex f-align-h-center lower-text">{{$ctrl.selected.p1Index}}</div>
                 </div>
             </div>
-            <button ng-click="$ctrl.onTableCompareToggle()" type="button" class="btn btn-default btn-sm m-l-auto">
+            <!-- <button ng-click="$ctrl.onTableCompareToggle()" type="button" class="btn btn-default btn-sm m-l-auto">
                 <i class="material-icons">swap_horiz</i>
             </button>
             <button ng-click="$ctrl.onTableResultToggle()" type="button" class="btn btn-default btn-sm">
                 %
-            </button>
-            <button ng-click="$ctrl.toggleFixedBottomCollapse()" type="button" class="btn btn-default btn-sm">
+            </button> -->
+            <button ng-click="$ctrl.toggleFixedBottomCollapse()" type="button" class="btn btn-default btn-sm m-l-auto">
                 <i class="material-icons">reorder</i>
             </button>
         </div>
@@ -161,13 +161,13 @@
                     </div>
                 </div>
             </div>
-            <button ng-click="$ctrl.onTableCompareToggle()" type="button" class="btn btn-default btn-sm m-l-auto">
+            <!-- <button ng-click="$ctrl.onTableCompareToggle()" type="button" class="btn btn-default btn-sm m-l-auto">
                 <i class="material-icons">swap_horiz</i>
             </button>
             <button ng-click="$ctrl.onTableResultToggle()" type="button" class="btn btn-default btn-sm">
                 %
-            </button>
-            <button ng-click="$ctrl.toggleFixedBottomCollapse()" type="button" class="btn btn-default btn-sm">
+            </button> -->
+            <button ng-click="$ctrl.toggleFixedBottomCollapse()" type="button" class="btn btn-default btn-sm m-l-auto">
                 <i class="material-icons">reorder</i>
             </button>
             <button type="button" ng-click="$ctrl.toggleSearchBar()" class="btn btn-default btn-sm">

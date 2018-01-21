@@ -15,7 +15,7 @@ export default angular
 export function heroFavoriteCtrl($scope, $stateParams, $timeout, AppLogger, Ajax){
 
     /* constants */
-    const logScope = 'hero.favorites';
+    const logFlag = false;
     const $ctrl = this;
     const region = $stateParams.region;
     const device = $stateParams.device;
@@ -39,8 +39,8 @@ export function heroFavoriteCtrl($scope, $stateParams, $timeout, AppLogger, Ajax
         const favorites = $ctrl.favorites;
 
         if(!Array.isArray(favorites) || favorites.length == 0) {
-            if(!Array.isArray(favorites)) AppLogger.log('err_favorites_is_not_array_can_not_load_player', logScope, 'error');
-            else AppLogger.log('err_favorites_legnth_is_zero', logScope, 'info');
+            if(!Array.isArray(favorites)) AppLogger.log('err_favorites_is_not_array_can_not_load_player', logFlag, 'error');
+            else AppLogger.log('err_favorites_legnth_is_zero', logFlag, 'info');
             
             $ctrl.favoritePlayers = [];
             scopeApplyManually();

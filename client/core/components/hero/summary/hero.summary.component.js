@@ -26,7 +26,7 @@ export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stat
 
     'ngInject';
     const env = process.env.NODE_ENV;
-    const logScope = 'hero.summary';
+    const logFlag = false;
     var $ctrl = this;
     $ctrl.id = $stateParams.id;
 
@@ -50,14 +50,14 @@ export function heroSummaryCtrl($location, $element, $timeout, $rootScope, $stat
             console.log($ctrl.cache.profile);
             console.log($ctrl.cache.most3);
             console.log($ctrl.cache.trend);
-            AppLogger.log("== This is $ctrl.label ==");
-            AppLogger.log($ctrl.label);
-            AppLogger.log("== This is $ctrl.summaryData.profile  ==");
-            AppLogger.log($ctrl.cache.profile);
-            AppLogger.log("== $ctrl.summaryData.most3 ==");
-            AppLogger.log($ctrl.cache.most3);
-            AppLogger.log("== $ctrl.summaryData.trend ==");
-            AppLogger.log($ctrl.cache.trend);
+            AppLogger.log("== This is $ctrl.label ==", logFlag, 'info');
+            AppLogger.log($ctrl.label, logFlag, 'info');
+            AppLogger.log("== This is $ctrl.summaryData.profile  ==", logFlag, 'info');
+            AppLogger.log($ctrl.cache.profile, logFlag, 'info');
+            AppLogger.log("== $ctrl.summaryData.most3 ==", logFlag, 'info');
+            AppLogger.log($ctrl.cache.most3, logFlag, 'info');
+            AppLogger.log("== $ctrl.summaryData.trend ==", logFlag, 'info');
+            AppLogger.log($ctrl.cache.trend, logFlag, 'info');
         }
         
         $ctrl.dynCache = {};

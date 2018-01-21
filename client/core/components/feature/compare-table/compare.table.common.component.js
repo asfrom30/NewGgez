@@ -11,6 +11,7 @@ export default angular
         controller : controller,
         bindings : {
             tableHeader : '<',
+            statIndexes : '<',
             labelColumn : '<',
             firstColumn : '<',
             secondColumn : '<',
@@ -29,18 +30,35 @@ export default angular
 export function controller($element, $scope, AppLogger) {
 
     const $ctrl = this;
+    const logFlag = false;
     const logScope = 'compare.table'
-
+    
+    $ctrl.lang = 'kr';
     $ctrl.onCompareToggle = onCompareToggle;
     $ctrl.onResultToggle = onResultToggle;
 
     $ctrl.$onInit = function() {
+        $ctrl.bind = {};
         init();
         initListener();
-        initTable($ctrl.labelColumn, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);
     }
 
     function initListener() {
+        $scope.$on("onChangeTableResultUnit", function(event, params) {
+            const unit = params.unit;
+            if(unit == 'percent') {
+                onResultPercentShow();
+            } else if(unit == 'subtract') {
+                onResultSubtractShow();
+            }
+        });
+
+        $scope.$on("onChangeTableColumnSelected", function(event, params) {
+            const direction = params.direction;
+            if(direction == undefined) return;
+            onChangeTableColumnSelected(direction);
+        })
+        
         $scope.$on("onCompareToggle", function(){
             onCompareToggle();
         });
@@ -52,20 +70,29 @@ export function controller($element, $scope, AppLogger) {
 
 
     $ctrl.$onChanges = function(changes) {
+        const statIndexes = $ctrl.statIndexes;
         const labelCol = $ctrl.labelColumn;
-        const firstCol = $ctrl.firstColumn;
-        const secondCol = $ctrl.secondColumn;
-        const thirdCol = $ctrl.thirdColumn;
+        const tableHeader = $ctrl.tableHeader;
+        const firstColumn = $ctrl.firstColumn;
+        const secondColumn = $ctrl.secondColumn;
+        const thirdColumn = $ctrl.thirdColumn;
 
-        if(labelCol == undefined) {
+        console.log(tableHeader);
+        if(statIndexes == undefined || !Array.isArray(labelCol)) {
+            AppLogger.log('statIndexes is undefined, can not inflate table', logFlag, 'warn');
             showOverlay();
             showPaddingAndHideResultRow();
+            $ctrl.tableRows = convertDatasColumnToRow([], [], [], []);
         } else {
+            AppLogger.log('statIndexes in defined, try to flate table', logFlag, 'info');
             hideOverlay();
             hidePaddingAndShowResultRow();
+            $ctrl.tableRows = convertDatasColumnToRow(statIndexes, firstColumn, secondColumn, thirdColumn);
+            $ctrl.bind.tableFooters = makeFooters(statIndexes, tableHeader, firstColumn, secondColumn, thirdColumn);
+            console.log($ctrl.bind.tableFooters);
         }
 
-        initTable($ctrl.labelColumn, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);
+        // initTable(statIndexes, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);
     }
 
 
@@ -88,47 +115,84 @@ export function controller($element, $scope, AppLogger) {
         }
 
         $ctrl.tableRows = tableRows;
-        AppLogger.log('Init Compare Table Complete', logScope, 'info');
-        AppLogger.log($ctrl.tableRows, logScope, 'info');
+        AppLogger.log('Init Compare Table Complete', logFlag, 'info');
+        AppLogger.log($ctrl.tableRows, logFlag, 'info');
     }
 
     function getLabelColumn() {
         return $ctrl.labelColumn;
     }
 
+    function getColumnScore(column, statIndex) {
+        try {
+            let result = column[statIndex].score;
+            result = parseFloat(result);
+            if(isNaN(result)) return undefined;
+            else return result;
+        } catch (error) {
+            return undefined;
+        }
+    }
 
-    function convertDatasColumnToRow(labelCol, firstCol, secondCol, thirdCol){
+    function getColumnPoint(column, statIndex) {
+        try {
+            let result = column[statIndex].point;
+            result = parseFloat(result);
+            if(isNaN(result)) return undefined;
+            else return result;
+        } catch (error) {
+            return undefined;
+        }
+    }
+
+
+    function convertDatasColumnToRow(statIndexes, firstColumn, secondColumn, thirdColumn){
 
         let tableRows = [];
+        for(const statIndex of statIndexes) {
+            tableRows.push([
+                statIndex, {
+                    score : getColumnScore(firstColumn, statIndex),
+                    point : getColumnPoint(firstColumn, statIndex)
+                }, {
+                    score : getColumnScore(secondColumn, statIndex),
+                    point : getColumnPoint(secondColumn, statIndex),
+                }, {
+                    score : getColumnScore(thirdColumn, statIndex),
+                    point : getColumnPoint(thirdColumn, statIndex),
+                }, {
+                    // result column
+                }]);
+        }
+        return tableRows;
+    }
 
-        for(let i = 0; i < labelCol.length; i++){
+    function makeFooters(statIndexes, tableHeader, firstColumn, secondColumn, thirdColumn) {
+        
+        let count = 0;
+        let p1PointSum = 0;
+        let p2PointSum = 0;
+        let tierPointSum = 0;
 
-            let title = labelCol[i];
+        for(const statIndex of statIndexes) {
+            const p1Point = getColumnPoint(firstColumn, statIndex);
+            const p2Point = getColumnPoint(secondColumn, statIndex);
+            const tierPoint = getColumnPoint(thirdColumn, statIndex);
 
-            let firstColumn = {};
-            if($ctrl.firstColumn != undefined) {
-                firstColumn.score = ($ctrl.firstColumn[i] == undefined) ? 'no-game' : $ctrl.firstColumn[i].score;
-                firstColumn.point = ($ctrl.firstColumn[i] == undefined) ? 'no-game' : $ctrl.firstColumn[i].point;
+            if(p1Point && p2Point && tierPoint) {
+                count ++;
+                p1PointSum += p1Point;
+                p2PointSum += p2Point;
+                tierPointSum += tierPoint;
             }
-
-            let secondColumn = {};
-            if($ctrl.secondColumn != undefined) {
-                secondColumn.score = ($ctrl.secondColumn[i] == undefined) ? 'no-game' : $ctrl.secondColumn[i].score;
-                secondColumn.point = ($ctrl.secondColumn[i] == undefined) ? 'no-game' : $ctrl.secondColumn[i].point;
-            }
-            
-            let thirdColumn = {};
-            if($ctrl.thirdColumn != undefined) {
-                thirdColumn.score = ($ctrl.thirdColumn[i] == undefined) ? 'no-game' : $ctrl.thirdColumn[i].score;
-                thirdColumn.point = ($ctrl.thirdColumn[i] == undefined) ? 'no-game' : $ctrl.thirdColumn[i].point;
-            }
-
-            let resultColumn = {};
-
-            tableRows.push([title, firstColumn, secondColumn, thirdColumn, resultColumn]);
         }
 
-        return tableRows;
+        return [
+            {headerA : '', headerB : '', value : calcIncrease(p1PointSum, p2PointSum)},
+            {headerA : '', headerB : '', value : calcIncrease(p1PointSum, tierPointSum)},
+            {headerA : '', headerB : '', value : calcIncrease(p2PointSum, tierPointSum)},
+
+        ];
     }
 
     function canInflateTable(labelCol) {
@@ -143,6 +207,14 @@ export function controller($element, $scope, AppLogger) {
     $ctrl.calcPercent = calcPercent;
     $ctrl.calcDiff = calcDiff;
     $ctrl.getNgClass = getNgClass;
+
+    function calcIncrease (a, b) {
+        if(!(a || b)) return undefined;
+        const result = (a - b) / b;
+        if(isNaN(result) || !isFinite(result)) return undefined;
+
+        return result;
+    }
 
     function calcPercent(a, b) {
         return (a - b) / b;
@@ -185,13 +257,43 @@ export function controller($element, $scope, AppLogger) {
         $element.find('td .result-diff').toggle();
     }
 
+    function onResultPercentShow() {
+        $element.find('td .result-percent').show();
+        $element.find('td .result-diff').hide();
+    }
+
+    function onResultSubtractShow(){
+        $element.find('td .result-percent').hide();
+        $element.find('td .result-diff').show();
+    }
+
+    function onChangeTableColumnSelected(direction) {
+        
+        if(direction == 'left'){
+            $ctrl.toggleIndex += 1;
+        } else if(direction == 'right') {
+            $ctrl.toggleIndex -= 1;
+        }
+
+        if($ctrl.toggleIndex >= 3) {
+            $ctrl.toggleIndex = 0;
+        } else if ($ctrl.toggleIndex <= -1) {
+            $ctrl.toggleIndex = 2;
+        }
+
+        updateColumnActive();
+    }
+    
     function onCompareToggle() {
         if($ctrl.toggleIndex == 2){
             $ctrl.toggleIndex = 0;
         } else {
             $ctrl.toggleIndex += 1;
         }
+        updateColumnActive();
+    }
 
+    function updateColumnActive() {
         const toggleIndex = $ctrl.toggleIndex;
         switch (toggleIndex) {
             case 0:
@@ -219,6 +321,8 @@ export function controller($element, $scope, AppLogger) {
                 break;
         }
     }
+
+    
 }
 
 import numeral from 'numeral';

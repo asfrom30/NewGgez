@@ -37,7 +37,7 @@ module.exports =  {
         // array( "label" => "거둔영혼", "description" => "한 게임당 거둔영혼", "unit" => "", "factor" => array(1, "거둔 영혼","치른 게임", "거둔 영혼 - 평균"), "grade"=> array(0, 4, 6, 8, 30)),
         // array( "label" => "궁극", "description" =>"한 게임당 죽음의 꽃으로 처치", "unit" => "", "factor" => array(1, "죽음의 꽃으로 처치", "치른 게임", "죽음의 꽃으로 처치 - 평균"), "grade"=> array(0, 4, 6, 8, 10))
     ],
-    "parah" : [
+    "pharah" : [
         { "label": "목숨당피해량", "unit" : "/", "numerator" : "준모든피해", "denominator" : "죽음", "description" : ""},
         { "label": "목숨당영웅피해량", "unit" : "/", "numerator" : "영웅에게준피해", "denominator" : "죽음", "description" : ""},
         { "label": "목숨당방벽피해량", "unit" : "/", "numerator" : "방벽에준피해", "denominator" : "죽음", "description" : ""},

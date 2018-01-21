@@ -4,7 +4,7 @@ import angular from 'angular';
 
 /* Old version */
 import Const from './const/constants';
-import statMapConstantModule from './const/statmap/statmap.const';
+import statMapConst from './const/statmap/statmap.const';
 import CONFIG from './const/config/const.config';
 
 /* New Version */
@@ -19,7 +19,7 @@ export default angular.module('ggezkrApp.constants', [])
     .constant('THINGS_VIEWS', '/views/')
 
     // App Setting Constant
-    .constant('STATMAP', statMapConstantModule)
+    
     .constant('CONFIG', CONFIG)
 
     /* Must be replaced with CONST_LABEL, CONST_RESOURCE*/
@@ -34,10 +34,11 @@ export default angular.module('ggezkrApp.constants', [])
 
     /* New version of constant */
     .constant('CONST_RESOURCE', constants.RESOURCE)
+    .constant('STATMAP', statMapConst)
+    .constant('statMap', constants.statMap)
     .constant('heroIndexes', constants.heroIndexes)
-    .constant('CONST_DIFF_GAMES_MAP', constants.DIFF_GAMES_MAP)
+    .constant('tierIndexes', constants.tierIndexes)
 
-    .constant('tierMap', constants.tierMap)
     .name;
 
 // (function (){

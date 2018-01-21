@@ -8,16 +8,11 @@ export default angular
         template: require('./feature.radar.chart.html'),
         controller : RadarChart,
         bindings : {
+            statIndexes : '<',
             labelColumn : '<',
             firstColumn : '<',
             secondColumn : '<',
             thirdColumn : '<',
-            // draw : '&',
-            // testFunction : '&',
-            // testValue : '=',
-            // fieldValue : '<', // `<` symbol denotes one-way bindings
-            // filedType : '@?', // = two-way binding, @ one-way
-            // onUpdate : '&'
         }
     }).name;
 
@@ -30,7 +25,7 @@ export function RadarChart($element, $attrs){
         /* Set RadarChartOptions */
         let radarChartOptions = {};
         
-        console.log($('hero-detail .first-section').width())
+        // console.log($('hero-detail .first-section').width())
         var margin = {top: 100, right: 30, bottom: 30, left: 30},
             // width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
             //FIXME: NOT DEPEND ON JQUERY, DEPEND ON ELEMENT
@@ -54,14 +49,25 @@ export function RadarChart($element, $attrs){
     }
 
     $ctrl.$onChanges = function(changesObj){
+        const firstColumn = $ctrl.firstColumn;
+        const secondColumn = $ctrl.secondColumn;
+        const thirdColumn = $ctrl.thirdColumn;
+
+        // if(firstColumn == undefined) // FIXME;
         /* Set Data */
         let dataset = [];
-        dataset.push(makeLabelset($ctrl.labelColumn));
-        dataset.push(makeDataset($ctrl.labelColumn, $ctrl.firstColumn));
-        dataset.push(makeDataset($ctrl.labelColumn, $ctrl.secondColumn));
-        dataset.push(makeDataset($ctrl.labelColumn, $ctrl.thirdColumn));
-
-        $ctrl.dataset = dataset;
+        const statIndexes = $ctrl.statIndexes;
+        if(statIndexes == undefined) {
+            // show no statIndexes
+            // console.warn('no stat Indexes in radar chart');
+            $ctrl.dataset = [[], [], [], []];
+        } else {
+            dataset.push(makeLabelset(statIndexes));
+            dataset.push(makeDataset(statIndexes, firstColumn));
+            dataset.push(makeDataset(statIndexes, secondColumn));
+            dataset.push(makeDataset(statIndexes, thirdColumn));
+            $ctrl.dataset = dataset;
+        }
     }
 }
 
@@ -77,21 +83,28 @@ function makeLabelset(labelColumn) {
     return result;
 }
 
-function makeDataset(labelColumn, dataColumn) {
+function makeDataset(statIndexes, dataColumn) {
     let result = [];
 
     if(dataColumn == undefined) return [];
 
-    for(let i=0; i < labelColumn.length; i++){
-        let axis = (labelColumn[i] == undefined) ? '-' : labelColumn[i];
-        
-        let value = 0;
-        if(dataColumn[i] != undefined) {
-            value = (dataColumn[i].point == undefined || isNaN(dataColumn[i].point) ) ? 0 : dataColumn[i].point ;
-        }
-        result.push({axis : axis, value : value});
+    for(const statIndex of statIndexes) {
+        let value = dataColumn[statIndex];
+        result.push({axis : statIndex, value : getColumnPoint(dataColumn, statIndex)});
     }
+
     return result;
+}
+
+function getColumnPoint(column, statIndex) {
+    try {
+        let result = column[statIndex].point;
+        result = parseFloat(result);
+        if(isNaN(result)) return 0;
+        else return result;
+    } catch (error) {
+        return undefined;
+    }
 }
 
 function getDummyDataSet() {

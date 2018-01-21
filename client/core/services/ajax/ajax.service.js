@@ -3,7 +3,7 @@
 import angular from 'angular';
 import SessionCtrl from './session.core.ajax.controller';
 
-const logScope = 'ajax-service';
+const logFlag = false;
 
 
 //FIXME: must be separated ajax Indicator
@@ -55,7 +55,7 @@ export default angular
                 })
             },
             fetchIndexInformation : function(device, region) {
-                AppLogger.log('Try To fetch Index Information', 'info', logScope);
+                AppLogger.log('Try To fetch Index Information', logFlag, 'info');
 
                 return new Promise((resolve, reject) => {
                     IndexInformationApi.get({device : device, region : region}).$promise.then(response => {
@@ -95,10 +95,10 @@ export default angular
                 
                 return new Promise((resolve, reject) => {
                     PlayersApi.register({device : device, region : region}, {btg : btg}).$promise.then(response => {
-                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, logFlag, 'info');
                         resolve(response.toJSON().value);
                     }).catch(reason => {
-                        AppLogger.log(reason, 'info', logScope);
+                        AppLogger.log(reason, 'info', logFlag);
                         
                         const statusCode = reason.status + ''
                         let result = reason.data;
@@ -115,17 +115,17 @@ export default angular
                 })
             },
             fetchPlayerWithBtg : function(device, region, btg) {
-                AppLogger.log(`Fetch Player(btg : ${btg}) about from server`, 'info', logScope);
+                AppLogger.log(`Fetch Player(btg : ${btg}) about from server`, logFlag, 'info');
 
                 let ajaxIndicator = new CoreUtils.ajaxIndicator(`${btg} 사용자를 검색중입니다.`);
                 ajaxIndicator.show();
 
                 return new Promise((resolve, reject) => {
                     PlayersApi.get({device:device, region:region, btg:btg}).$promise.then(response => {
-                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, logFlag, 'info');
                         resolve(response.toJSON().value);
                     }).catch(reason => {
-                        AppLogger.log(reason, 'info', logScope);
+                        AppLogger.log(reason, logFlag, 'info');
 
                         const statusCode = reason.status + ''
                         let result = reason.data;
@@ -141,17 +141,16 @@ export default angular
                 })
             },
             fetchPlayerWithId : function(device, region, id) {
-                AppLogger.log(`Fetch Player (Id :${id}) about from server`, 'info', logScope);
-
+                AppLogger.log(`Fetch Player (Id :${id}) about from server`, logFlag, 'info');
                 let ajaxIndicator = new CoreUtils.ajaxIndicator(`사용자(${id})를 검색중입니다.`);
                 ajaxIndicator.show();
 
                 return new Promise((resolve, reject) => {
                     PlayersApi.get({device:device, region:region, id:id}).$promise.then(response => {
-                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, logFlag, 'info');
                         resolve(response.toJSON().value);
                     }).catch(reason => {
-                        AppLogger.log(reason, 'info', logScope);
+                        AppLogger.log(reason, logFlag, 'info');
 
                         const statusCode = reason.status + ''
                         let result = reason.data;
@@ -177,7 +176,7 @@ export default angular
             },
             // http://localhost:3000/pc/kr/crawl-datas/1/?date=17-10-18,17-10-21,17-10-22,17-10-23
             fetchCrawlDatas : function(device, region, id) {
-                AppLogger.log(`Fetch Crawl Data(id : ${id}) about from server`, 'info', logScope);
+                AppLogger.log(`Fetch Crawl Data(id : ${id}) about from server`, logFlag, 'info');
 
                 let ajaxIndicator = new CoreUtils.ajaxIndicator(`사용자 데이터를 가져오는 중입니다.`);
                 ajaxIndicator.show();
@@ -192,10 +191,10 @@ export default angular
                 
                 return new Promise((resolve, reject) => {
                     CrawlDatasApi.get({device:device, region: region, id:id, date:dateQuery}).$promise.then(response => {
-                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, logFlag, 'info');
                         resolve(response.toJSON().value);
                     }).catch(reason => {
-                        AppLogger.log(reason, 'info', logScope);
+                        AppLogger.log(reason, 'info', logFlag);
                         
                         const statusCode = reason.status + ''
                         let result = reason.data;
@@ -224,12 +223,12 @@ export default angular
 
                 return new Promise((resolve, reject) => {
                     TierDatasApi.get({device : device, region : region, date : date}).$promise.then(response => {
-                        AppLogger.log(`server msg : ${response.toJSON().msg}`, 'info', logScope);
+                        AppLogger.log(`server msg : ${response.toJSON().msg}`, logFlag, 'info');
                         
                         //FIXME: if data is no exist in that date
                         resolve(response.toJSON().value);
                     }).catch(reason => {
-                        AppLogger.log(reason, 'info', logScope);
+                        AppLogger.log(reason, 'info', logFlag);
                         
                         const statusCode = reason.status + ''
                         let result = reason.data;
@@ -256,13 +255,13 @@ export default angular
                 })
             },
             needToOrganize : function () {
-                AppLogger.log("Fetch Player Id about " + btg + "from server", 'info', logScope);
+                AppLogger.log("Fetch Player Id about " + btg + "from server", logFlag, 'info');
                 
                 let ajaxIndicator = new CoreUtils.ajaxIndicator(`${btg} 사용자를 검색중입니다.`);
                 ajaxIndicator.show();
                 
                 return PlayersApi.get({device:device, region:region, btg:btg}).$promise.then(response => {
-                    AppLogger.log(response, 'info', logScope);
+                    AppLogger.log(response, logFlag, 'info');
                     return {
                         status_code : response.$status,
                         body : response.toJSON()

@@ -1,24 +1,41 @@
 <div class="hero-detail-inner-container pos-relative">
+    <div class="side-button-container">
+        <div class="btn-group" role="group" aria-label="">
+            <button id="per_death" ng-click="$ctrl.onPerButton($event, 'death')" type="button" class="btn w-50-pct active" >목숨당</button>
+            <button id="per_game" ng-click="$ctrl.onPerButton($event, 'game')" type="button" class="btn w-50-pct">경기당</button>
+        </div>
+        <div class="btn-group" role="group" aria-label="">
+            <button type="button" ng-click="$ctrl.onChangeTableResultUnit($event, 'percent')" class="btn w-50-pct active">%</button>
+            <button type="button" ng-click="$ctrl.onChangeTableResultUnit($event, 'subtract')" class="btn w-50-pct">+-</button>
+        </div>
+        <div class="btn-group" role="group" aria-label="">
+            <button type="button" ng-click="$ctrl.onChangeTableColumnSelected($event, 'left')" class="w-50-pct">< Table</button>
+            <button type="button" ng-click="$ctrl.onChangeTableColumnSelected($event, 'right')" class="w-50-pct">Table ></button>
+        </div>
+    </div>
     <div class="flex-wrap pos-relative">
         <!-- <div class="loading-screen pos-absolute pos-relative flex f-align-w-center f-align-h-center"> 
             <div class="back-ground pos-absolute"></div>
             <div class="message">{{$ctrl.label.please_select_data}}</div>
         </div> -->
-        <div class="first-section" >
+        <!-- "$ctrl.radar.labelColumn""$ctrl.table.labelColumn" -->
+        <!-- <div class="first-section" >
             <feature-radar-chart
-                label-column = "$ctrl.radar.labelColumn"
-                first-column = "$ctrl.radar.firstColumn"
-                second-column = "$ctrl.radar.secondColumn"
-                third-column ="$ctrl.radar.thirdColumn">
+                label-column = "$ctrl.bind.statIndexes"
+                stat-indexes = "$ctrl.bind.statIndexes"
+                first-column = "$ctrl.bind.p1Stats"
+                second-column = "$ctrl.bind.p2Stats"
+                third-column ="$ctrl.bind.tierStats">
             </feature-radar-chart>
-        </div>
+        </div> -->
         <div class="second-section">
             <compare-table 
-                table-header = "$ctrl.table.header"
-                label-column = "$ctrl.table.labelColumn"
-                first-column = "$ctrl.table.firstColumn"
-                second-column = "$ctrl.table.secondColumn"
-                third-column ="$ctrl.table.thirdColumn"
+                table-header = "$ctrl.bind.tableHeader"
+                stat-indexes = "$ctrl.bind.statIndexes"
+                label-column = "$ctrl.bind.statIndexes"
+                first-column = "$ctrl.bind.p1Stats"
+                second-column = "$ctrl.bind.p2Stats"
+                third-column ="$ctrl.bind.tierStats"
                 />
             </compare-table>
         </div>

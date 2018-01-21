@@ -18,23 +18,24 @@ export default angular
         }
     }).name;
 
-export function RadarChart($element, $attrs){
+export function RadarChart($element, $attrs, AppLogger){
 
     var $ctrl = this;
+    const logFlag = false;
     
     $ctrl.$onInit = function(){
 
     }
     
     $ctrl.$onChanges = function(changesObj) {
-        console.log('on changes in common d3.js')
-
+        AppLogger.log('on changes in common d3.js', logFlag, 'info');
+        AppLogger.log('$ctrl.datsetis below', logFlag, 'info');
+        AppLogger.log($ctrl.dataset, logFlag, 'info');
         /* set default chart options */
         if($ctrl.radarChartOptions == undefined) $ctrl.radarChartOptions = getDefaultRadarChartOptions();
         
         /* replace angular dom select */
         let targetDom = $element.find(".radar-chart-redesign")[0];
-        console.log($ctrl.dataset);
         RadarChartRedesign($element.find(targetDom)[0], $ctrl.dataset, $ctrl.radarChartOptions);
          /* The way to change d3 dom <- angular dom */
         /* first */

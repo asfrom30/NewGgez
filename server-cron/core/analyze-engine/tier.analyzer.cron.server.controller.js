@@ -8,63 +8,79 @@ exports.analyzeAsync = function(saveConfig) {
     const todaySuffix = saveConfig.todaySuffix;
 
     /* Dependency Injection */
-    let client = require('mongodb').MongoClient;
-    let heroMap = require('../../externals/const/heromap');
-    let statMap = require('../../externals/const/statmap');
-    let tierMap = require('../../externals/const/tiermap');
-
-    let aggregateQuery = [];
-    // need min playtimes set...
-    // aggregate.push(getMatcher(10))
-    // aggregate.push(addStatMapField(statMap))
-    // ....
-    // aggregate.push(remapObj)
-    // aggregate.output
+    
+    const heroIndexes = [
+        "all", "soldier76", "reaper", "pharah", "reinhardt", "roadhog",
+        "winston", "dva", "symmetra" , "widowmaker", "tracer", "hanzo",
+        "mercy", "zenyatta", "genji", "torbjoern", "junkrat", "zarya",
+        "mei", "ana", "lucio", "sombra", "doomfist", "orisa"
+    ];
+    const tierIndexes = ["bronze", "silver", "gold", "platinum", "diamond", "master", "grandmaster", "heroic"];
+    tierIndexes.push('total');
+    
+    const tierGteLtes = require('../../externals/const/tiermap');
+    
+    const lang = 'ko-kr';
+    const aggregateQuery = [];
+    const gamePlayedIndex = '치른게임'; //FIXME: Must have lang param
+    const statMap = require('../analyze-engine/stat-map-client.json');
+    const denominators = statMap.denominators;
+    const heroStatMap = statMap.heroes;
 
     /* Make Aggregate Query */
-    for(let heroId of heroMap) {
-        for(let tierKey in tierMap) {
-            let tier = tierMap[tierKey];
+    for(let heroIndex of heroIndexes) {
+        for(const tierIndex of tierIndexes) {
+            const gte =tierGteLtes[tierIndex].gte;
+            const lte = tierGteLtes[tierIndex].lte;
 
             /* Make `Matcher Aggregate` */
-            let arrMatcher = [];
-            arrMatcher.push(getGteComp("_value." + heroId + ".치른게임", 10));;
-            arrMatcher.push(getGteLteComp("_meta.cptpt", tier.gte, tier.lte));
-            let matcher = getMatcherWithMultipleComp(arrMatcher);
+            const arrMatcher = [
+                getGteComp( `_value.${heroIndex}.${gamePlayedIndex}`, 10),
+                getGteLteComp("_meta.cptpt", gte, lte)
+            ];
+
+            const matcher = getMatcherWithMultipleComp(arrMatcher);
             
             /* Make `addFields Aggregate` using WinRate Field */
 
             /* Make `addFields Aggregate` using statmap Field */
             let addFields = getEmptyAddFields();
-            for(let stat of statMap[heroId]) {
-                let statId = stat.label;
-                let statNume = stat.numerator;
-                let statDeno = stat.denominator;
-                addFields.$addFields[statId] = getDivideArithmetic(heroId, statNume, statDeno);
+            
+            for(const denominator of denominators) {
+                const denominatorIndex = denominator[lang];
+                for(const stat of heroStatMap[heroIndex]) {
+                    const statId = `${stat.id}_per_${denominator.id}`;
+                    const numeratorIndex = stat[lang];
+                    addFields.$addFields[statId] = getDivideArithmetic(heroIndex, numeratorIndex, denominatorIndex);
+                }
             }
 
             /* Make `Group Aggregate` */
             let groupStage = getEmptyGroupStage();
-            for(let stat of statMap[heroId]) {
-                groupStage.$group._id = heroId;
-                groupStage.$group.count = {$sum: 1};
-
-                let statId = stat.label;
-                groupStage.$group[statId + "_max"] = getGroupAccumulator('max', statId);
-                groupStage.$group[statId + "_min"] = getGroupAccumulator('min', statId);
-                groupStage.$group[statId + "_avg"] = getGroupAccumulator('avg', statId);
+            for(const denominator of denominators) {
+                for(const stat of heroStatMap[heroIndex]) {
+                    const statId = `${stat.id}_per_${denominator.id}`;
+                    groupStage.$group._id = heroIndex;
+                    groupStage.$group.count = {$sum: 1};
+                    groupStage.$group[statId + "_max"] = getGroupAccumulator('max', statId);
+                    groupStage.$group[statId + "_min"] = getGroupAccumulator('min', statId);
+                    groupStage.$group[statId + "_avg"] = getGroupAccumulator('avg', statId);
+                }
             }
 
             let projectStage = getEmptyProjectStage();
             projectStage.$project = {};
             projectStage.$project.count = "$count";
-            for(let stat of statMap[heroId]) {
-                let statId = stat.label;
-                projectStage.$project[statId] = {};
-                projectStage.$project[statId].max = '$' + statId + "_max";
-                projectStage.$project[statId].min = '$' + statId + "_min";
-                projectStage.$project[statId].avg = '$' + statId + "_avg";
+            for(const denominator of denominators) {
+                for(const stat of heroStatMap[heroIndex]) {
+                    const statId = `${stat.id}_per_${denominator.id}`;
+                    projectStage.$project[statId] = {};
+                    projectStage.$project[statId].max = '$' + statId + "_max";
+                    projectStage.$project[statId].min = '$' + statId + "_min";
+                    projectStage.$project[statId].avg = '$' + statId + "_avg";
+                }
             }
+
 
             /* out stage */
             // let outStage = {$out : 'tierdatas-' + currentDate};
@@ -76,16 +92,15 @@ exports.analyzeAsync = function(saveConfig) {
             aggregateDocs.push(groupStage);
             aggregateDocs.push(projectStage);
             // aggregate.push(outStage);
-
             //TODO: refactoring for sequence
             appDao.doAggregate(device, region, todaySuffix, aggregateDocs).then(result => {
-                const docKey = `${heroId}.${tierKey}`;
+                const docKey = `${heroIndex}.${tierIndex}`;
                 const docValue = result[0];
                 const doc = {$set : {}};
                 doc.$set[docKey] = docValue;
                 appDao.updateTierData(device, region, todaySuffix, doc);
             }).catch((reason) => {
-                console.log(`err occured in ${heroId} ${tierKey}`);
+                console.log(`err occured in ${heroIndex} ${tierIndex}`);
                 console.log(reason);
             });
 
@@ -102,7 +117,6 @@ exports.analyzeAsync = function(saveConfig) {
 
     return;
 }
-    
 
 /* Mongodb Aggregate Comparison */
 function getGteLteComp(compKey, gte, lte){

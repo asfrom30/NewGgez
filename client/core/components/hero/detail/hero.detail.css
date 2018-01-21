@@ -1,6 +1,17 @@
 /**
 *   Layout
 */
+.hero-detail-inner-container
+.side-button-container {
+    display: flex;
+}
+
+
+.hero-detail-inner-container
+.side-button-container .btn-group {
+    flex : 1 0 0;
+}
+
 
 .hero-selectors-container > .wh {
     width:100%;
@@ -87,4 +98,35 @@
     .padding-for-fixed-bottom {
         height: 75px;
     }
+}
+
+/* styles */
+.hero-detail-inner-container
+.side-button-container {
+    margin-top: 5px;
+}
+
+.hero-detail-inner-container
+.side-button-container .btn-group:nth-child(2) {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.hero-detail-inner-container
+.side-button-container button {
+    background-color: #00000000;
+    border : 1px solid white;
+    color: white;
+}
+
+.hero-detail-inner-container
+.side-button-container button.active {
+    background-color: white;
+    color: black;
+}
+
+.hero-detail-inner-container
+.side-button-container button {
+    background-color: #00000000;
+    color: white;
 }

@@ -22,7 +22,7 @@ var server = http.createServer(app);
 // });
 // require('./config/socketio').default(socketio);
 require('./config/express').default(app);
-require('./routes').default(app);
+require('./routes').default(app); // FIXME: replace with import
 
 /* Path Setting */
 // app.set('utilPath', path.join(config.root, 'client'));

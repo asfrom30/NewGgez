@@ -21,6 +21,7 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     'ngInject';
     
     var $ctrl = this;
+    const logFlag = false;
     const dom = {
         searchedPlayerTable : '.player-table-container table',
         noResultPlayerTable : '#no-result-in-searched-player',
@@ -188,9 +189,9 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
 
     function moveHeroPage(device, region, id){
         if(device == undefined | region == undefined | id == undefined) {
-            if(device == undefined) AppLogger.log('device is undefined, can not go hero page', 'error', logScope);
-            if(region == undefined) AppLogger.log('device is undefined, can not go hero page', 'error', logScope);
-            if(id == undefined) AppLogger.log('device is undefined, can not go hero page', 'error', logScope);
+            if(device == undefined) AppLogger.log('device is undefined, can not go hero page', logFlag, 'error' );
+            if(region == undefined) AppLogger.log('device is undefined, can not go hero page', logFlag, 'error');
+            if(id == undefined) AppLogger.log('device is undefined, can not go hero page',  logFlag, 'error');
             return;
         }
         // FIXME: Impl service for transfer profile data        

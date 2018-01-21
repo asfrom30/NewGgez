@@ -165,7 +165,6 @@ function getHeroDiffValue(crawlDatas, dateIndexA, dateIndexB, heroIndex, statInd
 
     if(result < 0 || isNaN(result)) return undefined;
     else return result;
-
 }
 
 function getDiffCptpt(beforeCptpt, afterCptpt) {

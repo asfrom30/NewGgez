@@ -1,9 +1,8 @@
 import RESOURCE from './resource/resource.const';
 
-import heroIndexes from './heromap/heromap.const';
-import tierMap from './map/tier.standard.constanat';
-import DIFF_GAMES_MAP from './analyzer-map/diff-games/diff.games.analyzer.map.const';
-
+import statMap from './map/stat-map';
+import heroIndexes from './indexes/hero-indexes';
+import tierIndexes from './indexes/tier-indexes';
 
 /* Labels */
 import summaryPageLabel from './label/lang/ko-kr/summary.page.label';
@@ -32,8 +31,7 @@ export default {
     RESOURCE : RESOURCE,
 
     /* Const Map */
-    tierMap : tierMap,
+    statMap : statMap,
     heroIndexes : heroIndexes,
-    DIFF_GAMES_MAP : DIFF_GAMES_MAP
-
+    tierIndexes : tierIndexes,
 };

@@ -14,7 +14,12 @@ export default angular
         }
     }).name;
 
-export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, CoreUtils, tierMap){
+export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, CoreUtils, tierIndexes){
+    //$ctrl.cache.dataSets.label[]
+    //$ctrl.cache.dataSets.p1[p1Index, heroIndex]
+    //$ctrl.cache.dataSets.p2[p2Index, heroIndex]
+    //$ctrl.cache.dataSets.tier[tierIndex, heroIndex];
+    //$ctlr.cahce.dataSets.statIndexes[denominatorIndex, heroIndex]
 
     /* constants */
     const $ctrl = this;
@@ -22,50 +27,94 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
     const device = $stateParams.device;
     const stateParams = {device : $stateParams.device, region : $stateParams.region, id : $stateParams.id};
     const dom = {
-        loadingScreen : '.loading-screen'
+        loadingScreen : '.loading-screen',
+        perDenominator : '#per_death'
     }
 
-    const logScope = 'hero.detail';
+    const logFlag = false;
 
     $ctrl.$onInit = onInit;
     $ctrl.onSelectorChanges = onSelectorChanges;
     $ctrl.changeP2PlayerData = changeP2PlayerData;
+    /* Button */
+    $ctrl.onPerButton = onPerButton;
+    $ctrl.onChangeTableResultUnit = onChangeTableResultUnit;
+    $ctrl.onChangeTableColumnSelected = onChangeTableColumnSelected;
+
+    $ctrl.onCompareToggle = onCompareToggle;
+    $ctrl.onResultToggle = onResultToggle;
+   
+    function activeOne($_dom) {
+        $_dom.parent().children().removeClass('active');
+        $_dom.addClass('active');
+    }
 
     function onInit() {
         const mode = getMode();
         initView(mode);
-        initLabel();
-
-        updateLabelData();
-        updateTierData();
-
-        updateP1PlayerData($ctrl.currentPlayerDatas);
-        updateP1GamesLabel();
-
-        updateP2PlayerData($ctrl.currentPlayerDatas);
-        updateP2GamesLabel();
+        initLabel('kr'); // en, cn
+        $ctrl.cache = $ctrl.cache || {};
+        $ctrl.cache.statIndexes = Analyzer.getDetailStatIndexes();
         
-        /* Update Data in Fixed Bottom*/
-        updateHeroGameLabelP1()
-        updateHeroGameLabelP2();
+
+        // updateLabelData();//FIXME: Analyzer.getLabels(lang);
+        
+        // Using Analyzer get Data, Stored in cache // getAnalyzer Store in Cache. 
+        $ctrl.cache['p1'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
+        $ctrl.cache['p2'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
+        makeTierDataSet(); // getTierDataSetFromAnalyzer
+
+        // need just once, not needed change when selectors changed
+        updateP1GamesLabel();
+        updateP2GamesLabel();
+
+        if(false) {
+            console.log("======== for debug =====");
+            console.log($ctrl.currentPlayerDatas)
+            // console.log($ctrl.cache.statIndexes);
+            console.log($ctrl.cache.p1);
+            console.log($ctrl.cache.p2);
+            // console.log($ctrl.cache.tier);
+        }
+    }
+
+    function onDenominatorChanges() {
+        const selector = getCurrentSelector();
+        
+        if(selector == undefined) return;
+        onSelectorChanges(selector);
     }
 
     function onSelectorChanges(selector) {
+        $ctrl.bind = $ctrl.bind || {};
+        const heroIndex = selector.heroIndex;
+        const p1Index = selector.p1Index;
+        const p2Index = selector.p2Index;
+        const tierIndex = selector.tierIndex;
+        const denominatorIndex = getDenominatorIndex();
 
-        if(selector.heroIndex && (selector.p1Index || selector.p2Index || selector.tierIndex )) {
+        if(!heroIndex) {
             $element.find(dom.loadingScreen).hide();
+            return;
+        } else if(!(p1Index || p2Index || tierIndex)) {
+            $element.find(dom.loadingScreen).hide();
+            return;
         }
+
+        // update game label in selectors
+        updateHeroGameLabelP1(p1Index);
+        updateHeroGameLabelP2(p2Index);
+        updateTierGamesLabel(heroIndex);
+
+        // update table and radar dataset
+        
+        $ctrl.bind.tableHeader = getTableHeader(denominatorIndex, p1Index, p2Index, tierIndex);
+        $ctrl.bind.statIndexes = $ctrl.cache.statIndexes[denominatorIndex][heroIndex];
+        $ctrl.bind.p1Stats = getSelectedPlayerStats(denominatorIndex, 'p1', p1Index, heroIndex);
+        $ctrl.bind.p2Stats = getSelectedPlayerStats(denominatorIndex, 'p2', p2Index, heroIndex);
+        $ctrl.bind.tierStats = getSelectedTierStats(denominatorIndex, tierIndex, heroIndex);
 
         setCurrentSelector(selector);
-
-        updateHeroGameLabelP1();
-        updateHeroGameLabelP2();
-
-        if(getHeroIndex() != undefined) {
-            updateTierGamesLabel();
-            updateRadarDataset();
-            updateTableDataSet();
-        }
     }
 
     function changeP2PlayerData(id) {
@@ -74,8 +123,7 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
 
         //FIXME: not yet implement : need to store raw data.
         Ajax.fetchCrawlDatas(device, region, id).then(crawlDatas => {
-            const playerData = transfer(crawlDatas);
-            updateP2PlayerData(playerData);
+            makePlayerDataSet('p2', crawlDatas);
             updateP2GamesLabel();
             updateHeroGameLabelP2();
             $scope.$apply();
@@ -97,7 +145,7 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
     } 
 
     /* Label Data */
-    function initLabel() {
+    function initLabel(lang) {
         // static label
         $ctrl.label = {};
         $ctrl.label.please_select_data = '데이터를 선택해주세요';
@@ -128,72 +176,30 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         }
     }
 
-    /* Tier Data */
-    function updateTierData() {
-        const tierData = $ctrl.tierData;
-        const analyzedTierData = makeAnalyzedTierData(tierData);
-        setAnalyzedTierData2Cache(analyzedTierData);
-    }
-    
-    function makeAnalyzedTierData(tierData) {
-        return Analyzer.getTierData(tierData);
-    }
-
-    function setAnalyzedTierData2Cache(analyzedTierData) {
-        if($ctrl.cache == undefined) $ctrl.cache = {};
-        $ctrl.cache.tier = analyzedTierData;
-    }
-
-    function getRawTierData(){
-        return $ctrl.tierData;
-    }
-
-    function getAnalyzedTierDataFromCache() {
-        try {
-            return $ctrl.cache.tier;
-        } catch (error) {
-            console.warn('$ctrl.cache or $ctrl.cache.tier undefined, can not get tier data');
-            return undefined;
-        }
-    }
-
     /* Player Data */
-    function updateP1PlayerData(playerData) {
-        const analyzedP1PlayerData = makeAnalyzedPlayerData(playerData, getRawTierData());
-        setAnalyzedP1PlayerData2Cache(analyzedP1PlayerData);
-    }
-    
-    function updateP2PlayerData(playerData) {
-        const analyzedP2PlayerData = makeAnalyzedPlayerData(playerData, getRawTierData());
-        setAnalyzedP2PlayerData2Cache(analyzedP2PlayerData);
-    }
-
-    function makeAnalyzedPlayerData(playerData, tierData) {
-        const arrDateIdx = ['week', 'yesterday', 'today', 'season'];  // Dependecy is analyzed tier data
-
+    function makePlayerDataSet(crawlDatas, tierData) {
+        const dateIndexes = ['week', 'yesterday', 'today', 'season'];  // Dependecy is analyzed tier data
+        if($ctrl.cache == undefined) $ctrl.cache = {};
+        
         return {
-            diffGames : Analyzer.getDiffGames(playerData, arrDateIdx),
-            diffDatas : Analyzer.getDiffHeroDatas(playerData, arrDateIdx, tierData)
+            diffGames : Analyzer.makeDetailHeroDiffGames(crawlDatas, dateIndexes),
+            diffDatas : Analyzer.makeDetailPlayerDataSet(crawlDatas, dateIndexes, tierData)
         }
     }
-    
-    function setAnalyzedP1PlayerData2Cache(analyzedPlayerData) {
-        if($ctrl.cache == undefined) $ctrl.cache = {};
-        $ctrl.cache.p1 = analyzedPlayerData;
-    }
 
-    function setAnalyzedP2PlayerData2Cache(analyzedPlayerData) {
-        if($ctrl.cache == undefined) $ctrl.cache = {};
-        $ctrl.cache.p2 = analyzedPlayerData;
-    }
+    /* Tier Data */
+    function makeTierDataSet() {
+        const tierData = $ctrl.tierData;
 
+        if($ctrl.cache == undefined) $ctrl.cache = {};
+        $ctrl.cache.tier =  Analyzer.makeDetailTierDataSet(tierData);
+    }
 
     function updateRadarDataset() {
         const p1Index = getP1Index();
         const p2Index = getP2Index();
         const tierIndex = getTierIndex();
         const heroIndex = getHeroIndex();
-        
         
         /* heroIndex is basic index */
         if(heroIndex == undefined) return;
@@ -210,38 +216,6 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         else $ctrl.radar.secondColumn = getP2DiffDatasFromCache(p2Index, heroIndex);
 
         if(tierIndex == undefined) $ctrl.radar.thirdColumn = [];
-        else $ctrl.radar.thirdColumn = getTierDiffDatasFromCache(tierIndex, heroIndex);
-    }
-
-    function updateTableDataSet(){
-        const p1Index = getP1Index();
-        const p2Index = getP2Index();
-        const tierIndex = getTierIndex();
-        const heroIndex = getHeroIndex();
-
-        setTableHeader();
-
-        if(heroIndex == undefined || heroIndex == 'all') return;
-
-        setTableColumn(0, getTableLabelColumn(heroIndex));
-        
-        if(p1Index == undefined || !hasP1Game(p1Index, heroIndex)) {
-            setTableColumn(1, []);
-        } else {
-            setTableColumn(1, getP1DiffDatasFromCache(p1Index, heroIndex));
-        }
-
-        if(p2Index == undefined || !hasP2Game(p2Index, heroIndex)) {
-            setTableColumn(2, []);
-        } else {
-            setTableColumn(2, getP2DiffDatasFromCache(p2Index, heroIndex));
-        }
-
-        if(tierIndex == undefined) {
-            setTableColumn(3, []); 
-        } else {
-            setTableColumn(3, getTierDiffDatasFromCache(tierIndex, heroIndex)); 
-        }
     }
 
     /* View */
@@ -256,10 +230,27 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
             $element.find('.mode-compare').show();
         } 
     }
-    
-    /* Button */
-    $ctrl.onCompareToggle = onCompareToggle;
-    $ctrl.onResultToggle = onResultToggle;
+
+    function onPerButton($event, denominatorIndex){
+        // update view
+        const $_dom = $element.find($event.target)
+        activeOne($_dom);
+
+        // update selector changes...
+        onDenominatorChanges();
+    }
+
+    function onChangeTableResultUnit($event, unit) {
+        // update view
+        const $_dom = $element.find($event.target)
+        activeOne($_dom);
+
+        $scope.$broadcast("onChangeTableResultUnit", {unit : unit});
+    }
+
+    function onChangeTableColumnSelected($event, direction) {
+        $scope.$broadcast("onChangeTableColumnSelected", {direction: direction});
+    }
     
     function onCompareToggle(){
         $scope.$broadcast("onCompareToggle"); 
@@ -278,15 +269,23 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         const mode = path.substring(index + 1).trim();
         return mode;
     }
-
-    function getTierDiffDatasFromCache(tierIndex, heroIndex) {
+    function getSelectedPlayerStats(denominatorIndex, player, pIndex, heroIndex) {
         try {
-            return $ctrl.cache.tier[tierIndex][heroIndex];
+            return $ctrl.cache[player]['diffDatas'][denominatorIndex][pIndex][heroIndex];
         } catch (error) {
-            console.error(`tier index : ${tierIndex}, heroIndex : ${heroIndex} can not get tier table datas from cache`)
-            return;
+            console.error(`denominatorIndex : ${denominatorIndex}, player index : ${player}, heroIndex : ${heroIndex} can not get selected player stat from cache`)
+            return undefined;
         }
     }
+    function getSelectedTierStats(denominatorIndex, tierIndex, heroIndex) {
+        try {
+            return $ctrl.cache.tier[denominatorIndex][tierIndex][heroIndex];
+        } catch (error) {
+            console.error(`denominatorIndex : ${denominatorIndex}, tier index : ${tierIndex}, heroIndex : ${heroIndex} can not get selected tier stat from cache`)
+            return undefined;
+        }
+    }
+
     function getP1DiffDatasFromCache(p1Index, heroIndex) {
         try {
             return $ctrl.cache.p1.diffDatas[p1Index][heroIndex];
@@ -358,35 +357,26 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         $ctrl.p2GameLabel = obj;
     }
 
-    function updateTierGamesLabel() {
+    function updateTierGamesLabel(heroIndex) {
         let result = {};
-
-        const heroIndex = getHeroIndex();
-        
-        for(let tierId of tierMap){
-            if(tierId == "total") continue;
+        for(let tierIndex of tierIndexes){
             try {
-                result[tierId] = $ctrl.tierData[heroIndex][tierId].count;
+                result[tierIndex] = $ctrl.tierData[heroIndex][tierIndex].count;
             } catch (error) {
-                result[tierId] = '-';
+                result[tierIndex] = '-';
             }   
         }
-
         $ctrl.tierGameLabel = result;
     }
 
-    function updateHeroGameLabelP1() {
-        const p1Index = getP1Index();
-
+    function updateHeroGameLabelP1(p1Index) {
         if(p1Index != undefined) {
             const diffGames = getP1DiffGames(p1Index);
             setHeroGameLabelP1(diffGames);
         }
     }
 
-    function updateHeroGameLabelP2() {
-        const p2Index = getP2Index();
-
+    function updateHeroGameLabelP2(p2Index) {
         if(p2Index != undefined) {
             const diffGames = getP2DiffGames(p2Index);
             setHeroGameLabelP2(diffGames);
@@ -419,7 +409,7 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         try {
             if($ctrl.selector.p1Index != undefined) result = $ctrl.selector.p1Index;
         } catch (error) {
-            AppLogger.log('p1 index is undefined', logScope, 'warn');
+            AppLogger.log('p1 index is undefined', logFlag, 'warn');
         }
         return result;
     }
@@ -429,7 +419,7 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         try {
             if($ctrl.selector.p2Index != undefined) result = $ctrl.selector.p2Index;
         } catch (error) {
-            AppLogger.log('p2 index is undefined', logScope, 'warn');
+            AppLogger.log('p2 index is undefined', logFlag, 'warn');
         }
         return result;
     }
@@ -439,7 +429,7 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         try {
             if($ctrl.selector.tierIndex != undefined) result = $ctrl.selector.tierIndex;
         } catch (error) {
-            AppLogger.log('tier index is undefined', logScope, 'warn');
+            AppLogger.log('tier index is undefined', logFlag, 'warn');
         }
         return result;
     }
@@ -448,7 +438,7 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         try {
             return $ctrl.selector.heroIndex;
         } catch (error) {
-            AppLogger.log('hero index is undefined', logScope, 'warn');
+            AppLogger.log('hero index is undefined', logFlag, 'warn');
             return undefined;
         }
     }
@@ -507,13 +497,31 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         $ctrl.heroGameLabel.p2 = p2HeroGameLabel;
     }
 
-    function setTableHeader() {
-        if($ctrl.table == undefined) $ctrl.table ={};
-        $ctrl.table.header =[
-            {index : ''}, 
-            {index : getP1Index()}, 
-            {index : getP2Index()}, 
-            {index : getTierIndex()}];
+    function getTableHeader(denominatorIndex, p1Index, p2Index, tierIndex) {
+        return [
+            {index : denominatorIndex}, 
+            {index : p1Index}, 
+            {index : p2Index}, 
+            {index : tierIndex}];
+    }
+
+    function getActiveDomIdInSiblings(domSelector){
+        let activeId;
+        $element.find(domSelector).parent().children().each(function(){
+            if($(this).hasClass('active')) {
+                activeId = $(this).attr('id');
+            } 
+        })
+        return activeId;
+    }
+
+    function getDenominatorIndex() {
+        const domId = getActiveDomIdInSiblings(dom.perDenominator);
+        if(domId == 'per_game') {
+            return "game";
+        } else {
+            return "death"
+        }
     }
 
 

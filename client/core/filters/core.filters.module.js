@@ -38,7 +38,14 @@ export default angular.module('ggez.core.filter', [])
     .filter('upDownSymbol', upDownSymbol)
     .filter('defaultValue', defaultValue)
     .filter('recentUpdate', recentUpdate)
+    .filter('i18nDateIndex', i18nDateIndex)
+    .filter('i18nStatIndex', i18nStatIndex)
+    .filter('i18nTierIndex', i18nTierIndex)
     .name;
+
+import { i18nDateIndex } from './i18n/i18n.core.filter.module';
+import { i18nStatIndex } from './i18n/i18n.core.filter.module';
+import { i18nTierIndex } from './i18n/i18n.core.filter.module';
 
 export function recentUpdate() {
     return function(unixTimestamp) {
@@ -246,10 +253,12 @@ export function tierImageSrc(){
         } else if(2500 <= cptpt && cptpt <= 2999) {
             return "./assets/images/tier-icon/platinum-badge.png";
         } else if(3000 <= cptpt && cptpt <= 3499) {
-            return "./assets/images/tier-icon/master-badge.png";
+            return "./assets/images/tier-icon/dia-badge.png";
         } else if(3500 <= cptpt && cptpt <= 3999) {
+            return "./assets/images/tier-icon/master-badge.png";
+        } else if(4000 <= cptpt && cptpt <= 4499) {
             return "./assets/images/tier-icon/grandmaster-badge.png";
-        } else if(4000 <= cptpt && cptpt <= 5000) {
+        } else if(4500 <= cptpt && cptpt <= 5000) {
             return "./assets/images/tier-icon/heroic-badge.png";
         } else {
             return "";

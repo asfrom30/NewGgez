@@ -58,7 +58,7 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
 
     $ctrl.$onInit = function(){
         if(process.env.NODE_ENV !== 'production') excutesForDev(true);
-        initView();
+        initView(); 
         dataBinding();
     }
 
@@ -91,10 +91,10 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
         // const tierIndex = 'heroic';
         // const heroIndex = 'doomfist';
 
-        const p1Index = 'yesterday';
-        const p2Index = 'today';
-        const tierIndex = 'heroic';
-        const heroIndex = 'genji';
+        const p1Index = 'season';
+        const p2Index = 'week';
+        const tierIndex = 'diamond';
+        const heroIndex = 'mercy';
 
         $timeout(function(){
             $element.find(`#first-player-${p1Index}-selected`).click();

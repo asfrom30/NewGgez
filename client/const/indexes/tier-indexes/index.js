@@ -1,0 +1,1 @@
+export default ["bronze", "silver", "gold", "diamond", "platinum", "master", "grandmaster", "heroic"];

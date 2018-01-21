@@ -10,19 +10,15 @@
         <table width="100%">
             <thead>
                 <tr>
-                    <th ng-repeat="header in $ctrl.tableHeader">
-                        <!-- <div>{{header.index}}</div> -->
-                        <div>1</div>
-                    </th>
-                    <th>
-                        <!-- <div class="h-50-pct">{{$ctrl.tableHeader[$ctrl.indexes.b].index}}</div> -->
-                        <!-- <div class="h-50-pct">보다 {{$ctrl.tableHeader[$ctrl.indexes.a].index}}</div> -->
-                    </th>
+                    <th>{{ $ctrl.tableHeader[0].index }}</th>
+                    <th>{{ $ctrl.tableHeader[1].index | i18nDateIndex : $ctrl.lang }}</th>
+                    <th>{{ $ctrl.tableHeader[2].index | i18nDateIndex : $ctrl.lang }}</th>
+                    <th>{{ $ctrl.tableHeader[3].index | i18nTierIndex : $ctrl.lang }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="tableRow in $ctrl.tableRows">
-                    <td>{{tableRow[0]}} <span class="glyphicon glyphicon-question-sign" style="color:lightgray"></span></td>
+                    <td>{{ tableRow[0] | i18nStatIndex : $ctrl.lang }} <span class="glyphicon glyphicon-question-sign" style="color:lightgray"></span></td>
                     <td ng-class="{active : $ctrl.isFirstActive}">
                         <div class="beantown td-up">{{tableRow[1].point  | upperNumberFormat : "0.0"}}</div>
                         <div class="td-down">{{tableRow[1].score | lowerNumberFormat : "0.00"}}</div>
@@ -57,8 +53,9 @@
                     </td>
                 </tr>
                 <tfoot>
-                    <tr><td class="row-result" colspan="5">티어 평균보다 얼마를 더 했습니다.</td></tr>
-                    <tr><td class="row-padding"colspan="5" style="height:300px"></td></tr>
+                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 0) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[2].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[0].value | percentForResult | abs}} {{ $ctrl.bind.tableFooters[0].value | upDownSymbol}} 했습니다.</td></tr>
+                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 1) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}} {{ $ctrl.bind.tableFooters[1].value | upDownSymbol}} 했습니다.</td></tr>
+                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 2) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[2].index}}이 {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}} {{ $ctrl.bind.tableFooters[2].value | upDownSymbol}} 했습니다.</td></tr>
                 </tfoot>
             </tbody>
         </table>

@@ -3,7 +3,7 @@
 import angular from 'angular';
 import './hero.main.css';
 
-const logScope = 'hero-main';
+const logFlag = false;
 
 export default angular
     .module('hero.component', [])
@@ -23,9 +23,9 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, $scope, A
     var $ctrl = this;
 
     $ctrl.$onInit = function(){
-        AppLogger.log($ctrl.resolvedPlayer, 'info', logScope);
-        AppLogger.log($ctrl.resolvedCrawlDatas, 'info', logScope);
-        AppLogger.log($ctrl.resolvedTierData, 'info', logScope);
+        AppLogger.log($ctrl.resolvedPlayer, logFlag, 'info');
+        AppLogger.log($ctrl.resolvedCrawlDatas, logFlag, 'info');
+        AppLogger.log($ctrl.resolvedTierData, logFlag, 'info');
 
         $ctrl.device = $stateParams.device;
         $ctrl.region = $stateParams.region;

@@ -94,7 +94,7 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
         const p1Index = 'season';
         const p2Index = 'week';
         const tierIndex = 'diamond';
-        const heroIndex = 'mercy';
+        const heroIndex = 'soldier76';
 
         $timeout(function(){
             $element.find(`#first-player-${p1Index}-selected`).click();

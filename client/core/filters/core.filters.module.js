@@ -49,16 +49,29 @@ import { i18nTierIndex } from './i18n/i18n.core.filter.module';
 
 export function recentUpdate() {
     return function(unixTimestamp) {
-        const subtractUnixTime = Date.now() - unixTimestamp/1000;
-        return hhmmss(subtractUnixTime);
+        const subtractUnixTime = (Date.now() - unixTimestamp)/1000;
+        return ddhhmm(parseInt(subtractUnixTime));
     }
+}
+
+function ddhhmm(secs) {
+    var days = Math.floor(secs / (3600*24));
+    secs  -= days*3600*24;
+    var hrs   = Math.floor(secs / 3600);
+    secs  -= hrs*3600;
+    var mnts = Math.floor(secs / 60);
+    secs  -= mnts*60;
+    return days+"d, "+hrs+"h, "+mnts+"m, "+secs+"s 전";
 }
 
 function hhmmss(secs) {
     var minutes = Math.floor(secs / 60);
     secs = secs%60;
+    
     var hours = Math.floor(minutes/60)
     minutes = minutes%60;
+    const days = Math.floor(hours/24);
+
     return pad(hours)+":"+pad(minutes)+":"+pad(secs);
 }
 

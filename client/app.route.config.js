@@ -23,7 +23,8 @@ export function routeConfig($stateProvider, $urlServiceProvider) {
     $stateProvider.state(getHeroSummaryState());
     $stateProvider.state(getHeroDetailState());
     $stateProvider.state(getHeroCompareState());
-    $stateProvider.state(getHeroRankState());
+    $stateProvider.state(getHeroRankingState());
+    $stateProvider.state(getHeroInsightsState());
     $stateProvider.state(getHeroFavoritesState());
 
     /* Hero Admin Page */
@@ -168,11 +169,19 @@ function getHeroCompareState() {
     }
 }
 
-function getHeroRankState() {
+function getHeroRankingState() {
     return {
-        name: 'hero.rank',
-        url : '{device}/{region}/{id}/rank',
-        component : 'heroRank',
+        name: 'hero.ranking',
+        url : '{device}/{region}/{id}/ranking',
+        component : 'heroRanking',
+    }
+}
+
+function getHeroInsightsState() {
+    return {
+        name: 'hero.insights',
+        url : '{device}/{region}/{id}/insights',
+        component : 'heroInsights',
     }
 }
 

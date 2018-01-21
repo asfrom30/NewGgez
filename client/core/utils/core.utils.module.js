@@ -47,7 +47,7 @@ export default angular
 
         this.getYesterIndex = function(){
             if(env != 'production') {
-                return '171211';
+                return '171113';
             } else {
                 return moment().subtract(1, 'days').format('YYMMDD');
             }

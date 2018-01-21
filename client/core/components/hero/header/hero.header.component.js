@@ -20,7 +20,7 @@ export default angular
     })
     .name;
 
-export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootScope, $scope, $element, Ajax) {
+export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootScope, $scope, $element, Ajax, CoreUtils) {
 
     const $ctrl = this;
     const device = $stateParams.device;
@@ -59,13 +59,23 @@ export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootSc
     }
 
     function refreshBtnClicked() {
+        const recentUpdateTime = $ctrl.currentPlayer.lastUpdateTimeStamp;
+        const diffSecs = (Date.now() - recentUpdateTime)/1000;
+        
+        if(diffSecs < 60) {
+            CoreUtils.noty('1분이 지나야 전적 갱신 가능합니다.', 'warning')
+            return;
+        }
+
         activeRefreshIcon(true);
         Ajax.updateCurrentCrawlData(device, region, id).then(responseJson => {
             // update all.. or refresh?
-            console.log('finish');
             activeRefreshIcon(false);
+            const mode = getMode();
+            const params = {device : device, region : region, id : id};
+            $state.go(`hero.${mode}`, params, {reload: true});
         }).catch(reason => {
-            console.log(reason);
+            console.error(reason);
         });
     }
 
@@ -166,11 +176,14 @@ export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootSc
             case 'compare' : 
                 $state.go('hero.compare', params);
                 break;
-            case 'rank' : 
-                $state.go('hero.rank', params);
-                break;
-            case 'favorite' : 
+            case 'favorites' : 
                 $state.go('hero.favorites', params);
+                break;
+            case 'insights' : 
+                $state.go('hero.insights', params);
+                break;
+            case 'ranking' : 
+                $state.go('hero.ranking', params);
                 break;
             case 'admin' :
                 $state.go('hero.admin', params);

@@ -19,8 +19,13 @@
         "week" : "주간"
     },
     "statIndex" : {
-        "all_demage_done_per_death" : "모든 준 피해",
-        "hero_damage_done_per_death" : "영웅에게 준 피해"
+        "all_demage_done_per_death" : "준 피해",
+        "hero_damage_done_per_death" : "준 피해(영웅)",
+        "barrier_damage_done_per_death" : "준 피해(방벽)",
+        "elminations_per_death" : "KDA",
+        "solo_kills_per_death" : "단독처치",
+
+        "healing_done_per_death" : "힐양"
     }   
 
 }

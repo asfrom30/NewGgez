@@ -25,7 +25,7 @@ compare-table table {
 compare-table thead, tfoot {
     display:table;
     width:100%;
-    width:calc(100% - 12px);
+    width:calc(100% - 20px);
 }
 compare-table tbody {
     height:43vh;

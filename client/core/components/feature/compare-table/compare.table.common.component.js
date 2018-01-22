@@ -76,7 +76,6 @@ export function controller($element, $scope, AppLogger) {
         const secondColumn = $ctrl.secondColumn;
         const thirdColumn = $ctrl.thirdColumn;
 
-        console.log(tableHeader);
         if(statIndexes == undefined || !Array.isArray(labelCol)) {
             AppLogger.log('statIndexes is undefined, can not inflate table', logFlag, 'warn');
             showOverlay();
@@ -88,7 +87,6 @@ export function controller($element, $scope, AppLogger) {
             hidePaddingAndShowResultRow();
             $ctrl.tableRows = convertDatasColumnToRow(statIndexes, firstColumn, secondColumn, thirdColumn);
             $ctrl.bind.tableFooters = makeFooters(statIndexes, tableHeader, firstColumn, secondColumn, thirdColumn);
-            console.log($ctrl.bind.tableFooters);
         }
 
         // initTable(statIndexes, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);

@@ -52,8 +52,6 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, $scope, A
             $ctrl.players.id = $ctrl.resolvedPlayer;
         }
 
-        transferResolvedCrawlDatasToCurrentPlayerDatas();
-
         /* Move Resolved `tierDatas` to `$ctrl`*/
         if($ctrl.resolvedTierData === undefined) {
 
@@ -77,28 +75,6 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, $scope, A
 
     function checkDataIsExist() {
         return true;
-    }
-
-    function transferResolvedCrawlDatasToCurrentPlayerDatas() {
-        /* currentPlayerData Format */
-        // $ctrl.currentPlayerData = {
-        //     171213 : {meta : {}, data : {}},
-        //     171214 : {meta : {}, data : {}}
-        // };
-
-        /* Move player data from resolved to current and players */
-        if($ctrl.resolvedCrawlDatas == undefined) {
-            $ctrl.currentPlayerData = {};
-            $ctrl.currentPlayerData.id = {};
-            return;
-        }
-
-        $ctrl.currentPlayerData = {};
-        for(let playerData of $ctrl.resolvedCrawlDatas){
-            $ctrl.currentPlayerData[playerData.date] = {};
-            $ctrl.currentPlayerData[playerData.date].meta = playerData.meta;
-            $ctrl.currentPlayerData[playerData.date].data = playerData.data;
-        }
     }
 
     function hideNavBar(){

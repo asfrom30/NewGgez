@@ -19,14 +19,16 @@
             <div class="message">{{$ctrl.label.please_select_data}}</div>
         </div> -->
         <!-- "$ctrl.radar.labelColumn""$ctrl.table.labelColumn" -->
-        <div class="first-section" >
-            <feature-radar-chart
-                label-column = "$ctrl.bind.statIndexes"
-                stat-indexes = "$ctrl.bind.statIndexes"
-                first-column = "$ctrl.bind.p1Stats"
-                second-column = "$ctrl.bind.p2Stats"
-                third-column ="$ctrl.bind.tierStats">
-            </feature-radar-chart>
+        <div class="first-section flex f-align-w-center f-align-h-center" >
+            <div>
+                <feature-radar-chart
+                    label-column = "$ctrl.bind.statIndexes"
+                    stat-indexes = "$ctrl.bind.statIndexes"
+                    first-column = "$ctrl.bind.p1Stats"
+                    second-column = "$ctrl.bind.p2Stats"
+                    third-column ="$ctrl.bind.tierStats">
+                </feature-radar-chart>
+            </div>
         </div>
         <div class="second-section">
             <compare-table 

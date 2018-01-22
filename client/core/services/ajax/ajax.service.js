@@ -192,7 +192,19 @@ export default angular
                 return new Promise((resolve, reject) => {
                     CrawlDatasApi.get({device:device, region: region, id:id, date:dateQuery}).$promise.then(response => {
                         AppLogger.log(`server msg : ${response.toJSON().msg}`, logFlag, 'info');
-                        resolve(response.toJSON().value);
+
+                        const values = response.toJSON().value;
+                        const result = {};
+                        for(let crawlData of values){
+                            const date = crawlData.date
+
+                            if(date == undefined) continue;
+                            result[date] = {};
+                            result[date].meta = crawlData.meta;
+                            result[date].data = crawlData.data;
+                        }
+                        console.log(result);
+                        resolve(result);
                     }).catch(reason => {
                         AppLogger.log(reason, 'info', logFlag);
                         

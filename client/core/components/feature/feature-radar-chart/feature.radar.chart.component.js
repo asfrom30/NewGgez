@@ -16,26 +16,18 @@ export default angular
         }
     }).name;
 
-export function RadarChart($element, $attrs){
+export function RadarChart($element, $attrs, $filter, ResizeSensor){
 
     var $ctrl = this;
+    $ctrl.lang = 'kr';
     
     $ctrl.$onInit = function(){
-
-        /* Set RadarChartOptions */
-        let radarChartOptions = {};
+        const margin = {top: 50, right: 50, bottom: 50, left: 50};
+        const width = getRadarChartWidth(margin.left, margin.right);
+        const height = getRadarChartHeight(width, margin.left, margin.right);
+        const color = d3.scale.ordinal().range(["#CC333F", "#CC333F","#00A0B0", "#EDC951"]);
         
-        // console.log($('hero-detail .first-section').width())
-        var margin = {top: 100, right: 30, bottom: 30, left: 30},
-            // width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
-            //FIXME: NOT DEPEND ON JQUERY, DEPEND ON ELEMENT
-            width = $('hero-detail .first-section').width() - margin.left - margin.right,
-            height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
-                
-        var color = d3.scale.ordinal()
-            .range(["#CC333F", "#CC333F","#00A0B0", "#EDC951"]);
-    
-        radarChartOptions = {
+        const radarChartOptions = {
             w: width,
             h: height,
             margin: margin,
@@ -62,14 +54,64 @@ export function RadarChart($element, $attrs){
             // console.warn('no stat Indexes in radar chart');
             $ctrl.dataset = [[], [], [], []];
         } else {
-            dataset.push(makeLabelset(statIndexes));
+            const labelColum = makeLabelColumn(statIndexes);
+            dataset.push(makeLabelset(labelColum));
             dataset.push(makeDataset(statIndexes, firstColumn));
             dataset.push(makeDataset(statIndexes, secondColumn));
             dataset.push(makeDataset(statIndexes, thirdColumn));
             $ctrl.dataset = dataset;
         }
     }
+
+    //FIXME: Add Listener
+    function addResizeListener($_dom) {
+        new ResizeSensor($_dom, function(){
+            const margin = {top: 100, right: 30, bottom: 30, left: 30};
+            const width = getRadarChartWidth(margin.left, margin.right);
+            const height = getRadarChartHeight(width, margin.left, margin.right);
+            const color = d3.scale.ordinal()
+                .range(["#CC333F", "#CC333F","#00A0B0", "#EDC951"]);
+            
+            const radarChartOptions = {
+                w: width,
+                h: height,
+                margin: margin,
+                maxValue: 1,
+                levels: 5,
+                roundStrokes: true,
+                color: color
+            };
+
+            $ctrl.radarChartOptions = radarChartOptions;
+            console.log(radarChartOptions);
+        });
+    }
+
+    function makeLabelColumn(statIndexes) {
+        const result = [];
+        
+        for(const statIndex of statIndexes) {
+            result.push($filter('i18nStatIndex')(statIndex, $ctrl.lang));
+        }
+    
+        return result;
+    }
 }
+
+function getRadarChartWidth(marginLeft, marginRight) {
+    //FIXME: 
+    // const width = $('hero-detail .first-section').width() - marginLeft - marginRight;
+    // console.log('width test');
+    // console.log($('hero-detail .first-section').width())
+    // console.log($('hero-detail .first-section > div').width()) // result is 0.. why?
+    const width = 350 - marginLeft - marginRight;
+    return width;
+}
+
+function getRadarChartHeight(width, marginTop, marginBottom) {
+    return Math.min(width, window.innerHeight - marginTop - marginBottom - 20);
+}
+
 
 function makeLabelset(labelColumn) {
     let result = [];

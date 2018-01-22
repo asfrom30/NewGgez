@@ -62,6 +62,8 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         // Using Analyzer get Data, Stored in cache // getAnalyzer Store in Cache. 
         $ctrl.cache['p1'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
         $ctrl.cache['p2'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
+        console.log($ctrl.currentPlayerDatas);
+        console.log($ctrl.cache.p2);
         makeTierDataSet(); // getTierDataSetFromAnalyzer
 
         // need just once, not needed change when selectors changed
@@ -107,7 +109,6 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         updateTierGamesLabel(heroIndex);
 
         // update table and radar dataset
-        
         $ctrl.bind.tableHeader = getTableHeader(denominatorIndex, p1Index, p2Index, tierIndex);
         $ctrl.bind.statIndexes = $ctrl.cache.statIndexes[denominatorIndex][heroIndex];
         $ctrl.bind.p1Stats = getSelectedPlayerStats(denominatorIndex, 'p1', p1Index, heroIndex);
@@ -123,7 +124,9 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
 
         //FIXME: not yet implement : need to store raw data.
         Ajax.fetchCrawlDatas(device, region, id).then(crawlDatas => {
-            makePlayerDataSet('p2', crawlDatas);
+            $ctrl.cache.p2 = makePlayerDataSet(crawlDatas, $ctrl.tierData);
+            console.log(crawlDatas);
+            console.log($ctrl.cache.p2.diffGames.season.all);
             updateP2GamesLabel();
             updateHeroGameLabelP2();
             $scope.$apply();

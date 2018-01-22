@@ -19,13 +19,97 @@
         "week" : "주간"
     },
     "statIndex" : {
-        "all_demage_done_per_death" : "준 피해",
-        "hero_damage_done_per_death" : "준 피해(영웅)",
-        "barrier_damage_done_per_death" : "준 피해(방벽)",
-        "elminations_per_death" : "KDA",
-        "solo_kills_per_death" : "단독처치",
+        "all_damage_done" : "준 피해",
+        "hero_damage_done" : "준 피해(영웅)",
+        "barrier_damage_done" : "준 피해(방벽)",
+        "elminations" : "KDA",
+        "solo_kills" : "단독처치",
+        
+        "damage_blocked" : "막은피해",
 
-        "healing_done_per_death" : "힐양"
+        "healing_done" : "치유량",
+        "self_healing" : "자가치유",
+
+        "helix_rockets_kills" : "나선로켓 처치",
+        "biotic_fields_deployed" : "생체장 치유",
+        "tacktical_visor_kills" : "전술조준경 처치",
+
+        "death_blossom_kills" : "죽음의꽃 처치",
+
+        "rocket_direct_hits" : "로켓명중",
+        "barrage_kills" : "포화 처치",
+        
+        "charge_kills" : "돌진 처치",
+        "fire_strike_kills" : "화염강타 처치",
+        "earthshatter_kills" : "대지분쇄 처치",
+
+        "enemies_hooked" : "갈고리 성공",
+        "whole_hog_kills" : "돼재앙 처치",
+
+        "melee_kills" : "근접공격 처치",
+        "jump_pack_kills" : "점프팩 처치",
+        "primal_rage_kills" : "원시분노 처치",
+
+        "self_destruct_kills" : "자폭 처치",
+
+        "sentry_turret_kills" : "감시포탑 처치",
+        "players_teleported" : "순간이동 횟수",
+        "shield_generator_uptime" : "보호막생성 시간",
+
+        "venom_mine_kills" : "맹독지뢰 처치",
+        "scoped_critical_hits" : "저격치명타",
+
+        "pulse_bomb_attached" : "펄스폭탄 부착",
+        "pulse_bomb_kills" : "펄스폭탄 처치",
+
+        "scatter_arrow_kills" : "갈래화살 처치",
+        "dragon_strike_kills" : "용의 일격 처치",
+
+        "damage_amplified" : "공격력 증폭",
+        "players_resurrected" : "부활한 플레이어",
+        
+        "offensive_assists" : "공격형 도움",
+        "deffensive_assists" : "방어형 도움",
+        "transcendence_healing" : "초월 치유",
+
+        "damage_reflected" : "튕겨낸 피해",
+        "dragonblade_kills" : "용검 처치",
+
+        "armor_packs_created" : "방어구팩 횟수",
+        "torbjorn_kills" : "직접 처치",
+        "turret_kills" : "포탑 처치",
+        "molten_core_kills" : "초고열 처치",
+
+        "enemies_trapped" : "덫 걸린 적",
+        "concussion_mine_kills" : "충격 지뢰 처치",
+        "rip-tire_kills" : "타이어 처치",
+
+        "projected_barriers_applied" : "방벽 씌우기",
+        "high_energy_kills" : "고에너지 처치",
+        "graviton_surge_kills" : "중력자탄 처치",
+
+        "enemies_frozen" : "얼린 적",
+        "blizzard_kills" : "눈보라 처치",
+
+        "enemies_slept" : "재운 적",
+        "nano_boost_assists" : "강화제 도움",
+
+        "environmental_kills" : "환경요소 처치",
+        "sound_barriers_provided" : "소리방벽 제공",
+
+        "enemies_hacked" : "해킹한 적",
+        "enemies_emp_d" : "emp 맞힌 적",
+
+
+
+        "ability_damage_done" : "기술 피해량",
+        "shields_created" : "생성한 보호막",
+        "meteor_strike_kills" : "파멸로 처치",
+
+        "supercharger_assists" : "증폭기 도움",
+
+        "fan_the_hammer_kills" : "피스키퍼 처치",
+        "deadeye_kills" : "석양으로 처치"
     }   
 
 }

@@ -35,9 +35,9 @@ export default angular.module('ggez.core.filter', [])
     .filter('prefixPlus', prefixPlus)
     .filter('suffixPercent', suffixPercent)
     .filter('numberFilter', numberFilter)
-    .filter('upDownSymbol', upDownSymbol)
     .filter('defaultValue', defaultValue)
     .filter('recentUpdate', recentUpdate)
+    .filter('abs', absFilter)
     .filter('i18nDateIndex', i18nDateIndex)
     .filter('i18nStatIndex', i18nStatIndex)
     .filter('i18nTierIndex', i18nTierIndex)
@@ -106,23 +106,7 @@ export function numberFormat() {
         return numeral(input).format(format);
     }
 }
-export function upDownSymbol() {
-    return function(value){
-        if(isNaN(value)) return "";
-        
-        if(value == Infinity) return '';
 
-        else {
-            if(value > 0 ){
-                return "▲";
-            } else if (value < 0) {
-                return "▼";
-            } else {
-                return "-"
-            }
-        }
-    }
-}
 export function suffixPercent() {
     return function(value) {
         return value + "%";
@@ -279,3 +263,9 @@ export function tierImageSrc(){
     }
 }
 
+function absFilter() {
+    return function(input) {
+        if(isNaN(input)) return input;
+        else return Math.abs(input);
+    }
+}

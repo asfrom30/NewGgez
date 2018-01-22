@@ -24,7 +24,6 @@ export default angular
     .filter('percentSymbolForResult', percentSymbolForResult)
     .filter('ptSymbolForResult', ptSymbolForResult)
     .filter('roundUp', roundUpFilter)
-    .filter('abs', absFilter)
     .name;
 
 export function controller($element, $scope, AppLogger) {
@@ -206,7 +205,6 @@ export function controller($element, $scope, AppLogger) {
 
     $ctrl.calcPercent = calcPercent;
     $ctrl.calcDiff = calcDiff;
-    $ctrl.getNgClass = getNgClass;
 
     function calcIncrease (a, b) {
         if(!(a || b)) return undefined;
@@ -222,12 +220,6 @@ export function controller($element, $scope, AppLogger) {
 
     function calcDiff(a, b) {
         return a - b;
-    }
-
-    function getNgClass(a, b){
-        if(a == b) return 'c-green';
-        else if (a > b) return 'c-red';
-        else if (a < b) return 'c-blue';
     }
 
     /* View */
@@ -404,10 +396,5 @@ function roundUpFilter() {
         numeral(input*100).format('xx.0');
     }
 }
-function absFilter() {
-    return function(input) {
-        if(isNaN(input)) return input;
-        else return Math.abs(input);
-    }
-}
+
 

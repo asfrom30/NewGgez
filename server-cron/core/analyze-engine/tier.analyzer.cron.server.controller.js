@@ -9,11 +9,12 @@ exports.analyzeAsync = function(saveConfig) {
 
     /* Dependency Injection */
     
+    //FIXME: EXTERNAL
     const heroIndexes = [
         "all", "soldier76", "reaper", "pharah", "reinhardt", "roadhog",
         "winston", "dva", "symmetra" , "widowmaker", "tracer", "hanzo",
         "mercy", "zenyatta", "genji", "torbjoern", "junkrat", "zarya",
-        "mei", "ana", "lucio", "sombra", "doomfist", "orisa"
+        "mei", "ana", "lucio", "sombra", "doomfist", "orisa", "mccree"
     ];
     const tierIndexes = ["bronze", "silver", "gold", "platinum", "diamond", "master", "grandmaster", "heroic"];
     tierIndexes.push('total');

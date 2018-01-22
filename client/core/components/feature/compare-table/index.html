@@ -35,18 +35,12 @@
                     <td>
                         <div class="flex flex-wh-center">
                             <div class="result-percent flex f-align-h-baseline">
-                                <div class="result-up-down-arrow" 
-                                    ng-class="$ctrl.getNgClass(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point)">
-                                    {{ $ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | upDownSymbol}}
-                                </div>
+                                <up-down-symbol class="result-up-down-arrow" value="$ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point)"></up-down-symbol>
                                 <div class="result-percent-text">{{ $ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | percentForResult | abs }}</div>
                                 <div class="result-percent-symbol">{{ $ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | percentSymbolForResult}}</div>
                             </div>
                             <div class="result-diff flex f-align-h-baseline" style="display: none">
-                                <div class="result-up-down-arrow" 
-                                    ng-class="$ctrl.getNgClass(tableRow[$ctrl.indexes.a].score, tableRow[$ctrl.indexes.b].score)">
-                                    {{ $ctrl.calcDiff(tableRow[$ctrl.indexes.a].score, tableRow[$ctrl.indexes.b].score) | upDownSymbol}}
-                                </div>
+                                <up-down-symbol class="result-up-down-arrow" value="$ctrl.calcDiff(tableRow[$ctrl.indexes.a].score, tableRow[$ctrl.indexes.b].score)"></up-down-symbol>
                                 <div class="result-percent-text">{{ $ctrl.calcDiff(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | upperNumberFormat : "0.0" | abs }}</div>
                                 <div class="result-percent-symbol">{{ $ctrl.calcDiff(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | ptSymbolForResult}}</div>
                             </div>
@@ -54,9 +48,9 @@
                     </td>
                 </tr>
                 <tfoot>
-                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 0) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[2].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[0].value | percentForResult | abs}} {{ $ctrl.bind.tableFooters[0].value | upDownSymbol}} 했습니다.</td></tr>
-                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 1) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}} {{ $ctrl.bind.tableFooters[1].value | upDownSymbol}} 했습니다.</td></tr>
-                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 2) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[2].index}}이 {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}} {{ $ctrl.bind.tableFooters[2].value | upDownSymbol}} 했습니다.</td></tr>
+                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 0) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[2].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[0].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[0].value"></up-down-symbol> 했습니다.</td></tr>
+                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 1) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[1].value"></up-down-symbol> 했습니다.</td></tr>
+                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 2) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[2].index}}이 {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[2].value"></up-down-symbol> 했습니다.</td></tr>
                 </tfoot>
             </tbody>
         </table>

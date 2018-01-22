@@ -98,172 +98,177 @@
 		],
 		"soldier76": [
 			{
-				"id": "special_skill_1",
+				"id": "helix_rockets_kills",
 				"ko-kr": "나선로켓으로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "biotic_fields_deployed",
 				"ko-kr": "생체장으로치유",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "tacktical_visor_kills",
 				"ko-kr": "전술조준경으로처치",
 				"en-us": []
 			}
 		],
 		"reaper": [
 			{
-				"id": "special_skill_1",
+				"id": "self_healing",
 				"ko-kr": "자가치유",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "death_blossom_kills",
 				"ko-kr": "죽음의꽃으로처치",
 				"en-us": []
 			}
 		],
 		"pharah": [
 			{
-				"id": "special_skill_1",
+				"id": "rocket_direct_hits",
 				"ko-kr": "로켓명중",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "barrage_kills",
 				"ko-kr": "포화로처치",
 				"en-us": []
 			}
 		],
 		"reinhardt": [
 			{
-				"id": "special_skill_1",
+				"id": "damage_blocked",
 				"ko-kr": "막은피해",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "charge_kills",
 				"ko-kr": "돌진으로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "fire_strike_kills",
 				"ko-kr": "화염강타로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_4",
+				"id": "earthshatter_kills",
 				"ko-kr": "대지분쇄로처치",
 				"en-us": []
 			}
 		],
 		"roadhog": [
 			{
-				"id": "special_skill_1",
-				"ko-kr": "갈고리로끌어오기",
-				"en-us": []
-			},
-			{
-				"id": "special_skill_2",
+				"id": "self_healing",
 				"ko-kr": "자가치유",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "enemies_hooked",
+				"ko-kr": "갈고리로끌어오기",
+				"en-us": []
+			},
+			{
+				"id": "whole_hog_kills",
 				"ko-kr": "돼재앙으로처치",
 				"en-us": []
 			}
 		],
 		"winston": [
 			{
-				"id": "special_skill_1",
+				"id": "damage_blocked",
 				"ko-kr": "막은피해",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "melee_kills",
 				"ko-kr": "근접공격으로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "jump_pack_kills",
 				"ko-kr": "점프팩으로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_4",
+				"id": "primal_rage_kills",
 				"ko-kr": "원시의분노로처치",
 				"en-us": []
 			}
 		],
 		"dva": [
 			{
-				"id": "special_skill_1",
+				"id": "damage_blacked",
 				"ko-kr": "막은피해",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "self_destruct_kills",
 				"ko-kr": "자폭으로처치",
 				"en-us": []
 			}
 		],
 		"symmetra": [
 			{
-				"id": "special_skill_1",
+				"id": "sentry_turret_kills",
 				"ko-kr": "감시포탑으로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "damage_blocked",
+				"ko-kr": "막은피해",
+				"en-us": []
+			},
+			{
+				"id": "players_teleported",
 				"ko-kr": "순간이동한플레이어",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "shield_generator_uptime",
 				"ko-kr": "보호막생성기가동시간",
 				"en-us": []
 			}
 		],
 		"widowmaker": [
 			{
-				"id": "special_skill_1",
+				"id": "venom_mine_kills",
 				"ko-kr": "맹독지뢰로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "scoped_critical_hits",
 				"ko-kr": "저격치명타",
 				"en-us": []
 			}
 		],
 		"tracer": [
 			{
-				"id": "special_skill_1",
+				"id": "self_healing",
 				"ko-kr": "자가치유",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "pulse_bomb_attached",
 				"ko-kr": "펄스폭탄부착",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "pulse_bomb_kills",
 				"ko-kr": "펄스폭탄으로처치",
 				"en-us": []
 			}
 		],
 		"hanzo": [
 			{
-				"id": "special_skill_1",
+				"id": "scatter_arrow_kills",
 				"ko-kr": "갈래화살로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "dragon_strike_kills",
 				"ko-kr": "용의일격으로처치",
 				"en-us": []
 			}
@@ -275,124 +280,134 @@
 				"en-us": []
 			},
 			{
-				"id": "special_skill_1",
-				"ko-kr": "블라스터로처치",
-				"en-us": []
-			},
-			{
-				"id": "special_skill_3",
-				"ko-kr": "공격력증폭",
-				"en-us": []
-			},
-			{
-				"id": "special_skill_4",
+				"id": "self_healing",
 				"ko-kr": "자가치유",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "damage_amplified",
+				"ko-kr": "공격력증폭",
+				"en-us": []
+			},
+			{
+				"id": "players_resurrected",
 				"ko-kr": "부활한플레이어",
 				"en-us": []
 			}
 		],
 		"zenyatta": [
 			{
-				"id": "special_skill_1",
+				"id": "self_healing",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "offensive_assists",
 				"ko-kr": "공격형도움",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "deffensive_assists",
 				"ko-kr": "방어형도움",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "transcendence_healing",
 				"ko-kr": "초월로치유",
 				"en-us": []
 			}
 		],
 		"genji": [
 			{
-				"id": "special_skill_1",
+				"id": "damage_reflected",
 				"ko-kr": "튕겨낸피해",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "dragonblade_kills",
 				"ko-kr": "용검으로처치",
 				"en-us": []
 			}
 		],
 		"torbjoern": [
 			{
-				"id": "special_skill_1",
+				"id": "armor_packs_created",
 				"ko-kr": "생성한방어구팩",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "torbjorn_kills",
 				"ko-kr": "토르비욘이직접처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "turret_kills",
 				"ko-kr": "포탑으로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_4",
+				"id": "molten_core_kills",
 				"ko-kr": "초고열용광로로처치",
 				"en-us": []
 			}
 		],
 		"junkrat": [
 			{
-				"id": "special_skill_1",
+				"id": "enemies_trapped",
 				"ko-kr": "덫에걸린적",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "concussion_mine_kills",
+				"ko-kr": "충격지뢰로처치",
+				"en-us": []
+			},
+			{
+				"id": "rip-tire_kills",
 				"ko-kr": "죽이는타이어로처치",
 				"en-us": []
 			}
 		],
 		"zarya": [
 			{
-				"id": "special_skill_1",
+				"id": "damage_blocked",
 				"ko-kr": "막은피해",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "projected_barriers_applied",
 				"ko-kr": "방벽씌우기",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "high_energy_kills",
 				"ko-kr": "고에너지로처치",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_4",
+				"id": "graviton_surge_kills",
 				"ko-kr": "중력자탄으로처치",
 				"en-us": []
 			}
 		],
 		"mei": [
 			{
-				"id": "special_skill_1",
-				"ko-kr": "얼린적",
-				"en-us": []
-			},
-			{
-				"id": "special_skill_2",
+				"id": "self_healing",
 				"ko-kr": "자가치유",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "damage_blocked",
+				"ko-kr": "막은피해",
+				"en-us": []
+			},
+			{
+				"id": "enemies_frozen",
+				"ko-kr": "얼린적",
+				"en-us": []
+			},
+			{
+				"id": "blizzard_kills",
 				"ko-kr": "눈보라로처치",
 				"en-us": []
 			}
@@ -421,7 +436,12 @@
 				"en-us": []
 			},
 			{
-				"id": "special_skill_1",
+				"id": "self_healing",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "environmental_kills",
 				"ko-kr": "환경요소로처치",
 				"en-us": []
 			},
@@ -433,12 +453,12 @@
 		],
 		"sombra": [
 			{
-				"id": "special_skill_1",
+				"id": "enemies_hacked",
 				"ko-kr": "해킹한적",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "enemies_emp_d",
 				"ko-kr": "EMP맞힌적",
 				"en-us": []
 			}
@@ -462,18 +482,30 @@
 		],
 		"orisa": [
 			{
-				"id": "special_skill_1",
+				"id": "damage_amplified",
 				"ko-kr": "공격력증폭",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_2",
+				"id": "damage_blocked",
 				"ko-kr": "막은피해",
 				"en-us": []
 			},
 			{
-				"id": "special_skill_3",
+				"id": "supercharger_assists",
 				"ko-kr": "초강력증폭기도움",
+				"en-us": []
+			}
+		],
+		"mccree": [
+			{
+				"id": "fan_the_hammer_kills",
+				"ko-kr": "피스키퍼난사로처치",
+				"en-us": []
+			},
+			{
+				"id": "deadeye_kills",
+				"ko-kr": "황야의무법자로처치",
 				"en-us": []
 			}
 		]

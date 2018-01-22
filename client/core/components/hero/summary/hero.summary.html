@@ -82,8 +82,8 @@
             <div class="content-row-box">
                 <div class="font-medium"><span class="glyphicon glyphicon-sort"></span> {{$ctrl.label.trend.diffCptptTitle}} </div>
                 <div class="flex">
-                    <div class="font-x-large">{{$ctrl.dynCache.diffCptpt.diffCptpt | upDownSymbol}}</div>
-                    <div class="font-xx-large">{{$ctrl.dynCache.diffCptpt.diffCptpt | nanFilter : "-"}}</div>
+                    <up-down-symbol class="font-x-large" value="$ctrl.dynCache.diffCptpt.diffCptpt"></up-down-symbol>
+                    <div class="font-xx-large">{{$ctrl.dynCache.diffCptpt.diffCptpt | abs | nanFilter : "-"}}</div>
                     <div>
                         <div>{{$ctrl.dynCache.diffCptptLabel.before}}</div>
                         <div>{{$ctrl.dynCache.diffCptpt.before | nanFilter : "-"}}</div>

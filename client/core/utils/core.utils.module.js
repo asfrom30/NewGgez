@@ -41,7 +41,7 @@ export default angular
             if(env != 'production') {
                 return '171212';
             } else {
-                return moment().subtract(0, 'days').format('YYMMDD');
+                return moment().subtract(0+getCalibration(), 'days').format('YYMMDD');
             }
         }   
 
@@ -49,7 +49,7 @@ export default angular
             if(env != 'production') {
                 return '171113';
             } else {
-                return moment().subtract(1, 'days').format('YYMMDD');
+                return moment().subtract(1+getCalibration(), 'days').format('YYMMDD');
             }
         }
         
@@ -57,7 +57,7 @@ export default angular
             if(env != 'production') {
                 return '171104';
             } else {
-                return moment().subtract(7, 'days').format('YYMMDD');
+                return moment().subtract(7+getCalibration(), 'days').format('YYMMDD');
             }
         }
         
@@ -78,3 +78,12 @@ export default angular
             }).show();
         }
     }).name;
+
+function getCalibration(){
+    const hours = parseInt(moment().format('hh'));
+    if(hours < 4) {
+        return 1;
+    } else {
+        return 0;
+    }
+}

@@ -203,7 +203,6 @@ export default angular
                             result[date].meta = crawlData.meta;
                             result[date].data = crawlData.data;
                         }
-                        console.log(result);
                         resolve(result);
                     }).catch(reason => {
                         AppLogger.log(reason, 'info', logFlag);

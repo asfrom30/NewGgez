@@ -29,6 +29,12 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
     }
     $ctrl.search = onSearchButton;
     $ctrl.moveHeroPage = moveHeroPage;
+    $ctrl.goRandomPage = goRandomPage;
+
+    function goRandomPage() {
+        const id = getRandomId();
+        moveHeroPage('pc', 'kr', id);
+    }
     
     $ctrl.$onInit = function() {
         onlyRunPcKr();
@@ -199,4 +205,19 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
         // $ctrl.bindCurrentPlayer({$event : {player : player}});
         $window.location.href = `#!/hero/${device}/${region}/${id}/summary`;
     }
+
+    function getRandomId(){
+        const min = 1;
+        let max = 13000;
+        try {
+            max = $ctrl.indexInformation.totalPlayers;
+        } catch (error) {
+            
+        }
+        const id = Math.floor((Math.random() * max) + min);
+
+        return id;
+    }
+
+
 }

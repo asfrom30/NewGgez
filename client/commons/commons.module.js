@@ -4,6 +4,7 @@ import angular from 'angular';
 
 require('./common.css');
 require('./common-loop-banner.css');
+require('./bootstrap-v4-custom.css')
 
 import CommonComponentsModule from './components/components.common.module'
 import CommonJqueryWrapModule from './jquery.wrap/jquery.wrap.common.module';

@@ -2,23 +2,27 @@
 
 import './index.html';
 
-/* bootstrap */
-import 'bootstrap/dist/js/bootstrap.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
+/* expose global variable */
+require("expose-loader?$!jquery");
+require("expose-loader?$!popper.js");
+
+/* Using bootstrap */
+require('bootstrap/dist/css/bootstrap.css');
+require('bootstrap/dist/js/bootstrap.min.js');
+/* use ui-bootstrap */
+// need bootstrap css
+// import uiBootStrap from 'angular1-ui-bootstrap4';
+// import ngAnimate from 'angular-animate';
+// import ngTouch from 'angular-touch';
 
 /* Basic Angular */
 import angular from 'angular';
-import uiRoute from '@uirouter/angularjs/release/angular-ui-router.js';
-
-// import ngAnimate from 'angular-animate';
-// import ngCookies from 'angular-cookies';
-import ngResource from 'angular-resource';
-// import ngSanitize from 'angular-sanitize';
-
-// import 'angular-socket-io';
-
 // import uiRouter from 'angular-ui-router';
-// import uiBootstrap from 'angular-ui-bootstrap';
+import uiRoute from '@uirouter/angularjs/release/angular-ui-router.js';
+import ngResource from 'angular-resource';
+// import ngCookies from 'angular-cookies';
+// import ngSanitize from 'angular-sanitize';
+// import 'angular-socket-io';
 // import 'angular-validation-match';
 
 /* Route Config */
@@ -33,7 +37,6 @@ import appCore from './core/core.module';
 // Declare app level module which depends on views, and components
 
 angular.module('ggezkrApp', [ngResource,
-  
   
   // ngRoute,
   uiRoute,
@@ -51,4 +54,5 @@ angular.module('ggezkrApp', [ngResource,
 .run(function ($rootScope, CONST) {
   'ngInject';
   $rootScope.CONST = CONST;
+  $('#indicator-in-index-page').hide();
 });;

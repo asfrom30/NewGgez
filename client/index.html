@@ -20,36 +20,21 @@
     gtag('config', 'UA-112391994-1');
   </script>
 
-
-  <!-- d3.js -->
+  <link rel="stylesheet" type="text/css" href="./index.css">
+  <!-- Material Icon -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- d3.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  
 </head>
 <body ng-app="ggezkrApp">
-  <!-- <nav class="navbar navbar-inverse  navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" ui-sref="index"><span class="glyphicon glyphicon-home"></span></a>
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span> 
-        </button>
-      </div>
-      
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-          <li><a href="#">Rank</a></li>
-          <li><a href="#">QnA</a></li>
-          <li><a ui-sref="test" ui-sref-active="active">Test</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav> -->
-  <!-- <ul class="menu"></ul> -->
+  <div id="indicator-in-index-page" class="w-100-pct h-100-pct new-loader">
+    <div class="spinner"></div>
+    <div class="content">전적 분석툴을 다운받는 중입니다...</div>
+    <div class="content">이 작업은 오래 걸리지 않습니다.</div>
+  </div>
+  <!-- <div id="no-support-notice">이 글자가 보이신다면, 지원하지 않는 브라우저로 접속하셨습니다. 저희 서비스는 크롬 사용을 권장합니다.</div> -->
   <ui-view current-player="root.currentPlayer" bind-current-player="root.currentPlayer = $event.player"></ui-view>      
-  
   <!-- <div>Angular seed app: v<span app-version></span></div> -->
 </body>
 </html>

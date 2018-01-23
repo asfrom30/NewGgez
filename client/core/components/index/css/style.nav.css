@@ -1,0 +1,14 @@
+.index-page-container nav {
+    background-color: white;
+}
+
+#index .header-banner {
+    width:100%;
+    margin-top : 42px;
+}
+
+@media (min-width: 768px) {
+    #index .header-banner {
+        margin-top : 56px;
+    }
+}

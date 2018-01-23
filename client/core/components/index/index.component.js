@@ -3,6 +3,7 @@
 import angular from 'angular';
 
 require('./css/index.css');
+require('./css/style.nav.css');
 require('./css/style.display.info.css');
 require('./css/style.player.table.css');
 

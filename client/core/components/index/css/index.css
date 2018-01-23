@@ -3,6 +3,17 @@ index {
     margin : 0;
 }
 
+#index .header-banner {
+    width:100%;
+    margin-top : 40px;
+}
+
+@media (min-width: 768px) {
+    #index .header-banner {
+        margin-top : 53px;
+    }
+}
+
 /* layout */
 index section:nth-child(1)
 .padding {

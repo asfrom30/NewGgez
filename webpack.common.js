@@ -94,6 +94,7 @@ const config = {
           jQuery: 'jquery',
           'window.jQuery': 'jquery', // for angularjs
           Popper: ['popper.js', 'default'],
+          Tether : 'tether'
         })
       ]
 };

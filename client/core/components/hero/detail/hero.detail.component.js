@@ -62,8 +62,6 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         // Using Analyzer get Data, Stored in cache // getAnalyzer Store in Cache. 
         $ctrl.cache['p1'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
         $ctrl.cache['p2'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
-        console.log($ctrl.currentPlayerDatas);
-        console.log($ctrl.cache.p2);
         makeTierDataSet(); // getTierDataSetFromAnalyzer
 
         // need just once, not needed change when selectors changed

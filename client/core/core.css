@@ -39,6 +39,10 @@ body {
     font-family: beantown;
 }
 
+.c-test {
+    display: flex;
+}
+
 @import url(https://fonts.googleapis.com/css?family=Josefin+Sans:300,400);
 * {
   margin: 0;
@@ -63,6 +67,10 @@ body {
 .noty_theme__sunset.noty_type__error {
     color: black;
     font-family: sans-serif;
+}
+
+.checker {
+    display: flex;
 }
 
 

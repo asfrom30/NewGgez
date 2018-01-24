@@ -1,6 +1,8 @@
 'use strict';
 
 import angular from 'angular';
+require('./styles/layout.css');
+require('./styles/style.css');
 
 export default angular
     .module('hero.favorites', [])
@@ -42,22 +44,18 @@ export function heroFavoriteCtrl($scope, $stateParams, $timeout, AppLogger, Ajax
             if(!Array.isArray(favorites)) AppLogger.log('err_favorites_is_not_array_can_not_load_player', logFlag, 'error');
             else AppLogger.log('err_favorites_legnth_is_zero', logFlag, 'info');
             
-            $ctrl.favoritePlayers = [];
-            scopeApplyManually();
+            $ctrl.playerList = [];
         } else {
             const arrIds = favorites;
             Ajax.fetchPlayerWithIds(device, region, arrIds).then(players => {
-                $ctrl.favoritePlayers = players;
-                scopeApplyManually();
+
+                // handling deprecated user.
+                $ctrl.playerList = players;
+                $scope.$apply();
             })
         }
     }
 
-    function scopeApplyManually(){
-        $timeout(function(){
-            $scope.$apply();
-        }, 1);
-    }
 
 }
 

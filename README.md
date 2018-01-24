@@ -1,4 +1,4 @@
-# Service is now available
+# Beta Service is available
 
 * [ggez.kr](http://ggez.kr)
 

@@ -1,0 +1,40 @@
+hero-favorites .table-container {
+    overflow-y : auto;
+}
+
+hero-favorites table {
+    table-layout: fixed;
+}
+
+hero-favorites table th {
+    width : 20%;
+    text-align: center;
+}
+
+hero-favorites table tr {
+    height: 10vh;
+}
+
+hero-favorites table td {
+    text-align: center;
+    border : 1px solid cyan;
+}
+
+hero-favorites table img.player-icon {
+    height: 8vh;
+}
+
+hero-favorites table img.tier-icon {
+    height: 6vh;
+}
+
+hero-favorites table button {
+    width: 30%;
+}
+
+hero-favorites table button img {
+}
+
+/***************
+Table Border
+***************/

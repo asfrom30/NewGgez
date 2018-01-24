@@ -1,2 +1,26 @@
 
-<search-table player-list="$ctrl.favoritePlayers" on-click=""></search-table>
+<div clas="table-container" >
+    <table class="w-100-pct">
+        <thead>
+            <tr>
+                <th>Icon</th>
+                <th>BattleTag</th>
+                <th>Tier</th>
+                <th>Cptpt</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="player in $ctrl.playerList" ng-click="$ctrl.onClick({$id : player._id})" style="border-top: 1px solid white">
+                <td><img class="player-icon" ng-src="{{player.iconUrl}}"/></td>
+                <td>{{player.btn}}</td>
+                <td><img class="tier-icon" ng-src="{{player.cptpt | tierImageSrc}}"/></td>
+                <td>{{player.cptpt}}</td> 
+                <td>
+                    <button type="button">1</button>
+                    <button type="button">2</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

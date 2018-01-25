@@ -17,7 +17,6 @@ hero-favorites table tr {
 
 hero-favorites table td {
     text-align: center;
-    border : 1px solid cyan;
 }
 
 hero-favorites table img.player-icon {
@@ -28,11 +27,13 @@ hero-favorites table img.tier-icon {
     height: 6vh;
 }
 
-hero-favorites table button {
-    width: 30%;
-}
-
-hero-favorites table button img {
+hero-favorites table .btn.btn-secondary {
+    color : white;
+    border : none;
+    background-color: transparent;
+    width : 30px;
+    height : 30px;
+    padding : 2px;
 }
 
 /***************

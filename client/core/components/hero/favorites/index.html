@@ -17,8 +17,14 @@
                 <td><img class="tier-icon" ng-src="{{player.cptpt | tierImageSrc}}"/></td>
                 <td>{{player.cptpt}}</td> 
                 <td>
-                    <button type="button">1</button>
-                    <button type="button">2</button>
+                    <div class="flex f-align-w-center">
+                        <button ng-click="$ctrl.onRemoveFavClicked(player._id)" type="button" class="btn btn-secondary">
+                            <i class="material-icons">remove_circle</i>
+                        </button>
+                        <button ng-click="" type="button" class="btn btn-secondary">
+                            <i class="material-icons">forward</i>
+                        </button>
+                    </div>
                 </td>
             </tr>
         </tbody>

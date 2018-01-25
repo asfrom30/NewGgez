@@ -10,7 +10,8 @@ export default angular
         controller : heroFavoriteCtrl,
         template : require('./index.html'),
         bindings : {
-            favorites : '<'
+            favorites : '<',
+            removeFavorite : '&',
         }
     }).name;
 
@@ -28,9 +29,9 @@ export function heroFavoriteCtrl($scope, $stateParams, $timeout, AppLogger, Ajax
 
     $ctrl.$onInit = onInit;
     $ctrl.$onChanges = onChanges;
+    $ctrl.onRemoveFavClicked = onRemoveFavClicked;
 
     function onInit() {
-        
     }
 
     function onChanges() {
@@ -56,6 +57,11 @@ export function heroFavoriteCtrl($scope, $stateParams, $timeout, AppLogger, Ajax
         }
     }
 
+    function onRemoveFavClicked(id){
+        Ajax.removeFavorite(device, region, id).then(result => {
+            $ctrl.removeFavorite({$id : id});
+        })
+    }
 
 }
 

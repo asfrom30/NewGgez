@@ -18,6 +18,7 @@
 /* Fixed Bottom Title */
 .fixed-bottom-title .profile{
     font-weight: 900;
+    height:50px; /* added for weinre */
 }
 .fixed-bottom-title .profile img{
     height : 100%;

@@ -114,7 +114,6 @@ export function HeroMainCtrl($document, $window, $state, $stateParams, $scope, A
     function removeFavorite(id) {
         let resolvedFavorites = $ctrl.resolvedFavorites;
         id = parseInt(id);
-        
         if(!Array.isArray(resolvedFavorites) || resolvedFavorites.length == 0) {
             resolvedFavorites = [];
         } else {

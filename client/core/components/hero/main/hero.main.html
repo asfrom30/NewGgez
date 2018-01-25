@@ -13,6 +13,7 @@
     <div class="body-wh flex f-align-w-center base-padding">
         <ui-view class="w-100-pct h-100-pct"
             favorites = "$ctrl.resolvedFavorites"
+            remove-favorite="$ctrl.removeFavorite($id)"
             current-player = "$ctrl.currentPlayer"
             current-player-datas = "$ctrl.resolvedCrawlDatas"
             all-players="$ctrl.players"

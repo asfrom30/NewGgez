@@ -24,7 +24,6 @@
 
 html, body {
     background: black;
-    height: 100%;
 }
 
 #index {
@@ -73,6 +72,19 @@ body {
     display: flex;
 }
 
+.form-control.no-border {
+    border : none;
+}
+
+.margin-for-app-nav{
+    margin-top : 40px;
+}
+
+@media (min-width: 768px) {
+    .margin-for-app-nav {
+        margin-top : 53px;
+    }
+}
 
 /* Scroll Bar... */
 /* ::-webkit-scrollbar {

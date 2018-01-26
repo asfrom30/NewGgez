@@ -2,9 +2,11 @@
 
 import angular from 'angular';
 
-require('./css/index.css');
-require('./css/style.display.info.css');
-require('./css/style.player.table.css');
+require('./styles/index.css');
+require('./styles/style.display.info.css');
+require('./styles/style.player.table.css');
+require('./styles/animate.css');
+require('./styles/layout.css');
 
 export default angular.module('components.index', [])
     .component('index', {

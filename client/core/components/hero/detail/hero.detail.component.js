@@ -14,7 +14,7 @@ export default angular
         }
     }).name;
 
-export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, CoreUtils, tierIndexes){
+export function HeroDetailCtrl($timeout, $filter, $location, $state, $element, AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, CoreUtils, tierIndexes){
     //$ctrl.cache.dataSets.label[]
     //$ctrl.cache.dataSets.p1[p1Index, heroIndex]
     //$ctrl.cache.dataSets.p2[p2Index, heroIndex]
@@ -62,21 +62,67 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         
         // Using Analyzer get Data, Stored in cache // getAnalyzer Store in Cache.
         $ctrl.cache['p1'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
-        
+        if(mode == 'detail') $ctrl.cache['p2'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
+
         makeTierDataSet(); // getTierDataSetFromAnalyzer
 
         // need just once, not needed change when selectors changed
         updateP1GamesLabel();
         updateP2GamesLabel();
 
-        if(false) {
-            console.log("======== for debug =====");
-            console.log($ctrl.currentPlayerDatas)
-            // console.log($ctrl.cache.statIndexes);
-            console.log($ctrl.cache.p1);
-            console.log($ctrl.cache.p2);
-            // console.log($ctrl.cache.tier);
+        initButtonClick();
+
+        // log for debug
+        logForDebug(logFlag);
+    }
+
+    function initButtonClick() {
+        const mode =$ctrl.mode;
+
+        const heroIndex = getP1MostHeroIndex();
+        const tierIndex = getCurrentPlayerTierIndex();
+
+        $timeout(function(){
+            if(mode == 'detail') {
+                $element.find(`#p0-week-selected`).click();
+            } else if (mode == 'compare') {
+                $element.find(`#p1-season-selected`).click();
+                $element.find(`#p2-season-selected`).click();
+            }
+            if(tierIndex != undefined) $element.find(`#${tierIndex}`).click();
+            if(heroIndex != undefined) $element.find(`#${heroIndex}`).click();
+        }, 100)
+    }
+
+    function getP1MostHeroIndex(){
+        const diffGames = getP1DiffGames('season');
+        
+        if(diffGames ==undefined) return;
+
+        let tempGames = 0;
+        let tempHeroIndex;
+
+        for(const heroIndex in diffGames) {
+            const diffGame = diffGames[heroIndex];
+            if(heroIndex == 'all') continue;
+            if(diffGame.totalGames > tempGames) {
+                tempGames = diffGame.totalGames;
+                tempHeroIndex = heroIndex;
+            }
         }
+        return tempHeroIndex;
+    }
+
+
+    function logForDebug(){
+        if(!logFlag) return;
+
+        console.log("======== for debug =====");
+        console.log($ctrl.currentPlayerDatas)
+        // console.log($ctrl.cache.statIndexes);
+        console.log($ctrl.cache.p1);
+        console.log($ctrl.cache.p2);
+        // console.log($ctrl.cache.tier);
     }
 
     function onDenominatorChanges() {
@@ -259,6 +305,22 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
         const mode = path.substring(index + 1).trim();
         return mode;
     }
+
+    function getCurrentPlayerTierIndex() {
+        const cptpt = getCurrentPlayerCptpt();
+        if(cptpt == undefined) return;
+        
+        return $filter('tierIndexFilter')(cptpt);
+    }
+    function getCurrentPlayerCptpt(){
+        const player = $ctrl.currentPlayer;
+        try {
+            const cptpt = player.cptpt;
+            return cptpt;
+        } catch (error) {
+            return undefined;
+        }
+    }
     function getSelectedPlayerStats(denominatorIndex, player, pIndex, heroIndex) {
         try {
             return $ctrl.cache[player]['diffDatas'][denominatorIndex][pIndex][heroIndex];
@@ -269,9 +331,12 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
     }
     function getSelectedTierStats(denominatorIndex, tierIndex, heroIndex) {
         try {
+            if(tierIndex == undefined) return;
+            if(heroIndex == undefined) return;
+            if(denominatorIndex == undefined) return;
             return $ctrl.cache.tier[denominatorIndex][tierIndex][heroIndex];
         } catch (error) {
-            console.error(`denominatorIndex : ${denominatorIndex}, tier index : ${tierIndex}, heroIndex : ${heroIndex} can not get selected tier stat from cache`)
+            console.error(`denominatorIndex : ${denominatorIndex}, tier index : ${tierIndex}, heroIndex : ${heroIndex} can not get selected tier stats from cache`)
             return undefined;
         }
     }

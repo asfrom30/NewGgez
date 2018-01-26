@@ -22,6 +22,10 @@
 	padding:0;
 }
 
+.no-border {
+    border : none;
+}
+
 .display-none {
     display: none;
 }

@@ -30,7 +30,6 @@ export default angular
             heroGameLabelP1 : '<',
             heroGameLabelP2 : '<',
 
-            
             p1Player : '<',
             selected : '=',
 
@@ -50,7 +49,7 @@ const errMsg = {
     err_this_battle_tag_is_not_exist_in_server : "해당 배틀태그는 서버에 등록되어 있지 않습니다."
 }
 
-export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax, CoreUtils){
+export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax, CoreUtils, $filter){
 
     var $ctrl = this;
     const device = $stateParams.device;
@@ -62,10 +61,10 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
     $ctrl.$onInit = function(){
         initView(); 
         dataBinding();
-        initButtonClick();
+        // initButtonClick();
 
-        if(process.env.NODE_ENV !== 'production') excutesForDev(true);
-    }
+        if(process.env.NODE_ENV !== 'production') excutesForDev(false);
+    };
 
     $ctrl.$onChanges = function(changesObj) {
 
@@ -102,8 +101,9 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
     function initButtonClick() {
         const mode =$ctrl.mode;
 
-        const tierIndex = 'gold';
-        const heroIndex = 'soldier76';
+        console.log($ctrl.heroGameLabelP1);
+        
+        const heroIndex = 'mercy';
 
         $timeout(function(){
             if(mode == 'detail') {
@@ -112,7 +112,9 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
                 $element.find(`#p1-season-selected`).click();
                 $element.find(`#p2-season-selected`).click();
             }
-            $element.find(`#${tierIndex}`).click();
+
+            const tierIndex = $filter('tierIndexFilter')($ctrl.p1Player.cptpt);
+            if(tierIndex != undefined) $element.find(`#${tierIndex}`).click();
             $element.find(`#${heroIndex}`).click();
         }, 100)
     }

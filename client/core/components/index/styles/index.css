@@ -100,7 +100,11 @@ index section h1 {
     text-decoration: none;
     transition: opacity .3s;
   }
-  
+    
+  index section a:not(.dropdown-item) {
+    padding-top: 60px;
+  }
+
   index section a:not(.dropdown-item):hover {
     opacity: .5;
   }
@@ -120,7 +124,4 @@ index section h1 {
     animation: sdb04 2s infinite;
     box-sizing: border-box;
   }
-  
-  index section a:not(.dropdown-item) {
-    padding-top: 60px;
-  }
+

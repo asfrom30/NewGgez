@@ -31,6 +31,7 @@ export default angular.module('ggez.core.filter', [])
     .filter('numberFormat', numberFormat)
     .filter('heroImageSrc', heroImageSrc)
     .filter('tierImageSrc', tierImageSrc)
+    .filter('tierIndexFilter', tierIndexFilter)
     .filter('playGamesLabel', playGamesLabel)
     .filter('prefixPlus', prefixPlus)
     .filter('suffixPercent', suffixPercent)
@@ -236,6 +237,32 @@ export function heroImageSrc() {
                 break;
             }
         return result;
+    }
+}
+
+export function tierIndexFilter(){
+    return function(cptpt) {
+        if(cptpt == undefined) return;
+        
+        if(1 <= cptpt && cptpt <= 1499) {
+            return "bronze";
+        } else if(1500 <= cptpt && cptpt <= 1999) {
+            return "silver";
+        } else if(2000 <= cptpt && cptpt <= 2499) {
+            return "gold";
+        } else if(2500 <= cptpt && cptpt <= 2999) {
+            return "platinum";
+        } else if(3000 <= cptpt && cptpt <= 3499) {
+            return "diamond";
+        } else if(3500 <= cptpt && cptpt <= 3999) {
+            return "master";
+        } else if(4000 <= cptpt && cptpt <= 4499) {
+            return "grand-master";
+        } else if(4500 <= cptpt && cptpt <= 5000) {
+            return "heroic";
+        } else {
+            return "";
+        }
     }
 }
 

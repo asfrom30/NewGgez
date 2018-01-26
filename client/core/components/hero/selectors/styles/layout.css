@@ -1,13 +1,30 @@
+/* title */
 .fixed-bottom-title {
     height: 50px;
 }
 
 @media (min-width: 768px) {
     .fixed-bottom-title {
-        height: 75px;
+        height: 65px;
     } 
 }
 
+hero-selectors .mode-detail .profile img{
+    height : 100%;
+}
+
+hero-selectors .mode-compare .profile {
+    width : 25%;
+}
+
+hero-selectors .mode-compare .profile img {
+    width : 25px;
+}
+
+hero-selectors .vs-label {
+    margin-left : 2%;
+    margin-right: 2%;
+}
 
 .fixed-bottom-content {
     padding-left : 5px;
@@ -38,6 +55,3 @@
     background: black;
     border-top: 1px solid gray;
 }
-
-
-

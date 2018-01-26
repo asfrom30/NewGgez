@@ -80,7 +80,7 @@ export default angular
     }).name;
 
 function getCalibration(){
-    const hours = parseInt(moment().format('hh'));
+    const hours = parseInt(moment().format('HH'));
     if(hours < 4) {
         return 1;
     } else {

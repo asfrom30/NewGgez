@@ -50,8 +50,9 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
     }
 
     function onInit() {
-        const mode = getMode();
-        initView(mode);
+        $ctrl.mode = getMode();
+        const mode = $ctrl.mode;
+
         initLabel('kr'); // en, cn
         $ctrl.cache = $ctrl.cache || {};
         $ctrl.cache.statIndexes = Analyzer.getDetailStatIndexes();
@@ -59,9 +60,9 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
 
         // updateLabelData();//FIXME: Analyzer.getLabels(lang);
         
-        // Using Analyzer get Data, Stored in cache // getAnalyzer Store in Cache. 
+        // Using Analyzer get Data, Stored in cache // getAnalyzer Store in Cache.
         $ctrl.cache['p1'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
-        $ctrl.cache['p2'] = makePlayerDataSet($ctrl.currentPlayerDatas, $ctrl.tierData);
+        
         makeTierDataSet(); // getTierDataSetFromAnalyzer
 
         // need just once, not needed change when selectors changed
@@ -220,18 +221,6 @@ export function HeroDetailCtrl($location, $state, $element, AppLogger, Ajax, CON
     }
 
     /* View */
-    function initView(mode) {
-        if(!(mode == 'detail' || mode == 'compare')) $state.go('hero.summary', stateParams);
-
-        if(mode == 'detail') {
-            $element.find('.mode-detail').show();
-            $element.find('.mode-compare').hide();
-        } else if(mode == 'compare') {
-            $element.find('.mode-detail').hide();
-            $element.find('.mode-compare').show();
-        } 
-    }
-
     function onPerButton($event, denominatorIndex){
         // update view
         const $_dom = $element.find($event.target)

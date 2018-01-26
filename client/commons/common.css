@@ -50,6 +50,16 @@
 .flex-column { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:vertical; -webkit-box-direction:normal; -ms-flex-direction:column; flex-direction:column; }
 .flex-row-wrap { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -ms-flex-flow:row wrap; flex-flow:row wrap; }
 
+.f-wh-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; -webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+.f-w-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; }
+.f-w-start {-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start; }
+.f-w-end {-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end; }
+.f-w-between {-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;}
+.f-h-center {-webkit-box-align:center;-ms-flex-align:center;align-items:center; }
+.f-h-start {-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start; }
+.f-h-end {-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end; }
+.f-h-baseline {-webkit-box-align : baseline; -ms-flex-align : baseline; align-items : baseline;}
+
 .f-align-w-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; }
 .f-align-w-start {-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start; }
 .f-align-w-end {-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end; }
@@ -271,6 +281,22 @@
     position    : fixed;
     left        : 0px;
     bottom      : 0px;
+}
+
+/* layout pattern */
+.row {
+    width : 100%;
+    height: 100%;
+    display: flex;
+}
+
+.row-2-box {
+    height: 100%;
+}
+.row-2-box > div {
+    width : 100%;
+    height : 50%;
+    min-height: 50%;
 }
 
 /* Bootstrap button group same width pattern */

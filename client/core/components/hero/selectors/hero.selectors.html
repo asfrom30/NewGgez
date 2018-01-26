@@ -1,46 +1,68 @@
 <div class="hero-selectors-inner-container">
     <div id="fixed-bottom-collapse" class="fixed-bottom-content display-none">
-        <!-- First Player Data -->
-        <div class="selector-separtor"></div>
-        <div id="first-player-selector" class="player-selector">
+        <!-- Common Player Data -->
+        <div class="selector-separtor mode-detail"></div>
+        <div id="p0-selector" class="player-selector mode-detail">
             <div class="btn-group" role="group">
-                <button id="first-player-yesterday-selected"   ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                <button id="p0-yesterday-selected"   ng-click="$ctrl.onSelectorClicked($event)"  type="button">
                     <div>어제</div>
-                    <div>{{$ctrl.p1GameLabel.yesterday}}</div>
+                    <div>{{$ctrl.p1GameLabel.yesterday | defaultValue : '-'}}</div>
                 </button>
-                <button id="first-player-today-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                <button id="p0-today-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
                     <div>오늘</div>
-                    <div>{{$ctrl.p1GameLabel.today}}</div>
+                    <div>{{$ctrl.p1GameLabel.today | defaultValue : '-'}}</div>
                 </button>
-                <button id="first-player-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                <button id="p0-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button">
                     <div>주간</div>
-                    <div>{{$ctrl.p1GameLabel.week}}</div>
+                    <div>{{$ctrl.p1GameLabel.week | defaultValue : '-'}}</div>
                 </button>
-                <button id="first-player-season-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                <button class="active2" id="p0-season-selected"       ng-click=""  type="button">
                     <div>시즌전체</div>
-                    <div>{{$ctrl.p1GameLabel.season}}</div>
+                    <div>{{$ctrl.p1GameLabel.season | defaultValue : '-'}}</div>
+                </button>
+            </div>
+        </div>
+        <!-- First Player Data -->
+        <div class="selector-separtor mode-compare"></div>
+        <div id="p1-selector" class="player-selector mode-compare">
+            <div class="btn-group" role="group">
+                <button id="p1-yesterday-selected"   ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                    <div>어제</div>
+                    <div>{{$ctrl.p1GameLabel.yesterday | defaultValue : '-'}}</div>
+                </button>
+                <button id="p1-today-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                    <div>오늘</div>
+                    <div>{{$ctrl.p1GameLabel.today | defaultValue : '-'}}</div>
+                </button>
+                <button id="p1-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                    <div>주간</div>
+                    <div>{{$ctrl.p1GameLabel.week | defaultValue : '-'}}</div>
+                </button>
+                <button id="p1-season-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                    <div>시즌전체</div>
+                    <div>{{$ctrl.p1GameLabel.season | defaultValue : '-'}}</div>
                 </button>
             </div>
         </div>
         <!-- Second Player Data -->
-        <div class="selector-separtor"></div>
-        <div id="second-player-selector" class="player-selector">
+        <div class="selector-separtor mode-compare"></div>
+        <div id="p2-selector" class="player-selector mode-compare">
             <div class="btn-group" role="group">
-                <button id="second-player-yesterday-selected"   ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                <button id="p2-yesterday-selected"   ng-click="$ctrl.onSelectorClicked($event)"  type="button">
                     <div>어제</div>
-                    <div>{{$ctrl.p2GameLabel.yesterday}}</div>
+                    <div>{{$ctrl.p2GameLabel.yesterday | defaultValue : '-'}}</div>
                 </button>
-                <button id="second-player-today-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                <button id="p2-today-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
                     <div>오늘</div>
-                    <div>{{$ctrl.p2GameLabel.today}}</div>
+                    <div>{{$ctrl.p2GameLabel.today | defaultValue : '-'}}</div>
                 </button>
-                <button id="second-player-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                <button id="p2-week-selected"        ng-click="$ctrl.onSelectorClicked($event)"  type="button">
                     <div>주간</div>
-                    <div>{{$ctrl.p2GameLabel.week}}</div>
+                    <div>{{$ctrl.p2GameLabel.week | defaultValue : '-'}}</div>
                 </button>
-                <button id="second-player-season-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
+                <button id="p2-season-selected"       ng-click="$ctrl.onSelectorClicked($event)"  type="button">
                     <div>시즌전체</div>
-                    <div>{{$ctrl.p2GameLabel.season}}</div>
+                    <div>{{$ctrl.p2GameLabel.season | defaultValue : '-'}}</div>
                 </button>
             </div>
         </div>
@@ -109,64 +131,52 @@
     </div>
     <div class="fixed-bottom-title flex">
         <!-- Header for detail -->
-        <div class="mode-detail fixed-detail-header flex w-100-pct">
+        <div class="mode-detail fixed-detail-header flex w-100-pct h-100-pct f-align-h-center">
             <div class="profile flex h-100-pct">
                 <div class="h-100-pct">
                     <img  ng-src="{{$ctrl.selected.heroIndex | heroImageSrc}}"/>
                 </div>
-                <div>
+                <div class="text-box h-100-pct">
                     <div class="h-50-pct flex f-align-h-center upper-text">{{$ctrl.selected.heroIndex}}</div>
                     <div class="h-50-pct flex f-align-h-center lower-text">{{$ctrl.selected.p1Index}}</div>
                 </div>
             </div>
-            <!-- <button ng-click="$ctrl.onTableCompareToggle()" type="button" class="btn btn-default btn-sm m-l-auto">
-                <i class="material-icons">swap_horiz</i>
-            </button>
-            <button ng-click="$ctrl.onTableResultToggle()" type="button" class="btn btn-default btn-sm">
-                %
-            </button> -->
             <button ng-click="$ctrl.toggleFixedBottomCollapse()" type="button" class="btn btn-default btn-sm m-l-auto">
                 <i class="material-icons">reorder</i>
             </button>
         </div>
         <!-- Header for compare -->
-        <div class="mode-compare flex w-100-pct">
-            <div class="profile p1 m-l-5">
-                <div class="upper h-50-pct flex f-align-w-center f-align-h-center">
-                    {{$ctrl.cache.p1.btn}}
-                </div>
-                <div class="flex h-50-pct">
-                    <div>
+        <div class="mode-compare row">
+            <div class="profile p1 row-2-box m-l-5">
+                <div class="upper flex f-wh-center">
+                    <div class="h-100-pct">
                         <img ng-src="{{$ctrl.cache.p1.cptpt | tierImageSrc}}"/>
                     </div>
-                    <div class="lower flex f-align-h-center">
-                        {{$ctrl.selected.p1Index}}
+                    <div class="overflow-hidden">
+                        {{$ctrl.cache.p1.btn}}
                     </div>
                 </div>
-            </div>
-            <div class="vs-label">
-                <div class="upper h-50-pct flex f-align-w-center f-align-h-end">VS</div>
-                <div class="lower h-50-pct flex f-align-w-center f-align-h-start">{{$ctrl.selected.heroIndex}}</div>
-            </div>
-            <div class="profile p2 m-l-5">
-                <div class="upper h-50-pct flex f-align-w-center f-align-h-center">
-                    {{$ctrl.cache.p2.btn}}
+                <div class="lower flex f-wh-center">
+                    {{$ctrl.selected.p1Index}}
                 </div>
-                <div class="flex h-50-pct">
+            </div>
+            <div class="vs-label row-2-box">
+                <div class="upper flex f-w-center f-h-end">VS</div>
+                <div class="lower flex f-w-center f-h-start">{{$ctrl.selected.heroIndex}}</div>
+            </div>
+            <div class="profile p2 row-2-box">
+                <div class="upper flex f-wh-center">
                     <div>
                         <img ng-src="{{$ctrl.cache.p2.cptpt | tierImageSrc}}"/>
                     </div>
-                    <div class="lower flex f-align-h-center">
-                        {{$ctrl.selected.p2Index}}
+                    <div>
+                        {{ $ctrl.cache.p2.btn }} 
                     </div>
                 </div>
+                <div class="lower flex f-wh-center">
+                    {{$ctrl.selected.p2Index}}
+                </div>
             </div>
-            <!-- <button ng-click="$ctrl.onTableCompareToggle()" type="button" class="btn btn-default btn-sm m-l-auto">
-                <i class="material-icons">swap_horiz</i>
-            </button>
-            <button ng-click="$ctrl.onTableResultToggle()" type="button" class="btn btn-default btn-sm">
-                %
-            </button> -->
             <button ng-click="$ctrl.toggleFixedBottomCollapse()" type="button" class="btn btn-default btn-sm m-l-auto">
                 <i class="material-icons">reorder</i>
             </button>

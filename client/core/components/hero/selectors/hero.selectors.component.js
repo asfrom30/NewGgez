@@ -1,9 +1,10 @@
 'use strict';
 
 import angular from 'angular';
-import './hero.selectors.css';
+import './styles/layout.css';
+import './styles/style.css';
 
-import './style.index.css';
+import './hero.selectors.css';
 
 import './style.fixed.header.css';
 
@@ -20,6 +21,7 @@ export default angular
         controller : HeroSelectorsCtrl,
         template : require('./hero.selectors.html'),
         bindings : {
+            mode : '<',
             p1GameLabel : '<',
             p2GameLabel : '<',
             
@@ -55,11 +57,13 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
     const region = $stateParams.region;
 
     /* wrap with dom selector */
-
+    
+    $ctrl.hasGame = hasGame;
     $ctrl.$onInit = function(){
-        if(process.env.NODE_ENV !== 'production') excutesForDev(true);
+        if(process.env.NODE_ENV !== 'production') excutesForDev(false);
         initView(); 
         dataBinding();
+        initButtonClick();
     }
 
     $ctrl.$onChanges = function(changesObj) {
@@ -67,12 +71,23 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
     }
 
     function initView() {
-        hideFixedBottomCollapse();
+        
+        showFixedBottomCollapse();
+        // hideFixedBottomCollapse();
         hideSearchBar();
         showPlayerSearchIcon();
+
+        const mode = $ctrl.mode;
+        if(mode == 'detail') {
+            $element.find('.mode-detail').show();
+            $element.find('.mode-compare').hide();
+        } else if(mode == 'compare') {
+            $element.find('.mode-detail').hide();
+            $element.find('.mode-compare').show();
+        } 
     }
 
-    $ctrl.hasGame = hasGame;
+    
     function hasGame(number){
 
         if(isNaN(number) || number == undefined || number ==0) {
@@ -81,6 +96,24 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
             return true;
         }
 
+    }
+
+    function initButtonClick() {
+        const mode =$ctrl.mode;
+
+        const tierIndex = 'gold';
+        const heroIndex = 'soldier76';
+
+        $timeout(function(){
+            if(mode == 'detail') {
+                $element.find(`#p0-week-selected`).click();
+            } else if (mode == 'compare') {
+                $element.find(`#p1-season-selected`).click();
+                $element.find(`#p2-season-selected`).click();
+            }
+            $element.find(`#${tierIndex}`).click();
+            $element.find(`#${heroIndex}`).click();
+        }, 100)
     }
 
     function excutesForDev(flag) {
@@ -97,8 +130,8 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
         const heroIndex = 'soldier76';
 
         $timeout(function(){
-            $element.find(`#first-player-${p1Index}-selected`).click();
-            $element.find(`#second-player-${p2Index}-selected`).click();
+            $element.find(`#p1-${p1Index}-selected`).click();
+            $element.find(`#p2-${p2Index}-selected`).click();
             $element.find(`#${tierIndex}`).click();
             $element.find(`#${heroIndex}`).click();
         }, 300)
@@ -112,6 +145,7 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
     $ctrl.toggleSearchTable = toggleSearchTable;
     $ctrl.onPlayerSearchBtn = onPlayerSearchBtn;
 
+    
     $ctrl.onSelectorClicked = function($event){
 
         /* View update add active and remove active*/
@@ -120,7 +154,6 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
 
         /* update selected */
         updateSelected();
-        /* test */
     }
 
     $ctrl.onHeroClicked = function($event){
@@ -194,39 +227,54 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
         $element.find('search-table').slideToggle('fast');
     }
 
-    
+    function showSearchResultTable() {
+        $element.find('search-table').slideDown('fast');
+    }
 
+    
     // TODO: 자기버튼먼 업데이트 되게 할 것.
     function updateSelected() {
-        let p1ActiveDomId = getActiveDomIdInSiblings("#first-player-selector button");
-        let p2ActiveDomId = getActiveDomIdInSiblings("#second-player-selector button");
+        const mode = $ctrl.mode;
 
+        let p1Index, p2Index;
+
+        if(mode == 'detail') {
+            let p0ActiveDomId = getActiveDomIdInSiblings("#p0-selector button");
+            p1Index = getDateIndex("p0", p0ActiveDomId);
+            p2Index = 'season';
+        } else if (mode == 'compare')  {
+            let p1ActiveDomId = getActiveDomIdInSiblings("#p1-selector button");
+            let p2ActiveDomId = getActiveDomIdInSiblings("#p2-selector button");
+            p1Index = getDateIndex("p1", p1ActiveDomId);
+            p2Index = getDateIndex("p2", p2ActiveDomId);
+        }
+        
         $ctrl.selected = {
-            p1Index : getDateIndex("first", p1ActiveDomId),
-            p2Index : getDateIndex("second", p2ActiveDomId),
+            p1Index : p1Index,
+            p2Index : p2Index,
             tierIndex : getTierIndex(),
             heroIndex : getHeroSelected(),
         }
 
-        onSelectorChanges($ctrl.selected);//todo : 항상 업데이트 되는게 아니라, 다른 데이터를 선택했을때 변화가 있게 변경할 것..
+        onSelectorChanges($ctrl.selected);
     }
 
     function getDateIndex(playerNum, domId){
         let result;
         switch(domId) {
-            case playerNum + "-player-week-selected" :
+            case playerNum + "-week-selected" :
                 result = 'week';
                 break;
-            case playerNum + "-player-yesterday-selected" :
+            case playerNum + "-yesterday-selected" :
                 result = 'yesterday';
                 break;
-            case playerNum + "-player-today-selected" :
+            case playerNum + "-today-selected" :
                 result = 'today';
                 break;
-            case playerNum + "-player-season-selected" :
+            case playerNum + "-season-selected" :
                 result = 'season';
                 break;
-            case playerNum + "-player-custom-selected" :
+            case playerNum + "-custom-selected" :
                 result = CoreUtils.getDateIndex(1);
             default :
                 result = undefined;
@@ -335,7 +383,9 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
                 if(reason.isServerError) CoreUtils.noty(errMsg.err_server_working_is_not_properly, 'error');
                 else CoreUtils.noty(errMsg.err_this_battle_tag_is_not_exist_in_server, 'warning');
             })
-        } 
+        }
+
+        showSearchResultTable();
     }
 
     function getIdFromResult(result) {

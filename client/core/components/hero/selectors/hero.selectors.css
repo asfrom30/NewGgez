@@ -36,10 +36,20 @@
     outline: none;
 }
 
-#first-player-selector button.active{
+#p0-selector button.active {
     border : 2px solid rgba(255,99,132,1);
 }
-#second-player-selector button.active{
+
+#p0-selector button.active2 {
+    color : white;
+    border : 2px solid rgba(154,208,245,1);
+}
+
+
+#p1-selector button.active{
+    border : 2px solid rgba(255,99,132,1);
+}
+#p2-selector button.active{
 	border : 2px solid rgba(154,208,245,1);
 }
 #tier-selector button.active {

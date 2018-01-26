@@ -15,14 +15,6 @@
 /* .hero-selectors-inner-container .fixed-bottom-title .mode-compare
 .profile */
 
-/* Fixed Bottom Title */
-.fixed-bottom-title .profile{
-    font-weight: 900;
-    height:50px; /* added for weinre */
-}
-.fixed-bottom-title .profile img{
-    height : 100%;
-}
 
 /**
     mode-compare
@@ -45,11 +37,7 @@
 }
 
 /* vs label font-size*/
-.hero-selectors-inner-container .fixed-bottom-title .mode-compare
-.vs-label {
-    margin-left : 20px;
-    margin-right: 20px;
-}
+
 
 .hero-selectors-inner-container .fixed-bottom-title .mode-compare
 .vs-label .upper {

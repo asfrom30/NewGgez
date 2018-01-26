@@ -5,13 +5,6 @@ index {
 
 #index .header-banner {
     width:100%;
-    margin-top : 40px;
-}
-
-@media (min-width: 768px) {
-    #index .header-banner {
-        margin-top : 53px;
-    }
 }
 
 /* layout */

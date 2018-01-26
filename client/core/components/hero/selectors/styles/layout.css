@@ -9,6 +9,14 @@
     } 
 }
 
+hero-selectors .player-search-bar {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+}
+
+
+
 hero-selectors .mode-detail .profile img{
     height : 100%;
 }
@@ -54,4 +62,21 @@ hero-selectors .vs-label {
 .hero-selectors-inner-container {
     background: black;
     border-top: 1px solid gray;
+}
+
+
+/* Button width and height */
+.hero-selectors-inner-container
+.fixed-bottom-title button {
+    width : 40px;
+    height: 40px;
+    margin-top : 5px;
+    margin-bottom : 5px;
+    margin-right : 2px;
+}
+
+/* player search bar */
+.hero-selectors .player-search-bar button {
+    width: 30px;
+    height: 30px;
 }

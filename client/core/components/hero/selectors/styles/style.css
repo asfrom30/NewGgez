@@ -5,3 +5,9 @@
     font-weight: 900;
     padding-left: 0.1em;
 }
+
+
+hero-selectors button {
+    color : white;
+    background-color: #404040;
+}

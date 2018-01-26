@@ -60,10 +60,11 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
     
     $ctrl.hasGame = hasGame;
     $ctrl.$onInit = function(){
-        if(process.env.NODE_ENV !== 'production') excutesForDev(false);
         initView(); 
         dataBinding();
         initButtonClick();
+
+        if(process.env.NODE_ENV !== 'production') excutesForDev(true);
     }
 
     $ctrl.$onChanges = function(changesObj) {
@@ -73,7 +74,7 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
     function initView() {
         
         showFixedBottomCollapse();
-        // hideFixedBottomCollapse();
+        hideFixedBottomCollapse();
         hideSearchBar();
         showPlayerSearchIcon();
 
@@ -134,14 +135,15 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
             $element.find(`#p2-${p2Index}-selected`).click();
             $element.find(`#${tierIndex}`).click();
             $element.find(`#${heroIndex}`).click();
+            $ctrl.onSearchBarBtn();
         }, 300)
 
         onPlayerSearchBtn('a');
     }
 
     /* View */
-    $ctrl.toggleFixedBottomCollapse = toggleFixedBottomCollapse;
-    $ctrl.toggleSearchBar = toggleSearchBar;
+    $ctrl.onHeroSelectorsBtn = onHeroSelectorsBtn;
+    $ctrl.onSearchBarBtn = onSearchBarBtn;
     $ctrl.toggleSearchTable = toggleSearchTable;
     $ctrl.onPlayerSearchBtn = onPlayerSearchBtn;
 
@@ -187,12 +189,12 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
     }
 
     /* View */
-    function toggleFixedBottomCollapse() {
+    function onHeroSelectorsBtn() {
         hideSearchBar();
         getFixedBottomCollapseDom().slideToggle('fast');
     }
     
-    function toggleSearchBar() {
+    function onSearchBarBtn() {
         hideFixedBottomCollapse();
         getFriendSearchDom().slideToggle('fast');
     }

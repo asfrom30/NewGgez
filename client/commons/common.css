@@ -10,7 +10,7 @@
 @media (min-width: 1200px) {}
 
 
-.my-border{
+.border{
 	border : 1px solid cyan;
 }
 
@@ -129,7 +129,9 @@
 .m-b-30{ margin-bottom:30px; }
 .m-b-40{ margin-bottom:40px; }
 
-.m-l-auto{ margin-left : auto};
+.m-w-auto { margin-left : auto; margin-right:auto}
+
+.m-l-auto{ margin-left : auto}
 .m-l-0{ margin-left:0px; }
 .m-l-2{ margin-left:2px; }
 .m-l-4{ margin-left:4px; }
@@ -137,7 +139,7 @@
 .m-l-10{ margin-left:10px; }
 .m-l-15{ margin-left:15px; }
 
-.m-r-auto{ margin-right:auto};
+.m-r-auto{ margin-right:auto}
 .m-r-0{ margin-right:0px; }
 .m-r-2{ margin-right:2px; }
 .m-r-4{ margin-right:4px; }
@@ -284,8 +286,7 @@
 }
 
 /* layout pattern */
-.row {
-    width : 100%;
+.p-row {
     height: 100%;
     display: flex;
 }

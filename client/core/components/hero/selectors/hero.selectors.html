@@ -112,21 +112,21 @@
         </div>
         <div class="selector-separtor"></div>
     </div>
-    <div class="fixed-bottom-content">
-        <div class="mode-compare">
-            <div id="player-search-bar" class="player-search-bar display-none">
-                <search-table player-list="$ctrl.searchedPlayerList" on-click="$ctrl.onClick($id)"></search-table>
-                <div class="input-group">
-                    <input ng-enter="$ctrl.onPlayerSearchBtn(serchInput)" ng-model="serchInput"/>
-                    <button ng-click="$ctrl.toggleSearchTable()" type="button" class="m-l-auto">
-                        <i class="material-icons">arrow_drop_down</i>
-                    </button>
-                    <button ng-click="$ctrl.onPlayerSearchBtn(serchInput)" type="button">
-                        <i id="player-search-icon" class="material-icons">search</i>
-                        <div id="player-search-loader" class="loader"></div>
-                    </button>
-                </div>
-            </div>
+    <div id="player-search-bar" class="player-search-bar mode-compare">
+        <search-table player-list="$ctrl.searchedPlayerList" on-click="$ctrl.onClick($id)"></search-table>
+        <div class="input-group">
+            <input class="form-control" ng-enter="$ctrl.onPlayerSearchBtn(serchInput)" ng-model="serchInput" placeholder="Search for..."/>
+            <span class="input-group-btn">
+                <button ng-click="$ctrl.toggleSearchTable()" type="button" class="btn btn-default btn-sm">
+                    <i class="material-icons">arrow_drop_down</i>
+                </button>
+            </span>
+            <span class="input-group-btn">
+                <button ng-click="$ctrl.onPlayerSearchBtn(serchInput)" type="button" class="btn btn-default btn-sm">
+                    <i id="player-search-icon" class="material-icons">search</i>
+                    <div id="player-search-loader" class="loader"></div>
+                </button>
+            </span>
         </div>
     </div>
     <div class="fixed-bottom-title flex">
@@ -146,7 +146,7 @@
             </button>
         </div>
         <!-- Header for compare -->
-        <div class="mode-compare row">
+        <div class="mode-compare p-row w-100-pct">
             <div class="profile p1 row-2-box m-l-5">
                 <div class="upper flex f-wh-center">
                     <div class="h-100-pct">
@@ -177,12 +177,14 @@
                     {{$ctrl.selected.p2Index}}
                 </div>
             </div>
-            <button ng-click="$ctrl.toggleFixedBottomCollapse()" type="button" class="btn btn-default btn-sm m-l-auto">
-                <i class="material-icons">reorder</i>
-            </button>
-            <button type="button" ng-click="$ctrl.toggleSearchBar()" class="btn btn-default btn-sm">
-                <i class="material-icons">search</i>
-            </button>
+            <div class="flex f-wh-center m-l-auto">
+                <button ng-click="$ctrl.onHeroSelectorsBtn()" type="button" class="btn btn-default btn-sm">
+                    <i class="material-icons">reorder</i>
+                </button>
+                <button type="button" ng-click="$ctrl.onSearchBarBtn()" class="btn btn-default btn-sm">
+                    <i class="material-icons">search</i>
+                </button>
+            </div>
         </div>
     </div>
 </div>

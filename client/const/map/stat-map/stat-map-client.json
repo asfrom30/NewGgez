@@ -1,4 +1,5 @@
 {
+	"date": "2018/01/27, 18:16:09",
 	"denominators": [
 		{
 			"id": "death",
@@ -622,7 +623,7 @@
 				"en-us": []
 			}
 		],
-		"torbjoern": [
+		"torbjorn": [
 			{
 				"id": "all_damage_done",
 				"ko-kr": "준모든피해",
@@ -1049,6 +1050,100 @@
 			{
 				"id": "deadeye_kills",
 				"ko-kr": "황야의무법자로처치",
+				"en-us": []
+			}
+		],
+		"bastion": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "self_healing",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "recon_kills",
+				"ko-kr": "수색모드로처치",
+				"en-us": []
+			},
+			{
+				"id": "sentry_kills",
+				"ko-kr": "경계모드로처치",
+				"en-us": []
+			},
+			{
+				"id": "tank_kills",
+				"ko-kr": "전차모드로처치",
+				"en-us": []
+			}
+		],
+		"moira": [
+			{
+				"id": "all_damage_done",
+				"ko-kr": "준모든피해",
+				"en-us": []
+			},
+			{
+				"id": "hero_damage_done",
+				"ko-kr": "영웅에게준피해",
+				"en-us": []
+			},
+			{
+				"id": "barrier_damage_done",
+				"ko-kr": "방벽에준피해",
+				"en-us": []
+			},
+			{
+				"id": "elminations",
+				"ko-kr": "처치",
+				"en-us": []
+			},
+			{
+				"id": "solo_kills",
+				"ko-kr": "단독처치",
+				"en-us": []
+			},
+			{
+				"id": "healing_done",
+				"ko-kr": "치유",
+				"en-us": []
+			},
+			{
+				"id": "self_healing",
+				"ko-kr": "자가치유",
+				"en-us": []
+			},
+			{
+				"id": "coalescence_healing",
+				"ko-kr": "융화로치유",
+				"en-us": []
+			},
+			{
+				"id": "coalescence_kills",
+				"ko-kr": "융화로처치",
 				"en-us": []
 			}
 		]

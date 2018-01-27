@@ -46,9 +46,38 @@
                 </tr>
             </tbody>
             <tfoot>
-                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 0) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[2].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[0].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[0].value"></up-down-symbol> 했습니다.</td></tr>
-                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 1) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[1].value"></up-down-symbol> 했습니다.</td></tr>
-                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 2) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[2].index}}이 {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[2].value"></up-down-symbol> 했습니다.</td></tr>
+                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 0) }">
+                    <td class="row-result" colspan="5">
+                        {{$ctrl.resultP2Append}} {{$ctrl.tableHeader[2].index |  i18nDateIndex : $ctrl.lang | defaultValue : '-'}}
+                        <span class="weak"> 보다</span>
+                        {{$ctrl.resultP1Append}} {{$ctrl.tableHeader[1].index |  i18nDateIndex : $ctrl.lang | defaultValue : '-'}}
+                        <span class="weak">이</span>
+                        {{$ctrl.bind.tableFooters[0].value | percentForResult | abs}}%
+                            <up-down-symbol value="$ctrl.bind.tableFooters[0].value"></up-down-symbol>
+                        <span class="weak">했습니다.</span>
+                    </td>
+                </tr>
+                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 1) }">
+                    <td class="row-result" colspan="5">
+                        {{$ctrl.tableHeader[3].index | i18nTierIndex : $ctrl.lang | defaultValue : '-'}}
+                        <span class="weak"> 보다</span>
+                         {{$ctrl.resultP2Append}} {{$ctrl.tableHeader[2].index |  i18nDateIndex : $ctrl.lang | defaultValue : '-'}}
+                        <span class="weak">이</span>
+                        {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}}%
+                        <up-down-symbol value="$ctrl.bind.tableFooters[1].value"></up-down-symbol>
+                        <span class="weak">했습니다.</span>
+                    </td>
+                </tr>
+                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 2) }">
+                    <td class="row-result" colspan="5">
+                        {{$ctrl.tableHeader[3].index | i18nTierIndex : $ctrl.lang | defaultValue : '-'}}
+                        <span class="weak"> 보다</span>
+                        {{$ctrl.resultP1Append}} {{$ctrl.tableHeader[1].index | i18nDateIndex : $ctrl.lang | defaultValue : '-'}}
+                        <span class="weak">이</span>
+                        {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}}% <up-down-symbol value="$ctrl.bind.tableFooters[2].value"></up-down-symbol>
+                        <span class="weak">했습니다.</span>
+                    </td>
+                </tr>
             </tfoot>
         </table>
     </div>

@@ -328,7 +328,6 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
         $(dom.heroSelector).each(function(){
             if($(this).hasClass('active')){
                 id = $(this).attr('id');
-                if(id == 'torbjorn') id = 'torbjoern';
             }
         });
 

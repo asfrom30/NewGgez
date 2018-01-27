@@ -25,8 +25,8 @@ module.exports = {
     onTickFlags : {
         crawl : false,
         tier : true,
-        diff : false,
-        report : false,
-        mail : false,
+        diff : true,
+        report : true,
+        mail : true,
     }
 }

@@ -8,25 +8,18 @@ exports.analyzeAsync = function(saveConfig) {
     const todaySuffix = saveConfig.todaySuffix;
 
     /* Dependency Injection */
-    
-    //FIXME: EXTERNAL
-    const heroIndexes = [
-        "all", "soldier76", "reaper", "pharah", "reinhardt", "roadhog",
-        "winston", "dva", "symmetra" , "widowmaker", "tracer", "hanzo",
-        "mercy", "zenyatta", "genji", "torbjoern", "junkrat", "zarya",
-        "mei", "ana", "lucio", "sombra", "doomfist", "orisa", "mccree"
-    ];
+    const heroIndexes = require('../../const/stat-map-builder/hero-indexes');
     const tierIndexes = ["bronze", "silver", "gold", "platinum", "diamond", "master", "grandmaster", "heroic"];
     tierIndexes.push('total');
     
-    const tierGteLtes = require('../../externals/const/tiermap');
+    const tierGteLtes = require('../../const/tiermap.js');
     
     const lang = 'ko-kr';
     const aggregateQuery = [];
     const gamePlayedIndex = '치른게임'; //FIXME: Must have lang param
-    const statMap = require('../analyze-engine/stat-map-client.json');
-    const denominators = statMap.denominators;
-    const heroStatMap = statMap.heroes;
+    const clientStatMap = require('../../const/stat-map-client.json');
+    const denominators = clientStatMap.denominators;
+    const heroStatMap = clientStatMap.heroes;
 
     /* Make Aggregate Query */
     for(let heroIndex of heroIndexes) {
@@ -37,7 +30,7 @@ exports.analyzeAsync = function(saveConfig) {
             /* Make `Matcher Aggregate` */
             const arrMatcher = [
                 getGteComp( `_value.${heroIndex}.${gamePlayedIndex}`, 10),
-                getGteLteComp("_meta.cptpt", gte, lte)
+                getGteLteComp(`_meta.cptpt`, gte, lte)
             ];
 
             const matcher = getMatcherWithMultipleComp(arrMatcher);

@@ -53,7 +53,23 @@ import { i18nTierIndex } from './i18n/i18n.core.filter.module';
 export function recentUpdate() {
     return function(unixTimestamp) {
         const subtractUnixTime = (Date.now() - unixTimestamp)/1000;
-        return ddhhmm(parseInt(subtractUnixTime));
+        if(isNaN(subtractUnixTime)) return '알수없음';
+
+        const result = ddhhmm(subtractUnixTime);
+
+        if(result.days != 0) {
+            return result.days + '일전';
+        } else if(result.hrs != 0){
+            return result.hrs + '시간전';
+        } else if (result.mnts != 0) {
+            return result.mnts + '분전';
+        } else if (result.secs != 0) {
+            if(result.secs < 1) {
+                return '방금전';
+            } else {
+                return parseInt(result.secs) + '초전';
+            }
+        }
     }
 }
 
@@ -64,7 +80,12 @@ function ddhhmm(secs) {
     secs  -= hrs*3600;
     var mnts = Math.floor(secs / 60);
     secs  -= mnts*60;
-    return days+"d, "+hrs+"h, "+mnts+"m, "+secs+"s 전";
+    return {
+        days : days,
+        hrs : hrs,
+        mnts : mnts,
+        secs : secs
+    }
 }
 
 function hhmmss(secs) {

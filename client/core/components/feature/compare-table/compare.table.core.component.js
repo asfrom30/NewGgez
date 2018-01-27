@@ -1,11 +1,12 @@
 'use strict'
-require('./index.css');
+
 
 const angular = require('angular');
-// const component = require('./compare.table.common.component');
+require('./styles/layout.css');
+require('./styles/style.css');
 
 export default angular
-    .module('compare.table.common.component.module',[])
+    .module('compare.table.core.component.module',[])
     .component('compareTable', {
         template: require('./index.html'),
         controller : controller,
@@ -26,7 +27,7 @@ export default angular
     .filter('roundUp', roundUpFilter)
     .name;
 
-export function controller($element, $scope, AppLogger) {
+export function controller($element, $scope, $location, AppLogger) {
 
     const $ctrl = this;
     const logFlag = false;
@@ -40,6 +41,15 @@ export function controller($element, $scope, AppLogger) {
         $ctrl.bind = {};
         init();
         initListener();
+
+        const mode = getMode($location);
+        if(mode == 'detail') {
+            $ctrl.resultP1Append = "내";
+            $ctrl.resultP2Append = "내";
+        } else {
+            $ctrl.resultP1Append = "내";
+            $ctrl.resultP2Append = "상대";
+        }
     }
 
     function initListener() {
@@ -88,7 +98,6 @@ export function controller($element, $scope, AppLogger) {
             $ctrl.tableRows = convertDatasColumnToRow(statIndexes, firstColumn, secondColumn, thirdColumn);
             $ctrl.bind.tableFooters = makeFooters(statIndexes, tableHeader, firstColumn, secondColumn, thirdColumn);
         }
-
         // initTable(statIndexes, $ctrl.firstColumn, $ctrl.secondColumn, $ctrl.thirdColumn);
     }
 
@@ -176,19 +185,16 @@ export function controller($element, $scope, AppLogger) {
             const p2Point = getColumnPoint(secondColumn, statIndex);
             const tierPoint = getColumnPoint(thirdColumn, statIndex);
 
-            if(p1Point && p2Point && tierPoint) {
-                count ++;
-                p1PointSum += p1Point;
-                p2PointSum += p2Point;
-                tierPointSum += tierPoint;
-            }
+            count ++;
+            p1PointSum += p1Point;
+            p2PointSum += p2Point;
+            tierPointSum += tierPoint;
         }
 
         return [
             {headerA : '', headerB : '', value : calcIncrease(p1PointSum, p2PointSum)},
             {headerA : '', headerB : '', value : calcIncrease(p1PointSum, tierPointSum)},
             {headerA : '', headerB : '', value : calcIncrease(p2PointSum, tierPointSum)},
-
         ];
     }
 
@@ -396,6 +402,13 @@ function roundUpFilter() {
     return function(input) {
         numeral(input*100).format('xx.0');
     }
+}
+
+function getMode($location){
+    const path = $location.path();
+    const index = path.lastIndexOf('/');
+    const mode = path.substring(index + 1).trim();
+    return mode;
 }
 
 

@@ -1,77 +1,3 @@
-/* Radar Table Width */
-/* Header Width */
-
-compare-table table thead th {
-    height : 10vh;
-}
-
-compare-table table thead th > div {
-    width: 100%;
-    overflow: hidden;
-}
-compare-table table tbody td {
-    height: 10vh;
-}
-compare-table table tfoot td {
-    height : 10vh;
-}
-
-
-/* Fixed Header and Fixed Footer Setting */
-compare-table table {
-    table-layout:fixed;
-    margin:auto;
-}
-
-compare-table thead, tfoot {
-    display:table;
-    width:calc(100% - 12px);
-}
-
-@media (min-width: 768px) {
-    compare-table thead, tfoot {
-        width:calc(100% - 17px);
-    }
-}
-
-
-compare-table tbody {
-    height:43vh;
-    overflow:auto;
-    overflow-x:hidden;
-    display:block;
-    width:100%;
-}
-compare-table tbody tr {
-    display:table;
-    width:100%;
-    table-layout:fixed;
-}
-
-/* font-size */
-compare-table .td-up {
-    font-size: 1.2rem;
-} 
-compare-table .td-down {
-    font-size: 0.9rem;
-    color : lightgray;
-}
-/* Layout */
-compare-table table {
-    table-layout: fixed;
-    width : 100%;
-    border-collapse: separate;
-    border-spacing: 0px;
-    word-wrap: break-word;
-}
-
-compare-table table th:nth-child(1), compare-table td:nth-child(1){
-    width : 32%
-}
-
-compare-table table th:not(:nth-child(1)), compare-table td:not(:nth-child(1)) {
-    width : 17%
-}
 
 
 
@@ -211,4 +137,19 @@ compare-table table tbody tr:last-child td.active:nth-child(4) { border-bottom :
         border-radius: 10px;  
         background-color: #ffffff; 
     }
+}
+
+compare-table tfoot {
+    color: white;
+    font-size: 1.0em;
+    font-weight: bold;
+}
+
+compare-table span.weak {
+    font-size: 0.8em;
+    color: lightgray;
+}
+
+compare-table tfoot up-down-symbol {
+    font-size: 1.2em;
 }

@@ -17,7 +17,8 @@ function makeDiffAggregateDoc(config, lang) {
 
     
     // no need to below
-    const statMap = loadStatMap();
+    // const statMap = loadStatMap();
+    const statMap = require('../../const/stat-map.json');
     if(statMap == undefined) return Promise.resolve(`err_can_not_read__statmap.json`); //TODO: how to handle this, if this code is reject other on tick will not excutes
 
     const saveSuffix = config.saveSuffix;

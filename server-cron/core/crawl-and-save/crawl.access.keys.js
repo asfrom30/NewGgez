@@ -4,7 +4,7 @@ exports.heroKeys = [
     {id:    "Tracer",       key :  "0x02E0000000000003"},
     {id:    "Hanzo" ,       key :  "0x02E0000000000005"},
     {id:    "Mercy" ,       key :  "0x02E0000000000004"},
-    {id:    "Torbjoern",    key :  "0x02E0000000000006"},
+    {id:    "Torbjorn",    key :  "0x02E0000000000006"},
     {id:    "Reinhardt",    key :  "0x02E0000000000007"},
     {id:    "Pharah",       key :  "0x02E0000000000008"},
     {id:    "Winston",      key :  "0x02E0000000000009"},

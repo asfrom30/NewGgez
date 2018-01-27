@@ -1,58 +1,31 @@
-/** font declaration **/
-@font-face {
-    font-family: 'NanumBarunGothic';
-    font-style: normal;
-    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
-    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
-   }
-
-/* BeanTown Font*/
-@font-face { 
-    font-family: beantown;
-    src: url(../assets/fonts/Beantown.ttf) format('truetype');
-    font-style: normal;
-    font-weight: normal
-}
-/* font size for responsive */
-:root {font-size : 12px}
-@media (min-width : 768px) and (max-width: 1023px) {
-    :root {font-size : 16px;}
-}
-@media (min-width: 1024px) {
-    :root {font-size : 16px;}
-}
-
+/* App Bacground Color */
 html, body {
     background: black;
 }
 
-#index {
-    height: 100%;
+/* App Font size */
+:root {font-size : 12px}
+
+@media (min-width: 768px) {
+    :root {font-size : 16px;}
 }
 
-body {
-    font-family: NanumBarunGothic;
+/* App Font */
+body.c-font {
+    font-family: 'Nanum Gothic', sans-serif;
 }
 
 .beantown {
     font-family: beantown;
 }
 
-.c-test {
-    display: flex;
-}
-
-@import url(https://fonts.googleapis.com/css?family=Josefin+Sans:300,400);
-* {
-  margin: 0;
-  padding: 0;
-}
-
+/* App common button style */
 .btn:focus {
     outline: none;
     box-shadow: none;
 }
 
+/* App Notify style */
 .noty_theme__sunset.noty_type__success {
     color: black;
     font-family: sans-serif;
@@ -68,14 +41,12 @@ body {
     font-family: sans-serif;
 }
 
-.checker {
-    display: flex;
-}
-
+/* custom bootstrap v4 alpha */
 .form-control.no-border {
     border : none;
 }
 
+/* margin for app nav */
 .margin-for-app-nav{
     margin-top : 40px;
 }
@@ -89,4 +60,17 @@ body {
 /* prevent auto focus */
 input[type='btn'] {
   font-size: 16px;
+}
+@font-face { 
+    font-family: beantown;
+    src: url(../assets/fonts/Beantown.ttf) format('truetype');
+    font-style: normal;
+    font-weight: normal
+}
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+@import url(https://fonts.googleapis.com/css?family=Josefin+Sans:300,400);
+* {
+  margin: 0;
+  padding: 0;
 }

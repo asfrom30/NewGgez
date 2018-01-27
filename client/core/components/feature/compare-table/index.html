@@ -3,18 +3,15 @@
         <div class="element">Please, select hero</div>
         <div class="background" style="background-color: black; opacity: 0.7"></div>
     </div>
-    <!-- <button ng-click="$ctrl.compareToggle()">테이블 결과 변경 버튼</button>
-    <button ng-click="$ctrl.onResultToggle()">결과 % <-> 등락폭</button> -->
-    </div>
     <div class="table-container">
         <table width="100%">
             <thead>
                 <tr>
-                    <th>{{ $ctrl.tableHeader[0].index }}</th>
-                    <th>{{ $ctrl.tableHeader[1].index | i18nDateIndex : $ctrl.lang }}</th>
-                    <th>{{ $ctrl.tableHeader[2].index | i18nDateIndex : $ctrl.lang }}</th>
-                    <th>{{ $ctrl.tableHeader[3].index | i18nTierIndex : $ctrl.lang }}</th>
-                    <th>result</th>
+                    <th>{{ $ctrl.tableHeader[0].index | i18nDenominatorIndex : $ctrl.lang | defaultValue : '-'}}</th>
+                    <th>{{ $ctrl.tableHeader[1].index | i18nDateIndex : $ctrl.lang | defaultValue : '-'}}</th>
+                    <th>{{ $ctrl.tableHeader[2].index | i18nDateIndex : $ctrl.lang | defaultValue : '-'}}</th>
+                    <th>{{ $ctrl.tableHeader[3].index | i18nTierIndex : $ctrl.lang | defaultValue : '-'}}</th>
+                    <th>분석</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,12 +44,12 @@
                         </div>
                     </td>
                 </tr>
-                <tfoot>
-                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 0) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[2].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[0].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[0].value"></up-down-symbol> 했습니다.</td></tr>
-                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 1) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[1].value"></up-down-symbol> 했습니다.</td></tr>
-                    <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 2) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[2].index}}이 {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[2].value"></up-down-symbol> 했습니다.</td></tr>
-                </tfoot>
             </tbody>
+            <tfoot>
+                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 0) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[2].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[0].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[0].value"></up-down-symbol> 했습니다.</td></tr>
+                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 1) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[1].index}}이 {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[1].value"></up-down-symbol> 했습니다.</td></tr>
+                <tr ng-class="{ 'display-none' : ($ctrl.toggleIndex != 2) }"><td class="row-result" colspan="5">{{$ctrl.tableHeader[3].index}} 보다 {{$ctrl.tableHeader[2].index}}이 {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}} <up-down-symbol value="$ctrl.bind.tableFooters[2].value"></up-down-symbol> 했습니다.</td></tr>
+            </tfoot>
         </table>
     </div>
 </div>

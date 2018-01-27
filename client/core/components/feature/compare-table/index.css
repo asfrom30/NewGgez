@@ -22,11 +22,19 @@ compare-table table {
     table-layout:fixed;
     margin:auto;
 }
+
 compare-table thead, tfoot {
     display:table;
-    width:100%;
-    width:calc(100% - 20px);
+    width:calc(100% - 12px);
 }
+
+@media (min-width: 768px) {
+    compare-table thead, tfoot {
+        width:calc(100% - 17px);
+    }
+}
+
+
 compare-table tbody {
     height:43vh;
     overflow:auto;
@@ -83,37 +91,40 @@ compare-table table th {text-align: center;}
 compare-table table td {text-align: center;}
 
 /* Border */
-compare-table table th {border-bottom: 2px solid lightgray}
+compare-table table {border-top: 2px solid lightgray; border-bottom: 2px solid lightgray; }
+compare-table table thead {border-bottom: 1px solid lightgray}
+compare-table table tfoot {border-top: 1px solid lightgray}
+
 compare-table table th:not(:nth-child(1)) {border-left : 2px solid rgba(0,0,0,0); border-right : 2px solid rgba(0,0,0,0);}
-compare-table table td {border-bottom: 2px solid gray;}
+compare-table table tbody td {border-bottom: 1px solid gray;}
 
 /* first column border : not active */
-compare-table table tr:nth-child(1) td:nth-child(2) { border-top : 2px solid rgba(0,0,0,0);}
-compare-table table td:nth-child(2) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
-compare-table table tr:nth-last-child(3) td:nth-child(2) { border-bottom : 2px solid rgba(0,0,0,0);}
+compare-table table tbody tr:first-child td:nth-child(2) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table tbody td:nth-child(2) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
+compare-table table tbody tr:last-child td:nth-child(2) { border-bottom : 2px solid rgba(0,0,0,0);}
 
 /* first column border : active */
-compare-table table tr:nth-child(1) td.active:nth-child(2) { border-top : 2px solid red;}
-compare-table table td.active:nth-child(2) { border-left : 2px solid red; border-right :2px solid red}
-compare-table table tr:nth-last-child(3) td.active:nth-child(2) { border-bottom : 2px solid red;}
+compare-table table tbody tr:first-child td.active:nth-child(2) { border-top : 2px solid red;}
+compare-table table tbody td.active:nth-child(2) { border-left : 2px solid red; border-right :2px solid red}
+compare-table table tbody tr:last-child td.active:nth-child(2) { border-bottom : 2px solid red;}
 
 /* second column border */
-compare-table table tr:nth-child(1) td:nth-child(3) { border-top : 2px solid rgba(0,0,0,0);}
-compare-table table td:nth-child(3) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
-compare-table table tr:nth-last-child(3) td:nth-child(3) { border-bottom : 2px solid rgba(0,0,0,0);}
+compare-table table tbody tr:first-child td:nth-child(3) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table tbody td:nth-child(3) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
+compare-table table tbody tr:last-child td:nth-child(3) { border-bottom : 2px solid rgba(0,0,0,0);}
 
-compare-table table tr:nth-child(1) td.active:nth-child(3) { border-top : 2px solid blue;}
-compare-table table td.active:nth-child(3) { border-left : 2px solid blue; border-right :2px solid blue}
-compare-table table tr:nth-last-child(3) td.active:nth-child(3) { border-bottom : 2px solid blue;}
+compare-table table tbody tr:first-child td.active:nth-child(3) { border-top : 2px solid blue;}
+compare-table table tbody td.active:nth-child(3) { border-left : 2px solid blue; border-right :2px solid blue}
+compare-table table tbody tr:last-child td.active:nth-child(3) { border-bottom : 2px solid blue;}
 
 /* third column border */
-compare-table table tr:nth-child(1) td:nth-child(4) { border-top : 2px solid rgba(0,0,0,0);}
-compare-table table td:nth-child(4) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
-compare-table table tr:nth-last-child(3) td:nth-child(4) { border-bottom : 2px solid rgba(0,0,0,0);}
+compare-table table tbody tr:first-child td:nth-child(4) { border-top : 2px solid rgba(0,0,0,0);}
+compare-table table tbody td:nth-child(4) { border-left : 2px solid rgba(0,0,0,0); border-right :2px solid rgba(0,0,0,0)}
+compare-table table tbody tr:last-child td:nth-child(4) { border-bottom : 2px solid rgba(0,0,0,0);}
 
-compare-table table tr:nth-child(1) td.active:nth-child(4) { border-top : 2px solid yellow;}
-compare-table table td.active:nth-child(4) { border-left : 2px solid yellow; border-right :2px solid yellow}
-compare-table table tr:nth-last-child(3) td.active:nth-child(4) { border-bottom : 2px solid yellow;}
+compare-table table tbody tr:first-child td.active:nth-child(4) { border-top : 2px solid yellow;}
+compare-table table tbody td.active:nth-child(4) { border-left : 2px solid yellow; border-right :2px solid yellow}
+compare-table table tbody tr:last-child td.active:nth-child(4) { border-bottom : 2px solid yellow;}
 
 
 /* table margin */
@@ -175,3 +186,29 @@ compare-table table tr:nth-last-child(3) td.active:nth-child(4) { border-bottom 
 <span class="tooltiptext">Tooltip text</span>
 </div> */
 
+
+/* Scroll Bar... */
+@media (max-width: 767px) {
+    compare-table tbody::-webkit-scrollbar {
+        -webkit-appearance: none;
+    }
+    
+    compare-table tbody::-webkit-scrollbar:vertical {
+        width: 12px;
+    }
+    
+    compare-table tbody::-webkit-scrollbar:horizontal {
+        height: 12px;
+    }
+    
+    compare-table tbody::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, .5);
+        border-radius: 10px;
+        border: 2px solid #ffffff;
+    }
+    
+    compare-table tbody::-webkit-scrollbar-track {
+        border-radius: 10px;  
+        background-color: #ffffff; 
+    }
+}

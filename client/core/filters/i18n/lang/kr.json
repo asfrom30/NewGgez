@@ -1,6 +1,7 @@
 {
     "denominatorIndex" : {
-
+        "death" : "목숨당",
+        "game" : "경기당"
     },
     "tierIndex" : {
         "bronze": "브론즈",

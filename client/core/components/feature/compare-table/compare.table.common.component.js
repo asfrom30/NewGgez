@@ -339,6 +339,9 @@ export function lowerNumberFormat() {
 
         if(format == undefined) format = '0.00';
 
+        input = parseFloat(input);
+        if(input > 100) format = "0.0";
+
         return numeral(input).format(format);
     }
 }

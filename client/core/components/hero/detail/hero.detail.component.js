@@ -73,7 +73,7 @@ export function HeroDetailCtrl($timeout, $filter, $location, $state, $element, A
         initButtonClick();
 
         // log for debug
-        logForDebug(logFlag);
+        logForDebug(true);
     }
 
     function initButtonClick() {
@@ -114,13 +114,13 @@ export function HeroDetailCtrl($timeout, $filter, $location, $state, $element, A
     }
 
 
-    function logForDebug(){
+    function logForDebug(logFlag){
         if(!logFlag) return;
 
         console.log("======== for debug =====");
         console.log($ctrl.currentPlayerDatas)
         // console.log($ctrl.cache.statIndexes);
-        console.log($ctrl.cache.p1);
+        console.log($ctrl.cache.p1.diffDatas.death.season.reinhardt);
         console.log($ctrl.cache.p2);
         // console.log($ctrl.cache.tier);
     }

@@ -39,11 +39,13 @@ export default angular.module('ggez.core.filter', [])
     .filter('defaultValue', defaultValue)
     .filter('recentUpdate', recentUpdate)
     .filter('abs', absFilter)
+    .filter('i18nDenominatorIndex', i18nDenominatorIndex)
     .filter('i18nDateIndex', i18nDateIndex)
     .filter('i18nStatIndex', i18nStatIndex)
     .filter('i18nTierIndex', i18nTierIndex)
     .name;
 
+import { i18nDenominatorIndex } from './i18n/i18n.core.filter.module';
 import { i18nDateIndex } from './i18n/i18n.core.filter.module';
 import { i18nStatIndex } from './i18n/i18n.core.filter.module';
 import { i18nTierIndex } from './i18n/i18n.core.filter.module';

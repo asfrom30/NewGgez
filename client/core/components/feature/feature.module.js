@@ -2,7 +2,7 @@
 
 import angular from 'angular';
 
-import CompareTableModule from './compare-table';
+import CompareTableModule from './compare-table/compare.table.common.component';
 import FeatureRadarChartModule from './feature-radar-chart/feature.radar.chart.component';
 import SearchTableModule from './search-table/search.table.core.component'
 import UpDownSymbolModule from './up-down-symbol/up.down.symbol.core.feature';

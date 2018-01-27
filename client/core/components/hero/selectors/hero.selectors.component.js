@@ -9,8 +9,6 @@ import './hero.selectors.css';
 import './style.fixed.header.css';
 
 import './style.hero.selector.css';
-import './style.tier.selector.css';
-
 
 import './style.player.search.bar.css';
 import './style.search.table.css';

@@ -115,7 +115,7 @@
     <div id="player-search-bar" class="player-search-bar mode-compare">
         <search-table player-list="$ctrl.searchedPlayerList" on-click="$ctrl.onClick($id)"></search-table>
         <div class="input-group">
-            <input class="form-control" ng-enter="$ctrl.onPlayerSearchBtn(serchInput)" ng-model="serchInput" placeholder="Search for..."/>
+            <input type="btn" class="form-control" ng-enter="$ctrl.onPlayerSearchBtn(serchInput)" ng-model="serchInput" placeholder="Search for..."/>
             <span class="input-group-btn">
                 <button ng-click="$ctrl.toggleSearchTable()" type="button" class="btn btn-default btn-sm">
                     <i class="material-icons">arrow_drop_down</i>

@@ -9,6 +9,16 @@ const lang = {
     cn : cn,
 }
 
+export function i18nDenominatorIndex() {
+    return function (inputIndex, langIndex) {
+        langIndex = langIndex || 'kr';
+        const i18n = lang[langIndex];
+        const result = i18n['denominatorIndex'][inputIndex];
+        if(result == undefined) return inputIndex;
+        else return result;
+    }
+}
+
 export function i18nDateIndex() {
     return function (inputIndex, langIndex) {
         langIndex = langIndex || 'kr';

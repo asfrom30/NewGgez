@@ -13,6 +13,7 @@ hero-selectors .player-search-bar {
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 
@@ -79,4 +80,12 @@ hero-selectors .vs-label {
 .hero-selectors .player-search-bar button {
     width: 30px;
     height: 30px;
+}
+
+
+
+.hero-selectors-inner-container .tier-selector
+img {
+    max-width: 100%;
+    max-height: 100%;
 }

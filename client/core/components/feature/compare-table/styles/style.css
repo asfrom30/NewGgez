@@ -145,7 +145,7 @@ compare-table tfoot {
     font-weight: bold;
 }
 
-compare-table span.weak {
+compare-table tfoot span.weak {
     font-size: 0.8em;
     color: lightgray;
 }

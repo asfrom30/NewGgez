@@ -1,5 +1,6 @@
 'use strict';
-require('./index.css');
+require('./styles/layout.css');
+require('./styles/style.css');
 import angular from 'angular';
 
 export default angular

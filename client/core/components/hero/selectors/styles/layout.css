@@ -77,9 +77,12 @@ hero-selectors .vs-label {
 }
 
 /* player search bar */
-.hero-selectors .player-search-bar button {
-    width: 30px;
-    height: 30px;
+hero-selectors .player-search-bar button .loader{
+    border: 3px solid #f3f3f3; 
+    border-top: 3px solid dimgray;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
 }
 
 

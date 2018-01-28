@@ -112,7 +112,7 @@
         </div>
         <div class="selector-separtor"></div>
     </div>
-    <div id="player-search-bar" class="player-search-bar mode-compare">
+    <div id="player-search-bar" class="player-search-bar display-none">
         <search-table player-list="$ctrl.searchedPlayerList" on-click="$ctrl.onClick($id)"></search-table>
         <div class="input-group">
             <input type="btn" class="form-control" ng-enter="$ctrl.onPlayerSearchBtn(serchInput)" ng-model="serchInput" placeholder="Search for..."/>
@@ -124,7 +124,7 @@
             <span class="input-group-btn">
                 <button ng-click="$ctrl.onPlayerSearchBtn(serchInput)" type="button" class="btn btn-default btn-sm">
                     <i id="player-search-icon" class="material-icons">search</i>
-                    <div id="player-search-loader" class="loader"></div>
+                    <div id="player-search-loader" class="loader display-none"></div>
                 </button>
             </span>
         </div>

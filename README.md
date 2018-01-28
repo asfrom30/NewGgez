@@ -1,8 +1,34 @@
-# Beta Service is available
-
-* [ggez.kr](http://ggez.kr)
+# Now beta service is available
+* [http://ggez.kr](http://ggez.kr)
 
 # Snapshot and Screenshot
+<table>
+    <tbody>
+        <tr>
+            <td><img src="./.resources/index.gif" style="width:250px;"> </td>
+            <td><img src="./.resources/overview.gif" style="width:250px;"> </td>
+            <td><img src="./.resources/detail.gif" style="width:250px;"> </td>
+        </tr>
+        <tr>
+            <td align="center"> index </td>
+            <td align="center"> overview </td>
+            <td align="center"> detail </td>
+        </tr>
+    </tbody>
+<table>
+<table>
+    <tbody>
+        <tr>
+            <td><img src="./.resources/compare.gif" style="width:250px;"> </td>
+            <td><img src="./.resources/favorite.gif" style="width:250px;"> </td>
+        </tr>
+        <tr>
+            <td align="center"> compare </td>
+            <td align="center"> favorite </td>
+        </tr>
+    </tbody>
+<table>
+
 
 # Technical Report
 * 한국어로 된 기술문서를 보시려면 [여기로](./README_kr.md)
@@ -22,7 +48,7 @@
 ## Bug-fix
 * ~~hero torbjorn, bastion bug~~
 * compare table score appear minus value
-* webpack vendor hash value check
+* webpack vendor hash value check(status ok but not cache use in browser)
 * hero.detail.component can not get diff season data...
 * random page random number must be based on cahce factory
 

@@ -70,10 +70,10 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
 
     function initView() {
         
-        showFixedBottomCollapse();
+        // showFixedBottomCollapse();
         hideFixedBottomCollapse();
-        hideSearchBar();
-        showPlayerSearchIcon();
+        // hideSearchBar();
+        // showPlayerSearchIcon();
 
         const mode = $ctrl.mode;
         if(mode == 'detail') {

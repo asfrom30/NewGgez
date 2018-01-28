@@ -63,8 +63,8 @@
                         <span class="weak"> 보다</span>
                          {{$ctrl.resultP2Append}} {{$ctrl.tableHeader[2].index |  i18nDateIndex : $ctrl.lang | defaultValue : '-'}}
                         <span class="weak">이</span>
-                        {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}}%
-                        <up-down-symbol value="$ctrl.bind.tableFooters[1].value"></up-down-symbol>
+                        {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}}%
+                        <up-down-symbol value="$ctrl.bind.tableFooters[2].value"></up-down-symbol>
                         <span class="weak">했습니다.</span>
                     </td>
                 </tr>
@@ -74,7 +74,7 @@
                         <span class="weak"> 보다</span>
                         {{$ctrl.resultP1Append}} {{$ctrl.tableHeader[1].index | i18nDateIndex : $ctrl.lang | defaultValue : '-'}}
                         <span class="weak">이</span>
-                        {{$ctrl.bind.tableFooters[2].value | percentForResult | abs}}% <up-down-symbol value="$ctrl.bind.tableFooters[2].value"></up-down-symbol>
+                        {{$ctrl.bind.tableFooters[1].value | percentForResult | abs}}% <up-down-symbol value="$ctrl.bind.tableFooters[1].value"></up-down-symbol>
                         <span class="weak">했습니다.</span>
                     </td>
                 </tr>

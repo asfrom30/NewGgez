@@ -5,9 +5,9 @@
 <table>
     <tbody>
         <tr>
-            <td><img src="./.resources/index.gif" style="width:250px;"> </td>
-            <td><img src="./.resources/overview.gif" style="width:250px;"> </td>
-            <td><img src="./.resources/detail.gif" style="width:250px;"> </td>
+            <td><img width="250px" src="./.resources/index.gif"> </td>
+            <td><img width="250px" src="./.resources/overview.gif"> </td>
+            <td><img width="250px" src="./.resources/detail.gif"> </td>
         </tr>
         <tr>
             <td align="center"> index </td>
@@ -19,8 +19,8 @@
 <table>
     <tbody>
         <tr>
-            <td><img src="./.resources/compare.gif" style="width:250px;"> </td>
-            <td><img src="./.resources/favorite.gif" style="width:250px;"> </td>
+            <td><img width="250px" src="./.resources/compare.gif"> </td>
+            <td><img width="250px" src="./.resources/favorite.gif"> </td>
         </tr>
         <tr>
             <td align="center"> compare </td>
@@ -28,6 +28,7 @@
         </tr>
     </tbody>
 <table>
+
 
 
 # Technical Report

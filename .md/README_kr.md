@@ -1,7 +1,105 @@
 # 목차
 
 # 서머리
-서버측은 `web-server`, `cron-server`로 이루어지고 클라이언트측은 `SPA(single page application)`으로 구상하여 개발하였다. `cron-server`를 `web-server`와 통합하지 않은 이유는 추후에 `web-server`의 부하를 고려하여 서버의 스토리지가 늘어났을 때 유연하게 대처하기 위해, 언제든지 물리적으로 분리할 수 있게 `standalone`하게 설계 하였다. 
+서버측은 `web-server`, `cron-server`로 이루어지고 클라이언트측은 `SPA(single page application)`으로 구상하여 개발하였다. `cron-server`를 `web-server`와 통합하지 않은 이유는 추후에 `web-server`의 부하를 고려하여 서버의 스토리지가 늘어났을 때 유연하게 대처하기 위해, 언제든지 물리적으로 분리할 수 있게 `standalone`하게 설계 하였다.
+
+# as-was vs as-is
+<table style="text-align:center">
+    <tr>
+        <th colspan="2">구분</th>
+        <th>as-was(ggez)</th>
+        <th>as-is(new-ggez)</th>
+        <th>to-be</th>
+        <th>detail</th>
+    <tr>
+    <tr>
+        <td rowspan="6">개발</td>
+        <td>기간</td>
+        <td>3달</td>
+        <td>5달</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>언어</td>
+        <td>php, javascript, html, css</td>
+        <td>javascript, html, css</td>
+        <td>-</td>
+        <td>Link</td>
+    </tr>
+    <tr>
+        <td>프레임워크</td>
+        <td>-</td>
+        <td>nodejs, express, angularjs</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>데이터베이스</td>
+        <td>mysql</td>
+        <td>mongodb</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>부가기술</td>
+        <td>jquery</td>
+        <td>jquery, webpack</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>태스크러너</td>
+        <td></td>
+        <td>gulp</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>크롤링시간</td>
+        <td>약 5시간<br>/ 13,000</td>
+        <td>약 2시간 30분<br>/ 13,000</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td rowspan="3">운영</td>
+        <td>데일리 레포트</td>
+        <td>수동<br>(매일 조회)</td>
+        <td>자동<br>(매일 이메일)</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>빌드</td>
+        <td>-</td>
+        <td>gulp and webpack<br>(vendor and bundle)</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>배포</td>
+        <td>수동<br>(파일질라)</td>
+        <td>자동<br>(ssh, gulp, linux)</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td rowspan="2">테스트</td>
+        <td>서버</td>
+        <td>-</td>
+        <td>-</td>
+        <td>mocha, chai</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>클라이언트</td>
+        <td>-</td>
+        <td>-</td>
+        <td>karma, protractor</td>
+        <td>-</td>
+    </tr>
+</table>
 
 # 웹 서버
 ### 라우터

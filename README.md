@@ -45,8 +45,8 @@
 
 
 # Technical Report
-* 한국어로 된 기술문서를 보시려면 [여기로](./README_kr.md)
-* Technical document in english link is [here](./README_en.md)
+* 한국어로 된 기술문서를 보시려면 [여기로](./.md/README_kr.md)
+* Technical document in english link is [here](./.md/README_en.md)
 
 # as-was vs as-is
 <table style="text-align:center">
@@ -58,87 +58,87 @@
         <th>detail</th>
     <tr>
     <tr>
-        <td rowspan="6">개발</td>
-        <td>기간</td>
-        <td>3달</td>
-        <td>5달</td>
+        <td rowspan="7">dev</td>
+        <td>period</td>
+        <td>3 months</td>
+        <td>5 months</td>
         <td></td>
         <td></td>
     </tr>
     <tr>
-        <td>언어</td>
+        <td>lang</td>
         <td>php, javascript, html, css</td>
         <td>javascript, html, css</td>
         <td>-</td>
-        <td>Link</td>
+        <td>-</td>
     </tr>
     <tr>
-        <td>프레임워크</td>
+        <td>framework</td>
         <td>-</td>
         <td>nodejs, express, angularjs</td>
         <td>-</td>
         <td>-</td>
     </tr>
     <tr>
-        <td>데이터베이스</td>
+        <td>database</td>
         <td>mysql</td>
         <td>mongodb</td>
         <td>-</td>
         <td>-</td>
     </tr>
     <tr>
-        <td>부가기술</td>
+        <td>side tech</td>
         <td>jquery</td>
         <td>jquery, webpack</td>
         <td>-</td>
         <td>-</td>
     </tr>
     <tr>
-        <td>태스크러너</td>
+        <td>task runner</td>
         <td></td>
         <td>gulp</td>
         <td>-</td>
         <td>-</td>
     </tr>
     <tr>
-        <td>크롤링시간</td>
-        <td>약 5시간<br>/ 13,000</td>
-        <td>약 2시간 30분<br>/ 13,000</td>
+        <td>elapsed time for crawling</td>
+        <td>5 hours<br>/ 13,000</td>
+        <td>2.5 hours<br>/ 13,000</td>
         <td>-</td>
         <td>-</td>
     </tr>
     <tr>
-        <td rowspan="3">운영</td>
-        <td>데일리 레포트</td>
-        <td>수동<br>(매일 조회)</td>
-        <td>자동<br>(매일 이메일)</td>
+        <td rowspan="3">Operation</td>
+        <td>daily report</td>
+        <td>none<br>(manually check)</td>
+        <td>auto<br>(mail report everyday)</td>
         <td>-</td>
         <td>-</td>
     </tr>
     <tr>
-        <td>빌드</td>
+        <td>build</td>
         <td>-</td>
         <td>gulp and webpack<br>(vendor and bundle)</td>
         <td>-</td>
         <td>-</td>
     </tr>
     <tr>
-        <td>배포</td>
-        <td>수동<br>(파일질라)</td>
-        <td>자동<br>(ssh, gulp, linux)</td>
+        <td>deploy</td>
+        <td>manual<br>(filezilla)</td>
+        <td>auto<br>(cli, ssh, gulp, linux)</td>
         <td>-</td>
         <td>-</td>
     </tr>
     <tr>
-        <td rowspan="2">테스트</td>
-        <td>서버</td>
+        <td rowspan="2">Test</td>
+        <td>server</td>
         <td>-</td>
         <td>-</td>
         <td>mocha, chai</td>
         <td>-</td>
     </tr>
     <tr>
-        <td>클라이언트</td>
+        <td>client</td>
         <td>-</td>
         <td>-</td>
         <td>karma, protractor</td>

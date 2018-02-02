@@ -1,119 +1,134 @@
 # 목차
-### 서머리
-### 스냅샷
-### ggez vs new-ggez
-### 개발
-### 배포
-### 운영
 
 # 서머리
-오늘날에는 굉장히 많은 게임 전적 분석툴이 있다. 그럼에도 불구하고 이러한 분석 툴이 유용하지 않는 것은 게임회사에서 제공하는 게임 데이터를 가공하지 않고 있는 그대로 보여주는 것이다. 예를 들자면 아래와 같은 식이다.
+서버측은 `web-server`, `cron-server`로 이루어지고 클라이언트측은 `SPA(single page application)`으로 구상하여 개발하였다. `cron-server`를 `web-server`와 통합하지 않은 이유는 추후에 `web-server`의 부하를 고려하여 서버의 스토리지가 늘어났을 때 유연하게 대처하기 위해, 언제든지 물리적으로 분리할 수 있게 `standalone`하게 설계 하였다. 
 
-이와 같은 방식의 문제점은
-1. 언제나 합산된 데이터만 볼 수 있다는 점.
-1. 비교 대상이 불분명하다는 점이다.
+# 웹 서버
+### 라우터
+api는 `route.js`에서 일괄적으로 미들웨어에 등록한다. 라우터에 등록되는 함수는 컨트롤러로 따로 분리하여 작성하였으며, 각 컨트롤러에서는 비즈니스 로직을 수행하면서 데이터베이스에 접근한다. 각 컨트롤레어서 데이테베이스에 접근하는 함수는 중복되는 경우가 많으므로 `service dao`로 모듈화하여 분리 작성하였다.
 
-따라서 이 프로젝트에서는 위와 같은 문제를 개선하고자 두가지 방식으로 데이터를 가공하였다.
-1. 크롤링 된 데이터들간의 시간차이를 이용하여 데이터를 가공한다.
-    1. 합산된 데이터가 아닌 일정 기간동안의 성적을 알 수 있다.
-1. 등록된 유저들의 모든 정보를 등급별로 분류하여 등급별 데이터를 산출하여 비교 대상으로 사용한다.
+```js
+// router
+// /server/routes.js
+'use strict';
+export default function(app) {
+    app.param('device', function(req, res, next, device){
+        req.device = device;
+        next();
+    });
 
-# ggez vs new-ggez
-<table style="text-align:center">
-    <tr>
-        <th colspan="2">구분</th>
-        <th>as-was(ggez)</th>
-        <th>as-is(new-ggez)</th>
-        <th>to-be</th>
-        <th>detail</th>
-    <tr>
-    <tr>
-        <td rowspan="6">개발</td>
-        <td>기간</td>
-        <td>3달</td>
-        <td>5달<br>(진행중)</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>언어</td>
-        <td>php, javascript, html, css</td>
-        <td>javascript, html, css</td>
-        <td>-</td>
-        <td>Link</td>
-    </tr>
-    <tr>
-        <td>프레임워크</td>
-        <td>-</td>
-        <td>nodejs, express, angularjs</td>
-        <td>-</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td>데이터베이스</td>
-        <td>mysql</td>
-        <td>mongodb</td>
-        <td>-</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td>부가기술</td>
-        <td>jquery</td>
-        <td>jquery, webpack, gulp</td>
-        <td>-</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td>크롤링시간</td>
-        <td>약 5시간<br>/ 13,000</td>
-        <td>약 2시간 30분<br>/ 13,000</td>
-        <td>-</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td rowspan="3">운영</td>
-        <td>데일리 레포트</td>
-        <td>수동<br>(매일 조회)</td>
-        <td>자동<br>(매일 이메일)</td>
-        <td>-</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td>빌드</td>
-        <td>-</td>
-        <td>gulp and webpack<br>(vendor and bundle)</td>
-        <td>-</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td>배포</td>
-        <td>수동<br>(파일질라)</td>
-        <td>자동<br>(ssh, gulp, linux)</td>
-        <td>-</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td rowspan="2">테스트</td>
-        <td>서버</td>
-        <td>-</td>
-        <td>-</td>
-        <td>mocha, chai</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td>클라이언트</td>
-        <td>-</td>
-        <td>-</td>
-        <td>karma, protractor</td>
-        <td>-</td>
-    </tr>
-</table>
+    app.param('region', function(req, res, next, region){
+        req.region = region;
+        next();
+    })
 
-# 개발
+    app.use('/:device/:region/players', require('./core/api/v3/player'));
+    app.use('/:device/:region/crawl-datas', require('./core/api/v3/crawl-data'));
+    app.use('/:device/:region/tier-datas', require('./core/api/v3/tier-data'));
+    app.use('/:device/:region/index-information', require('./core/api/v3/index-information'));
+    app.use('/:device/:region/sessions', require('./core/api/v3/sessions'));
 
-개발 컨셉은 전통적인 서버1, 클라이언트1에서 벗어나 서버2, 클라이언트1로 개발하였습니다. 서버 한개가 추가된 이유는 `cron-job` 매일 정기적으로 `crawling`을 수행하는 서버를 단독으로 설계하였기 때문입니다. 많은 양의 데이터를 크롤링하다보면 서버의 스토리지가 필연적으로 계속 늘어나기 마련인데, 추후에 이러한 문제에서 데이터를 수집하는 서버와 서비스를 제공하는 서버를 나누기 위해서 이와 같은 컨셉으로 개발하게 되었습니다.
+    // All undefined asset or api routes should return a 404
+    app.route('/:url(api|auth|components|app|bower_components|assets)/*')
+    .get(errors[404]);
 
-## 서버
+    // All other routes should redirect to the index.html
+    app.route('/*')
+        .get((req, res) => {
+        res.sendFile(path.resolve(`${app.get('appPath')}/index.html`));
+    });
+}
+```
+```js
+// controller 
+// path : /server/core/api/v3/crawl-data
+'use strict';
+
+var express = require('express');
+var controller = require('./crawl.data.server.controller');
+
+var router = express.Router();
+
+router.param('id', controller.storedId);
+
+router.get('/:id', controller.query);
+router.put('/:id', controller.update);
+
+module.exports = router;
+```
+
+```js
+// app dao
+// path : /server/core/services/dao/dao.server.controller.js
+exports.getNewPlayerId = function(device, region) {
+    ...
+}
+
+exports.insertPlayer = function (device, region, doc) {
+}
+
+exports.insertTodayCrawlData = function(device, region, doc) {
+    ...
+}
+
+exports.insertCurrentCrawlData = function(device, region, doc) {
+    ...
+}
+
+exports.findPlayerById = function(device, region, id) {
+    ...
+}
+
+exports.findPlayerByIds = function(device, region, ids) {
+    ...
+}
+
+
+exports.findPlayerBtgById = function(device, region, id) {
+    ...
+}
+
+exports.findPlayerByBtg = function(device, region, btg) {
+    ...
+}
+
+exports.findPlayerByRegex = function(device, region, regex) {
+    ...
+}
+
+exports.findCrawlDataById = function(device, region, collectionSuffix, id) {
+    ...
+}
+
+exports.findCrawlDataByBtg = function(device, region, collectionSuffix, btg) {
+    ...
+}
+
+exports.findCurrentCrawlDataById = function(device, region, id) {
+    ...
+}
+
+exports.findTierDataByDate = function(device, region, date) {
+    ...
+}
+
+exports.updatePlayer = function(device, region, id, doc) {
+    ...
+}
+
+exports.updateTodayCrawlData = function(device, region, id, doc) {
+    ...
+}
+
+exports.updateCurrentCrawlData = function(device, region, id, doc) {
+    ...
+}
+
+exports.getIndexInformation = function(device, region) {
+    ...
+}
+```
+
 ### RESTApi
 ##### players
 URL | VERB | REQUIRED | Result |
@@ -150,27 +165,98 @@ URL | VERB | REQUIRED | Result |
 :device/:region/sessions/thumbs/?id={id}| PUT | - | 세션 쿠키에 추천 추가
 :device/:region/sessions/thumbs/?id={id}| DELETE | - | 세션 쿠키에 추천 삭제
 
-## 크론(크롤링) 서버
+# 크론(크롤링) 서버
+### Crwal Promise Chain
+PHP에서는 아래와 같이 방식으로 1만개가 넘는 크롤링을 수행하도 문제가 없었지만 NodeJS에서는 아래와 같이 실행을 하면 서버가 다운된다.
 
-### 미들웨어패턴
+```js
+appDao.getAllPlayers(players => {
+    for(const player of players) {
+        // do crawl.
+    }
+})
+```
+이는 NodeJS가 event driven 방식이기 때문에 크롤링이 완료된 뒤에 두번째 크롤링을 수행하는 것이 아니라. FOR LOOP를 돌면서 즉시 크롤링을 요청해버리기 때문이다. 즉 아주짧은 시간내에 해당 players에 대한 모든 크롤링을 한번에 요청해버린다. 따라서 크롤링을 아래와 같은 promise chain으로 엮어준다.
 
-### PROMISE CHAIN 
+```js
+players.reduce(function(prePromise, currentValue, currentIndex, array){
+    const id = currentValue._id;
+    const btg = currentValue.btg;
+    return prePromise.then(() => {
+        /* end of promise chain */
+        if(currentIndex == playerNum -1) {
+            console.log('end one of crawl thread task...' + btg);
+            resolve();
+            return;
+        }
+        return crawlAndSave.doAsync(id, btg, crawlConfig, saveConfig);
+    })
+}, Promise.resolve());
+
+```
+### Cron Job Middleware Pattern
 
 ### Mongodb Aggregate
 
 ### 로그 전략
 
-## 클라이언트 개발
-
 ### Webpack dev-server
 서버측 api가 구현되지 않았을때는 dummie api를 사용하도록
 
-### 
+# 클라이언트
+## Folder Structure
+
+## Image Resource
+No hard wiring. see const resrouces.map.js(now resrouce.const.js)
+
+## Common css 전략
+
+## Web component
+
+## Ajax
+Loading Bar appear and disappear
+
+## Dummie Api
+
+## 리치 컴포넌트 전략
+
+## binding data 전략
+
+# Sides
+## Webpack
+* make webpack.config.js
+
+* if you want to use `import` syntax install package which is relate to babel(babel-loader, babel-core etc)
+
+* in the webpack config this option is very useful `devtool: 'inline-source-map',`
+
+* if you want watch html and css file being changed. import that `import './{filename}.html'`;
+
+* in the webpack syntax, use `name;`
+```javascript
+angular.module.xxx.name;
+```
+
+* To use full jquery(angular has only jqlite), Jquery plugin option must be declared also you need to install jquery package 
+```javascript
+plugins: [
+    new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery' // for angularjs
+    })
+    // new webpack.optimize.UglifyJsPlugin(),
+    // new HtmlWebpackPlugin({template: './src/index.html'})
+]
+```
+
 
 # 배포
-처음 개발을 했을 때는 파일질라를 이용해서 배포하였습니다. `ggez`에서 이용했던 서버는 `cpanel`을 사용한 서버 기반으로 이미 세팅이 되어 있는 상태여서 `public_html` 또는 `www` 폴더에 파일만 잘 옮겨주면 되었습니다. 기존에 있는 파일들을 모두 지우고 다시 옮겨넣는 일은 여간 번거로운 일이 아니였습니다. 따라서 현재는 아래와 같은 방식을 이용해서 자동으로 배포 하고 있습니다.
+빌드를 수행하여 dist 폴더에 
 
-## 서버측 자동 빌드 및 배포
+ssh와 linux shell을 사용하여 자동 배포를 수행합니다.
+
+## 서버 자동 빌드 및 배포
 ```js
 // auto deploy server
 gulp.task('auto:deploy:server', cb => {
@@ -189,8 +275,19 @@ gulp.task('auto:deploy:server', cb => {
 });
 ```
 
-## 클라이언트 측 자동 빌드 및 배포
+## 크론 서버 자동 빌드 및 배포
+
+## 클라이언트 자동 빌드 및 배포
 ```js
 // auto deploy client
 
 ```
+
+## 클라이언트 자동 빌드 및 배포(exclude assets)
+조그마한 버그픽스나 사소한 스타일 하나를 수정해야할때 asset까지 포함하여 배포하지 않고 `bundle.js`만 배포하도록 수정하였다.(`vendor.js` 제외)
+
+
+# Trouble Shooting
+* [web-server trouble shooting](./server/README.md)
+* [cron-server trouble shooting](./server-cron/README.md)
+* [client trouble shooting](./client/README.md)

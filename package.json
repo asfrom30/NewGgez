@@ -1,10 +1,10 @@
 {
-  "name": "new-ggez",
+  "name": "ggez.kr",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "",
   "repository": "",
-  "license": "",
+  "license": "All right reserved",
   "scripts": {
     "update-deps": "npm update",
     "postupdate-deps": "bower update",

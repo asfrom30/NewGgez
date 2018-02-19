@@ -68,6 +68,7 @@ export function heroHeaderCtrl($window, $location, $stateParams, $state, $rootSc
         }
 
         activeRefreshIcon(true);
+        
         Ajax.updateCurrentCrawlData(device, region, id).then(responseJson => {
             // update all.. or refresh?
             activeRefreshIcon(false);

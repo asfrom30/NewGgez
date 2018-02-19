@@ -1,0 +1,94 @@
+loop-banner {
+  width : 100%;
+}
+
+loop-banner .header-banner .header-promotion {
+    background-color: #041e3a;
+    color: #ffffff;
+    padding: 12px 0;
+    text-transform: uppercase;
+    font-family: "HCo Gotham Book";
+    letter-spacing: 0.05em;
+}
+
+loop-banner .ticker-item{
+  box-sizing: border-box;
+  padding: 0 3em;
+}
+
+.header-promotion a {
+  font-family: "HCo Gotham Bold";
+}
+
+.header-promotion a span.rl-link-underline {
+  position: relative;
+  font-family: "HCo Gotham Book";
+  margin-left: 0.8em;
+  text-transform: capitalize;
+}
+
+.header-promotion a span.rl-link-underline:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    bottom: 0px;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.header-promotion a span.rl-link-underline:hover {
+  font-family: "HCo Gotham Bold";
+}
+
+
+loop-banner .rl-tickerloop {
+    overflow: hidden;
+    width: 100%;
+  }
+loop-banner .rl-tickerloop2 .rl-loop-container {
+  display: flex;
+  align-items: center;
+  width: 200%;
+  -webkit-animation: tickerloop2 20s infinite;
+  animation: tickerloop2 15s infinite;
+  animation-duration: 8s;
+}
+
+loop-banner .rl-loop-container:hover,
+loop-banner .rl-loop-container:active, 
+loop-banner .rl-loop-container:focus-within {
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    -o-animation-play-state: paused;
+    animation-play-state: paused;
+  }
+
+  /** Width and Height **/
+loop-banner .ticker-item {
+    width: 50%;
+}
+
+@media screen and (max-width : 767px) {
+  .header-banner .header-promotion {
+    padding: 8px 0;
+  }
+  .ticker-item,
+  .header-promotion a,
+  .header-promotion a:hover {
+    font-size: 9px;
+  }
+}
+
+.tooltip-content {
+    display: none;
+}
+
+.ticker-item,
+.header-promotion a,
+.header-promotion a:hover {
+  font-size: 12px;
+  line-height: 1.4em;
+  color: #fff;
+  text-decoration: none;
+}

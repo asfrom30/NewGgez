@@ -53,7 +53,11 @@ import { i18nTierIndex } from './i18n/i18n.core.filter.module';
 export function recentUpdate() {
     return function(unixTimestamp) {
         const subtractUnixTime = (Date.now() - unixTimestamp)/1000;
-        if(isNaN(subtractUnixTime)) return '알수없음';
+        if(isNaN(subtractUnixTime)) {
+            return '알수없음';
+        } else if(subtractUnixTime <= 0) {
+            return '방금전'
+        }
 
         const result = ddhhmm(subtractUnixTime);
 

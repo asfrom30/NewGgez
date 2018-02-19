@@ -1,0 +1,30 @@
+@keyframes tickerloop2 {
+    0% {
+        transform: translateX(0);
+        flex-direction: row;
+    }
+    40% {
+        transform: translateX(0);
+        flex-direction: row;
+    }
+    50% {
+        transform: translateX(-50%);
+        flex-direction: row;
+    }
+    89.9999% {
+        transform: translateX(-50%);
+        flex-direction: row;
+    }
+    90% {
+        transform: translateX(0);
+        flex-direction: row-reverse;
+    }
+    99.9999% {
+        transform: translateX(-50%);
+        flex-direction: row-reverse;
+    }
+    100% {
+        transform: translateX(0);
+        flex-direction: row;
+    }
+}

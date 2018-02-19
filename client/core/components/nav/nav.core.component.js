@@ -10,13 +10,14 @@ export default angular.module('nav.core.component.module', [])
         }
     }).name;
 
-export function controller(AppLogger, $state){
+export function controller(AppLogger, $state, $translate){
     'ngInject';
     
     var $ctrl = this;
     const logFlag = false;
 
     $ctrl.goRandomPage = goRandomPage;
+    $ctrl.changeLang = changeLang;
 
     function goRandomPage() {
         const id = getRandomId();
@@ -45,6 +46,12 @@ export function controller(AppLogger, $state){
         const id = Math.floor((Math.random() * max) + min);
 
         return id;
+    }
+
+    function changeLang(){
+        const langKey = $ctrl.tempSelectedLang;
+        if(langKey == undefined) alert('need to select lang');
+        $translate.use(langKey);
     }
 
 

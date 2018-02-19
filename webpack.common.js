@@ -79,7 +79,7 @@ const config = {
       plugins: [
         new HtmlWebpackPlugin({
           title: 'My App',
-          template : 'client/index.html',
+          template : 'client/index-template.html',
           filename: 'index.html', // default is index.html
           alwaysWriteToDisk: false,
         }),

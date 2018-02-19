@@ -39,7 +39,7 @@ export default angular
 
         this.getTodayIndex = function(){
             if(env != 'production') {
-                return '171212';
+                return '180210';
             } else {
                 return moment().subtract(0+getCalibration(), 'days').format('YYMMDD');
             }
@@ -47,7 +47,7 @@ export default angular
 
         this.getYesterIndex = function(){
             if(env != 'production') {
-                return '171113';
+                return '180209';
             } else {
                 return moment().subtract(1+getCalibration(), 'days').format('YYMMDD');
             }
@@ -55,7 +55,7 @@ export default angular
         
         this.getWeekIndex = function(){
             if(env != 'production') {
-                return '171104';
+                return '180208';
             } else {
                 return moment().subtract(7+getCalibration(), 'days').format('YYMMDD');
             }

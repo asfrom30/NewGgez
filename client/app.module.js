@@ -1,7 +1,5 @@
 'use strict';
 
-import './index.html';
-
 /* expose global variable */
 require("expose-loader?$!jquery");
 require("expose-loader?$!popper.js");
@@ -19,14 +17,17 @@ require('bootstrap/dist/js/bootstrap.min.js');
 import angular from 'angular';
 // import uiRouter from 'angular-ui-router';
 import uiRoute from '@uirouter/angularjs/release/angular-ui-router.js';
+import angularTranslate from 'angular-translate';
 import ngResource from 'angular-resource';
 // import ngCookies from 'angular-cookies';
 // import ngSanitize from 'angular-sanitize';
 // import 'angular-socket-io';
 // import 'angular-validation-match';
 
-/* Route Config */
-import { routeConfig } from './app.route.config.js';
+/* import configs */
+import i18nConfig from './configs/app.i18n.config';
+import { routeConfig } from './configs/app.route.config.js';
+
 /* Constant */
 import constants from './app.constants';
 /* Common Module */
@@ -37,9 +38,9 @@ import appCore from './core/core.module';
 // Declare app level module which depends on views, and components
 
 angular.module('ggezkrApp', [ngResource,
-  
   // ngRoute,
-  uiRoute,
+  /* Configs Dependency */
+  uiRoute, angularTranslate,
   
   constants,
 
@@ -51,6 +52,7 @@ angular.module('ggezkrApp', [ngResource,
   // 'myApp.version',
 ])
 .config(routeConfig)
+.config(i18nConfig)
 .run(function ($rootScope, CONST) {
   'ngInject';
   $rootScope.CONST = CONST;

@@ -42,6 +42,7 @@ export default {
             {id : "mercy",   label : "메르시",    iconSrc : "./assets/images/hero-icon/icon-mercy.png"},
             {id : "symmetra",   label : "시메트라",    iconSrc : "./assets/images/hero-icon/icon-symmetra.png"},
             {id : "zenyatta",   label : "젠야타",    iconSrc : "./assets/images/hero-icon/icon-zenyatta.png"},
+            {id : "moira",   label : "모이라",    iconSrc : "./assets/images/hero-icon/icon-moira.png"},
         ]
     },
 }

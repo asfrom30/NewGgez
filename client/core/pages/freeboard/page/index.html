@@ -1,0 +1,87 @@
+<button type="button" class="btn btn-outline-light" ng-click="$ctrl.goWriting()">글쓰기</button>
+
+<div class="freeboard-container">
+    <div ng-repeat="freeboard in $ctrl.freeboards" ng-click="$ctrl.clickFreeboard(freeboard)" class="freeboard w-100-pct flex border-w">
+        <div class="flex f-h-center">
+            <div>
+                <div class="row-2-box row-2-box--collect status-outline status-outline--views">
+                        <div>VIEWS</div>
+                        <div>{{freeboard.views | defaultValue : '0'}}</div>
+                </div>
+            </div>
+            <div>
+                <div class="row-2-box row-2-box--collect status-outline status-outline--upvotes">
+                        <div>UPVOTES</div>
+                        <div>{{freeboard.upvotes | defaultValue : '0'}}</div>
+                </div>
+            </div>
+            <div>
+                <div class="row-2-box row-2-box--collect status-outline status-outline--answers">
+                        <div>ANSWERS</div>
+                        <div>{{freeboard.answers | defaultValue : '0'}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="f-h-center-self f-grow-1">{{freeboard.title}}</div>
+        <div class="w-10-pct row-2-box row-2-box--collect">
+            <div>{{freeboard.createdAt}}</div>
+            <div>{{freeboard.createdBy}}</div>
+        </div>
+    </div>
+</div>
+
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        <li class="page-item" ng-repeat="pageIndex in $ctrl.pageIndexes">
+            <a class="page-link" ng-click="$ctrl.clickPageNum($event)" style="color:black">{{pageIndex}}</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+<!-- 
+<div infinite-scroll="$ctrl.loadMore()" infinite-scroll-distance="0" style="border:1px solid cyan">
+    <div ng-repeate="summary in $ctrl.summaries">
+        <ul>
+            <li>
+                <div>조회수</div>
+                <div>답변</div>
+                <div>추천수</div>
+                <div>타이틀</div>
+                <div>시간</div>
+            </li>
+        </ul>
+    </div>
+    <img ng-repeat='image in $ctrl.images' ng-src='http://placehold.it/225x250&text={{image}}'>
+</div>
+<button ng-click="$ctrl.test()">add element</button> -->
+
+
+<!-- <div ng-app='myApp' ng-controller='DemoController'> -->
+<div infinite-scroll='$ctrl.reddit.nextPage()' infinite-scroll-disabled='$ctrl.reddit.busy' infinite-scroll-distance='1'>
+    <div ng-repeat='item in $ctrl.reddit.items'>
+        <span class='score'>{{item.score}}</span>
+        <span class='title'>
+            <a ng-href='{{item.url}}' target='_blank'>{{item.title}}</a>
+        </span>
+        <small>by {{item.author}} -
+            <a ng-href='http://reddit.com{{item.permalink}}' target='_blank'>{{item.num_comments}} comments</a>
+        </small>
+        <div style='clear: both;'></div>
+    </div>
+    <div ng-show='$ctrl.reddit.busy'>Loading data...</div>
+</div>
+<!-- </div> -->

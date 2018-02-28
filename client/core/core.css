@@ -1,6 +1,7 @@
 /* App Bacground Color */
 html, body {
     background: black;
+    color : white;
 }
 
 /* App Font size */

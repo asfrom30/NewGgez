@@ -1,0 +1,15 @@
+<h1>This is Freeboard Detail</h1>
+<div class="title">{{$ctrl.freeboard.title}}</div>
+<text-editor content-messenger="$ctrl.contentMessenger"></text-editor>
+<div class="form-group">
+    <label for="comment">Comment:</label>
+    <textarea class="form-control" rows="3" id="comment" ng-model="$ctrl.comment"></textarea>
+</div>
+<button type="button" class="btn btn-outline-light" ng-click="$ctrl.clickComment()">댓글등록</button>
+
+<div class="comment flex" ng-repeat="comment in $ctrl.freeboard.comments">
+    <div class="content">{{comment.content}}</div>
+    <div class="content">{{comment.createdAt}}</div>
+    <div class="content">{{comment.createdBy}}</div>
+</div>
+

@@ -1,3 +1,7 @@
+:root {
+    --primary-color : red;
+}
+
 .new-loader {
     display: flex;
     flex-direction: column;
@@ -15,7 +19,7 @@
             animation: spin 2s linear infinite;
 }
 .new-loader > .content {
-    color: white;
+    color: black;
     margin-top : 5px;
 }
 

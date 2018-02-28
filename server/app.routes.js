@@ -27,6 +27,10 @@ export default function(app) {
   app.use('/:device/:region/tier-datas', require('./core/api/v3/tier-data'));
   app.use('/:device/:region/index-information', require('./core/api/v3/index-information'));
   app.use('/:device/:region/sessions', require('./core/api/v3/sessions'));
+  
+  // freeboard area
+  app.use('/api/freeboard', require('./core/api/v3/boards/freeboard'));
+  
   /* For Auth */
   // app.use('/auth', require('./auth').default);
 

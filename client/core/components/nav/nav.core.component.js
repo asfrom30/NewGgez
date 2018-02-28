@@ -1,6 +1,7 @@
 'use strict';
 
 import angular from 'angular';
+require('./index.css');
 
 export default angular.module('nav.core.component.module', [])
     .component('appNav', {
@@ -17,6 +18,7 @@ export function controller(AppLogger, $state, $translate){
     const logFlag = false;
 
     $ctrl.goRandomPage = goRandomPage;
+    $ctrl.goFreeBoard = goFreeBoard;
     $ctrl.changeLang = changeLang;
 
     function goRandomPage() {
@@ -54,5 +56,8 @@ export function controller(AppLogger, $state, $translate){
         $translate.use(langKey);
     }
 
+    function goFreeBoard() {
+        $state.go(`freeboard`);
+    }
 
 }

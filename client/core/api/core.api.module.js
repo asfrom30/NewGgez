@@ -24,7 +24,9 @@ import TierDatasModule from './v3/tier-datas/api.tier.datas.service';
 import FavoritesApiModule from './v3/favorites/api.favorites.service';
 import ThumbsApiModule from './v3/thumbs/api.thumbs.service';
 
+import FreeboardApiModule from './v3/freeboard/freeboard.api.v3.service';
+
 
 export default angular
-    .module('ggez.core.api', [IndexInformation, PlayersApiModule, CrawlDatasModule, TierDatasModule, FavoritesApiModule, ThumbsApiModule])
+    .module('ggez.core.api', [IndexInformation, PlayersApiModule, CrawlDatasModule, TierDatasModule, FavoritesApiModule, ThumbsApiModule, FreeboardApiModule])
     .name;

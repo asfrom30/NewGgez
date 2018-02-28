@@ -3,31 +3,30 @@ import http from 'http';
 import path from 'path';
 import config from './config/environment';
 
-/* Custom Logger */
+/* Util Setup (before main) */
 setCustomLogger();
 
 // Set Global Variables
 global.appRoot = path.resolve(__dirname);
 
-// Setup Database
-var mongoose = require('./config/mongoose');
-var db = mongoose();
+/* DB Setup */
+require('./config/mongoose.setup')();
 
-// Setup server
+/* Server Setup */
 var app = express();
 var server = http.createServer(app);
+require('./config/express').default(app);
 // var socketio = require('socket.io')(server, {
 //   serveClient: config.env !== 'production',
 //   path: '/socket.io-client'
 // });
 // require('./config/socketio').default(socketio);
-require('./config/express').default(app);
-require('./routes').default(app); // FIXME: replace with import
 
-/* Path Setting */
+/* Server Route */
+require('./app.routes').default(app);
+
+/* Global Path Setting */
 // app.set('utilPath', path.join(config.root, 'client'));
-
-
 
 // Start server
 function startServer() {

@@ -1,5 +1,5 @@
 <app-nav></app-nav>
-<div class="hero-main flex-column f-align-h-center margin-for-app-nav">
+<div class="hero-main flex-column f-h-center margin-for-app-nav">
     <div class="header-wh">
         <hero-header
             current-player="$ctrl.currentPlayer" 
@@ -11,7 +11,7 @@
             remove-thumb="$ctrl.removeThumb($id)">
         </hero-header>
     </div>
-    <div class="body-wh flex f-align-w-center base-padding">
+    <div class="body-wh flex f-w-center base-padding">
         <ui-view class="w-100-pct h-100-pct"
             favorites = "$ctrl.resolvedFavorites"
             remove-favorite="$ctrl.removeFavorite($id)"

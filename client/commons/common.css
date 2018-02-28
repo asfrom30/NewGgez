@@ -55,31 +55,23 @@
 .flex-row-wrap { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -ms-flex-flow:row wrap; flex-flow:row wrap; }
 
 .f-wh-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; -webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+
 .f-w-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; }
 .f-w-start {-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start; }
 .f-w-end {-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end; }
 .f-w-between {-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;}
+
 .f-h-center {-webkit-box-align:center;-ms-flex-align:center;align-items:center; }
 .f-h-start {-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start; }
 .f-h-end {-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end; }
 .f-h-baseline {-webkit-box-align : baseline; -ms-flex-align : baseline; align-items : baseline;}
 
-.f-align-w-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; }
-.f-align-w-start {-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start; }
-.f-align-w-end {-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end; }
-.f-align-w-between {-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;}
+.f-h-center-self {-ms-flex-item-align:center;align-self:center; }
+.f-h-start-self {-ms-flex-item-align:start;align-self:flex-start; }
+.f-h-end-self {-ms-flex-item-align:end;align-self:flex-end; }
 
-.f-align-h-center {-webkit-box-align:center;-ms-flex-align:center;align-items:center; }
-.f-align-h-start {-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start; }
-.f-align-h-end {-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end; }
-.f-align-h-baseline {-webkit-box-align : baseline; -ms-flex-align : baseline; align-items : baseline;}
+.f-grow-1 {flex-grow: 1};
 
-.f-align-self-v-center {-ms-flex-item-align:center;align-self:center; }
-.f-align-self-v-start {-ms-flex-item-align:start;align-self:flex-start; }
-.f-align-self-v-end {-ms-flex-item-align:end;align-self:flex-end; }
-
-.flex-wh-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
- 
  /* View Port */
 .v-100-vw {width:100vw;}
 .h-100-vh {height:100vh;}
@@ -110,7 +102,15 @@
 .w-60-px{width:60px}
 
 .h-100-pct{height:100%}
+.h-90-pct{height:90%}
+.h-80-pct{height:80%}
+.h-70-pct{height:70%}
+.h-60-pct{height:60%}
 .h-50-pct{height:50%}
+.h-40-pct{height:40%}
+.h-30-pct{height:30%}
+.h-20-pct{height:20%}
+.h-10-pct{height:10%}
 
 .h-30-px{height:30px}
 .h-50-px{height:50px}
@@ -287,21 +287,6 @@
     position    : fixed;
     left        : 0px;
     bottom      : 0px;
-}
-
-/* layout pattern */
-.p-row {
-    height: 100%;
-    display: flex;
-}
-
-.row-2-box {
-    height: 100%;
-}
-.row-2-box > div {
-    width : 100%;
-    height : 50%;
-    min-height: 50%;
 }
 
 /* Bootstrap button group same width pattern */

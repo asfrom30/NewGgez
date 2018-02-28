@@ -5,11 +5,11 @@ require("expose-loader?$!jquery");
 require("expose-loader?$!popper.js");
 
 /* Using bootstrap */
-require('bootstrap/dist/css/bootstrap.css');
-require('bootstrap/dist/js/bootstrap.min.js');
-/* use ui-bootstrap */
-// need bootstrap css
+// require('bootstrap/dist/css/bootstrap.css');
+// require('bootstrap/dist/js/bootstrap.min.js');
+/* or use ui-bootstrap */
 // import uiBootStrap from 'angular1-ui-bootstrap4';
+
 // import ngAnimate from 'angular-animate';
 // import ngTouch from 'angular-touch';
 
@@ -23,6 +23,9 @@ import ngResource from 'angular-resource';
 // import ngSanitize from 'angular-sanitize';
 // import 'angular-socket-io';
 // import 'angular-validation-match';
+
+/* Call Angular Add on */
+import ngInfinteScroll from 'ng-infinite-scroll';
 
 /* import configs */
 import i18nConfig from './configs/app.i18n.config';
@@ -44,10 +47,11 @@ angular.module('ggezkrApp', [ngResource,
   
   constants,
 
-  /* Common */
-  CommonsModule,
+  /* ng component */
+  'infinite-scroll',
 
-  appCore,
+  /* Common */
+  CommonsModule, appCore,
 
   // 'myApp.version',
 ])

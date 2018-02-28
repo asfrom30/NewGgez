@@ -1,7 +1,7 @@
 <div class="hero-header">
     <div class="flex">
         <img class="current-player-icon" ng-src="{{$ctrl.currentPlayer.iconUrl}}"/>
-        <div class="current-player-info flex f-align-h-end">
+        <div class="current-player-info flex f-h-end">
             <div class="flex-column">
                 <div class="battle-name">{{$ctrl.currentPlayer.btn}}</div>
                 <!-- <div class="level">Lv. 142</div> -->
@@ -14,7 +14,7 @@
             </div>
             <!-- <div class="level">{{$ctrl.currentPlayer.level}}</div> -->
         </div>
-        <div class="current-player-buttons flex f-align-h-end">
+        <div class="current-player-buttons flex f-h-end">
             <div class="flex">
                 <div ng-click="$ctrl.refreshBtnClicked()" class="refresh"><i class="material-icons">autorenew</i></div>
                 <div ng-click="$ctrl.starBtnClicked()" class="favorite"><i class="material-icons">star_border</i></div>

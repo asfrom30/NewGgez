@@ -99,7 +99,7 @@
                 <div class="font-medium"><span class="glyphicon glyphicon-tasks"></span> {{$ctrl.label.trend.winRate}} </div>
                 <div style="width:80%;">
                     <div>시즌전체</div>
-                    <div class="flex f-align-h-baseline">
+                    <div class="flex f-h-baseline">
                         <div style="width:100%" class="progress">
                             <div class="progress-bar bg-success" role="progressbar"
                                     style="width:{{ $ctrl.dynCache.currentProcessBar.success | percent :'0%'}}"></div>
@@ -116,7 +116,7 @@
                 </div>
                 <div style="width:70%;">
                     <div>어제, 오늘, 주간</div>
-                    <div class="flex f-align-h-baseline">
+                    <div class="flex f-h-baseline">
                         <div style="width:60%;" class="progress">
                             <div class="progress-bar bg-success" role="progressbar"
                                  style="width:{{ $ctrl.dynCache.selectedProcessBar.success | percent :'0%'}}"></div>

@@ -1,3 +1,5 @@
+import { isNumber } from "util";
+
 'use strict';
 
 // [ui.router](https://github.com/angular-ui/ui-router/wiki/URL-Routing)
@@ -12,15 +14,20 @@ const logScope = 'app-route-config';
 export function routeConfig($stateProvider, $urlServiceProvider) {
 
     /* otherwise redirect to index */
-    $urlServiceProvider.rules.otherwise({ state: 'index' });
+    // $urlServiceProvider.rules.otherwise({ state: 'index' });
     
     /* Index Component */
     $stateProvider.state(getIndexState());
 
-    /* Hero Paerent */
-    $stateProvider.state(getHeroParentState());
-    /* Hero Child */
-    $stateProvider.state(getHeroSummaryState());
+    /* Board Component*/
+    $stateProvider.state(getFreeboardState());
+    $stateProvider.state(getFreeboardPageState());
+    $stateProvider.state(getFreeboardWritingState());
+    $stateProvider.state(getFreeboardDetailState());
+
+    /* Hero */
+    $stateProvider.state(getHeroParentState()); // Parent
+    $stateProvider.state(getHeroSummaryState()); // Child
     $stateProvider.state(getHeroDetailState());
     $stateProvider.state(getHeroCompareState());
     $stateProvider.state(getHeroRankingState());
@@ -58,7 +65,7 @@ export function routeConfig($stateProvider, $urlServiceProvider) {
 
 }
 
-function getIndexState() {
+function  getIndexState() {
     return {
         name: 'index',
         url: '/index',
@@ -73,6 +80,64 @@ function getIndexState() {
         },
     }
 }
+
+function getFreeboardState() {
+    return {
+        name: 'freeboard',
+        url: '/freeboard',
+        component: 'freeboard',
+    }
+}
+
+function getFreeboardWritingState() {
+    return {
+        name: 'freeboard.writing',
+        url: '/writing',
+        component: 'freeboardWriting',
+    }
+}
+
+function getFreeboardPageState() {
+    return {
+        name: 'freeboard.page',
+        url: '/page/{index}',
+        component: 'freeboardPage',
+        resolve : {
+            freeboards : function($state, $stateParams, Freeboard) {
+                const index = parseInt($stateParams.index);
+                
+                if(!isNumber(index)) {
+                    $state.go('freeboard.page', {index : 1});
+                    return;
+                } else {
+                    return Freeboard.fetchPage(index);
+                }
+            }
+        }
+    }
+}
+
+function getFreeboardDetailState() {
+    return {
+        name: 'freeboard.detail',
+        url: '/detail/{id}',
+        component: 'freeboardDetail',
+        resolve : {
+            freeboard : function($stateParams, Freeboard, Noty) {
+                const id = parseInt($stateParams.id);
+                
+                if(isNaN(id) || !isNumber(id)) {
+                    Noty.show('INVALID_REQUEST', 'warning');
+                    return;
+                } else {
+                    return Freeboard.fetchDetail(id);
+                }
+            }
+        }
+    }
+}
+
+
 
 function getHeroParentState() {
     return {

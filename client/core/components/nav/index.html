@@ -1,9 +1,25 @@
-<nav class="navbar fixed-top navbar-toggleable-md navbar-light bg-faded">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand mb-0" href="#">ggez</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" ng-click="$ctrl.goFreeBoard()" translate>NAV.BOARD</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="" translate>NAV.BUG_REPORT</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="" translate>NAV.SCRIM</a>
+            </li>
+        </ul>
+    </div>
+
     <div class="navbar-toggler-right">
         <button class="custom" type="button" data-toggle="modal" data-target="#exampleModal" aria-controls="" aria-expanded="" aria-label="">
             <img src="/assets/svgs/icons/si-glyph-global.svg" />
         </button>
-        <button ng-click="$ctrl.goRandomPage()" class="custom" type="button" aria-controls="" aria-expanded="" aria-label="랜덤페이지">
+        <button ng-click="$ctrl.goRandomPage()" class="custom" type="button" aria-controls="" aria-expanded="" aria-label="">
             <img src="/assets/svgs/icons/si-glyph-arrow-shuffle.svg" />
         </button>
         <button class="custom navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -11,21 +27,8 @@
             <img src="/assets/svgs/icons/si-glyph-left-justify.svg" />
         </button>
     </div>
-    <a class="navbar-brand mb-0" href="#">ggez</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#" translate>NAV.BOARD</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#" translate>NAV.BUG_REPORT</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#" translate>NAV.SCRIM</a>
-            </li>
-        </ul>
-    </div>
 </nav>
+
 <!-- i18n Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

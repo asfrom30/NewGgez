@@ -20,7 +20,6 @@ const MongoStore = require('connect-mongo')(session);
 import cors from 'cors';
 import config from './environment';
 
-
 /* Set Middle Ware */ 
 export default function(app) {
     var env = app.get('env');
@@ -54,8 +53,6 @@ export default function(app) {
     // app.engine('html', require('ejs').renderFile);
     // app.set('view engine', 'html');
     // app.use(shrinkRay());
-    // app.use(bodyParser.urlencoded({ extended: false }));
-    // app.use(bodyParser.json());
     // app.use(methodOverride());
     // app.use(cookieParser());
     // app.use(passport.initialize());
@@ -65,10 +62,10 @@ export default function(app) {
     app.set('view engine', 'ejs');
 
     app.use(bodyParser.urlencoded({
-        extended : true,
+        extended : true, // This object will contain key-value pairs, where the value can be a string or array (when extended is false), or any type (when extended is true)
     }))
-
     app.use(bodyParser.json());
+
     app.use(methodOverride());
 
     //TODO: REPLACE WITH COR...
@@ -112,9 +109,9 @@ export default function(app) {
 
     /* Build Client using webpack middle-ware */
     const needWebpack = true;
+    if(!needWebpack) console.warn('Webpack middleware flag is off');
     if(needWebpack && process.env.NODE_ENV  === 'development') {
         console.info('Webpack middleware is running');
-        
         
         const webpack = require('webpack');
         const stripAnsi = require('strip-ansi');

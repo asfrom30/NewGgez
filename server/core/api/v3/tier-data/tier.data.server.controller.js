@@ -16,6 +16,7 @@ exports.find = function(req, res, next) {
 
 exports.storeDate = function(req, res, next, date) {
     req.date = date;
+    req.date = '180227'
     next();
 }
 

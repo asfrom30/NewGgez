@@ -5,7 +5,8 @@ require("expose-loader?$!jquery");
 require("expose-loader?$!popper.js");
 
 /* Using bootstrap */
-require('bootstrap/dist/css/bootstrap.css');
+//TODO: need to replace regex pattern in webpack.common.config (do not apply this bootstrap), see more bootstrap css in webpack https://getbootstrap.com/docs/4.0/getting-started/webpack/
+require('bootstrap/dist/css/bootstrap.css'); 
 require('bootstrap/dist/js/bootstrap.min.js');
 /* use ui-bootstrap */
 // need bootstrap css

@@ -53,7 +53,12 @@ const config = {
           },
           {
             test : /\.css$/,
-            use : ['style-loader', { loader: 'css-loader', options: { importLoaders: 1 } }, 'postcss-loader']
+            use : [
+              'style-loader', 
+              'css-loader',
+              // { loader: 'css-loader', options: { importLoaders: 1 } }, 
+              // 'postcss-loader'
+            ]
           },
           {
             // HTML LOADER

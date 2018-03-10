@@ -1,10 +1,10 @@
 'use strict';
 
 import angular from 'angular';
-import apiConfig from '../../core.api.config';
+import apiConfig from '../../../../configs/app.api.config';
 
 export default angular
-    .module('freeboard.api.v3.service.module', [])
+    .module('freeboard.service.api.v3.module', [])
     .factory('Freeboard', ['$resource', function ($resource) {
 
         let api = `/api/freeboard/:id`;

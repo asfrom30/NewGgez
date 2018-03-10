@@ -1,7 +1,7 @@
 'use strict';
 
 import angular from 'angular';
-import apiConfig from '../../core.api.config';
+import apiConfig from '../../../../configs/app.api.config';
 
 export default angular
     .module('freeboard.api.v3.service.module', [])

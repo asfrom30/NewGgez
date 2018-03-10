@@ -8,39 +8,55 @@ setCustomLogger();
 
 // Set Global Variables
 global.appRoot = path.resolve(__dirname);
-
-/* DB Setup */
-require('./config/mongoose.setup')();
-
-/* Server Setup */
-var app = express();
-var server = http.createServer(app);
-require('./config/express').default(app);
-// var socketio = require('socket.io')(server, {
-//   serveClient: config.env !== 'production',
-//   path: '/socket.io-client'
-// });
-// require('./config/socketio').default(socketio);
-
-/* Server Route */
-require('./app.routes').default(app);
-
-/* Global Path Setting */
+// Set Node Variables
 // app.set('utilPath', path.join(config.root, 'client'));
+
+// Init express
+const app = express();
+
+// Database Setup
+const mongooseSetup = require('./config/mongoose.setup')();
+
+// Express and Webpack Setup 
+const expressSetup = require('./config/express').default(app);
+// socektSetup();
+
+// Router Setup
+const routerSetup = require('./app.routes').default(app);
+
+// Seed Data Setup
+// const seedDataSetup = seedDatabaseIfNeeded();
+
+setImmediate(startServer);
+exports = module.exports = app;
 
 // Start server
 function startServer() {
-    app.angularFullstack = server.listen(config.port, config.ip, function() {
+    const server = http.createServer(app);
+    app.angularFullstack = server.listen(config.port, config.ip, function () {
         // console.log("Welcome doyoon, Now server[" + process.env.NODE_ENV + " mode] is running at port 3000");
         console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
     });
 }
 
-// seedDatabaseIfNeeded();
-setImmediate(startServer);
+function setCustomLogger() {
+    require('console-stamp')(console, {
+        pattern: 'HH:MM:ss',
+        colors: {
+            stamp: 'yellow',
+            label: 'white',
+        }
+    });
+}
 
-// Expose app
-exports = module.exports = app;
+function socektSetup() {
+    // var socketio = require('socket.io')(server, {
+    //   serveClient: config.env !== 'production',
+    //   path: '/socket.io-client'
+    // });
+    // require('./config/socketio').default(socketio);
+}
+
 
 //FIXME: db configuration... info..
 //FIXME: Run Cron Job
@@ -78,14 +94,3 @@ exports = module.exports = app;
 
 // // Expose app
 // exports = module.exports = app;
-
-
-function setCustomLogger() {
-    require('console-stamp')(console, {
-        pattern: 'HH:MM:ss',
-        colors: {
-            stamp: 'yellow',
-            label: 'white',
-        }
-    });
-}

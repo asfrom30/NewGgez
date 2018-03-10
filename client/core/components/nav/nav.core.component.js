@@ -8,18 +8,30 @@ export default angular.module('nav.core.component.module', [])
         template : require("./index.html"),
         controller : controller,
         bindings : {
+            isSignin : '<'
         }
     }).name;
 
-export function controller(AppLogger, $state, $translate){
+export function controller(AppLogger, User, Noty, $state, $translate){
     'ngInject';
     
     var $ctrl = this;
     const logFlag = false;
+    const dom = {
+        signinModal : '#signin-modal',
+    }
 
     $ctrl.goRandomPage = goRandomPage;
     $ctrl.goFreeBoard = goFreeBoard;
     $ctrl.changeLang = changeLang;
+    $ctrl.signIn = signIn;
+    $ctrl.signOut = signOut;
+
+    $ctrl.$onInit = function() {
+        $('#myModal').modal({
+            show : true,
+        });
+    }
 
     function goRandomPage() {
         const id = getRandomId();
@@ -60,4 +72,26 @@ export function controller(AppLogger, $state, $translate){
         $state.go(`freeboard`);
     }
 
+    function signIn() {
+        User.signIn({ email : 'miraee05@naver.com', password : '1'}).$promise.then(response => {
+            const isSignin = response.toJSON().result;
+            if(isSignin) {
+                $(dom.signinModal).modal('hide');
+                Noty.show('sign_in_success');
+                $ctrl.isSignin = true;
+            }
+        }, reason => {
+            $ctrl.wrongPassword = true;
+        })
+    }
+
+    function signOut() {
+        User.signOut().$promise.then(response => {
+            const result = response.toJSON();
+            Noty.show('sign_out_success');
+            $ctrl.isSignin = false;
+        }, reason => {
+            Noty.show('sign_out_fail');
+        })
+    }
 }

@@ -5,7 +5,6 @@ import angular from 'angular';
 require('./common.css');
 require('./styles/common.border.css');
 require('./styles/common.layout.css');
-require('./custom.bootstrap.v4.css')
 
 import CommonComponentsModule from './components/components.common.module'
 import CommonJqueryWrapModule from './jquery.wrap/jquery.wrap.common.module';

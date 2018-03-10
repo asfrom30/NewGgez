@@ -28,8 +28,10 @@ export default function(app) {
   app.use('/:device/:region/index-information', require('./core/api/v3/index-information'));
   app.use('/:device/:region/sessions', require('./core/api/v3/sessions'));
   
-  // freeboard area
+  // REST Api
+  app.use('/api/user', require('./core/api/v3/user'))
   app.use('/api/freeboard', require('./core/api/v3/boards/freeboard'));
+
   
   /* For Auth */
   // app.use('/auth', require('./auth').default);

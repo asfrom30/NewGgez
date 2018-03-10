@@ -14,7 +14,8 @@ export default angular.module('components.index', [])
         controller : indexCtrl,
         bindings : {
             currentPlayer : "=",
-            indexInformation : '<'
+            indexInformation : '<',
+            isSignin : '<',
             // bindCurrentPlayer : "&",
         }
     }).name;
@@ -64,16 +65,22 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
 
     /* View */
     function initView() {
-        scrollDownAnimateInit();
+        initScrollDownAnimate();
+
     }
 
-    function scrollDownAnimateInit() {
+    function initScrollDownAnimate() {
         $(function() {
             $('a[href*="#"]').on('click', function(e) {
                 e.preventDefault();
                 $('html, body').animate({ scrollTop: $($(this).attr('href')).offset().top}, 500, 'linear');
             });
         });
+    }
+
+    function initAccountView() {
+        const isSignin = $ctrl.isSignin;
+        
     }
 
     function hideNoResultPlayerTable() {

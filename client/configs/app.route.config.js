@@ -76,6 +76,15 @@ function  getIndexState() {
                 const device = 'pc';
                 const region = 'kr';
                 return Ajax.fetchIndexInformation(device, region);
+            },
+            isSignin : function(User) {
+                return User.getStatus().$promise.then(result => {
+                    const isSignin = result.toJSON().result;
+                    return true;
+                    // return isSignin;
+                }, reason => {
+                    return false;
+                })
             }
         },
     }

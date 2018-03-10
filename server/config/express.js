@@ -1,34 +1,35 @@
-var compress = require('compression');
+const path = require('path');
+const compress = require('compression');
+const express = require('express');
+const favicon = require('serve-favicon');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const passport = require('passport');
 
-/* from full stack */
-import express from 'express';
-import favicon from 'serve-favicon';
-import morgan from 'morgan';
+const methodOverride = require('method-override');
+const validator = require('express-validator');
 // import shrinkRay from 'shrink-ray';
-import bodyParser from 'body-parser';
-import methodOverride from 'method-override';
-// import cookieParser from 'cookie-parser';
 // import errorHandler from 'errorhandler';
-import path from 'path';
 // import lusca from 'lusca';
 // import passport from 'passport';
 // import mongoose from 'mongoose';
 
-import session from 'express-session';
-const MongoStore = require('connect-mongo')(session);
+const config = require('./environment');
+const passportSetup = require('./passport.setup');
 
-import cors from 'cors';
-import config from './environment';
-
-/* Set Middle Ware */ 
-export default function(app) {
+/* Set Middle Ware */
+export default function (app) {
     var env = app.get('env');
 
-    if(env === 'development' || env === 'test') {
+    if (env === 'development' || env === 'test') {
         app.use(express.static(path.join(config.root, '.tmp')));
     }
-    
-    if(env === 'production') {
+
+    if (env === 'production') {
         try {
             app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
         } catch (error) {
@@ -36,57 +37,34 @@ export default function(app) {
         }
     }
 
-    if(env == 'development') {
+    if (env == 'development') {
         // morgan must be declared before webpack and static...
         app.use(morgan('dev')); // morgan is HTTP request logger middleware for node.js
     }
-    
-    if (env  == 'production') {
+
+    if (env == 'production') {
         app.use(compress());
     }
 
-    app.set('appPath', path.join(config.root, 'client'));
-    app.use(express.static(app.get('appPath')));
-
-    /* Below code is from angular-fullstack-generator */
-    // app.set('views', `${config.root}/server/views`);
-    // app.engine('html', require('ejs').renderFile);
-    // app.set('view engine', 'html');
-    // app.use(shrinkRay());
-    // app.use(methodOverride());
-    // app.use(cookieParser());
-    // app.use(passport.initialize());
-
-    /* custom */
-    app.set('views', './app/views');
-    app.set('view engine', 'ejs');
-
-    app.use(bodyParser.urlencoded({
-        extended : true, // This object will contain key-value pairs, where the value can be a string or array (when extended is false), or any type (when extended is true)
-    }))
-    app.use(bodyParser.json());
-
-    app.use(methodOverride());
-
-    //TODO: REPLACE WITH COR...
-    if(env !== 'production') {
+    // Set cors
+    if (env !== 'production') {
         console.info('setting up cross origin resource sharing');
         app.use(cors());
     }
 
-    /* from angular full stack */
-    /* Persist sessions with MongoStore / sequelizeStore
-    We need to enable sessions for passport-twitter because it's an
-    oauth 1.0 strategy, and Lusca depends on sessions */
-    app.use(session({
-        secret: config.secrets.session,
-        saveUninitialized: true,
-        resave: false,
-        store: new MongoStore({
-            url : config.mongo.defaultUri + 'sessions',
-            db : config.mongo.collectionName.sessions,
-        })
-    }));
+    // set node variable
+    app.set('appPath', path.join(config.root, 'client'));
+
+    // set serve static
+    app.use(express.static(app.get('appPath')));
+
+    // Set default view engines
+    // app.set('views', `${config.root}/server/views`);
+    // app.engine('html', require('ejs').renderFile);
+    /* custom */
+    app.set('views', './app/views');
+    // app.set('view engine', 'html');
+    app.set('view engine', 'ejs');
 
     /**
      * Lusca - express server security
@@ -107,12 +85,44 @@ export default function(app) {
     //     }));
     // }
 
+    // method override setting
+    app.use(methodOverride());
+
+    // cookie and body parser setting
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+        extended: true, // This object will contain key-value pairs, where the value can be a string or array (when extended is false), or any type (when extended is true)
+    }));
+    app.use(cookieParser());
+    app.use(validator());
+
+    // session setting
+    /* Persist sessions with MongoStore / sequelizeStore
+    We need to enable sessions for passport-twitter because it's an
+    oauth 1.0 strategy, and Lusca depends on sessions */
+    app.use(session({
+        secret: config.secrets.session,
+        saveUninitialized: true,
+        resave: false,
+        store: new MongoStore({
+            url: config.mongo.defaultUri + 'sessions',
+            db: config.mongo.collectionName.sessions,
+        })
+    }));
+    
+    // passport setting
+    passportSetup(app);
+
+    
+    //TODO: REMAINING SETTING
+     // app.use(shrinkRay());
+
     /* Build Client using webpack middle-ware */
     const needWebpack = true;
-    if(!needWebpack) console.warn('Webpack middleware flag is off');
-    if(needWebpack && process.env.NODE_ENV  === 'development') {
+    if (!needWebpack) console.warn('Webpack middleware flag is off');
+    if (needWebpack && process.env.NODE_ENV === 'development') {
         console.info('Webpack middleware is running');
-        
+
         const webpack = require('webpack');
         const stripAnsi = require('strip-ansi');
         const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -128,38 +138,38 @@ export default function(app) {
          * Run Browsersync and use middleware for Hot Module Replacement
          */
         browserSync.init({
-          open: false,
-          logFileChanges: false,
-          proxy: `localhost:${config.port}`,
-          ws: true,
-          middleware: [
-            webpackDevMiddleware(compiler, {
-              noInfo: false,
-              stats: {
-                colors: true,
-                timings: true,
-                chunks: false
-              }
-            })
-          ],
-          port: config.browserSyncPort,
-          plugins: ['bs-fullscreen-message']
+            open: false,
+            logFileChanges: false,
+            proxy: `localhost:${config.port}`,
+            ws: true,
+            middleware: [
+                webpackDevMiddleware(compiler, {
+                    noInfo: false,
+                    stats: {
+                        colors: true,
+                        timings: true,
+                        chunks: false
+                    }
+                })
+            ],
+            port: config.browserSyncPort,
+            plugins: ['bs-fullscreen-message']
         });
-    
+
         /**
          * Reload all devices when bundle is complete
          * or send a fullscreen error message to the browser instead
          */
-        compiler.plugin('done', function(stats) {
-          console.log('webpack done hook');
-          if(stats.hasErrors() || stats.hasWarnings()) {
-            return browserSync.sockets.emit('fullscreen:message', {
-              title: 'Webpack Error:',
-              body: stripAnsi(stats.toString()),
-              timeout: 100000
-            });
-          }
-          browserSync.reload();
+        compiler.plugin('done', function (stats) {
+            console.log('webpack done hook');
+            if (stats.hasErrors() || stats.hasWarnings()) {
+                return browserSync.sockets.emit('fullscreen:message', {
+                    title: 'Webpack Error:',
+                    body: stripAnsi(stats.toString()),
+                    timeout: 100000
+                });
+            }
+            browserSync.reload();
         });
     }
 

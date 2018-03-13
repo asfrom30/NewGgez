@@ -11,8 +11,9 @@ export default angular
     .component('textEditor', {
         template: require('./index.html'),
         controller: controller,
-        bindings : {
-            contentMessenger : '='
+        bindings: {
+            contentMessenger: '=',
+            viewMode: '<',
         }
     })
     .name;
@@ -22,26 +23,37 @@ function controller($element, $scope) {
     const $ctrl = this;
 
     $ctrl.$onInit = onInit;
-        
+
 
     $ctrl.$onChanges = function () {
 
     }
-   
+
     function onInit() {
-         // quill needs a container
+
+        const viewMode = $ctrl.viewMode || false;
+        
+        let toolbar = [];
+        if(!viewMode) {
+            toolbar = [
+                [{ header: [1, 3, 5, false] }],
+                ['bold', 'italic', 'underline'],
+                ['image', 'code-block'],
+            ]
+        }
+
+
+        // quill needs a container
         const container = $element.find('.editor-container')[0];
         var quill = new Quill(container, {
             modules: {
-                toolbar: [
-                    [{ header: [1, 2, false] }],
-                    ['bold', 'italic', 'underline'],
-                    ['image', 'code-block']
-                ]
+                toolbar: toolbar,
             },
             placeholder: 'Compose an epic...',
             theme: 'snow'  // or 'bubble'
         });
+
+        if(viewMode) quill.enable(false);
 
         $ctrl.contentMessenger = quill;
     }

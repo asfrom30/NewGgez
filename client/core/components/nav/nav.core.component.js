@@ -5,20 +5,19 @@ require('./index.css');
 
 export default angular.module('nav.core.component.module', [])
     .component('appNav', {
-        template : require("./index.html"),
-        controller : controller,
-        bindings : {
-            isSignin : '<'
+        template: require("./index.html"),
+        controller: controller,
+        bindings: {
         }
     }).name;
 
-export function controller(AppLogger, User, Noty, $state, $translate){
+export function controller(AppLogger, User, Noty, $state, $translate) {
     'ngInject';
-    
+
     var $ctrl = this;
     const logFlag = false;
     const dom = {
-        signinModal : '#signin-modal',
+        signinModal: '#signin-modal',
     }
 
     $ctrl.goRandomPage = goRandomPage;
@@ -27,55 +26,59 @@ export function controller(AppLogger, User, Noty, $state, $translate){
     $ctrl.signIn = signIn;
     $ctrl.signOut = signOut;
 
-    $ctrl.$onInit = function() {
-        $('#myModal').modal({
-            show : true,
-        });
+    $ctrl.$onInit = function () {
+        User.getStatus().$promise.then(result => {
+            const isSignin = result.toJSON().result;
+            $ctrl.isSignin = isSignin;
+        }, reason => {
+
+        })
+
     }
 
     function goRandomPage() {
         const id = getRandomId();
         moveHeroPage('pc', 'kr', id);
     }
-    
-    function moveHeroPage(device, region, id){
-        if(device == undefined | region == undefined | id == undefined) {
-            if(device == undefined) AppLogger.log('device is undefined, can not go hero page', logFlag, 'error' );
-            if(region == undefined) AppLogger.log('device is undefined, can not go hero page', logFlag, 'error');
-            if(id == undefined) AppLogger.log('device is undefined, can not go hero page',  logFlag, 'error');
+
+    function moveHeroPage(device, region, id) {
+        if (device == undefined | region == undefined | id == undefined) {
+            if (device == undefined) AppLogger.log('device is undefined, can not go hero page', logFlag, 'error');
+            if (region == undefined) AppLogger.log('device is undefined, can not go hero page', logFlag, 'error');
+            if (id == undefined) AppLogger.log('device is undefined, can not go hero page', logFlag, 'error');
             return;
         }
-        const params = {device : device, region : region, id : id};
-        $state.go(`hero.summary`, params, {reload: true});
+        const params = { device: device, region: region, id: id };
+        $state.go(`hero.summary`, params, { reload: true });
     }
 
-    function getRandomId(){
+    function getRandomId() {
         const min = 1;
         let max = 13000;
         try {
             max = $ctrl.indexInformation.totalPlayers;
         } catch (error) {
-            
+
         }
         const id = Math.floor((Math.random() * max) + min);
 
         return id;
     }
 
-    function changeLang(){
+    function changeLang() {
         const langKey = $ctrl.tempSelectedLang;
-        if(langKey == undefined) alert('need to select lang');
+        if (langKey == undefined) alert('need to select lang');
         $translate.use(langKey);
     }
 
     function goFreeBoard() {
-        $state.go(`freeboard`);
+        $state.go(`freeboard.list`, { pageIndex: 1 });
     }
 
     function signIn() {
-        User.signIn({ email : 'miraee05@naver.com', password : '1'}).$promise.then(response => {
+        User.signIn({ email: 'miraee05@naver.com', password: '1' }).$promise.then(response => {
             const isSignin = response.toJSON().result;
-            if(isSignin) {
+            if (isSignin) {
                 $(dom.signinModal).modal('hide');
                 Noty.show('sign_in_success');
                 $ctrl.isSignin = true;

@@ -7,8 +7,12 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 const FreeboardSchema = new Schema({
     _id             : Number,
     title           : String,
+    owner           : {type: Schema.Types.ObjectId, ref : 'User'},
     content         : Object,
-    comments        : [{ type: Schema.Types.ObjectId, ref: 'FreeboardComment' }]
+    comments        : [{ type: Schema.Types.ObjectId, ref: 'FreeboardComment' }],
+    view_count      : Number,
+    upvote_count    : Number,
+    comment_count     : Number,
 }, { _id: false, timestamps: true});
 
 FreeboardSchema.plugin(AutoIncrement);

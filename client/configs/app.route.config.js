@@ -77,15 +77,6 @@ function  getIndexState() {
                 const region = 'kr';
                 return Ajax.fetchIndexInformation(device, region);
             },
-            isSignin : function(User) {
-                return User.getStatus().$promise.then(result => {
-                    const isSignin = result.toJSON().result;
-                    return true;
-                    // return isSignin;
-                }, reason => {
-                    return false;
-                })
-            }
         },
     }
 }
@@ -108,18 +99,18 @@ function getFreeboardWritingState() {
 
 function getFreeboardPageState() {
     return {
-        name: 'freeboard.page',
-        url: '/page/{index}',
-        component: 'freeboardPage',
+        name: 'freeboard.list',
+        url: '/list/{pageIndex}',
+        component: 'freeboardList',
         resolve : {
             freeboards : function($state, $stateParams, Freeboard) {
-                const index = parseInt($stateParams.index);
+                const pageIndex = parseInt($stateParams.pageIndex);
                 
-                if(!isNumber(index)) {
-                    $state.go('freeboard.page', {index : 1});
+                if(!isNumber(pageIndex)) {
+                    $state.go('freeboard.list', {pageIndex : 1});
                     return;
                 } else {
-                    return Freeboard.fetchPage(index);
+                    return Freeboard.fetchPage(pageIndex);
                 }
             }
         }

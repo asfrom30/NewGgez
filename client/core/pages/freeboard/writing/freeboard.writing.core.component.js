@@ -1,6 +1,7 @@
 'use strict';
 
 import angular from 'angular';
+require('./styles/index.css');
 
 export default angular
     .module('myModule', [])
@@ -21,6 +22,7 @@ function controller($state, $element, Freeboard, Noty, CoreUtils) {
     }
 
     function onSave() {
+
         const title = $ctrl.title;
         const contentLength = getContentMessenger().getLength();
         const valid = isFreeboardValid(title, contentLength);
@@ -29,7 +31,7 @@ function controller($state, $element, Freeboard, Noty, CoreUtils) {
             const content = getContentMessenger().getContents();
             Freeboard.save(title, content).$promise.then(result => {
                 Noty.show(NOTY_MSG.WRITING_SUCCESS, 'info', 500, function() {
-                    return $state.go('freeboard.page', {index : 1});
+                    return $state.go('freeboard.list', {pageIndex : 1});
                 })
             }, reason => {
                 const errMsg = reason.data.err || 'DEFAULT_ERROR';

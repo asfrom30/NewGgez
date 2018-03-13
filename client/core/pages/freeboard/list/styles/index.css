@@ -1,0 +1,68 @@
+/* height and width */
+.freeboards-container {
+}
+
+.freeboard-container {
+    height : 70px;
+}
+
+/* freeboard inner structure */
+.freeboard-container .status-display {
+    width : 43px;
+    height: 43px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.freeboard-container .summary-display {
+    height: 43px;
+    margin-left: 5px;
+}
+
+
+/* font-size and color */
+.freeboard-container .status-display {
+    font-size : 10px;
+}
+
+
+.freeboard-container .title-font {
+    font-size:18px;
+}
+
+
+.freeboard-container .sub-title-font {
+    font-size:10px;
+    color:lightgrey
+}
+
+/* style : color */
+.freeboard-list-container .nav.nav-tabs .nav-link{
+    color: white;
+}
+
+/* style : border */
+.freeboards-container > div:first-child {
+    border-top: 1px solid gray;
+}
+
+.freeboard-container {
+    border-bottom: 1px solid gray;
+}
+
+.status-outline {
+    border : 1px solid var(--color, white);
+    border-radius: 10%;
+}
+
+.status-outline--views {
+    --color : red;
+}
+
+.status-outline--upvotes {
+    --color : magenta;
+}
+
+.status-outline--answers {
+    --color : yellow;
+}

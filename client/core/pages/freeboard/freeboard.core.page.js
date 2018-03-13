@@ -1,11 +1,12 @@
 'use strict';
+require('./index.css');
 
 import angular from 'angular';
-import FreeboardPageModule from './page/freeboard.page.core.component';
+import FreeboardListModule from './list/freeboard.list.core.component';
 import FreeboardWritingModule from './writing/freeboard.writing.core.component';
 import FreeboardDetailModule from './detail/freeboard.detail.core.component';
 
-export default angular.module('freeboard.core.pages.module', [FreeboardPageModule, FreeboardWritingModule, FreeboardDetailModule])
+export default angular.module('freeboard.core.pages.module', [FreeboardListModule, FreeboardWritingModule, FreeboardDetailModule])
     .component('freeboard', {
         template : require("./index.html"),
         controller : controller,

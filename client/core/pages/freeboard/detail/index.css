@@ -1,0 +1,16 @@
+.comment-info {
+    font-size: var(--reply-info-font-size);
+    color : var(--reply-info-font-color);
+}
+
+.comment-content {
+    font-size: var(--reply-content-font-size);
+}
+
+
+/* list structure */
+.comment {
+    min-height: 40px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid grey;
+}

@@ -1,4 +1,5 @@
 'use strict';
+require('./index.css');
 
 import angular from 'angular';
 
@@ -11,7 +12,7 @@ export default angular.module('freeboard.detail.core.component', [])
         }
     }).name;
 
-function controller(Freeboard, $stateParams, $timeout, $state, Noty) {
+function controller(Freeboard, $stateParams, $timeout, $state, $element, Noty) {
 
     const $ctrl = this;
     $ctrl.$onInit = onInit;
@@ -25,10 +26,10 @@ function controller(Freeboard, $stateParams, $timeout, $state, Noty) {
 
     function onChanges() {
         $timeout(function(){
-            const contentMessenger = $ctrl.contentMessenger;
-            if(contentMessenger == undefined) return;
-            const content = $ctrl.freeboard.content;
-            contentMessenger.setContents(content);
+            // const contentMessenger = $ctrl.contentMessenger;
+            // if(contentMessenger == undefined) return;
+            // const content = $ctrl.freeboard.content;
+            // contentMessenger.setContents(content);
         });
     }
 

@@ -35,7 +35,7 @@ export default angular
 
 
         const Freeboard = function(){
-
+            this.busy = false;
         }
 
         Freeboard.prototype.fetchPage = function(index) {
@@ -58,7 +58,7 @@ export default angular
             return freeboard.save({title : title, content : content});
         }
 
-        return new Freeboard();;
+        return new Freeboard();
         // FreeboardPost.prototype.post = function() {
         //     $resource.$save();
         //     console.log('freeboard on post');  

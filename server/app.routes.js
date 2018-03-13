@@ -31,6 +31,7 @@ export default function(app) {
   // REST Api
   app.use('/api/user', require('./core/api/v3/user'))
   app.use('/api/freeboard', require('./core/api/v3/boards/freeboard'));
+  app.use('/api/freeboard', require('./core/api/v3/boards/freeboard-comment')); // freeboard comment
 
   
   /* For Auth */

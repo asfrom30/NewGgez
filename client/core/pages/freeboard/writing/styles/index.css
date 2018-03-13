@@ -1,0 +1,27 @@
+/*
+
+Quill Size Description
+
+// `ql-container` height is already setted at 100%.
+// it means. when you set the parent size. total edital size should be 100% + 42px(toolbar size)
+// So if you wan to fit size to parent, you must override the ql-container size (100% - 42px)
+
+*/
+
+
+/* Freeboard writing structure */
+.freeboard-writing-container {
+    height : calc(100vh - var(--margin-for-header));
+}
+.freeboard-writing-container input {
+    height : 35px;
+    margin-bottom: 10px;
+}
+
+.freeboard-writing-container .content-container {
+    height : calc(100% - 115px);
+}
+
+.freeboard-writing-container .ql-container {
+    height : calc(100% - 42px);
+}

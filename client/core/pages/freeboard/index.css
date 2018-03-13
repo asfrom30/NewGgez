@@ -1,0 +1,28 @@
+.freeboard-template{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.freeboard-template {
+    --reply-info-font-size : 10px;
+    --reply-content-font-size : 15px;
+
+    /* color */
+    --reply-info-font-color : lightgrey;
+}
+
+
+/* common fixed-bottom style */
+
+.freeboard-template .fixed-bottom {
+    background-color: var(--gray-dark);
+    height : 50px;
+    z-index: 1000;
+}
+
+.freeboard-template .fixed-bottom button {
+    height : 40px;
+    margin-right: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

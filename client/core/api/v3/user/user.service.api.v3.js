@@ -25,6 +25,10 @@ export default angular
             signOut : {
                 method : 'GET',
                 url : api + '/signout'
+            },
+            signUp : {
+                method : 'POST',
+                url : api + '/signup'
             }
         })
 

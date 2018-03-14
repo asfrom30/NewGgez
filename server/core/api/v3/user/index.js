@@ -1,43 +1,51 @@
 'use strict';
 
 const express = require('express');
-const controller = require('./user.controller');
-const passport = require('passport');
 const router = express.Router();
+
+const controller = require('./user.controller');
+
+const passport = require('passport');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+
 
 
 router.post('/signup', function (req, res) {
 
-    const name = req.body.name;
     const email = req.body.email;
-    const username = req.body.username;
+    const userName = req.body.userName;
     const password = req.body.password;
-    const password2 = req.body.password2;
+    const passwordConf = req.body.passwordConf;
 
     // Validation
-    req.checkBody('name', 'Name is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
     req.checkBody('email', 'Email is not valid').isEmail();
-    req.checkBody('username', 'Username is required').notEmpty();
+    req.checkBody('userName', 'Username is required').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
-    req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+    req.checkBody('passwordConf', 'Passwords do not match').equals(req.body.password);
 
     const errors = req.validationErrors();
 
     if (errors) {
         res.status(422).json({ err: errors });
     } else {
-        const newUser = new User({
-            name: name,
-            email: email,
-            username: username,
-            password: password,
-        });
 
-        User.createUser(newUser, function (err, user) {
-            if (err) throw err;
-            console.log(user);
-        })
+        User.findOne({email : email}).then(user => {
+            if(user) return res.status(409).json({err : 'this_email_is_already_registered'});
+
+            const newUser = new User({
+                email: email,
+                username: userName,
+                password: password,
+            });
+    
+            newUser.save().then(result => {
+                return res.status(200).json({result : true, msg : 'register_success'});
+            }, reason => {
+                return res.status(500).json({err : 'internal_server_error'});
+            })
+        });
     }
 });
 

@@ -11,20 +11,23 @@ export default angular.module('nav.core.component.module', [])
         }
     }).name;
 
-export function controller(AppLogger, User, Noty, $state, $translate) {
+export function controller(AppLogger, User, Noty, $state, $translate, validator) {
     'ngInject';
 
     var $ctrl = this;
     const logFlag = false;
     const dom = {
-        signinModal: '#signin-modal',
+        signInModal: '#signin-modal',
+        signUpModal : '#register-modal',
     }
 
     $ctrl.goRandomPage = goRandomPage;
     $ctrl.goFreeBoard = goFreeBoard;
     $ctrl.changeLang = changeLang;
+    $ctrl.initSignin = initSignin;
     $ctrl.signIn = signIn;
     $ctrl.signOut = signOut;
+    $ctrl.signUp = signUp;
 
     $ctrl.$onInit = function () {
         User.getStatus().$promise.then(result => {
@@ -75,11 +78,18 @@ export function controller(AppLogger, User, Noty, $state, $translate) {
         $state.go(`freeboard.list`, { pageIndex: 1 });
     }
 
+    function initSignin() {
+        $ctrl.email = undefined;
+        $ctrl.password = undefined;
+    }
+
     function signIn() {
-        User.signIn({ email: 'miraee05@naver.com', password: '1' }).$promise.then(response => {
+        const email = $ctrl.email;
+        const password = $ctrl.password;
+        User.signIn({ email: email, password: password }).$promise.then(response => {
             const isSignin = response.toJSON().result;
             if (isSignin) {
-                $(dom.signinModal).modal('hide');
+                $(dom.signInModal).modal('hide');
                 Noty.show('sign_in_success');
                 $ctrl.isSignin = true;
             }
@@ -96,5 +106,40 @@ export function controller(AppLogger, User, Noty, $state, $translate) {
         }, reason => {
             Noty.show('sign_out_fail');
         })
+    }
+
+    function initSignUp() {
+        $ctrl.register.userName = undefined;
+        $ctrl.register.email = undefined;
+        $ctrl.register.password = undefined;
+        $ctrl.register.passwordConf = undefined;
+    }
+
+    function signUp() {
+        const userName = $ctrl.register.userName;
+        const email = $ctrl.register.email;
+        const password = $ctrl.register.password;
+        const passwordConf = $ctrl.register.passwordConf;
+
+        const params = {
+            userName : userName,
+            email : email,
+            password : password,
+            passwordConf : passwordConf
+        }
+
+        User.signUp(params).$promise.then(response => {
+            const data = response.toJSON();
+
+            if(data.result) {
+                $(dom.signUpModal).modal('hide');
+                Noty.show('register_success');
+            }
+        }, reason => {
+            const responseCode = reason.status;
+            const data = reason.data;
+            if(responseCode == 409) Noty.show(data.err, 'warning');
+        })
+        
     }
 }

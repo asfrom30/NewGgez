@@ -5,7 +5,7 @@ import angular from 'angular';
 
 import TestModule from './test/test.module';
 
-import NavComponentModule from './nav/nav.core.component';
+import NavComponentModule from './app-nav/app.nav.core.component';
 import IndexModule from './index/index.component';
 import FeatureModule from './feature/feature.module';
 import HeroModule from './hero/hero.module';

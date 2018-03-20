@@ -30,6 +30,7 @@ const clientPath = 'client';
 const serverPath = 'server';
 const cronPath = 'server-cron';
 const paths = {
+    secrets : `.secrets/**`,
     client: {
         assets: `${clientPath}/assets/**/*`,
         images: `${clientPath}/assets/images/**/*`,
@@ -46,10 +47,12 @@ const paths = {
     },
     server: {
         scripts: [
-          `${serverPath}/**/!(*.spec|*.integration).js`,
-          `!${serverPath}/config/local.env.sample.js`,
+            `${serverPath}/**/!(*.spec|*.integration).js`,
         ],
-        json: [`${serverPath}/**/*.json`],
+        excludeScripts : [
+            `${serverPath}/**/!(*.js)`,
+        ],
+        packageJson: [`package.json`, `package-lock.json`],
         test: {
           integration: [`${serverPath}/**/*.integration.js`, 'mocha.global.js'],
           unit: ['mocha.global.before.js', `${serverPath}/**/*.spec.js`, 'mocha.global.after.js']
@@ -64,7 +67,7 @@ const paths = {
             // `!${cronPath}/package.json`, // json file is start with .js
             // `!${cronPath}/package-lock.json` ,
           ],
-          json: [`${cronPath}/**/*.json`],
+          packageJson: [`${cronPath}/package.json`, `${cronPath}/package-lock.json`],
           ini: [`${cronPath}/**/*.ini`],
           test: {
             integration: [`${cronPath}/**/*.integration.js`, 'mocha.global.js'],
@@ -191,7 +194,7 @@ gulp.task('serve', cb => {
         [
             'clean:tmp',
             // 'lint:scripts',
-            'inject',
+            // 'inject',
             'copy:fonts:dev',
             'env:all'
         ],
@@ -201,6 +204,10 @@ gulp.task('serve', cb => {
         cb
     );
 });
+
+gulp.task('serve:dist', cb => {
+    //TODO: make serve dist.
+})
 
 gulp.task('serve:debug', cb => {
     runSequence(
@@ -218,32 +225,49 @@ gulp.task('serve:debug', cb => {
     );
 });
  
-gulp.task('build', cb => {
-    runSequence(
-        [
-            'clean:dist',
-            'clean:tmp'
-        ],
-        'inject',
-        'transpile:server',
-        [
-            'build:images'
-        ],
-        [
-            'copy:extras',
-            'copy:assets',
-            'copy:fonts:dist',
-            'copy:server',
-            'webpack:dist'
-        ],
-        'revReplaceWebpack',
-        cb);
+// gulp.task('build', cb => {
+//     runSequence(
+//         [
+//             'clean:dist',
+//             'clean:tmp'
+//         ],
+//         'inject',
+//         'transpile:server',
+//         [
+//             'build:images'
+//         ],
+//         [
+//             'copy:extras',
+//             'copy:assets',
+//             'copy:fonts:dist',
+//             'copy:files:server',
+//             'webpack:dist'
+//         ],
+//         'revReplaceWebpack',
+//         cb);
+// });
+
+gulp.task('build:server', cb => {
+    return runSequence(
+        ['clean:dist:package.json', 'clean:dist:server'],
+        ['copy:package.json', 'transpile:server', 'copy:files:server'],
+        cb
+    )
 });
+
+gulp.task('build:cron', cb => {
+    return runSequence(
+        'clean:dist:cron', // clean dist cron folder
+        'transpile:cron', // copy *.js file without *.spec.js, *.integration.js
+        'copy:cron', // copy package.json, .pm2 files, .ini file
+        cb
+    )
+})
 
 gulp.task('build:client', cb => {
     return runSequence(
         'clean:dist:client',
-        'inject',
+        // 'inject', // no need any more
         'build:images',
         [
         'copy:extras',
@@ -252,7 +276,6 @@ gulp.task('build:client', cb => {
         'webpack:dist'
         ],
         'revReplaceWebpack',
-        // inject,
         cb
     )
 })
@@ -270,26 +293,6 @@ gulp.task('build:client:simple', cb => {
         cb
     )
 })
-
-
-gulp.task('build:server', cb => {
-    return runSequence(
-        ['clean:dist:server', 'clean:dist:package'],
-        ['transpile:server','copy:server'],
-        cb
-    )
-});
-
-gulp.task('build:cron', cb => {
-    return runSequence(
-        'clean:dist:cron', // clean dist cron folder
-        'transpile:cron', // copy *.js file without *.spec.js, *.integration.js
-        'copy:cron', // copy package.json, .pm2 files, .ini file
-        cb
-    )
-})
-
-
 
 
 /********************
@@ -328,41 +331,52 @@ gulp.task('start:client', cb => {
 /* Clean */
 gulp.task('clean:tmp', () => del(['.tmp/**/*'], {dot: true}));
 gulp.task('clean:dist', () => del([`${paths.dist}/!(.git*|.openshift|Procfile|node_modules)**`], {dot: true}));
-gulp.task('clean:dist:server', () => del([`${paths.dist}/${serverPath}/**`], {dot: true}));
 
+gulp.task('clean:dist:package.json', () => del([`${paths.dist}/package.json`], {dot: true}));
+gulp.task('clean:dist:server', () => del([`${paths.dist}/${serverPath}/**`], {dot: true}));
+gulp.task('clean:dist:cron', () => del([`${paths.dist}/${cronPath}/!(.git*|.openshift|Procfile|node_modules)**`], {dot: true}));
 gulp.task('clean:dist:client', () => del([`${paths.dist}/${clientPath}/**`], {dot: true}));
 gulp.task('clean:dist:client:simple', () => del([`${paths.dist}/${clientPath}/!(assets)`], {dot: true}));
 
-gulp.task('clean:dist:cron', () => del([`${paths.dist}/${cronPath}/!(.git*|.openshift|Procfile|node_modules)**`], {dot: true}));
-gulp.task('clean:dist:package', () => del([`${paths.dist}/package.json`], {dot: true}));
+/**
+ * Copy and Transpile Files
+ */
+
+/* Copy common secrets */
+gulp.task('copy:.secrets', () => {
+    return gulp.src(paths.secrets, {cwdbase: true})
+        .pipe(gulp.dest(paths.dist));
+})
 
 /* Server */
-/* move server files without spec.js to dist */
+/* move root package.json files */
+gulp.task('copy:package.json', () => {
+    return gulp.src(paths.server.packageJson, {cwdbase: true})
+        .pipe(gulp.dest(paths.dist));
+});
+/* Transpile Javascript files (move server files without spec.js to dist) */
 gulp.task('transpile:server', () => {
-    return gulp.src(_.union(paths.server.scripts, paths.server.json))
+    return gulp.src(_.union(paths.server.scripts), {dot: true})
         .pipe(transpileServer())
         .pipe(gulp.dest(`${paths.dist}/${serverPath}`));
 });
+/* Copy all files to server folder(html, json... those type of files can not be transfiled. just copy and move) */
+gulp.task('copy:files:server', () => {
+    return gulp.src(paths.server.excludeScripts, {cwdbase: true, dot: true})
+        .pipe(gulp.dest(paths.dist));
+});
 
+/* Cron Server */
 gulp.task('transpile:cron', () => {
     return gulp.src(_.union(paths.cron.scripts))
         .pipe(transpileServer())
         .pipe(gulp.dest(`${paths.dist}/${cronPath}`));
 });
 
-/* Move package.json file from dev to dist */
-gulp.task('copy:server', () => {
-    return gulp.src([
-        'package.json',
-        `${serverPath}/.pm2/**`,
-    ], {cwdbase: true})
-        .pipe(gulp.dest(paths.dist));
-});
-
 gulp.task('copy:cron', () => {
     
     return gulp.src(_.union([
-        `${paths.cron.json}`,
+        `${paths.cron.packageJson}`,
         `${cronPath}/*.ini`,
         `${cronPath}/.pm2/**`,
         `${cronPath}/.smtp/**`
@@ -405,12 +419,11 @@ gulp.task('build:images', () => {
             plugins.imagemin.svgo({plugins: [{removeViewBox: false}]})
         ]))
         // .pipe(plugins.rev())
-        .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets/images`))
         // .pipe(plugins.rev.manifest(`${paths.dist}/${paths.client.revManifest}`, {
             // base: `${paths.dist}/${clientPath}/assets`,
             // merge: true
-        // }))
-        .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets`));
+            // }))
+        .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets/images`))
 });
 
 /* */
@@ -530,7 +543,7 @@ gulp.task('test:client', done => {
  * Remote Task
  ********************/
 import GulpSSH from 'gulp-ssh';
-import GulpSshConfig from './.ssh/bluehost/config';
+import GulpSshConfig from './.secrets/ssh/bluehost/config';
 
 var gulpSSH = new GulpSSH({
     ignoreErrors: false,

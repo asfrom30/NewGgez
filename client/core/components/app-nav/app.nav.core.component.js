@@ -28,6 +28,7 @@ export function controller(AppLogger, User, Noty, $state, $translate, validator)
     $ctrl.signIn = signIn;
     $ctrl.signOut = signOut;
     $ctrl.signUp = signUp;
+    $ctrl.setting = setting;
 
     $ctrl.$onInit = function () {
         User.getStatus().$promise.then(result => {
@@ -140,6 +141,9 @@ export function controller(AppLogger, User, Noty, $state, $translate, validator)
             const data = reason.data;
             if(responseCode == 409) Noty.show(data.err, 'warning');
         })
+    }
+
+    function setting() {
         
     }
 }

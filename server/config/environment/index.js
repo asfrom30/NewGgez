@@ -3,7 +3,7 @@
 
 import path from 'path';
 import _ from 'lodash';
-import secrets from '../../../.secrets';
+import secrets from '../../../.secrets/server-secrets';
 
 
 /*function requiredProcessEnv(name) {

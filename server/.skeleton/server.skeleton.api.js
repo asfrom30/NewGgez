@@ -1,9 +1,9 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./player.server.controller');
+const express = require('express');
+const controller = require('./player.server.controller');
 
-var router = express.Router();
+const router = express.Router();
 
 router.param('id', players.findById);
 router.param('btg', players.findByBtg);

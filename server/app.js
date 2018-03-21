@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import path from 'path';
 import config from './config/environment';
+import fs from 'fs';
 
 /* Util Setup (before main) */
 setCustomLogger();
@@ -13,6 +14,10 @@ global.appRoot = path.resolve(__dirname);
 
 // Init express
 const app = express();
+
+// Secret Key Loading
+const secrets = require('./config/secret.loader')();
+app.set('secrets', secrets);
 
 // Database Setup
 const mongooseSetup = require('./config/mongoose.setup')();
@@ -32,10 +37,24 @@ exports = module.exports = app;
 
 // Start server
 function startServer() {
-    const server = http.createServer(app);
+    const httpsMode = true;
+
+    let server;
+    if(httpsMode) {
+        const httpsOption = {
+            cert : fs.readFileSync(path.join(__dirname, '../.secrets/ssl', 'server.crt')),
+            key : fs.readFileSync(path.join(__dirname, '../.secrets/ssl', 'server.key')),
+        }
+
+        const https = require('https');
+        server = https.createServer(httpsOption, app);
+    } else {
+        server = http.createServer(app);
+    }
+
     app.angularFullstack = server.listen(config.port, config.ip, function () {
         // console.log("Welcome doyoon, Now server[" + process.env.NODE_ENV + " mode] is running at port 3000");
-        console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+        console.log('Express server listening on %d, serverMode =  %s, https mode = %s', config.port, app.get('env'), httpsMode);
     });
 }
 

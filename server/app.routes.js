@@ -21,6 +21,9 @@ export default function(app) {
     next();
   })
 
+  /* Auth API */
+  app.use('/api/oauth', require('./core/api/v3/oauth'));
+
   /* Insert routes below */
   app.use('/:device/:region/players', require('./core/api/v3/player'));
   app.use('/:device/:region/crawl-datas', require('./core/api/v3/crawl-data'));

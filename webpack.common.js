@@ -18,6 +18,8 @@ const VENDOR_LIBS = [
   "angular-socket-io",
   "angular-ui-router",
   "angular-validation-match",
+  'jquery',
+  'popper.js',
   'bootstrap',
   "d3",
   "d3-selection",

@@ -15,11 +15,11 @@
             </button>
             <div class="dropdown-menu align-right">
                 <div ng-if="!$ctrl.isSignin">
-                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#register-modal">Register</button>
-                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#signin-modal">Sign In</button>
+                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#register-modal" ng-click="$ctrl.onSignupModalBtn()">Register</button>
+                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#signin-modal" ng-click="$ctrl.onSigninModalBtn()">Sign In</button>
                 </div>
                 <div ng-if="$ctrl.isSignin">
-                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#setting-modal">Setting</button>
+                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#account-setting-modal" ng-click="$ctrl.onSettingModalBtn()">Setting</button>
                     <button class="dropdown-item" type="button" ng-click="$ctrl.signOut()">Sign out</button>
                 </div>
             </div>
@@ -54,7 +54,7 @@
 </nav>
 
 <!-- i18n Modal -->
-<div class="modal fade" id="i18n-modal" tabindex="-1" role="dialog" aria-labelledby="i18nModalLabel" aria-hidden="true">
+<div class="modal fade" id="i18n-modal" role="dialog" aria-labelledby="i18nModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -82,7 +82,7 @@
 </div>
 
 <!-- Register Modal -->
-<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" ng-click="$ctrl.initSignUp()" aria-labelledby="registerModalLabel"
+<div class="modal fade" id="register-modal" role="dialog" aria-labelledby="registerModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -115,12 +115,11 @@
 </div>
 
 <!-- Sign in Modal -->
-<div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" ng-click="$ctrl.initSignin()" aria-labelledby="signInModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="signin-modal" role="dialog" aria-labelledby="signInModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="signInModalLabel">MODAL.SIGNIN.HEADER</h5>
+                <h5 class="modal-title" translate>MODAL.SIGNIN.HEADER</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -148,29 +147,53 @@
     </div>
 </div>
 
-<!-- Setting in Modal -->
-<div class="modal fade" id="setting-modal" tabindex="-1" role="dialog">
+<!-- Account Setting in Modal -->
+<div class="modal fade pos-relative" id="account-setting-modal" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="signInModalLabel">MODAL.USER_SETTING.HEADER</h5>
+                <h5 class="modal-title" translate>MODAL.ACCOUNT_SETTING.HEADER</h5>
+                <div id="account-setting-spinner" class="fa-3x" style="margin-left:0.5em; align-self:center; font-size:1.0em">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                <!-- user name -->
+                <label class="col-form-label" translate="">MODAL.ACCOUNT_SETTING.USERNAME</label>
                 <form class="form-inline">
                     <div class="form-group mx-sm-3 mb-2">
-                        <label for="inputPassword2" class="sr-only">Password</label>
-                        <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+                        <input type="text" class="form-control" ng-model="$ctrl.username" readonly>
                     </div>
-                    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+                    <button type="submit" class="btn btn-primary mb-2" ng-click="" translate>MODAL.COMMON.EDIT</button>
+                </form>
+                <!-- battle tag -->
+                <label class="col-form-label" translate="">MODAL.ACCOUNT_SETTING.BATTLETAG</label>
+                <form class="form-inline">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="text" class="form-control" placeholder="{{ 'MODAL.ACCOUNT_SETTING.NOT_REGISTERED_BATTLETAG' | translate }}" ng-model="$ctrl.tempBattletag" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2" ng-click="$ctrl.registerBtg()" translate>MODAL.ACCOUNT_SETTING.REGISTER</button>
+                </form>
+                <label class="col-form-label" translate="">MODAL.ACCOUNT_SETTING.PASSWORD</label>
+                <form class="m-l-15">
+                    <label class="col-form-label" translate="">MODAL.ACCOUNT_SETTING.PASSWORD_EDIT</label>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="$ctrl.tempPassword">
+                    </div>
+                    <label class="col-form-label" translate="">MODAL.ACCOUNT_SETTING.PASSWORD_EDIT_CONFIRM</label>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="$ctrl.tempPassword2">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="$ctrl.signIn()">Sign In</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.onSettingSaveChanges()" translate>MODAL.ACCOUNT_SETTING.SAVE_CHANGES</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" translate>MODAL.COMMON.CLOSE</button>
             </div>
         </div>
     </div>
 </div>
+

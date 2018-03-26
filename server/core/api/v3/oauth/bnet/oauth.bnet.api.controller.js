@@ -5,7 +5,7 @@ exports.authenticate = function () {
     passport.authenticate('bnet');
 }
 
-exports.callback = function callback(req, res) {
+exports.callback = function (req, res) {
     const profile = req.profile;
-    res.json({profile : profile});
+    res.render('callback', {result : JSON.stringify(profile)});
 }

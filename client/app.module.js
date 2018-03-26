@@ -1,14 +1,15 @@
 'use strict';
 
-/* expose global variable */
-require("expose-loader?$!jquery");
-require("expose-loader?$!popper.js");
-
-/* Using bootstrap */
+/* import bootstrap css */
 // require('bootstrap/dist/css/bootstrap.css');
-// require('bootstrap/dist/js/bootstrap.min.js');
-/* or use ui-bootstrap */
-// import uiBootStrap from 'angular1-ui-bootstrap4';
+
+/* import bootstrap js */
+require("expose-loader?$!jquery");
+require("expose-loader?popper!popper.js");
+require('bootstrap/dist/js/bootstrap.min.js');
+
+/* import d3 js */
+require("expose-loader?d3!d3");
 
 // import ngAnimate from 'angular-animate';
 // import ngTouch from 'angular-touch';

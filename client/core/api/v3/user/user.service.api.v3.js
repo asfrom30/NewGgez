@@ -14,9 +14,15 @@ export default angular
 
         
         const User = $resource(api, {}, {
-            getStatus :{
+            get : {
                 method : 'GET',
-                url : api + '/status',
+            },
+            update : {
+                method : 'PUT',
+            },
+            getStatus : {
+                method : 'GET',
+                url : api + '/status'
             },
             signIn : {
                 method : 'POST',

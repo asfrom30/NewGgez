@@ -14,6 +14,10 @@ const UserSchema = new mongoose.Schema({
         unique : false,
         trim: true
     },
+    battletag: {
+        type: String,
+        trim: true
+    },
     password: {
         type: String,
         required: true,
@@ -33,12 +37,19 @@ module.exports.createUser = function(newUser, callback){
 //hashing a password before saving it to the database
 UserSchema.pre('save', function (next) {
     const user = this;
-    const salt= bcrypt.genSaltSync(5);
-    // bcrypt.hashSync(user.password, bcrypt.genSalt)
-    console.log(salt);
-    user.password = bcrypt.hashSync(user.password, salt, null);
+    user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(5), null);
     next();
 });
+
+UserSchema.pre('findOneAndUpdate', function (next) {
+    const user = this;
+
+    if(user._update.password) {
+        user._update.password = bcrypt.hashSync(user._update.password, bcrypt.genSaltSync(5), null);
+    }   
+    next();
+});
+
 
 UserSchema.methods.encryptPassword = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
@@ -49,5 +60,6 @@ UserSchema.methods.validPassword = function (password) {
 };
 
 const User = mongoose.model('User', UserSchema);
+
 module.exports = User;
 

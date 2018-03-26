@@ -9,6 +9,7 @@ const MongoStore = require('connect-mongo')(session);
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const passport = require('passport');
+const exphbs = require('express-handlebars');
 
 const methodOverride = require('method-override');
 const validator = require('express-validator');
@@ -59,12 +60,9 @@ export default function (app) {
     app.use(express.static(app.get('appPath')));
 
     // Set default view engines
-    // app.set('views', `${config.root}/server/views`);
-    // app.engine('html', require('ejs').renderFile);
-    /* custom */
-    app.set('views', './app/views');
-    // app.set('view engine', 'html');
-    app.set('view engine', 'ejs');
+    app.set('views', path.join(__dirname, '../views'));
+    app.engine('handlebars', exphbs( /* { defaultLayout: 'layout' } */));
+    app.set('view engine', 'handlebars');
 
     /**
      * Lusca - express server security
@@ -109,13 +107,13 @@ export default function (app) {
             db: config.mongo.collectionName.sessions,
         })
     }));
-    
+
     // passport setting
     passportSetup(app);
 
-    
+
     //TODO: REMAINING SETTING
-     // app.use(shrinkRay());
+    // app.use(shrinkRay());
 
     /* Build Client using webpack middle-ware */
     const needWebpack = true;

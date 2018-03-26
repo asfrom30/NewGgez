@@ -1,5 +1,9 @@
 export default {
     MODAL :{
+        COMMON : {
+            CLOSE : "닫기",
+            EDIT : "수정",
+        },
         I18N : {
             HEADER : "언어 선택",
             LANG_KR : "한국어",
@@ -9,6 +13,18 @@ export default {
         },
         SIGNIN : {
             HEADER : "로그인"
+        },
+        ACCOUNT_SETTING : {
+            HEADER : "계정설정",
+            USERNAME : "유저이름",
+            BATTLETAG : "배틀태그",
+            PASSWORD : "패스워드",
+            PASSWORD_EDIT : "패스워드 수정",
+            PASSWORD_EDIT_CONFIRM : "패스워드 수정 확인",
+            REGISTER : "등록",
+            EDIT : "수정",
+            SAVE_CHANGES : "변경사항 저장",
+            NOT_REGISTERED_BATTLETAG : "등록된 배틀태그가 없습니다.",
         }
     },
     NAV : {

@@ -9,8 +9,6 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-
-
 router.post('/signup', function (req, res) {
 
     const email = req.body.email;
@@ -78,7 +76,29 @@ router.get('/status', function (req, res, next) {
 })
 
 
+router.get('/', function (req, res, next) {
+    if (req.isAuthenticated()) {
+        res.json({result : req.user});
+    } else {
+        res.json({result : null});
+    }
+})
+
+router.put('/', function(req, res, next) {
+    if(!req.isAuthenticated()) res.status(401).json({err_msg : "not_logged_in"});
+
+    const email = req.user.email;
+
+    const doc = {};
+    if(req.body.password) doc.password = req.body.password + '';
+    if(req.body.battletag) doc.battletag = req.body.battletag;
 
 
+    User.findOneAndUpdate({email : email}, doc).then(result => {
+        return res.status(200).json({result : true, msg : 'USER_ACCOUNT_UPDATE_SUCCESS'});
+    }, reason => {
+        return res.status(500).json({errMsg : 'INTERNAL_SERVER_ERROR', errReason : reason});
+    })
+})
 
 module.exports = router;

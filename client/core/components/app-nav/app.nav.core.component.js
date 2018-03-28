@@ -145,6 +145,10 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
         })
     }
 
+    $ctrl.test = function() {
+        console.log('hi');
+    }
+
     function onSignupModalBtn() {
         $ctrl.register.userName = undefined;
         $ctrl.register.email = undefined;

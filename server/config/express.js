@@ -49,7 +49,7 @@ export default function (app) {
 
     // Set cors
     if (env !== 'production') {
-        console.info('setting up cross origin resource sharing');
+        console.info('set up complete cross origin for resource sharing');
         app.use(cors());
     }
 
@@ -128,13 +128,6 @@ export default function (app) {
         const compiler = webpack(webpackDevConfig);
         const browserSync = require('browser-sync').create();
 
-        //FIXME: why without this code. can call assets/images...
-        // app.use(webpackDevMiddleware(compiler, {
-        //     publicPath: webpackDevConfig.output.publicPath
-        // }));
-        /**
-         * Run Browsersync and use middleware for Hot Module Replacement
-         */
         browserSync.init({
             open: false,
             logFileChanges: false,

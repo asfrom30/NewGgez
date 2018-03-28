@@ -3,12 +3,8 @@
 /* import bootstrap css */
 // require('bootstrap/dist/css/bootstrap.css');
 
-/* import bootstrap js */
+/** Expose package */
 require("expose-loader?$!jquery");
-require("expose-loader?popper!popper.js");
-require('bootstrap/dist/js/bootstrap.min.js');
-
-/* import d3 js */
 require("expose-loader?d3!d3");
 
 // import ngAnimate from 'angular-animate';
@@ -38,6 +34,7 @@ import constants from './app.constants';
 import CommonsModule from './commons/commons.module';
 /* App Core */
 import appCore from './core/core.module';
+
 /* Version */
 // Declare app level module which depends on views, and components
 

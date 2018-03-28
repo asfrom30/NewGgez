@@ -16,12 +16,9 @@ const VENDOR_LIBS = [
   "angular-route",
   "angular-sanitize",
   "angular-socket-io",
-  "angular-ui-router",
   "angular-validation-match",
-  'jquery',
   'popper.js',
   'bootstrap',
-  "d3",
   "d3-selection",
   "fast-json-patch",
   "jquery-knob",
@@ -29,6 +26,9 @@ const VENDOR_LIBS = [
   "moment",
   "noty",
   "numeral",
+  /* below package is declared in entry.js for exposing */
+  // 'jquery',
+  // "d3",
 ]
 
 const config = {
@@ -37,12 +37,8 @@ const config = {
       vendor : VENDOR_LIBS,
     },
     output: {
-        path: path.resolve(__dirname, 'dist'), // absolute path with Path module
-            // path.resolve() return correct path whatever on mac and window
-            // __ is constant in nodejs
+        path: path.resolve(__dirname, 'dist'), // absolute path with Path module, path.resolve() return correct path whatever on mac and window
         filename: '[name].[chunkhash].js',
-        // path : '/',
-        publicPath : '/'
     },
     module: {
         rules: [

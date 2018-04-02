@@ -9,8 +9,16 @@
 
 
 /* list structure */
-.comment {
+.freeboard-detail-container .comment-list {
     min-height: 40px;
     margin-bottom: 10px;
     border-bottom: 1px solid grey;
+}
+
+.freeboard-detail-container .comment-writer {
+    padding-top : 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border : 1px solid grey;
 }

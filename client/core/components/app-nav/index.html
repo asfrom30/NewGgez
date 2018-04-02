@@ -15,7 +15,7 @@
             </button>
             <div class="dropdown-menu align-right">
                 <div ng-if="!$ctrl.isSignin">
-                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#register-modal" ng-click="$ctrl.onSignupModalBtn()">Register</button>
+                    <button id="first-click" class="dropdown-item" type="button" data-toggle="modal" data-target="#register-modal" ng-click="$ctrl.onSignupModalBtn()">Register</button>
                     <button class="dropdown-item" type="button" data-toggle="modal" data-target="#signin-modal" ng-click="$ctrl.onSigninModalBtn()">Sign In</button>
                 </div>
                 <div ng-if="$ctrl.isSignin">
@@ -87,14 +87,19 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
+                <form name="$ctrl.registerForm">
+                    <div>
                         <label class="col-form-label" translate>REGISTER.USER_NAME</label>
-                        <input type="text" class="form-control" ng-model="$ctrl.register.userName">
+                        <input type="text" class="form-control" name="userName" ng-model="$ctrl.register.userName" ng-class="{'is-invalid' : $ctrl.errors.userName}">
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" translate>REGISTER.EMAIL</label>
                         <input type="text" class="form-control" ng-model="$ctrl.register.email">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="col-form-label" translate>REGISTER.EMAIL_INVITATION_CODE</label>
+                        <input type="text" class="form-control" ng-model="$ctrl.register.invitationCode">
+                        <button type="submit" class="btn btn-primary mb-2" ng-click="$ctrl.onRequestInvitation()" translate>MODAL.COMMON.REQUEST</button>
                     </div>
                     <div class="form-group has-danger">
                         <label class="col-form-label" translate>REGISTER.PASSWORD</label>
@@ -107,7 +112,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="$ctrl.signUp()">Register</button>
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.onSignUp()">Register</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
             </div>
         </div>
@@ -129,11 +134,11 @@
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">E-Mail :</label>
                         <input type="text" class="form-control" ng-model="$ctrl.email">
-                    </div>
+                </div>
                     <div class="form-group has-danger">
                         <label for="recipient-name" class="col-form-label">PASSWORD : </label>
-                        <input type="password" class="form-control" ng-class="{'is-invalid' : $ctrl.wrongPassword}" ng-model="$ctrl.password">
-                        <div ng-show="$ctrl.wrongPassword" class="invalid-feedback">
+                        <input type="password" class="form-control" ng-class="{'is-invalid' : $ctrl.register.invalid.wrongPassword}" ng-model="$ctrl.password">
+                        <div ng-show="$ctrl.register.invalid.wrongPassword" class="invalid-feedback">
                             Wrong Password
                         </div>
                     </div>

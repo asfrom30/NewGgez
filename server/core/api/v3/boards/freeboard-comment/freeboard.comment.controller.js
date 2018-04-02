@@ -7,7 +7,7 @@ const FreeboardComment = mongoose.model('FreeboardComment');
 
 
 // register Comment
-exports.registerComment = function (req, res, next) {
+exports.save = function (req, res, next) {
 
     // authenticate check
 
@@ -23,12 +23,20 @@ exports.registerComment = function (req, res, next) {
 
     Promise.resolve().then(() => {
         return comment.save();
-    }).then(() => {
+    }).then(result => {
         freeboard.comments.push(comment);
-        freeboard.comment_count = freeboard.comments.length;
+        freeboard.commentCount = freeboard.comments.length;
         return freeboard.save();
     }).then(() => {
-        res.json({ msg: 'save successfully' });
+        return FreeboardComment
+            .findOne({_id : comment._id})
+            .populate({
+                path: 'owner',
+                model: 'User',
+                select : ['_id', 'username'],
+            });
+    }).then(currentComment => {
+        res.json({ msg: 'save successfully', result : currentComment});
     }).catch(reason => {
         res.status(500).json({ err: 'internal server error' });
     })

@@ -24,7 +24,7 @@ import TierDatasModule from './v3/tier-datas/api.tier.datas.service';
 import FavoritesApiModule from './v3/favorites/api.favorites.service';
 import ThumbsApiModule from './v3/thumbs/api.thumbs.service';
 
-import FreeboardApiModule from './v3/freeboard/freeboard.service.api.v3';
+import FreeboardApiModule from './v3/freeboard/freeboard.client.api.v3';
 import UserApiModule from './v3/user/user.service.api.v3';
 
 

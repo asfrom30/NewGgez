@@ -87,8 +87,9 @@ export default function (app) {
     app.use(methodOverride());
 
     // cookie and body parser setting
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({limit: '1mb'}));
     app.use(bodyParser.urlencoded({
+        limit: '1mb',
         extended: true, // This object will contain key-value pairs, where the value can be a string or array (when extended is false), or any type (when extended is true)
     }));
     app.use(cookieParser());
@@ -116,7 +117,7 @@ export default function (app) {
     // app.use(shrinkRay());
 
     /* Build Client using webpack middle-ware */
-    const needWebpack = true;
+    const needWebpack = false;
     if (!needWebpack) console.warn('Webpack middleware flag is off');
     if (needWebpack && process.env.NODE_ENV === 'development') {
         console.info('Webpack middleware is running');

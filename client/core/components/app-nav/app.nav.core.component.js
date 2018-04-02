@@ -22,9 +22,12 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
     };
 
     const notyMsg = {
+        SIGN_IN_SUCCESS : "NOTY.ACCOUNT_SETTING.SIGN_IN_SUCCESS",
+        SIGN_IN_FAIL : "NOTY.ACCOUNT_SETTING.SIGN_IN_FAIL",
+        SIGN_OUT_SUCCESS : "NOTY.ACCOUNT_SETTING.SIGN_OUT_SUCCESS",
+        SIGN_OUT_FAIL : "NOTY.ACCOUNT_SETTING.SIGN_OUT_FAIL",
         SAVE_CHANGES_SUCCESS : "SAVE_CHANGES_SUCCESS",
         SAVE_CHANGES_FAIL : "SAVE_CHANGES_FAIL",
-
     }
 
     let authBusyFlag = false;
@@ -35,13 +38,16 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
     $ctrl.onSignupModalBtn = onSignupModalBtn;
     $ctrl.onSigninModalBtn = onSigninModalBtn;
     $ctrl.onSettingModalBtn = onSettingModalBtn;
-    $ctrl.signIn = signIn;
-    $ctrl.signUp = signUp;
+    $ctrl.onSettingSaveChanges = onSettingSaveChanges;
+    $ctrl.onRequestInvitation = onRequestInvitation;
+    $ctrl.signIn = onSignIn;
+    $ctrl.onSignUp = onSignUp;
     $ctrl.signOut = signOut;
     $ctrl.registerBtg = registerBtg;
-    $ctrl.onSettingSaveChanges = onSettingSaveChanges;
 
     $ctrl.$onInit = function () {
+        
+        $ctrl.register = {};
 
         // check user status
         User.getStatus().$promise.then(result => {
@@ -51,9 +57,9 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
 
         });
 
-        $timeout(function(){
-            $element.find("#first-click").click();
-        }, 300)
+        // $timeout(function(){
+        //     $element.find("#first-click").click();
+        // }, 300)
     }
 
     function goRandomPage() {
@@ -115,33 +121,39 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
 
             hideElement($_spinner);
         }, reason => {
-            console.log(reason);
             hideElement($_spinner);
         });
     }
 
-    function signIn() {
+    function onSignIn() {
         const email = $ctrl.email;
         const password = $ctrl.password;
         User.signIn({ email: email, password: password }).$promise.then(response => {
             const isSignin = response.toJSON().result;
             if (isSignin) {
                 $(dom.signInModal).modal('hide');
-                Noty.show('sign_in_success');
+                Noty.show(notyMsg.SIGN_IN_SUCCESS);
                 $ctrl.isSignin = true;
             }
         }, reason => {
-            $ctrl.wrongPassword = true;
+            $ctrl.register.invalid = {};
+            const responseCode = reason.status;
+            const data = reason.data;
+
+            if(responseCode == 500) return Noty.show(data.errMsg, 'error');
+
+            // INVALID HANDLING...
+            $ctrl.register.invalid.wrongPassword = true;
         })
     }
 
     function signOut() {
         User.signOut().$promise.then(response => {
             const result = response.toJSON();
-            Noty.show('sign_out_success');
+            Noty.show(notyMsg.SIGN_OUT_SUCCESS);
             $ctrl.isSignin = false;
         }, reason => {
-            Noty.show('sign_out_fail');
+            Noty.show(notyMsg.SIGN_OUT_FAIL);
         })
     }
 
@@ -150,21 +162,32 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
     }
 
     function onSignupModalBtn() {
-        $ctrl.register.userName = undefined;
-        $ctrl.register.email = undefined;
-        $ctrl.register.password = undefined;
-        $ctrl.register.passwordConf = undefined;
+        $ctrl.register = {};
     }
 
-    function signUp() {
-        const userName = $ctrl.register.userName;
-        const email = $ctrl.register.email;
+    function onRequestInvitation() {
+
+        const email = $ctrl.register.email + '';
+
+        //TODO: email valid check
+        User.requestInvitation({email : email}).$promise.then(response => {
+            const result = response.toJSON();
+        }, reason => {
+            console.log(reason);
+        })
+    }
+
+    function onSignUp() {
+        const userName = $ctrl.register.userName + '';
+        const email = $ctrl.register.email + '';
         const password = $ctrl.register.password;
         const passwordConf = $ctrl.register.passwordConf;
+        const invitationCode = $ctrl.register.invitationCode;
 
         const params = {
             userName : userName,
             email : email,
+            invitationCode :invitationCode,
             password : password,
             passwordConf : passwordConf
         }
@@ -260,6 +283,7 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
             return Noty.show(notyMsg.SAVE_CHANGES_FAIL, 'error');
         })
     }
+
 
     function hideElement($_dom) {
         $_dom.hide();

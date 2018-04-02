@@ -1,3 +1,7 @@
 text-editor .ql-snow .ql-picker  {
   color : white;
 }
+
+text-editor .ql-snow .ql-picker-item {
+  color : black;
+}

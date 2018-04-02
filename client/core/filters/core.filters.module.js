@@ -1,5 +1,7 @@
 import angular from 'angular';
 import numeral from 'numeral';
+import moment from 'moment';
+import momentTz from 'moment-timezone';
 
 'use strict';
 
@@ -43,6 +45,7 @@ export default angular.module('ggez.core.filter', [])
     .filter('i18nDateIndex', i18nDateIndex)
     .filter('i18nStatIndex', i18nStatIndex)
     .filter('i18nTierIndex', i18nTierIndex)
+    .filter('isoTimeFilter', isoTimeFilter)
     .name;
 
 import { i18nDenominatorIndex } from './i18n/i18n.core.filter.module';
@@ -321,5 +324,24 @@ function absFilter() {
     return function(input) {
         if(isNaN(input)) return input;
         else return Math.abs(input);
+    }
+}
+
+function isoTimeFilter() {
+    return function (input, region) {
+        region = region || 'kr';
+
+        const momentInput = momentTz(input).tz('Asia/Seoul');
+        const momentNow = momentTz().tz('Asia/Seoul');
+
+        const diffSeconds = momentNow.unix() - momentInput.unix();
+
+        if(diffSeconds < 60*60*24*2) { // 2 days under
+            const relativeTime = momentInput.fromNow();
+            return relativeTime;
+        } else {
+            const absoluteTime = momentInput.format('YYYY MM DD, hh:mm:ss');
+            return absoluteTime;
+        }
     }
 }

@@ -340,6 +340,9 @@ export function HeroSelectorsCtrl($scope, $timeout, $element, $stateParams, Ajax
             setP2DataToHeader(result);
             changeP2PlayerData(id);
         }, reason => {
+            const responseCode = reason.status;
+            const data = reason.data;
+            if(responseCode == 500) 
             if(reason.isServerError) CoreUtils.noty(errMsg.err_server_working_is_not_properly, 'error');
             else CoreUtils.noty(errMsg.err_this_battle_tag_is_not_exist_in_server, 'warning');
         })

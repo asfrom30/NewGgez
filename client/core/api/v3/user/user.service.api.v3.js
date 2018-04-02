@@ -35,6 +35,10 @@ export default angular
             signUp : {
                 method : 'POST',
                 url : api + '/signup'
+            },
+            requestInvitation : {
+                method : 'GET',
+                url : api + '/invitation',
             }
         })
 

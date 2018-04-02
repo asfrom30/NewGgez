@@ -1,0 +1,76 @@
+<div class="freeboard-list-container">
+    <div infinite-scroll='$ctrl.loadNext()' class="freeboards-container">
+        <div ng-repeat="freeboard in $ctrl.freeboards" ng-click="$ctrl.clickFreeboard(freeboard)" class="freeboard-container w-100-pct flex f-h-center">
+            <div class="flex">
+                <div class="status-display">
+                    <div class="row-2-box row-2-box--collect status-outline status-outline--views">
+                        <div translate>WRITING.VIEWS</div>
+                        <div>{{freeboard.viewCount | defaultValue : '0'}}</div>
+                    </div>
+                </div>
+                <div class="status-display">
+                    <div class="row-2-box row-2-box--collect status-outline status-outline--upvotes">
+                        <div translate>WRITING.UPVOTES</div>
+                        <div>{{freeboard.upvoteUserCount | defaultValue : '0'}}</div>
+                    </div>
+                </div>
+                <div class="status-display">
+                    <div class="row-2-box row-2-box--collect status-outline status-outline--answers">
+                        <div translate>WRITING.ANSWERS</div>
+                        <div>{{freeboard.commentCount | defaultValue : '0'}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="summary-display summary-display--layout overflow-hidden f-grow-1">
+                <div class="summary-display--font overflow-text-ellipsis ws-nowrap">{{freeboard.title}}</div>
+                <div class="flex summary-display--sub-font ws-nowrap" style="font-size:10px; color:lightgrey">
+                    <div>{{freeboard.owner.username}}</div>
+                    <div class="m-l-10">{{freeboard.createdAt | isoTimeFilter}}</div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="$ctrl.busy">Loading data...</div>
+        <div ng-show="$ctrl.pageIndex == 'last'">Last</div>
+    </div>
+    <div class="fixed-bottom flex f-w-end f-h-center pos-relative">
+        <div id="sort-box" class="sort-box pos-absolute w-100-pct z-1000">
+        </div>
+        <div id="search-box" class="search-box pos-absolute w-100-pct z-1000 p-a-3">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item">Action</a>
+                        <a class="dropdown-item">Another action</a>
+                        <a class="dropdown-item">Something else here</a>
+                        <a class="dropdown-item">Separated link</a>
+                    </div>
+                </div>
+                <input type="text" class="form-control" ng-model="$ctrl.searchKeyword">
+                <div class="input-group-append">
+                    <button ng-click="$ctrl.onSearch()">search</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-outline-light" ng-click="$ctrl.showSearchBox()">검색</button>
+            <button type="button" class="btn btn-outline-light" ng-click="$ctrl.showSortBox()">정렬</button>
+            <button type="button" class="btn btn-outline-light" ng-click="$ctrl.goWriting()">글쓰기</button>
+            <button type="button" class="btn btn-outline-light" ng-click="$ctrl.onScrollTop()">위로</button>
+        </div>
+    </div>
+</div>
+<ul class="order-buttons nav nav-tabs justify-content-end">
+    <li class="nav-item">
+        <a class="nav-link">ORDER_RECENT</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link">ORDER_VIEWS</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link">ORDER_VOTES</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link">ORDER_COMMENTS</a>
+    </li>
+</ul>

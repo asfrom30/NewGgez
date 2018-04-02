@@ -9,7 +9,7 @@ const logFlag = false;
 //FIXME: must be separated ajax Indicator
 export default angular
     .module('core.services.ajax', [])
-    .factory('Ajax', function(AppLogger, IndexInformationApi, PlayersApi, CrawlDatasApi , TierDatasApi, FavoritesApi, ThumbsApi, CoreUtils, CONFIG){
+    .factory('Ajax', function(AppLogger, IndexInformationApi, PlayersApi, CrawlDatasApi , TierDatasApi, FavoritesApi, ThumbsApi, CoreUtils){
 
         const sessionCtrl = new SessionCtrl(FavoritesApi, ThumbsApi);
 

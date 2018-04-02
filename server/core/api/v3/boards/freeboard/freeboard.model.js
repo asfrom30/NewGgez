@@ -9,12 +9,15 @@ const FreeboardSchema = new Schema({
     title           : String,
     owner           : {type: Schema.Types.ObjectId, ref : 'User'},
     content         : Object,
+    text            : String,
     comments        : [{ type: Schema.Types.ObjectId, ref: 'FreeboardComment' }],
-    view_count      : Number,
-    upvote_count    : Number,
-    comment_count     : Number,
+    upvoteUsers     : [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    viewCount       : Number,
+    commentCount    : Number,
+    upvoteUserCount : Number,
 }, { _id: false, timestamps: true});
 
+FreeboardSchema.index({title : 'text', text : 'text'});
 FreeboardSchema.plugin(AutoIncrement);
 
 module.exports = mongoose.model('Freeboard', FreeboardSchema);

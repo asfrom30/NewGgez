@@ -1,9 +1,8 @@
 'use strict';
+require('./index.css');
 
 import angular from 'angular';
 import QuillDeltaToHtmlConverter from 'quill-delta-to-html';
-
-require('./index.html');
 
 export default angular
     .module('quill.render.common.component.module', [])
@@ -29,6 +28,5 @@ function controller($element) {
 
         const html = converter.convert();
         $element.find('.quill-render-container').html(html);
-        console.log(html);
     }
 }

@@ -1,3 +1,4 @@
+/* freeboard-template variable */
 .freeboard-template{
     margin-left: 10px;
     margin-right: 10px;
@@ -9,20 +10,24 @@
 
     /* color */
     --reply-info-font-color : lightgrey;
+
+    --fixed-bottom-height : 50px;
 }
 
 
 /* common fixed-bottom style */
-
 .freeboard-template .fixed-bottom {
     background-color: var(--gray-dark);
-    height : 50px;
+    height : var(--fixed-bottom-height);
     z-index: 1000;
+}
+
+.freeboard-template .fixed-bottom-padding {
+    height : 70px;
 }
 
 .freeboard-template .fixed-bottom button {
     height : 40px;
-    margin-right: 3px;
     overflow: hidden;
     text-overflow: ellipsis;
 }

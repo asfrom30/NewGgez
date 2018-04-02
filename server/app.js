@@ -15,6 +15,10 @@ global.appRoot = path.resolve(__dirname);
 // Init express
 const app = express();
 
+// set util dir
+const coreUtilDir = require('./core/utils');
+app.set('coreUtilDir', coreUtilDir);
+
 // Secret Key Loading
 const secrets = require('./config/secret.loader')();
 app.set('secrets', secrets);

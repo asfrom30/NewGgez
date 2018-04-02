@@ -38,7 +38,7 @@ function controller($element, $scope) {
             toolbar = [
                 [{ header: [1, 3, 5, false] }],
                 ['bold', 'italic', 'underline'],
-                ['image', 'code-block'],
+                // ['image', 'code-block'],
             ]
         }
 

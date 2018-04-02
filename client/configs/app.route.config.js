@@ -21,7 +21,7 @@ export function routeConfig($stateProvider, $urlServiceProvider) {
 
     /* Board Component*/
     $stateProvider.state(getFreeboardState());
-    $stateProvider.state(getFreeboardPageState());
+    $stateProvider.state(getFreeboardListState());
     $stateProvider.state(getFreeboardWritingState());
     $stateProvider.state(getFreeboardDetailState());
 
@@ -97,15 +97,32 @@ function getFreeboardWritingState() {
     }
 }
 
-function getFreeboardPageState() {
+/** Freeboard Infinite Scroll */
+function getFreeboardListState() {
     return {
         name: 'freeboard.list',
-        url: '/list/{pageIndex}',
+        url: '/list?keyword',
+        component: 'freeboardList',
+        resolve : {
+            freeboards : function($state, $stateParams, Freeboard) {
+                console.log($stateParams.keyword);
+                // query check? has query?
+                return Freeboard.fetchPage(1)
+            }
+        }
+    }
+}
+
+/** Freeboard Pagenation */
+function getFreeboardPageState() {
+    return {
+        name: 'freeboard.page',
+        url: '/page/{pageIndex}',
         component: 'freeboardList',
         resolve : {
             freeboards : function($state, $stateParams, Freeboard) {
                 const pageIndex = parseInt($stateParams.pageIndex);
-                
+
                 if(!isNumber(pageIndex)) {
                     $state.go('freeboard.list', {pageIndex : 1});
                     return;
@@ -123,14 +140,25 @@ function getFreeboardDetailState() {
         url: '/detail/{id}',
         component: 'freeboardDetail',
         resolve : {
-            freeboard : function($stateParams, Freeboard, Noty) {
+            freeboard : function($state, $stateParams, $timeout, Freeboard, Noty, LOG_SETTING) {
+                const logFlag = LOG_SETTING.FLAG;
                 const id = parseInt($stateParams.id);
                 
                 if(isNaN(id) || !isNumber(id)) {
                     Noty.show('INVALID_REQUEST', 'warning');
                     return;
                 } else {
-                    return Freeboard.fetchDetail(id);
+                    return Freeboard.fetchDetail(id).then(response => {
+                        const resultJson = response.toJSON();
+                        return resultJson;
+                    }, reason => {
+                        const statusCode = reason.status;
+                        const resultJson = reason.data;
+                        if(logFlag) console.log(resultJson.errLog);
+                        Noty.show(`NOTY.SERVER.${resultJson.errMsg}`, 'warning', 1000, function(){
+                            $state.go(`freeboard.list`, {}, { reload: true });
+                        });
+                    });
                 }
             }
         }

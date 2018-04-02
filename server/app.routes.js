@@ -23,6 +23,8 @@ export default function(app) {
 
   /* Auth API */
   app.use('/api/oauth', require('./core/api/v3/oauth'));
+   /* For Auth */
+  // app.use('/auth', require('./auth').default);
 
   /* Insert routes below */
   app.use('/:device/:region/players', require('./core/api/v3/player'));
@@ -36,9 +38,6 @@ export default function(app) {
   app.use('/api/freeboard', require('./core/api/v3/boards/freeboard'));
   app.use('/api/freeboard', require('./core/api/v3/boards/freeboard-comment')); // freeboard comment
 
-  
-  /* For Auth */
-  // app.use('/auth', require('./auth').default);
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
@@ -47,6 +46,6 @@ export default function(app) {
   // All other routes should redirect to the index.html
   app.route('/*')
     .get((req, res) => {
-      res.sendFile(path.resolve(`${app.get('appPath')}/index.html`));
+      res.redirect('/#!/index');
     });
 }

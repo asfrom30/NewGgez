@@ -14,9 +14,10 @@
     margin-right: 2px;
 }
 
-.freeboard-container .summary-display {
+.freeboard-container .summary-display--layout {
     height: 43px;
     margin-left: 5px;
+
 }
 
 
@@ -26,12 +27,12 @@
 }
 
 
-.freeboard-container .title-font {
+.freeboard-container .summary-display--font {
     font-size:18px;
 }
 
 
-.freeboard-container .sub-title-font {
+.freeboard-container .summary-display--sub-font {
     font-size:10px;
     color:lightgrey
 }
@@ -65,4 +66,16 @@
 
 .status-outline--answers {
     --color : yellow;
+}
+
+/** sort view */
+.freeboard-list-container .sort-box {
+    bottom : var(--fixed-bottom-height);
+    height: 50px;
+}
+
+/** search view */
+.freeboard-list-container .search-box {
+    bottom : var(--fixed-bottom-height);
+    height: 50px;
 }

@@ -59,4 +59,4 @@ angular.module('ggezkrApp', [ngResource,
   'ngInject';
   $rootScope.CONST = CONST;
   $('#indicator-in-index-page').hide();
-});;
+});

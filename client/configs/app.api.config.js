@@ -1,4 +1,6 @@
 
+
+// FIXME: should be moved in const/settings(need to refactor)
 const port = 9003;
 
 module.exports = {

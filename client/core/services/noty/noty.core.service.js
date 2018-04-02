@@ -6,7 +6,7 @@ import Noty from 'noty';
 
 export default angular
     .module('noty.core.service.module', [])
-    .factory('Noty', function(){
+    .factory('Noty', function($translate){
 
         const theme = 'sunset';
 
@@ -16,12 +16,19 @@ export default angular
                     theme : theme,
                     type : type || 'info',
                     timeout : timeout || 1500,
-                    text : text,
                     callbacks: {
                         onClose: onClose,
                     }
                 }
-                new Noty(setting).show();
+
+                $translate(text).then(result => {
+                    return result; // translated text
+                }, reason => {
+                    return reason; // not translated text
+                }).then(text => {
+                    setting.text = text;
+                    new Noty(setting).show();
+                })
             },
         }
     }).name;

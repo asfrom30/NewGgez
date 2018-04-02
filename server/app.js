@@ -27,7 +27,7 @@ app.set('secrets', secrets);
 const mongooseSetup = require('./config/mongoose.setup')();
 
 // Express and Webpack Setup 
-const expressSetup = require('./config/express').default(app);
+const expressSetup = require('./config/express.setup').default(app);
 // socektSetup();
 
 // Router Setup

@@ -117,7 +117,7 @@ export default function (app) {
     // app.use(shrinkRay());
 
     /* Build Client using webpack middle-ware */
-    const needWebpack = false;
+    const needWebpack = true;
     if (!needWebpack) console.warn('Webpack middleware flag is off');
     if (needWebpack && process.env.NODE_ENV === 'development') {
         console.info('Webpack middleware is running');

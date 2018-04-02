@@ -25,8 +25,8 @@ server-cron/.smtp
 sandbox
 
 /* secret */
-/server/config
-/server-cron/config
+/server/config/environment
+/server-cron/config/environment
 
 .secrets
 

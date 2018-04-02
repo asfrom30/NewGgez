@@ -15,7 +15,6 @@ import http from 'http';
 import del from 'del';
 import through2 from 'through2';
 import webpack from 'webpack-stream';
-// import makeWebpackConfig from './webpack.make'; // depreacted in webpack 4.0.
 
 import grunt from 'grunt';
 import open from 'open';

@@ -37,7 +37,7 @@ const config = {
       vendor : VENDOR_LIBS,
     },
     output: {
-        path: path.resolve(__dirname, 'dist'), // absolute path with Path module, path.resolve() return correct path whatever on mac and window
+        path: path.resolve(__dirname, '../dist/client'), // absolute path with Path module, path.resolve() return correct path whatever on mac and window
         filename: '[name].[chunkhash].js',
     },
     module: {

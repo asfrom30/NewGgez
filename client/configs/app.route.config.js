@@ -104,8 +104,9 @@ function getFreeboardListState() {
         url: '/list?keyword',
         component: 'freeboardList',
         resolve : {
-            freeboards : function($state, $stateParams, Freeboard) {
-                console.log($stateParams.keyword);
+            freeboards : function(LOG_SETTING, $state, $stateParams, Freeboard) {
+                const logFlag = LOG_SETTING.FLAG; 
+                if(logFlag) console.log($stateParams.keyword);
                 // query check? has query?
                 return Freeboard.fetchPage(1)
             }

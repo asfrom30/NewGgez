@@ -24,7 +24,7 @@
     "nodemon": "^1.12.1"
   },
   "scripts": {
-    "build:stat-map" : "node ./const/stat-map-builder/index.js",
+    "build:stat-map": "node ./const/stat-map-builder/index.js",
     "nodemon:dev": "set NODE_ENV=development & nodemon ./index.js",
     "node:dev": "set NODE_ENV=development & node ./index.js",
     "node:prod": "set NODE_ENV=production & node ./index.js",

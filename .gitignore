@@ -12,6 +12,7 @@ tmp
 /* dist */
 /.tmp
 /dist
+/dist.dryrun
 
 /* ops */
 .ssh/**

@@ -125,7 +125,7 @@ export default function (app) {
         const webpack = require('webpack');
         const stripAnsi = require('strip-ansi');
         const webpackDevMiddleware = require('webpack-dev-middleware');
-        const webpackDevConfig = require('../../webpack.dev');
+        const webpackDevConfig = require('../../.webpack/webpack.dev');
         const compiler = webpack(webpackDevConfig);
         const browserSync = require('browser-sync').create();
 

@@ -1,6 +1,31 @@
 
 
-# Gulp Instruction
+# Build
+* pre
+    * clean local
+* build
+    * server
+        * transpile
+        * copy extras
+    * clinet
+        * assets
+        * webpakc
+
+# Deploy
+* pre
+    * clean remote
+* build
+
+# Run (only server)
+* pre
+    * npm install
+* run 
+    * local
+        * development
+        * dist
+    * remote
+        * production
+        * dryrun
 
 ## Manual Full build
 ```

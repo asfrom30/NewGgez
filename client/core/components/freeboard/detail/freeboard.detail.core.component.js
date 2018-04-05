@@ -1,5 +1,5 @@
 'use strict';
-require('./index.css');
+// require('./index.css');
 
 import angular from 'angular';
 

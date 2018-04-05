@@ -1,11 +1,13 @@
-<div class="freeboard-writing-container">
-    <input type="text" class="form-control" placeholder="{{ 'WRITING.TITLE_PLACE_HOLDER' | translate }}" ng-model="$ctrl.title">
-    <div class="content-container">
+<div class="freeboard-writing">
+    <input type="text" class="freeboard-writing__title form-control" placeholder="{{ 'WRITING.TITLE_PLACE_HOLDER' | translate }}" ng-model="$ctrl.title">
+    <div class="freeboard-writing__content">
         <text-editor content-messenger="$ctrl.contentMessenger"></text-editor>
     </div>
-    <div class="fixed-bottom flex f-w-end f-h-center">
-        <button type="button" class="btn btn-outline-warning" ng-click="$ctrl.onTempPost()" translate>WRITING.TEMPORARY_SAVE</button>
-        <button type="button" class="btn btn-outline-success" ng-click="$ctrl.onSave()" translate>WRITING.WRITE</button>
-        <button type="button" class="btn btn-outline-danger" ng-click="$ctrl.onPost()" translate>WRITING.CANCLE</button>
+    <div class="fixed-bottom fixed-bottom--static-in-desktop fixed-bottom--freeboard flex f-w-end f-h-center">
+        <div>
+            <!-- <button type="button" class="btn btn-outline-warning fixed-bottom--freeboard__btn" ng-click="$ctrl.onTempPost()" translate>WRITING.TEMPORARY_SAVE</button> -->
+            <button type="button" class="btn btn-outline-success fixed-bottom--freeboard__btn" ng-click="$ctrl.onPost()" translate>WRITING.WRITE</button>
+            <button type="button" class="btn btn-outline-danger fixed-bottom--freeboard__btn m-r-5" ng-click="$ctrl.onCancle()" translate>WRITING.CANCLE</button>
+        </div>
     </div>
 </div>

@@ -1,7 +1,6 @@
 'use strict';
 
 import angular from 'angular';
-require('./index.css');
 
 export default angular.module('freeboard.list.core.component.module', [])
     .component('freeboardList', {

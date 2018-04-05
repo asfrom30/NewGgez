@@ -41,7 +41,7 @@ exports = module.exports = app;
 
 // Start server
 function startServer() {
-    const httpsMode = true;
+    const httpsMode = false;
 
     let server;
     if(httpsMode) {

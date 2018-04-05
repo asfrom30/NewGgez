@@ -51,7 +51,7 @@
 .display-none{ display:none; }
 .flex{ display:-webkit-box; display:-ms-flexbox; display:flex; }
 .flex-wrap{display:flex; flex-wrap: wrap;}
-.flex-column { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:vertical; -webkit-box-direction:normal; -ms-flex-direction:column; flex-direction:column; }
+.flex--column { -webkit-box-orient:vertical; -webkit-box-direction:normal; -ms-flex-direction:column; flex-direction:column; }
 .flex-row-wrap { display:-webkit-box; display:-ms-flexbox; display:flex; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -ms-flex-flow:row wrap; flex-flow:row wrap; }
 
 .f-wh-center {-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center; -webkit-box-align:center;-ms-flex-align:center;align-items:center;}
@@ -70,6 +70,12 @@
 .f-h-start-self {-ms-flex-item-align:start;align-self:flex-start; }
 .f-h-end-self {-ms-flex-item-align:end;align-self:flex-end; }
 
+/* flew order */
+.order-1 { order : -1; }
+.order-2 { order : -2; }
+.order-3 { order : -3; }
+
+/* flex grow */
 .f-grow-1 {flex-grow: 1};
 
  /* View Port */
@@ -302,7 +308,19 @@
     position    : fixed;
     left        : 0px;
     bottom      : 0px;
+    z-index: 1000;
 }
+
+@media (min-width: 768px) {
+    .fixed-bottom--hide-in-desktop {
+        display: none;
+    }
+
+    .fixed-bottom--static-in-desktop {
+        position : static; 
+    }
+}
+
 
 /* Bootstrap button group same width pattern */
 .player-selector .btn-group {

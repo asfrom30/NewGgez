@@ -1,7 +1,7 @@
 'use strict';
 
 import angular from 'angular';
-require('./styles/index.css');
+// require('./index.css');
 
 export default angular
     .module('myModule', [])
@@ -15,8 +15,9 @@ function controller($state, $element, Freeboard, Noty, CoreUtils, rules, LOG_SET
     
     const $ctrl = this;
     const logFlag = LOG_SETTING.FLAG
-    $ctrl.onSave = onSave;
     $ctrl.onTempPost = onTempPost;
+    $ctrl.onPost = onPost;
+    $ctrl.onCancle = onCancle;
 
     const NOTY_MSG = {
         WRITING_SUCCESS : 'NOTY.FREEBOARD.WRITING_SUCCESS',
@@ -30,7 +31,7 @@ function controller($state, $element, Freeboard, Noty, CoreUtils, rules, LOG_SET
     /**
      * Event
      */
-    function onSave() {
+    function onPost() {
 
         const title = $ctrl.title;
         const contentLength = getContentMessenger().getLength();
@@ -55,6 +56,10 @@ function controller($state, $element, Freeboard, Noty, CoreUtils, rules, LOG_SET
 
     function onTempPost() {
         
+    }
+
+    function onCancle() {
+        window.history.back();
     }
 
     /**

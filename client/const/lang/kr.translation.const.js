@@ -60,6 +60,12 @@ export default {
         SCRIM : '스크림'
     },
     FREEBOARD : {
+        LIST : {
+            SEARCH : "검색",
+            SORT : "정렬",
+            WRITING : "글쓰기",
+            UP : "위로",
+        },
         DETAIL : {
             UPVOTE : '추천',
             MODIFY : '수정',

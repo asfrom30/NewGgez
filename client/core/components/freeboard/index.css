@@ -1,33 +1,189 @@
-/* freeboard-template variable */
-.freeboard-template{
+/** freeboard variables */
+.freeboard-template {
+    /* color */
+    --reply-info-font-color: lightgrey;
+    --fixed-bottom-height: 50px;
+}
+
+
+
+
+
+
+/* freeboard-template Block */
+.freeboard-template {
     margin-left: 10px;
     margin-right: 10px;
+    max-width: 768px;
 }
 
-.freeboard-template {
-    --reply-info-font-size : 10px;
-    --reply-content-font-size : 15px;
+@media (min-width: 768px) {
+    .freeboard-template   {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
 
-    /* color */
-    --reply-info-font-color : lightgrey;
+.freeboard-template__top-padding {
+    width: 100%;
+    height:60px;
+}
 
-    --fixed-bottom-height : 50px;
+.freeboard-template__bottom-padding {
+    width: 100%;
+    height: 70px;
 }
 
 
-/* common fixed-bottom style */
-.freeboard-template .fixed-bottom {
-    background-color: var(--gray-dark);
-    height : var(--fixed-bottom-height);
-    z-index: 1000;
+
+
+
+
+/* freeboard-writing */
+.freeboard-writing {
+    height : calc(100vh - var(--margin-for-header));
+}
+.freeboard-writing__title {
+    height : 35px;
+    margin-bottom: 10px;
+}
+/*
+// Quill Size Description
+// `ql-container` height is already setted at 100%.
+// it means. when you set the parent size. total edital size should be 100% + 42px(toolbar size)
+// So if you wan to fit size to parent, you must override the ql-container size (100% - 42px)
+*/
+
+.freeboard-writing__content {
+    height : calc(100% - 115px);
 }
 
-.freeboard-template .fixed-bottom-padding {
+.freeboard-writing__content .ql-container {
+    height : calc(100% - 42px);
+}
+
+
+/* freeboard-list Block */
+.freeboard-list {
     height : 70px;
+    border-bottom: 1px solid gray;
 }
 
-.freeboard-template .fixed-bottom button {
-    height : 40px;
+.freeboard-list__status {
+    width : 43px;
+    height: 43px;
+    margin-left: 2px;
+    margin-right: 2px;
+    font-size : 10px;
+    border : 1px solid var(--color, white);
+    border-radius: 10%;
+}
+
+.freeboard-list__status--views {
+    --color : red;
+}
+
+.freeboard-list__status--upvotes {
+    --color : magenta;
+}
+
+.freeboard-list__status--answers {
+    --color : yellow;
+}
+
+.freeboard-list__summary-box {
+    height: 43px;
+    margin-left: 5px;
+}
+
+.freeboard-list__title {
+    font-size:18px;
+}
+
+.freeboard-list__info {
+    font-size:10px;
+    color:lightgrey;
+}
+
+/** freeboard detail */
+
+
+/** freeboard comments */
+.freeboard-comment {
+    margin: 10px 10px 0px 10px
+}
+@media (min-width: 768px) {
+    .freeboard-comment {
+        margin: 20px 20px 0px 20px
+    }
+}
+
+.freeboard-comment__repeat {
+    --reply-info-font-size: 10px;
+    --reply-content-font-size: 15px;
+    min-height: 40px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid grey;
+}
+
+.freeboard-comment__content {
+    font-size: var(--reply-content-font-size);
+}
+
+.freeboard-comment__info {
+    font-size: var(--reply-info-font-size);
+    color : var(--reply-info-font-color);
+}
+
+/** freeboard-comment-writer */
+.freeboard-comment-writer {
+    padding-top : 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border : 1px solid grey;
+}
+
+/** fixed-bottom Block */
+.fixed-bottom--freeboard {
+    background-color: var(--gray-dark);
+    height: var(--fixed-bottom-height);
+}
+
+@media (min-width: 768px) {
+    .fixed-bottom--freeboard {
+        background-color: transparent;
+    }
+}
+
+.fixed-bottom--freeboard__btn {
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fixed-bottom--freeboard__search-box {
+    bottom : var(--fixed-bottom-height);
+    height: 50px;
+    width : 100%;
+}
+
+.fixed-bottom--freeboard__sort-box {
+    bottom : var(--fixed-bottom-height);
+    height: 50px;
+    width : 100%;
+}
+
+
+/** freeboard control */
+@media (max-width: 767px) {
+    .freeboard-control--desktop {
+        display: none;
+    }
+}
+
+.freeboard-control__btn {
+    height: 40px;
     overflow: hidden;
     text-overflow: ellipsis;
 }

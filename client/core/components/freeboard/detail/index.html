@@ -1,11 +1,28 @@
 <div class="flex flex--column">
 
-    <!-- content -->
+    <!-- freeboard -->
     <div class="order-1">
+        <!-- title -->
         <h1 class="title wb-break-word">{{$ctrl.freeboard.title}}</h1>
+        <!-- owner info -->
+        <div class="freeboard-user-profile">
+            <div class="flex freeboard-user-profile__upper">
+                <img class="freeboard-user-profile__tier-img" ng-src="{{$ctrl.freeboard.owner.cptpt | tierImageSrc}}"/>
+                <img class="freeboard-user-profile__hero-img" ng-src="{{$ctrl.freeboard.owner.most | heroImageSrc}}"/>
+                <div class="freeboard-user-profile__names row-2 row-2--collect">
+                    <div>{{$ctrl.freeboard.owner.username}}</div>
+                    <div>{{$ctrl.freeboard.owner.battleName}}</div>
+                </div>
+            </div>
+            <div class="flex freeboard-user-profile__lower">
+                <div class="flex f-wh-center"><span translate>FREEBOARD.DETAIL.CREATED_AT</span> : {{$ctrl.freeboard.createdAt | isoTimeFilter}}</div>
+                <div class="flex f-wh-center"><span translate>FREEBOARD.DETAIL.VIEW_COUNT</span> : {{$ctrl.freeboard.viewCount | defaultValue : 0}}</div>
+                <div class="flex f-wh-center"><span translate>FREEBOARD.DETAIL.UPVOTE_COUNT</span> : {{$ctrl.freeboard.upvoteCount | defaultValue : 0}}</div>
+            </div>
+        </div>
+        <!-- content -->
         <quill-render delta="$ctrl.freeboard.content"></quill-render>
     </div>
-
 
     <!-- comment list-->
     <div class="freeboard-comment">
@@ -17,6 +34,7 @@
             </div>
         </div>
     </div>
+
     <!-- comment -->
     <div class="freeboard-comment-writer">
         <div class="form-group">

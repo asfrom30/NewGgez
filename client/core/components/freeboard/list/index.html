@@ -11,19 +11,19 @@
         <div ng-repeat="freeboard in $ctrl.freeboards" ng-click="$ctrl.clickFreeboard(freeboard)" class="freeboard-list w-100-pct flex f-h-center">
             <div class="flex">
                 <div class="freeboard-list__status freeboard-list__status--views">
-                    <div class="row-2-box row-2-box--collect">
+                    <div class="row-2 row-2--collect">
                         <div translate>WRITING.VIEWS</div>
                         <div>{{freeboard.viewCount | defaultValue : '0'}}</div>
                     </div>
                 </div>
                 <div class="freeboard-list__status freeboard-list__status--upvotes">
-                    <div class="row-2-box row-2-box--collect">
+                    <div class="row-2 row-2--collect">
                         <div translate>WRITING.UPVOTES</div>
                         <div>{{freeboard.upvoteUserCount | defaultValue : '0'}}</div>
                     </div>
                 </div>
                 <div class="freeboard-list__status freeboard-list__status--answers">
-                    <div class="row-2-box row-2-box--collect">
+                    <div class="row-2 row-2--collect">
                         <div translate>WRITING.ANSWERS</div>
                         <div>{{freeboard.commentCount | defaultValue : '0'}}</div>
                     </div>

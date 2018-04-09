@@ -8,13 +8,17 @@ const UserSchema = new mongoose.Schema({
         require: true,
         trim: true,
     },
-    username: {
+    userName: {
         type: String,
         required: true,
-        unique : false,
+        unique: false,
         trim: true
     },
-    battletag: {
+    battleTag: {
+        type: String,
+        trim: true
+    },
+    battleName: {
         type: String,
         trim: true
     },
@@ -24,9 +28,9 @@ const UserSchema = new mongoose.Schema({
     },
 })
 
-module.exports.createUser = function(newUser, callback){
-    bcrypt.genSalt(10, function(err, salt) {
-        bcrypt.hash(newUser.password, salt, function(err, hash) {
+module.exports.createUser = function (newUser, callback) {
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(newUser.password, salt, function (err, hash) {
             // Store hash in your password DB.
             newUser.password = hash;
             newUser.save(callback);
@@ -44,9 +48,7 @@ UserSchema.pre('save', function (next) {
 UserSchema.pre('findOneAndUpdate', function (next) {
     const user = this;
 
-    if(user._update.password) {
-        user._update.password = bcrypt.hashSync(user._update.password, bcrypt.genSaltSync(5), null);
-    }   
+    if (user._update.password) user._update.password = bcrypt.hashSync(user._update.password, bcrypt.genSaltSync(5), null);
     next();
 });
 
@@ -58,6 +60,13 @@ UserSchema.methods.encryptPassword = function (password) {
 UserSchema.methods.validPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
+
+/* document filter */
+if (!UserSchema.options.toObject) UserSchema.options.toObject = {};
+UserSchema.options.toObject.transform = function (doc, ret, options) {
+    delete ret.password; // remove the _id of every document before returning the result
+    return ret;
+}
 
 const User = mongoose.model('User', UserSchema);
 

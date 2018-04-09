@@ -33,7 +33,7 @@ exports.save = function (req, res, next) {
             .populate({
                 path: 'owner',
                 model: 'User',
-                select : ['_id', 'username'],
+                select : ['_id', 'userName'],
             });
     }).then(currentComment => {
         res.json({ msg: 'save successfully', result : currentComment});

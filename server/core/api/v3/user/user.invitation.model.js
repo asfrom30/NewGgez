@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const currentSchema = new Schema({
+    email : String,
     sessionOwnerKey : String,
     invitationCode : Number,
     failCounter : Number,

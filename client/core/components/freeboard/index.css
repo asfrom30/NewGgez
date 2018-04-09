@@ -144,6 +144,33 @@
     border : 1px solid grey;
 }
 
+/** freeboard */
+.freeboard-user-profile__upper {
+    height : 50px;
+}
+
+.freeboard-user-profile__lower {
+    margin : 5px;
+    border : 1px solid white;
+    height : 30px;
+}
+
+.freeboard-user-profile__lower > div {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.freeboard-user-profile__tier-img {
+    height : 100%;
+    width : 50px;
+}
+
+.freeboard-user-profile__hero-img {
+    height : 100%;
+    width : 50px;
+}
+
+
 /** fixed-bottom Block */
 .fixed-bottom--freeboard {
     background-color: var(--gray-dark);

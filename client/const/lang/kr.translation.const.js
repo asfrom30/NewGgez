@@ -1,4 +1,21 @@
 export default {
+    SERVER : {
+        saved_email_is_different : "요청한 이메일 주소와 가입할 이메일주소가 다릅니다.",
+        this_email_is_already_registerd : '해당 이메일은 이미 등록된 메일입니다.',
+        send_invitation_code_success : "이메일로 코드를 전송하였습니다.(없을 경우 스팸메일함도 확인해주세요)",
+        user_invitation_is_not_existed : '전송된 이메일 코드가 없습니다. 이메일코드를 먼저 요청해주세요',
+        can_not_read_user_status : '유저 정보를 읽을수 없습니다',
+        internal_server_error : '서버 에러입니다.',
+        log_in_please : '로그인이 필요합니다.',
+        freeboard_is_not_existed : '게시물이 존재하지 않습니다. 잠시후 리스트로 이동합니다.',
+        freeboard_already_upvote : '이미 추천하셨습니다.',
+        freeboard_upvote_success : '성공적으로 추천했습니다.',
+        user_profile_update_success : "유저 프로필이 성공적으로 업데이트 되었습니다.",
+        need_log_in : '로그인이 필요합니다.',
+        no_user_found : '해당 이메일은 존재하지 않습니다',
+        wrong_password : '패스워드가 일치하지 않습니다',
+
+    },
     MODAL :{
         COMMON : {
             CLOSE : '닫기',
@@ -12,8 +29,13 @@ export default {
             SELECT_CHANGES : '변경',
             CLOSE : '닫기'
         },
-        SIGNIN : {
-            HEADER : '로그인'
+        SIGN_IN : {
+            HEADER : '로그인',
+            ON_SIGN_IN : '로그인',
+            ON_CLOSE : '닫기'
+        },
+        REGISTER : {
+            USERNAME_PLACEHOLDER : "2글자 이상 10글자이하로 가능합니다",
         },
         ACCOUNT_SETTING : {
             HEADER : '계정설정',
@@ -26,9 +48,12 @@ export default {
             EDIT : '수정',
             SAVE_CHANGES : '변경사항 저장',
             NOT_REGISTERED_BATTLETAG : '등록된 배틀태그가 없습니다.',
-        }
+        },
     },
     NOTY : {
+        SIGN_UP : {
+            REGISTER_SUCCESS : "가입 성공",
+        },
         ACCOUNT_SETTING : {
             SIGN_IN_SUCCESS : '로그인 성공',
             SIGN_IN_FAIL : "로그인 실패",
@@ -47,12 +72,6 @@ export default {
             INVALID : '코멘트는 최소 5자 이상 300자 이하로 입력해주세요',
             POST_FAIL : '에러발생, 코멘트를 등록하지 못했습니다.',
         },
-        SERVER : {
-            log_in_please : '로그인이 필요합니다.',
-            freeboard_is_not_existed : '게시물이 존재하지 않습니다. 잠시후 리스트로 이동합니다.',
-            freeboard_already_upvote : '이미 추천하셨습니다.',
-            freeboard_upvote_success : '성공적으로 추천했습니다.',
-        }
     },
     NAV : {
         BOARD : '게시판',
@@ -67,6 +86,9 @@ export default {
             UP : "위로",
         },
         DETAIL : {
+            UPVOTE_COUNT : '추천수',
+            VIEW_COUNT : '조회수',
+            CREATED_AT : '작성일',
             UPVOTE : '추천',
             MODIFY : '수정',
             DELETE : '삭제',

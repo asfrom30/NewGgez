@@ -5,27 +5,23 @@
 }
 
 /* Row 2 Pattern */
-.row-2-box {
+.row-2 {
     height: 100%;
 }
-.row-2-box > div {
+.row-2 > div {
     width : 100%;
     height : 50%;
     min-height: 50%;
 }
 
-.row-2-box--collect {
-    
-}
-.row-2-box--collect > div{
+.row-2--collect > div{
     display: flex;
-    justify-content: center;
 }
 
-.row-2-box--collect > div:nth-child(1){
+.row-2--collect > div:nth-child(1){
     align-items: flex-end;
 }
 
-.row-2-box--collect > div:nth-child(2){
+.row-2--collect > div:nth-child(2){
     align-items: flex-start;
 }

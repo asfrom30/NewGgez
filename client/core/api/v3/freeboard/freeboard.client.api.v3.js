@@ -5,7 +5,9 @@ import apiConfig from '../../../../configs/app.api.config';
 
 export default angular
     .module('freeboard.service.api.v3.module', [])
-    .factory('Freeboard', ['$resource', function ($resource) {
+    .factory('Freeboard', ['$resource', 'LOG_SETTING', function ($resource, LOG_SETTING) {
+
+        const logFlag = LOG_SETTING.FLAG;
 
         let api = `/api/freeboard/:id`;
         if (process.env.NODE_ENV === 'webpack') {
@@ -32,11 +34,11 @@ export default angular
 
         const FreeboardComment = $resource(`${api}/comments`, { id: '@id' }, {});
 
-        return new Controller(Freeboard, FreeboardComment);
+        return new Controller(logFlag, Freeboard, FreeboardComment);
     }]).name;
 
 
-function Controller(Freeboard, FreeboardComment) {
+function Controller(logFlag, Freeboard, FreeboardComment) {
 
     const obj = this;
     this.Freeboard = Freeboard;
@@ -46,26 +48,35 @@ function Controller(Freeboard, FreeboardComment) {
     this.busy = false;
 
     // method 
-    this.getFreeboard = getFreeboard;
     this.fetchPage = fetchPage;
     this.fetchDetail = fetchDetail;
     this.save = save;
     this.saveComment = saveComment;
     this.upvote = upvote;
 
-    function getFreeboard() {
-        return obj.Freeboard;
-    }
-
-    function fetchPage(index) {
-        return Freeboard.getPage({ page: index }).$promise.then(result => {
-            return result;
-        });
+    function fetchPage(pageIndex) {
+        return new Promise((resolve, reject) => {
+            Freeboard.getPage({ page: pageIndex }).$promise.then(ngResources => {
+                resolve(ngResources);
+            }, reason => {
+                const statusCode = reason.status;
+                const result = reason.data;
+                if(logFlag) console.log(result.errLog);
+                reject(`NOTY.SERVER.${result.errMsg}`);
+            })
+        })
     }
 
     function fetchDetail(id) {
-        return Freeboard.getDetail({id : id}).$promise.then(result => {
-            return result;
+        return new Promise((resolve, reject) => {
+            Freeboard.getDetail({id : id}).$promise.then(ngResource => {
+                resolve(ngResource);
+            }, reason => {
+                const statusCode = reason.status;
+                const result = reason.data;
+                if(logFlag) console.log(result.errLog);
+                reject(`NOTY.SERVER.${result.errMsg}`);
+            })
         })
     }
 

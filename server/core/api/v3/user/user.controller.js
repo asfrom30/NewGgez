@@ -10,14 +10,10 @@ exports.signup = signup;
 exports.signin = signin;
 exports.signout = signout;
 exports.createInvitation = createInvitation;
-exports.checkStatus = checkStatus;
+exports.isSignIn = isSignIn;
 
 function get(req, res, next) {
-    if (req.isAuthenticated()) {
-        res.json({ result: req.user });
-    } else {
-        res.json({ result: null });
-    }
+    res.json({ datas: { userProfile: req.user } });
 }
 
 function signup(req, res) {
@@ -36,55 +32,55 @@ function signup(req, res) {
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('passwordConf', 'Passwords do not match').equals(req.body.password);
 
-    const errors = req.validationErrors();
+    const formErrors = req.validationErrors();
 
-    if (errors) {
-        return res.status(422).json({ err: errors });
-    }
+    if (formErrors) return res.status(422).json({ devLogs: 'server_side_signup_form_is_invalid', errors: { formErrors: formErrors } });
 
     return Promise.resolve().then(() => {
         return UserInvitation.findOne({ sessionOwnerKey: sessionID });
     }).then(userInvitation => {
-        if (!userInvitation) throw makeReason(422, { msg: 'user_invitation_is_not_existed' });
+        if (!userInvitation) throw make4xxReasonWithClientMsg(422, 'user_invitation_is_not_existed');
 
+        const savedEmail = userInvitation.email;
+        if (savedEmail !== email) throw make4xxReasonWithClientMsg(422, 'saved_email_is_different');
         const userInvitationCode = userInvitation.invitationCode + ''; // int to string
-        if (userInvitationCode !== invitationCode) throw makeReason(422, { msg: 'invitation_code_is_wrong' });
-        return;
+        if (userInvitationCode !== invitationCode) throw make4xxReasonWithClientMsg(422, 'invitation_code_is_wrong');
     }).then(() => {
         return User.findOne({ email: email });
     }).then(user => {
-        if (user) throw makeReason(409, { msg: 'this_email_is_already_registerd' });
+        if (user) throw make4xxReasonWithClientMsg(409, 'this_email_is_already_registerd');
         return;
     }).then(() => {
         const newUser = new User({
             email: email,
-            username: userName,
+            userName: userName,
             password: password,
         });
         return newUser.save();
     }).then(() => {
-        res.status(200).json({ result: true, msg: 'register_success' });
+        const datas = { msg2Client: 'register_success', signUpResult: true };
+        res.json({ datas: datas });
     }).catch(reason => {
         const code = reason.code || 500;
-        if (code == 500) {
-            res.status(500).json({ errMsg : 'internal_server_error', reason : reason });
-        } else {
-            res.status(code).json({ errors: reason.errors });
-        }
+        const msg2Client = (code == 500) ? 'internal_server_error' : reason.msg2Client;
+        res.status(code).json({ devLogs: reason, errors: { msg2Client: msg2Client } });
     })
 }
 
 function signin(req, res, next) {
     passport.authenticate('local.signin', function (err, user, info) {
 
-        if (err) { return res.status(500).json({ err: 'internal_server_error' }) };
-        if (info) { return res.status(422).json({ err: 'check_info_message', info: info }) };
-        if (!user) { return res.status(422).json({ err: 'no_user_found' }) };
+        // 5xx : passport find one mongo error
+        if (err) return sendInternalServerError(res, err);
+
+        // 4xx : no error but unprocessable entity
+        if (info) return res.status(422).json({ devLogs: info, errors: { msg2Client: info } });
 
         req.logIn(user, function (err) {
-            if (err) { return res.status(500).json({ err: 'internal_server_error' }) }
-            return res.json({ result: true });
+            if (err) return sendInternalServerError(res, err);
+            res.json({ datas: { signInResult: true } });
         });
+        
 
     })(req, res, next);
 }
@@ -97,46 +93,51 @@ function signout(req, res, next) {
 function createInvitation(req, res) {
     const sessionID = req.session.id;
     const invitationCode = generateInvitationCode();
-    const targetEmailAddress = req.query.email;
+    const email = req.query.email;
 
     Promise.resolve().then(() => {
-        return UserInvitation.remove({sessionOwnerKey : sessionID});
-    }).then(() => {
-        const promises = [];
-        promises.push(sendInvitationMail(targetEmailAddress, invitationCode));
-        promises.push(saveInvitation(sessionID, invitationCode));
-        return  Promise.all(promises);
-    }).then(() => {
-        res.json({ result: true, msg: 'success' });
-    }).catch(reason => {
-        const code = reason.code || 500;
-        if (code == 500)  res.status(500).json({ errMsg : 'internal_server_error', reason : reason });
-        else res.status(code).json({ errors: reason.errors });
+        return UserInvitation.remove({ sessionOwnerKey: sessionID });
     })
+        .then(() => {
+            return User.findOne({ email: email });
+        })
+        .then(user => {
+            if (user) throw make4xxReasonWithClientMsg(409, 'this_email_is_already_registerd');
+        })
+        .then(() => {
+            const promises = [];
+            promises.push(sendInvitationMail(email, invitationCode));
+            promises.push(saveInvitation(sessionID, invitationCode, email));
+            return Promise.all(promises);
+        }).then(() => {
+            const datas = { msg2Client: 'send_invitation_code_success', expireAfterSeconds: 300 }; //TODO: NOT HARD WIRE, WIRE FROM MONGOOSE MODEL
+            res.json({ datas: datas });
+        }).catch(reason => {
+            const code = reason.code || 500;
+            const msg2Client = (code == 500) ? 'internal_server_error' : reason.msg2Client;
+            res.status(code).json({ devLogs: reason, errors: { msg2Client: msg2Client } });
+        })
 }
 
 function update(req, res, next) {
-    if (!req.isAuthenticated()) res.status(401).json({ err_msg: "not_logged_in" });
 
-    const email = req.user.email;
+    const user = req.user;
+    const doc = req.body.userProfile;
 
-    const doc = {};
-    if (req.body.password) doc.password = req.body.password + '';
-    if (req.body.battletag) doc.battletag = req.body.battletag;
+    if(!user) return sendInternalServerError(res, 'req.user(passport_user)_is_undefined');
 
-
-    User.findOneAndUpdate({ email: email }, doc).then(result => {
-        return res.status(200).json({ result: true, msg: 'USER_ACCOUNT_UPDATE_SUCCESS' });
+    User.findOneAndUpdate({ _id: user._id }, doc, {new: true}).then(user => {
+        res.json({ datas: { msg2Client: 'user_profile_update_success', updateResult : true, userProfile : user.toObject() } });
     }, reason => {
-        return res.status(500).json({ errMsg: 'INTERNAL_SERVER_ERROR', reason: reason });
+        sendInternalServerError(res, reason);
     })
 }
 
-function checkStatus(req, res, next) {
+function isSignIn(req, res, next) {
     if (req.isAuthenticated()) {
-        res.json({ result: true });
+        res.json({ datas: { isSignin: true } });
     } else {
-        res.json({ result: false });
+        res.json({ datas: { isSignin: false } });
     }
 }
 
@@ -146,10 +147,11 @@ function generateInvitationCode() {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
 
-function saveInvitation(sessionID, invitationCode) {
+function saveInvitation(sessionID, invitationCode, email) {
     const userInvitation = new UserInvitation({
         sessionOwnerKey: sessionID,
         invitationCode: invitationCode,
+        email: email
     });
 
     return userInvitation.save();
@@ -164,10 +166,10 @@ function sendInvitationMail(targetEmailAddress, invitationCode) {
             const config = require('../../../../../.secrets/smtp/ggez.smtp').invitationConfig;
             let transporter = nodemailer.createTransport(config);
             let mailContents = createInvitationMailContent(targetEmailAddress, invitationCode);
-    
+
             // send mail with defined transport object
             transporter.sendMail(mailContents, (error, info) => {
-                if (error) return reject(makeReason(400, error.toString()));
+                if (error) return reject(make4xxReasonWithClientMsg(400, error.toString()));
                 resolve();
             });
         });
@@ -184,11 +186,17 @@ function createInvitationMailContent(targetEmailAddress, invitationCode) {
     };
 }
 
-function makeReason(code, error) {
+/** response helper function */
+
+
+function sendInternalServerError(res, devLogs) {
+    res.status(500).json({ devLogs: devLogs, errors: { msg2Client: 'internal_server_error' } });
+}
+
+// only use for promise process. In other case, just use manual handling
+function make4xxReasonWithClientMsg(code, msg2Client) {
     return {
         code: code,
-        errors: [
-            error
-        ]
+        msg2Client: msg2Client,
     }
 }

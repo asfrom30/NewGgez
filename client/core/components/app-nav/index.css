@@ -39,3 +39,11 @@ app-nav .btn-group .dropdown-menu.show.align-right {
         order: 1;
     }
 }
+
+
+.btn--battle-net {
+    width: 40px;
+    background-image: url('/assets/images/extras/blizzard-battle-net.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}

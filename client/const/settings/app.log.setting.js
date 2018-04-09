@@ -1,7 +1,8 @@
+
+const globalLogFlag = true;
+const devLogFlag = (process.env.NODE_ENV == 'development') ? true : false;
+
 export default {
-    globalLogFlag : true,
-    devLogFlag : (process.env.NODE_ENV == 'development') ? true : false,
-    FLAG : function(){
-        return this.globalLogFlag && this.devLogFlag;
-    }
+    FLAG : globalLogFlag && devLogFlag,
+    
 }

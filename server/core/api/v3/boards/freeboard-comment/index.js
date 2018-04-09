@@ -8,14 +8,11 @@ const freeboardCtrl = require('../freeboard/freeboard.controller');
 const freeboardCommentCtrl = require('./freeboard.comment.controller');
 
 
-/** Preprocessor  */
-router.use('', coreController.checkAuth);
-
 /** Param Check */
 router.param('id', freeboardCtrl.findById);
 
 /* Http Method Matching */
-router.post('/:id/comments', freeboardCommentCtrl.save);
+router.post('/:id/comments', coreController.checkAuth, freeboardCommentCtrl.save);
 
 module.exports = router;
 

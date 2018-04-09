@@ -3,63 +3,71 @@
 import angular from 'angular';
 require('./index.css');
 
+import { notyMsg } from './local-const'
+import { dom } from './local-const'
+
 export default angular.module('nav.core.component.module', [])
     .component('appNav', {
         template: require("./index.html"),
         controller: controller,
     }).name;
 
-export function controller(AppLogger, User, Noty, $state, $translate, $window, $interval, validator, $element, $timeout) {
+export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $translate, $window, $interval, validator, $element, $timeout) {
     'ngInject';
 
     var $ctrl = this;
-    const logFlag = false;
-    const dom = {
-        signInModal: '#signin-modal',
-        signUpModal : '#register-modal',
-        accountSettingModal : '#account-setting-modal',
 
-    };
+    // ajax event
+    $ctrl.onSignIn = onSignIn;
+    $ctrl.onSignUp = onSignUp;
+    $ctrl.onSignOut = onSignOut;
+    $ctrl.onRequestInvitation = onRequestInvitation;
+    $ctrl.registerBtg = registerBtg;
+    $ctrl.onSettingSaveChanges = onProfileUpdate;
+    $ctrl.onSettingModalBtn = onSettingModalBtn;
+    // non-ajax event
+    $ctrl.goRandomPage = goRandomPage;
+    $ctrl.goFreeBoard = goFreeBoard;
+    $ctrl.changeLang = changeLang;
+    // non-ajax event : modal btn
+    $ctrl.onSignUpModalBtn = onSignUpModalBtn;
+    $ctrl.onSignInModalBtn = onSignInModalBtn;
 
-    const notyMsg = {
-        SIGN_IN_SUCCESS : "NOTY.ACCOUNT_SETTING.SIGN_IN_SUCCESS",
-        SIGN_IN_FAIL : "NOTY.ACCOUNT_SETTING.SIGN_IN_FAIL",
-        SIGN_OUT_SUCCESS : "NOTY.ACCOUNT_SETTING.SIGN_OUT_SUCCESS",
-        SIGN_OUT_FAIL : "NOTY.ACCOUNT_SETTING.SIGN_OUT_FAIL",
-        SAVE_CHANGES_SUCCESS : "SAVE_CHANGES_SUCCESS",
-        SAVE_CHANGES_FAIL : "SAVE_CHANGES_FAIL",
+
+    const logFlag = LOG_SETTING.FLAG;
+
+    const ajaxFlags = {
+        invitation: false,
+        updateProfile : false,
     }
 
     let authBusyFlag = false;
 
-    $ctrl.goRandomPage = goRandomPage;
-    $ctrl.goFreeBoard = goFreeBoard;
-    $ctrl.changeLang = changeLang;
-    $ctrl.onSignupModalBtn = onSignupModalBtn;
-    $ctrl.onSigninModalBtn = onSigninModalBtn;
-    $ctrl.onSettingModalBtn = onSettingModalBtn;
-    $ctrl.onSettingSaveChanges = onSettingSaveChanges;
-    $ctrl.onRequestInvitation = onRequestInvitation;
-    $ctrl.signIn = onSignIn;
-    $ctrl.onSignUp = onSignUp;
-    $ctrl.signOut = signOut;
-    $ctrl.registerBtg = registerBtg;
 
     $ctrl.$onInit = function () {
-        
+
+        $ctrl.ajaxFlags = ajaxFlags;
         $ctrl.register = {};
+        $ctrl.signIn = {};
+        $ctrl.formErrors = {}; // reset
+        updateUserSignInStatus();
+        initForDev();
+    }
 
-        // check user status
-        User.getStatus().$promise.then(result => {
-            const isSignin = result.toJSON().result;
-            $ctrl.isSignin = isSignin;
-        }, reason => {
+    function initForDev() {
+        if (process.env.NODE_ENV !== 'development') return;
+        $ctrl.isSignIn = true;
+        $timeout(function () {
+            $element.find("#first-click").click();
+        }, 300)
+    }
 
+    function updateUserSignInStatus() {
+        User.isSignIn().then(datas => {
+            $ctrl.isSignin = datas.isSignin;
+        }, errors => {
+            if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`, 'error');
         });
-
-        // $timeout(function(){
-        //     $element.find("#first-click").click();
-        // }, 300)
     }
 
     function goRandomPage() {
@@ -101,116 +109,138 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
         $state.go(`freeboard.list`, { pageIndex: 1 });
     }
 
-    function onSigninModalBtn() {
-        $ctrl.email = undefined;
-        $ctrl.password = undefined;
+    function onSignInModalBtn() {
+        resetSignInVariables();
+        resetSignInFormErrors();
     }
 
+    // need ajax
     function onSettingModalBtn() {
-        $ctrl.tempBattletag = undefined;
-
+        // reset state
+        setUpdateProfileFlag(false);
+        
+        // di
         const $_spinner = $element.find("#account-setting-spinner");
         showElement($_spinner);
 
         // get user profile
-        User.get().$promise.then(response => {
-            const result = response.toJSON().result;
-
-            $ctrl.username = result.username;
-            if(result.battletag) $ctrl.tempBattletag = result.battletag;
-
-            hideElement($_spinner);
-        }, reason => {
+        User.getProfile().then(datas => {
+            updateUserProfile(datas.userProfile);
+        }, errors => {
+            if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`, 'error');
+        }).then(() => {
             hideElement($_spinner);
         });
     }
 
     function onSignIn() {
-        const email = $ctrl.email;
-        const password = $ctrl.password;
-        User.signIn({ email: email, password: password }).$promise.then(response => {
-            const isSignin = response.toJSON().result;
-            if (isSignin) {
-                $(dom.signInModal).modal('hide');
-                Noty.show(notyMsg.SIGN_IN_SUCCESS);
-                $ctrl.isSignin = true;
-            }
-        }, reason => {
-            $ctrl.register.invalid = {};
-            const responseCode = reason.status;
-            const data = reason.data;
+        // reset state;
+        resetSignInFormErrors();
 
-            if(responseCode == 500) return Noty.show(data.errMsg, 'error');
+        // di
+        const email = ($ctrl.signIn.email + '').trim();
+        const password = $ctrl.signIn.password ? ($ctrl.signIn.password + '') : undefined;
 
-            // INVALID HANDLING...
-            $ctrl.register.invalid.wrongPassword = true;
+        // client form validate
+        const isEmailValidError = !validator.isEmail(email);
+        if (isEmailValidError) setSignInEmailFormError(true);
+        if (!password) setSignInPasswordFormError(true);
+
+        const hasError = hasAnyValidateError($ctrl.formErrors.signIn);
+        if (hasError) return;
+
+        User.signIn(email, password).then(datas => {
+            Noty.show(notyMsg.SIGN_IN_SUCCESS, undefined, 'short', hideSignInModal);
+            $ctrl.isSignin = true;
+        }, errors => {
+            if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`, 'error', 'short');
         })
     }
 
-    function signOut() {
-        User.signOut().$promise.then(response => {
-            const result = response.toJSON();
-            Noty.show(notyMsg.SIGN_OUT_SUCCESS);
+    function onSignOut() {
+        User.signOut().then(datas => {
+            Noty.show(notyMsg.SIGN_OUT_SUCCESS, undefined, 'short');
             $ctrl.isSignin = false;
-        }, reason => {
+        }, errors => {
             Noty.show(notyMsg.SIGN_OUT_FAIL);
         })
     }
-
-    $ctrl.test = function() {
-        console.log('hi');
-    }
-
-    function onSignupModalBtn() {
+    function onSignUpModalBtn() {
+        stopEmailExpirationTimer();
         $ctrl.register = {};
+        $ctrl.formErrors.signUp = {};
+        $ctrl.ajaxFlags = {};
     }
 
     function onRequestInvitation() {
 
-        const email = $ctrl.register.email + '';
+        // reset state;
+        setEmailValidError(false);
 
-        //TODO: email valid check
-        User.requestInvitation({email : email}).$promise.then(response => {
-            const result = response.toJSON();
-        }, reason => {
-            console.log(reason);
+        // client valid check
+        const email = ($ctrl.register.email + '').trim();
+        const isEmailValidError = !validator.isEmail(email);
+        if (isEmailValidError) return setEmailValidError(true);
+
+        $ctrl.ajaxFlags.invitation = true;
+
+        User.requestInvitation(email).then(datas => {
+            if (datas.msg2Client) Noty.show(`SERVER.${datas.msg2Client}`);
+            startEmailExpirationTimer(datas.expireAfterSeconds);
+        }, errors => {
+            if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`, 'warning');
+        }).then(() => {
+            $ctrl.ajaxFlags.invitation = false;
         })
     }
 
     function onSignUp() {
-        const userName = $ctrl.register.userName + '';
+
+        // di
+        const userName = $ctrl.register.userName ? $ctrl.register.userName + '' : '';
         const email = $ctrl.register.email + '';
         const password = $ctrl.register.password;
         const passwordConf = $ctrl.register.passwordConf;
         const invitationCode = $ctrl.register.invitationCode;
 
+
+        // client side validate
+        $ctrl.formErrors = $ctrl.formErrors || {}; // reset
+        $ctrl.formErrors.signUp = {};
+
+        const length = userName.length;
+        if (length < 2 || 10 < length) $ctrl.formErrors.signUp.userName = true;
+        if (!validator.isEmail(email)) $ctrl.formErrors.signUp.email = true;
+        //TODO: invitation code validate
+        //TODO: password validate
+
+        const hasError = hasAnyValidateError($ctrl.formErrors.signUp);
+        if (hasError) return;
+
         const params = {
-            userName : userName,
-            email : email,
-            invitationCode :invitationCode,
-            password : password,
-            passwordConf : passwordConf
+            userName: userName,
+            email: email,
+            invitationCode: invitationCode,
+            password: password,
+            passwordConf: passwordConf
         }
 
-        User.signUp(params).$promise.then(response => {
-            const data = response.toJSON();
+        User.signUp(params).then(datas => {
+            if (!datas.signUpResult) return;
 
-            if(data.result) {
-                $(dom.signUpModal).modal('hide');
-                Noty.show('register_success');
-            }
-        }, reason => {
-            const responseCode = reason.status;
-            const data = reason.data;
-            if(responseCode == 409) Noty.show(data.err, 'warning');
+            $(dom.signUpModal).modal('hide');
+            Noty.show(`NOTY.SIGN_UP.REGISTER_SUCCESS`);
+        }, errors => {
+            if (errors.formErrors) { } // TODO: form error handling
+            if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`);
         })
     }
 
     function registerBtg() {
-        
+
         //FIXME: CHANGE CODE based on Cheking Event. not interval
         // bnetWindow.addEventListener('hashchange', function(e){console.log('hash changed')});
-        
+
         // const timeout = 30;
         // let time = 0;
         // const authTimer = $interval(function() {
@@ -229,14 +259,14 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
         //     }
         // }, 1000);
 
-        if(authBusyFlag) return Noty.show('already_request', 'error');
+        if (authBusyFlag) return Noty.show('already_request', 'error');
         const bnetWindow = $window.open("/api/oauth/bnet", "_blank", "width=300,height=500");
         const timeout = 30;
         let time = 0;
         authBusyFlag = true;
-        const authTimer = $interval(function() {
+        const authTimer = $interval(function () {
 
-            if(time > timeout) {
+            if (time > timeout) {
                 $interval.cancel(authTimer);
                 bnetWindow.close();
                 Noty.show('time out');
@@ -245,45 +275,85 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
             }
 
             const result = bnetWindow.result;
-            if(result == undefined) {
+            if (result == undefined) {
                 time++;
             } else {
                 bnetWindow.close();
                 $interval.cancel(authTimer);
                 authBusyFlag = false;
-                $ctrl.tempBattletag = result.battletag;
+                $ctrl.battleTag = result.battletag;
             }
         }, 1000);
     }
 
-    function onSettingSaveChanges() {
 
-        const battletag = $ctrl.tempBattletag;
+    function onProfileUpdate() {
+
+        // client validate
+        const userProfile = $ctrl.userProfile;
+        if(!isValidUserProfile(userProfile)) return;
+        
+        setUpdateProfileFlag(true);
+
+        User.updateProfile(userProfile).then(datas => {
+            updateUserProfile(datas.userProfile);
+            // $(dom.accountSettingModal).modal('hide');
+            // return Noty.show(notyMsg.SAVE_CHANGES_SUCCESS, 'info');
+        }, errors => {
+            Noty.show(`SERVER.${errors.msg2Client}`, 'error');
+        }).then(() =>{
+            setUpdateProfileFlag(false);
+            // updateView();
+        });
+    }
+
+
+    /** Unit Function */
+    function isValidUserProfile(userProfile) {
+
+        return true;
+
+        if(!userProfile) return;
+        userProfile.userName = '변경된이름12345';
+        
+
+        const battletag = $ctrl.battleTag;
         const password = $ctrl.tempPassword;
         const passwordConfirm = $ctrl.tempPassword2;
 
         const body = {};
-        if(battletag) body.battletag = battletag;
-        if(password || passwordConfirm) {
-            if(password === passwordConfirm) {
+
+        // client form validate
+        if (battletag) body.battletag = battletag;
+        if (password || passwordConfirm) {
+            if (password === passwordConfirm) {
                 body.password = password;
             } else {
                 return Noty.show('INCORRECT_PASSWORD_CONFIRM ', 'error');
             }
         }
-
-        User.update(body).$promise.then(res => {
-            const result = res.toJSON();
-            const serverMsg = result.msg;
-            $(dom.accountSettingModal).modal('hide');
-            return Noty.show(notyMsg.SAVE_CHANGES_SUCCESS, 'info');
-        }, reason => {
-            const serverErrMsg = result.errMsg;
-            const serverErrReason = result.errReason;
-            return Noty.show(notyMsg.SAVE_CHANGES_FAIL, 'error');
-        })
     }
 
+    function updateUserProfile(userProfile) {
+        console.log('update profile');
+        console.log(userProfile);
+        if (userProfile == undefined) return $ctrl.userProfile == undefined;
+        $ctrl.userProfile = userProfile;
+        updateView();
+    }
+
+    function resetSignInVariables() {
+        $ctrl.signIn = {};
+    }
+
+    function resetSignInFormErrors() {
+        $ctrl.formErrors = $ctrl.formErrors || {};
+        $ctrl.formErrors.signIn = {};
+    }
+
+    function hideSignInModal() {
+        $(dom.signInModal).modal('hide');
+    }
 
     function hideElement($_dom) {
         $_dom.hide();
@@ -291,5 +361,73 @@ export function controller(AppLogger, User, Noty, $state, $translate, $window, $
 
     function showElement($_dom) {
         $_dom.show();
+    }
+
+    function setEmailValidError(flag) {
+        $ctrl.formErrors.signUp = $ctrl.formErrors.signUp || {};
+
+        if (flag) {
+            $ctrl.formErrors.signUp.email = true;
+        } else {
+            $ctrl.formErrors.signUp.email = false;
+        }
+    }
+
+    function setSignInEmailFormError(flag) {
+        $ctrl.formErrors.signIn = $ctrl.formErrors.signIn || {};
+
+        if (flag) {
+            $ctrl.formErrors.signIn.email = true;
+        } else {
+            $ctrl.formErrors.signIn.email = false;
+        }
+    }
+
+    function setSignInPasswordFormError(flag) {
+        $ctrl.formErrors.signIn = $ctrl.formErrors.signIn || {};
+
+        if (flag) {
+            $ctrl.formErrors.signIn.password = true;
+        } else {
+            $ctrl.formErrors.signIn.password = false;
+        }
+    }
+
+    function hasAnyValidateError(objErrors) {
+        for (let error of Object.values(objErrors)) {
+            if (error) return true;
+        }
+
+        return false;
+    }
+
+    function startEmailExpirationTimer(emailExpirationTime) {
+
+        if (emailExpirationTime == null || emailExpirationTime == 0) return;
+        stopEmailExpirationTimer();
+
+        $ctrl.expireAfterSeconds = emailExpirationTime;
+
+        const interval = $interval(function () {
+            $ctrl.expireAfterSeconds--;
+            if ($ctrl.expireAfterSeconds == 0) $interval.cancel(interval);
+        }, 1000);
+
+        $ctrl.emailExpireInterval = interval;
+    }
+
+    function stopEmailExpirationTimer() {
+        if ($ctrl.emailExpireInterval) $interval.cancel($ctrl.emailExpireInterval);
+        $ctrl.expireAfterSeconds = 0;
+    }
+
+    function setUpdateProfileFlag(bool) {
+        $ctrl.ajaxFlags = $ctrl.ajaxFlags || {};
+        $ctrl.ajaxFlags.updateProfile = bool;
+    }
+
+    function updateView() {
+        if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') return  $scope.$apply();
+        if(logFlag) console.log('$scope.$apply() update view fail');
     }
 }

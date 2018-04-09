@@ -12,30 +12,23 @@ module.exports = function (app) {
         usernameField: 'email',
         passwordField: 'password',
         passReqToCallback: true
-    }, function (req, email, password, done) {
-
-        //done(err, user, info);
+    }, function (req, email, password, done/* done(err, user, info) */) {
 
         req.checkBody('email', 'Invalid email').notEmpty().isEmail();
         req.checkBody('password', 'Invalid password').notEmpty();
-        var errors = req.validationErrors();
+        var formErrors = req.validationErrors();
 
-        if (errors) {
-            // handling error;
-            return done(null, false, errors);
-        }
+        if (formErrors)  return done(null, false, formErrors);
 
-        User.findOne({ 'email': email }, function (err, user) {
-            if (err) {
-                return done(err);
-            }
-            if (!user) {
-                return done(null, false, { msg: 'No user found.' });
-            }
-            if (!user.validPassword(password)) {
-                return done(null, false, { msg: 'Wrong password.' });
-            }
-            return done(null, user);
+        User.findOne({ email: email }, function (err, user) {
+            // mongo error
+            if (err) return done(err);
+
+            // unporcessable entity
+            if (!user) return done(null, false, 'no_user_found');
+            if (!user.validPassword(password)) return done(null, false, 'wrong_password');
+
+            done(null, user);
         });
     }));
 
@@ -77,8 +70,9 @@ module.exports = function (app) {
 
         // this excutes when passport-session is already existed
         // passport.user <-- this is id.
-        User.findById(id, {_id : 1, email : 1, username : 1, battletag : 1}, function (err, user) {
-            done(err, user);
+        User.findById(id, {}, function (err, user) {
+            if(err) return done(err, null);
+            done(err, user.toObject());
         });
     });
 

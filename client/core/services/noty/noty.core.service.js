@@ -12,6 +12,9 @@ export default angular
 
         return {
             show : function(text, type, timeout, onClose){
+
+                if(timeout == 'short') timeout == 500;
+
                 const setting = {
                     theme : theme,
                     type : type || 'info',

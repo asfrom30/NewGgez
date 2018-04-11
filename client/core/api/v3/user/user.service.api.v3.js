@@ -43,7 +43,6 @@ export default angular
         })
 
         return new Controller(logFlag, User);
-        // return User;
     }]).name;
 
 
@@ -138,7 +137,7 @@ function Controller(logFlag, User) {
     function requestInvitation(email) {
         return new Promise((resolve, reject) => {
             User.requestInvitation({ email: email }).$promise.then(response => {
-                if (logFlag) console.log(response.logs);
+                if (logFlag) console.log(response.devLogs);
                 resolve(response.datas);
             }, reason => {
                 if (logFlag) console.error(reason.data.devLogs);

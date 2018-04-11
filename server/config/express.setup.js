@@ -132,8 +132,8 @@ export default function (app) {
         browserSync.init({
             open: false,
             logFileChanges: false,
-            // proxy: `https://localhost:${config.port}`,
-            proxy: `http://localhost:${config.port}`,
+            proxy: `https://localhost:${config.port}`,
+            // proxy: `http://localhost:${config.port}`,
             ws: true,
             middleware: [
                 webpackDevMiddleware(compiler, {

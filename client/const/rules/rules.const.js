@@ -1,6 +1,9 @@
 export default {
+
+    //FIXME: this setting mustbe declared from server
     freeboard : {
         title : {
+            minStringLength : 5,
             maxStringLength : 50,
         },
         content : {

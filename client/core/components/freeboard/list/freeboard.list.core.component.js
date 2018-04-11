@@ -12,56 +12,62 @@ export default angular.module('freeboard.list.core.component.module', [])
     }).name;
 
 function controller($scope, $state, $stateParams, $element, User, Freeboard, Noty) {
-    const $ctrl = this;
 
+    'ngInject';
+
+    // variables 
+    const $ctrl = this;
     $ctrl.pageIndex = 1;
+
+    // local variables
+    const selectors = {
+        searchBox: '#search-box',
+        sortBox: '#sort-box',
+    }
+    const NOTY_MSG = {
+        WRITING_NEED_USER_LOGIN: 'NOTY.FREEBOARD.WRITING_NEED_USER_LOGIN'
+    }
+
+    // lifecycle method
     $ctrl.$onInit = onInit;
-    $ctrl.$onChanges = onChanges;
+    // ajax event method
+    $ctrl.onLoadNext = onLoadNext; // infinite-scroll
+    $ctrl.goWriting = goWriting;
+    $ctrl.onSort = onSort;
+    // non-ajax event method
+    $ctrl.onScrollTop = onScrollTop;
+    $ctrl.onSearchSlide = onSearchSlide;
+    $ctrl.onSortSlide = onSortSlide;
+
     $ctrl.clickPageNum = clickPageNum;
     $ctrl.clickFreeboard = clickFreeboard;
-    $ctrl.goWriting = goWriting;
-    $ctrl.onScrollTop = onScrollTop;
     $ctrl.onSearch = onSearch;
-    $ctrl.loadNext = onLoadNext;
+
     $ctrl.showSearchBox = showSearchBox;
     $ctrl.showSortBox = showSortBox;
 
-    const selectors = {
-        searchBox : '#search-box',
-        sortBox : '#sort-box',
-    }
-
-    const NOTY_MSG = {
-        WRITING_NEED_USER_LOGIN : 'NOTY.FREEBOARD.WRITING_NEED_USER_LOGIN'
-    }
-
     /**
-    * Events LifeCycle
+    * LifeCycle Events
     */
     function onInit() {
+        $ctrl.searchOption = {};
+
         // lazy loading need...
         // active pagination index
         const currentPageIndex = parseInt($stateParams.pageIndex);
-        initPageIndex(currentPageIndex);
-    }
-
-    function onChanges() {
-
+        initPageIndexForDesktop(currentPageIndex);
     }
 
     /**
-     * Events with Ajax
+     * Ajax Events
      */
     function goWriting() {
-        User.getStatus().$promise.then(result => {
-            const isSignin = result.toJSON().result;
-            if (isSignin) {
-                $state.go(`freeboard.writing`, {}, { reload: true });
-            } else {
-                Noty.show(NOTY_MSG.WRITING_NEED_USER_LOGIN, 'warning');
-            }
-        }, reason => {
-            Noty.show('get_response_fail', 'error');
+        User.isSignIn().then(datas => {
+            const isSignIn = datas.isSignin;
+            if (!isSignIn) return Noty.show(NOTY_MSG.WRITING_NEED_USER_LOGIN, 'warning');
+            $state.go(`freeboard.writing`, {}, { reload: true });
+        }, errors => {
+            if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`, 'error');
         })
     }
 
@@ -73,48 +79,77 @@ function controller($scope, $state, $stateParams, $element, User, Freeboard, Not
         const pageIndex = ++$ctrl.pageIndex;
         Freeboard.busy = true;
 
-        Freeboard.fetchPage(pageIndex).then(response => {
+        const params = { page: pageIndex };
+        Freeboard.fetchPage(params).then(response => {
 
             Freeboard.busy = false;
             if (response.length == 0) return $ctrl.pageIndex = 'last';
 
             $ctrl.freeboards = $ctrl.freeboards.concat(response);
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+            updateView();
         }, reason => {
 
         })
     }
 
+    function onSort() {
+        const date = $ctrl.sortOption.date;
+        const order = $ctrl.sortOption.order;
+        let startDate = undefined;
+        if (date == 'yesterday') startDate = '20180409';
+        else if (date == 'today') startDate = '20180410';
+        else if (date == 'weekly') startDate = '20180402';
+        else if (date == 'montly') startDate = '20180309';
+
+        const params = { startDate: startDate, order: order };
+
+        Freeboard.fetchPage(params).then(datas => {
+            $ctrl.freeboards = datas;
+            updateView();
+        }, errors => {
+            if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`, 'error');
+        });
+    }
+
     function onSearch() {
-        const keyword = $ctrl.searchKeyword;
-        $ctrl.searchKeyword = undefined;
+        // keyword valid check
+        const keyword = $ctrl.searchOption.keyword;
+        if(keyword.length == 1) return Noty.show('검색어는 두글자 이상으로 입력해야 합니다.', 'warning');
 
+        const date = $ctrl.searchOption.date;
+        let startDate = undefined;
+        if (date == 'yesterday') startDate = '20180409';
+        else if (date == 'today') startDate = '20180410';
+        else if (date == 'weekly') startDate = '20180402';
+        else if (date == 'montly') startDate = '20180309';
 
+        const params = { startDate: startDate, keyword: keyword };
 
+        Freeboard.fetchPage(params).then(datas => {
+            $ctrl.freeboards = datas;
+            updateView();
+        }, errors => {
+            if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`, 'error');
+        });
     }
 
     /**
-     * Events without Ajax
+     * Non-Ajax Events
      */
     function onScrollTop() {
         $("html, body").animate({ scrollTop: 0 }, "slow");
     }
 
-    function showSearchBox() {
-        // $element.find(selectors.sortBox).slideDown('slow');
-        $element.find(selectors.searchBox).slideUp('slow');
+    function onSearchSlide() {
+        $element.find(selectors.searchBox).slideToggle('slow');
     }
 
-    function showSortBox() {
-        // $element.find(selectors.sortBox).slideUp('slow');
-        $element.find(selectors.searchBox).slideDown('slow');
+    function onSortSlide() {
+        $element.find(selectors.sortBox).slideToggle('slow');
     }
-    
 
     /**
-     * Controller
+     * Unit Function : Controller
      */
     function clickPageNum($event) {
         const $_dom = $element.find($event.currentTarget);
@@ -127,23 +162,29 @@ function controller($scope, $state, $stateParams, $element, User, Freeboard, Not
         $state.go('freeboard.detail', { id: id });
     }
 
-
-    /**
-     * Views
-     */
-
-    /** Desktop */
-    /**
-     * Init
-     */
-    function initPageIndex(currentPageIndex) {
+    function initPageIndexForDesktop(currentPageIndex) {
         const pageIndexes = $ctrl.pageIndexes = [];
         for (let i = 0; i < 5; i++) {
             pageIndexes.push(currentPageIndex + i);
         }
     }
 
+    /** 
+     * Unit Function : View
+     */
+    function updateView() {
+        if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') return $scope.$apply();
+        if (logFlag) console.log('$scope.$apply() update view fail');
+    }
 
-    
+    function showSearchBox() {
+        // $element.find(selectors.sortBox).slideDown('slow');
+        $element.find(selectors.searchBox).slideUp('slow');
+    }
+
+    function showSortBox() {
+        // $element.find(selectors.sortBox).slideUp('slow');
+        $element.find(selectors.searchBox).slideDown('slow');
+    }
 }
 

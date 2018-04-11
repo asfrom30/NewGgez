@@ -6,7 +6,6 @@ const router = express.Router();
 const coreCtrl = require('../../core.api.controller');
 const userCtrl = require('./user.controller');
 
-// router.get('/', coreCtrl.checkAuth, userCtrl.get);
 router.get('/', coreCtrl.checkAuth, userCtrl.get);
 router.put('/', coreCtrl.checkAuth, userCtrl.update);
 

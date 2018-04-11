@@ -1,30 +1,30 @@
 <div>
     <div class="freeboard-control--desktop flex f-w-end">
         <div>
-            <button type="button" class="btn btn-outline-light freeboard-control__btn" ng-click="$ctrl.showSearchBox()">검색</button>
-            <button type="button" class="btn btn-outline-light freeboard-control__btn" ng-click="$ctrl.showSortBox()">정렬</button>
-            <button type="button" class="btn btn-outline-light freeboard-control__btn" ng-click="$ctrl.goWriting()">글쓰기</button>
-            <button type="button" class="btn btn-outline-light freeboard-control__btn" ng-click="$ctrl.onScrollTop()">위로</button>
+            <button type="button" class="btn btn-outline-light freeboard-control__btn" ng-click="$ctrl.showSearchBox()" translate>FREEBOARD.LIST.SEARCH_CONDITION</button>
+            <button type="button" class="btn btn-outline-light freeboard-control__btn" ng-click="$ctrl.showSortBox()" translate>FREEBOARD.LIST.SORT_CONDITION</button>
+            <button type="button" class="btn btn-outline-light freeboard-control__btn" ng-click="$ctrl.goWriting()" translate>FREEBOARD.LIST.WRITING</button>
+            <button type="button" class="btn btn-outline-light freeboard-control__btn" ng-click="$ctrl.onScrollTop()" translate>FREEBOARD.LIST.UP</button>
         </div>
     </div>
-    <div infinite-scroll='$ctrl.loadNext()'>
+    <div infinite-scroll='$ctrl.onLoadNext()'>
         <div ng-repeat="freeboard in $ctrl.freeboards" ng-click="$ctrl.clickFreeboard(freeboard)" class="freeboard-list w-100-pct flex f-h-center">
             <div class="flex">
                 <div class="freeboard-list__status freeboard-list__status--views">
-                    <div class="row-2 row-2--collect">
-                        <div translate>WRITING.VIEWS</div>
+                    <div class="row-2 row-2--center row-2--collect">
+                        <div translate>FREEBOARD.LIST.VIEWS</div>
                         <div>{{freeboard.viewCount | defaultValue : '0'}}</div>
                     </div>
                 </div>
                 <div class="freeboard-list__status freeboard-list__status--upvotes">
-                    <div class="row-2 row-2--collect">
-                        <div translate>WRITING.UPVOTES</div>
+                    <div class="row-2 row-2--center row-2--collect">
+                        <div translate>FREEBOARD.LIST.UPVOTES</div>
                         <div>{{freeboard.upvoteUserCount | defaultValue : '0'}}</div>
                     </div>
                 </div>
                 <div class="freeboard-list__status freeboard-list__status--answers">
-                    <div class="row-2 row-2--collect">
-                        <div translate>WRITING.ANSWERS</div>
+                    <div class="row-2 row-2--center row-2--collect">
+                        <div translate>FREEBOARD.LIST.ANSWERS</div>
                         <div>{{freeboard.commentCount | defaultValue : '0'}}</div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
             <div class="freeboard-list__summary-box overflow-hidden f-grow-1">
                 <div class="freeboard-list__title overflow-text-ellipsis ws-nowrap">{{freeboard.title}}</div>
                 <div class="flex summary-display--sub-font ws-nowrap" style="font-size:10px; color:lightgrey">
-                    <div>{{freeboard.owner.username}}</div>
+                    <div>{{freeboard.owner.userName}}</div>
                     <div class="m-l-10">{{freeboard.createdAt | isoTimeFilter}}</div>
                 </div>
             </div>
@@ -40,33 +40,52 @@
         <div ng-show="$ctrl.busy">Loading data...</div>
         <div ng-show="$ctrl.pageIndex == 'last'">Last</div>
     </div>
+    <!-- freeboard search box -->
     <div class="fixed-bottom fixed-bottom--hide-in-desktop fixed-bottom--freeboard flex f-w-end f-h-center pos-relative">
-        <div id="sort-box" class="fixed-bottom--freeboard__sort-box pos-absolute">
-        </div>
-        <div id="search-box" class="fixed-bottom--freeboard__search-box pos-absolute p-a-3">
-            <div class="input-group input-group-sm">
-                <div class="input-group-prepend">
-                    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item">Action</a>
-                        <a class="dropdown-item">Another action</a>
-                        <a class="dropdown-item">Something else here</a>
-                        <a class="dropdown-item">Separated link</a>
+        <div id="sort-box" class="fixed-bottom--freeboard__sort-box pos-absolute flex f-w-between f-h-center" style="background-color: var(--gray-dark); display: none">
+            <div class="m-l-10">
+                <div class="input-group">
+                    <select ng-init="$ctrl.sortOption.date = 'total'" ng-model="$ctrl.sortOption.date" class="custom-select">
+                        <option value="total" translate>FREEBOARD.SORT_BOX.TOTAL</option>
+                        <option value="yesterday" translate>FREEBOARD.SORT_BOX.YESTERDAY</option>
+                        <option value="today" translate>FREEBOARD.SORT_BOX.TODAY</option>
+                        <option value="weekly" translate>FREEBOARD.SORT_BOX.WEEKLY</option>
+                        <option value="monthly" translate>FREEBOARD.SORT_BOX.MONTHLY</option>
+                    </select>
+                    <div class="input-group-append">
+                        <div class="btn-group">
+                            <button class="btn btn-outline-light" ng-class="{active : !$ctrl.sortOption.order }" ng-click="$ctrl.sortOption.order = undefined" translate>FREEBOARD.SORT_BOX.RECENT</button>
+                            <button class="btn btn-outline-light" ng-class="{active : $ctrl.sortOption.order == 'vote'}" ng-click="$ctrl.sortOption.order = 'vote'" translate>FREEBOARD.SORT_BOX.VOTE</button>
+                            <button class="btn btn-outline-light" ng-class="{active : $ctrl.sortOption.order == 'view'}" ng-click="$ctrl.sortOption.order = 'view'" translate>FREEBOARD.SORT_BOX.VIEW</button>
+                            <button class="btn btn-outline-light" ng-class="{active : $ctrl.sortOption.order == 'comment'}" ng-click="$ctrl.sortOption.order = 'comment'" translate>FREEBOARD.SORT_BOX.COMMENT</button>
+                        </div>
                     </div>
                 </div>
-                <input type="text" class="form-control" ng-model="$ctrl.searchKeyword">
+            </div>
+            <div class="m-r-10">
+                <button ng-click="$ctrl.onSort()" class="btn btn-outline-light" translate>FREEBOARD.SORT_BOX.SORT</button>
+            </div>
+        </div>
+        <div id="search-box" class="fixed-bottom--freeboard__search-box flex f-h-center" style="background-color: var(--gray-dark);">
+            <div class="input-group m-l-10 m-r-10">
+                <select ng-init="$ctrl.searchOption.date = 'total'" ng-model="$ctrl.searchOption.date" class="custom-select" style="flex:0; width:100px">
+                    <option value="total" translate>FREEBOARD.SEARCH_BOX.TOTAL</option>
+                    <option value="yesterday" translate>FREEBOARD.SEARCH_BOX.YESTERDAY</option>
+                    <option value="today" translate>FREEBOARD.SEARCH_BOX.TODAY</option>
+                    <option value="weekly" translate>FREEBOARD.SEARCH_BOX.WEEKLY</option>
+                    <option value="monthly" translate>FREEBOARD.SEARCH_BOX.MONTHLY</option>
+                </select>
+                <input class="f-grow-1" type="text" ng-model="$ctrl.searchOption.keyword">
                 <div class="input-group-append">
-                    <button ng-click="$ctrl.onSearch()">search</button>
+                    <button class="btn btn-outline-light" ng-click="$ctrl.onSearch()" translate>FREEBOARD.SEARCH_BOX.SEARCH</button>
                 </div>
             </div>
         </div>
         <div>
-            <button type="button" class="btn btn-outline-light fixed-bottom--freeboard__btn" ng-click="$ctrl.showSearchBox()" translate>FREEBOARD.LIST.SEARCH</button>
-            <button type="button" class="btn btn-outline-light fixed-bottom--freeboard__btn" ng-click="$ctrl.showSortBox()" translate>FREEBOARD.LIST.SORT</button>
+            <button type="button" class="btn btn-outline-light fixed-bottom--freeboard__btn" ng-click="$ctrl.onSearchSlide()" translate>FREEBOARD.LIST.SEARCH_CONDITION</button>
+            <button type="button" class="btn btn-outline-light fixed-bottom--freeboard__btn" ng-click="$ctrl.onSortSlide()" translate>FREEBOARD.LIST.SORT_CONDITION</button>
             <button type="button" class="btn btn-outline-light fixed-bottom--freeboard__btn" ng-click="$ctrl.goWriting()" translate>FREEBOARD.LIST.WRITING</button>
             <button type="button" class="btn btn-outline-light fixed-bottom--freeboard__btn m-r-5" ng-click="$ctrl.onScrollTop()" translate>FREEBOARD.LIST.UP</button>
         </div>
     </div>
 </div>
-
-

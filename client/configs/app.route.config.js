@@ -107,7 +107,8 @@ function getFreeboardListState() {
             freeboards: function (LOG_SETTING, $state, $stateParams, Freeboard, Noty) {
                 // if (logFlag) console.log($stateParams.keyword);
                 // query check? has query?
-                return Freeboard.fetchPage(1).then(result => {
+                const params = { page : 1};
+                return Freeboard.fetchPage(params).then(result => {
                     return result;
                 }, reason => {
                     Noty.show(reason, 'error', 500, function () {
@@ -143,7 +144,6 @@ function getFreeboardDetailState() {
                 if (isNaN(id) || !isNumber(id)) return Noty.show('INVALID_REQUEST', 'warning');
 
                 return Freeboard.fetchDetail(id).then(result => {
-                    console.log(result);
                     return result;
                 }, reason => {
                     Noty.show(reason, 'warning', 1000, function () {

@@ -12,6 +12,7 @@ nav button.custom {
     padding : 0.25rem 0.25rem;
     opacity: 0.8
 }
+
 @media (min-width: 768px) {
     nav button.custom {
         height:40px;
@@ -29,8 +30,6 @@ app-nav .btn-group .dropdown-menu.show.align-right {
     right: 0;
 }
 
-
-
 @media (min-width: 992px) {
     app-nav .right-align {
         order: 2;
@@ -46,4 +45,5 @@ app-nav .btn-group .dropdown-menu.show.align-right {
     background-image: url('/assets/images/extras/blizzard-battle-net.svg');
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center center;
 }

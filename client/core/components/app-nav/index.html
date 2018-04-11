@@ -15,21 +15,21 @@
             </button>
             <div class="dropdown-menu align-right">
                 <div ng-if="!$ctrl.isSignin">
-                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#register-modal" ng-click="$ctrl.onSignUpModalBtn()">Register</button>
-                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#signin-modal" ng-click="$ctrl.onSignInModalBtn()">Sign In</button>
+                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#register-modal" ng-click="$ctrl.onSignUpModalBtn()" translate>NAV.SIGN_UP</button>
+                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#signin-modal" ng-click="$ctrl.onSignInModalBtn()" translate>NAV.SIGN_IN</button>
                 </div>
-                <!-- <div ng-if="$ctrl.isSignin"> -->
-                <div>
-                    <button id="first-click" class="dropdown-item" type="button" data-toggle="modal" data-target="#account-setting-modal" ng-click="$ctrl.onSettingModalBtn()">Setting</button>
-                    <button class="dropdown-item" type="button" ng-click="$ctrl.onSignOut()">Sign out</button>
+                <div ng-if="$ctrl.isSignin">
+                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#account-setting-modal" ng-click="$ctrl.onSettingModalBtn()" translate>NAV.USER_SETTING</button>
+                    <button class="dropdown-item" type="button" ng-click="$ctrl.onSignOut()" translate>NAV.SIGN_OUT</button>
                 </div>
             </div>
         </div>
         <div class="btn-group inline-block">
             <button type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="">
-                <i class="far fa-bell"></i>
+                <i class="far fa-bell"></i><span class="ml-2 badge badge-light">{{$ctrl.notices.length | defaultValue : '0'}}</span>
             </button>
             <div class="dropdown-menu align-right">
+                <button class="dropdown-item" type="button" ng-repeat="notice in $ctrl.notices" ng-click="$ctrl.onClickNotice(notice._id)">{{notice.title}}</button>
             </div>
         </div>
         <button class="custom navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -89,22 +89,22 @@
             <div class="modal-body">
                 <form name="$ctrl.registerForm">
                     <div class="form-group">
-                        <label class="col-form-label" translate>REGISTER.USER_NAME</label>
-                        <input type="text" class="form-control" placeholder="{{ 'MODAL.REGISTER.USERNAME_PLACEHOLDER' | translate }}" name="userName"
+                        <label class="col-form-label" translate>MODAL.SIGN_UP.USERNAME</label>
+                        <input type="text" class="form-control" placeholder="{{ 'MODAL.SIGN_UP.USERNAME_PLACEHOLDER' | translate }}" name="userName"
                             ng-model="$ctrl.register.userName" ng-class="{ 'is-invalid' : $ctrl.formErrors.signUp.userName }">
-                        <div class="invalid-feedback" translate="" ng-show="$ctrl.formErrors.signUp.userName" translate>
-                            이름 형식이 유효하지 않습니다.
+                        <div class="invalid-feedback d-block" ng-show="$ctrl.formErrors.signUp.userName" translate>
+                            MODAL.SIGN_UP.INVALID
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" translate>REGISTER.EMAIL</label>
+                        <label class="col-form-label" translate>MODAL.SIGN_UP.EMAIL</label>
                         <input type="text" class="form-control" ng-model="$ctrl.register.email" ng-class="{ 'is-invalid' : $ctrl.formErrors.signUp.email }">
-                        <div class="invalid-feedback" translate="" ng-show="$ctrl.formErrors.signUp.email" translate>
-                            이메일 형식이 유효하지 않습니다.
+                        <div class="invalid-feedback d-block" ng-show="$ctrl.formErrors.signUp.email" translate>
+                            MODAL.SIGN_UP.INVALID
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" translate>REGISTER.EMAIL_INVITATION_CODE</label>
+                        <label class="col-form-label" translate>MODAL.SIGN_UP.EMAIL_INVITATION_CODE</label>
                         <div class="input-group">
                             <input type="text" class="form-control" ng-model="$ctrl.register.invitationCode">
                             <div class="input-group-append">
@@ -116,21 +116,21 @@
                                 </button>
                             </div>
                         </div>
-                        <div ng-show="$ctrl.expireAfterSeconds">곧 인증코드가 만료됩니다. : {{ $ctrl.expireAfterSeconds}}</div>
+                        <div ng-show="$ctrl.expireAfterSeconds"><span translate>MODAL.SIGN_UP.EXPIRE_INVITATION_CODE</span> : {{ $ctrl.expireAfterSeconds}}</div>
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" translate>REGISTER.PASSWORD</label>
+                        <label class="col-form-label" translate>MODAL.SIGN_UP.PASSWORD</label>
                         <input type="password" class="form-control" ng-model="$ctrl.register.password">
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" translate>REGISTER.PASSWORD_CONFIRM</label>
+                        <label class="col-form-label" translate>MODAL.SIGN_UP.PASSWORD_CONFIRM</label>
                         <input type="password" class="form-control" ng-model="$ctrl.register.passwordConf">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="$ctrl.onSignUp()">Register</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.onSignUp()" translate>MODAL.SIGN_UP.SIGN_UP</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" translate>MODAL.SIGN_UP.CANCEL</button>
             </div>
         </div>
     </div>
@@ -151,15 +151,15 @@
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">E-Mail :</label>
                         <input type="text" class="form-control" ng-class="{'is-invalid' : $ctrl.formErrors.signIn.email}" ng-model="$ctrl.signIn.email">
-                        <div class="invalid-feedback" ng-show="$ctrl.formErrors.signIn.email">
-                            이메일 형식이 유효하지 않습니다.
+                        <div class="invalid-feedback d-block" ng-show="$ctrl.formErrors.signIn.email" translate>
+                                MODAL.SIGN_IN.INVALID
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">PASSWORD : </label>
                         <input type="password" class="form-control" ng-class="{'is-invalid' : $ctrl.formErrors.signIn.password}" ng-model="$ctrl.signIn.password">
-                        <div ng-show="$ctrl.formErrors.signIn.password" class="invalid-feedback">
-                            Wrong Password
+                        <div ng-show="$ctrl.formErrors.signIn.password" class="invalid-feedback d-block" translate>
+                                MODAL.SIGN_IN.INVALID
                         </div>
                     </div>
                 </form>
@@ -187,22 +187,29 @@
             </div>
             <div class="modal-body">
                 <form>
+                    <div class="form-group">
+                        <label class="col-form-label" translate>MODAL.ACCOUNT_SETTING.EMAIL</label>
+                        <input type="text" class="form-control" ng-disabled="true" ng-model="$ctrl.userProfile.email">
+                    </div>
                     <!-- user name change -->
                     <div class="form-group">
-                        <label class="col-form-label" translate="">MODAL.ACCOUNT_SETTING.USERNAME</label>
+                        <label class="col-form-label" translate>MODAL.ACCOUNT_SETTING.USERNAME</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" ng-model="$ctrl.userProfile.userName">
+                            <input type="text" class="form-control" ng-disabled="!$ctrl.enable.editUserName" ng-model="$ctrl.userProfile.userName">
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary" ng-click="" translate>MODAL.COMMON.EDIT</button>
+                                <button type="submit" class="btn btn-primary" ng-click="$ctrl.enable.editUserName = !$ctrl.enable.editUserName" translate>MODAL.COMMON.EDIT</button>
                             </div>
+                        </div>
+                        <div ng-show="$ctrl.formErrors.setting.userName" class="invalid-feedback d-block">
+                                MODAL.ACCOUNT_SETTING.INVALID
                         </div>
                     </div>
                     <!-- battle tag change -->
                     <div class="form-group">
-                        <label class="col-form-label" translate="">MODAL.ACCOUNT_SETTING.BATTLETAG</label>
+                        <label class="col-form-label" translate>MODAL.ACCOUNT_SETTING.BATTLETAG</label>
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="{{ 'MODAL.ACCOUNT_SETTING.NOT_REGISTERED_BATTLETAG' | translate }}"
-                                ng-model="$ctrl.userProfile.battleTag">
+                                ng-disabled="true" ng-model="$ctrl.userProfile.battleTag">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn--battle-net" ng-click="$ctrl.registerBtg()"></button>
                             </div>
@@ -221,7 +228,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-disabled="$ctrl.ajaxFlags.updateProfile" ng-click="$ctrl.onSettingSaveChanges()">
+                <button type="button" class="btn btn-primary" ng-disabled="$ctrl.ajaxFlags.updateProfile" ng-click="$ctrl.onProfileUpdate()">
                     <span ng-show="!$ctrl.ajaxFlags.updateProfile" translate> MODAL.ACCOUNT_SETTING.SAVE_CHANGES </span>
                     <span ng-show="$ctrl.ajaxFlags.updateProfile">
                         <i class="fas fa-spinner fa-pulse"></i>

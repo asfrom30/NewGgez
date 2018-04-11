@@ -34,14 +34,16 @@ const expressSetup = require('./config/express.setup').default(app);
 const routerSetup = require('./app.routes').default(app);
 
 // Seed Data Setup
-// const seedDataSetup = seedDatabaseIfNeeded();
+const seedDatabaseIfNeeded = require('./config/seed.setup');
+seedDatabaseIfNeeded();
+
 
 setImmediate(startServer);
 exports = module.exports = app;
 
 // Start server
 function startServer() {
-    const httpsMode = false;
+    const httpsMode = true;
 
     let server;
     if(httpsMode) {

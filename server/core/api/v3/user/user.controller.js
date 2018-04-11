@@ -1,8 +1,12 @@
+// package
 const mongoose = require('mongoose');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
+// mongoose model
 const UserInvitation = mongoose.model('UserInvitation');
 const User = mongoose.model('User');
+// custom module
+const apiHelper = require('../../core.api.helper');
 
 exports.get = get;
 exports.update = update;
@@ -39,16 +43,16 @@ function signup(req, res) {
     return Promise.resolve().then(() => {
         return UserInvitation.findOne({ sessionOwnerKey: sessionID });
     }).then(userInvitation => {
-        if (!userInvitation) throw make4xxReasonWithClientMsg(422, 'user_invitation_is_not_existed');
+        if (!userInvitation) throw apiHelper.make4xxReasonWithClientMsg(422, 'user_invitation_is_not_existed');
 
         const savedEmail = userInvitation.email;
-        if (savedEmail !== email) throw make4xxReasonWithClientMsg(422, 'saved_email_is_different');
+        if (savedEmail !== email) throw apiHelper.make4xxReasonWithClientMsg(422, 'saved_email_is_different');
         const userInvitationCode = userInvitation.invitationCode + ''; // int to string
-        if (userInvitationCode !== invitationCode) throw make4xxReasonWithClientMsg(422, 'invitation_code_is_wrong');
+        if (userInvitationCode !== invitationCode) throw apiHelper.make4xxReasonWithClientMsg(422, 'invitation_code_is_wrong');
     }).then(() => {
         return User.findOne({ email: email });
     }).then(user => {
-        if (user) throw make4xxReasonWithClientMsg(409, 'this_email_is_already_registerd');
+        if (user) throw apiHelper.make4xxReasonWithClientMsg(409, 'this_email_is_already_registerd');
         return;
     }).then(() => {
         const newUser = new User({
@@ -71,13 +75,13 @@ function signin(req, res, next) {
     passport.authenticate('local.signin', function (err, user, info) {
 
         // 5xx : passport find one mongo error
-        if (err) return sendInternalServerError(res, err);
+        if (err) return apiHelper.sendInternalServerError(res, err);
 
         // 4xx : no error but unprocessable entity
         if (info) return res.status(422).json({ devLogs: info, errors: { msg2Client: info } });
 
         req.logIn(user, function (err) {
-            if (err) return sendInternalServerError(res, err);
+            if (err) return apiHelper.sendInternalServerError(res, err);
             res.json({ datas: { signInResult: true } });
         });
         
@@ -102,7 +106,7 @@ function createInvitation(req, res) {
             return User.findOne({ email: email });
         })
         .then(user => {
-            if (user) throw make4xxReasonWithClientMsg(409, 'this_email_is_already_registerd');
+            if (user) throw apiHelper.make4xxReasonWithClientMsg(409, 'this_email_is_already_registerd');
         })
         .then(() => {
             const promises = [];
@@ -122,14 +126,20 @@ function createInvitation(req, res) {
 function update(req, res, next) {
 
     const user = req.user;
-    const doc = req.body.userProfile;
+    const userProfile = req.body.userProfile;
 
-    if(!user) return sendInternalServerError(res, 'req.user(passport_user)_is_undefined');
+    const doc = {
+        userName : userProfile.userName,
+        battleTag : userProfile.battleTag,
+        battleName : makeBattleName(userProfile.battleTag),
+    }
+    
+    if(!user) return apiHelper.sendInternalServerError(res, 'req.user(passport_user)_is_undefined');
 
     User.findOneAndUpdate({ _id: user._id }, doc, {new: true}).then(user => {
         res.json({ datas: { msg2Client: 'user_profile_update_success', updateResult : true, userProfile : user.toObject() } });
     }, reason => {
-        sendInternalServerError(res, reason);
+        apiHelper.sendInternalServerError(res, reason);
     })
 }
 
@@ -169,7 +179,7 @@ function sendInvitationMail(targetEmailAddress, invitationCode) {
 
             // send mail with defined transport object
             transporter.sendMail(mailContents, (error, info) => {
-                if (error) return reject(make4xxReasonWithClientMsg(400, error.toString()));
+                if (error) return reject(apiHelper.make4xxReasonWithClientMsg(400, error.toString()));
                 resolve();
             });
         });
@@ -186,17 +196,12 @@ function createInvitationMailContent(targetEmailAddress, invitationCode) {
     };
 }
 
-/** response helper function */
-
-
-function sendInternalServerError(res, devLogs) {
-    res.status(500).json({ devLogs: devLogs, errors: { msg2Client: 'internal_server_error' } });
+function makeBattleTag(battleTag) {
+    if(!battleTag) return;
+    return battleTag.replace("#", "-");
 }
 
-// only use for promise process. In other case, just use manual handling
-function make4xxReasonWithClientMsg(code, msg2Client) {
-    return {
-        code: code,
-        msg2Client: msg2Client,
-    }
+function makeBattleName(battleTag) {
+    if(!battleTag) return;
+    return battleTag.substring(0, battleTag.indexOf('#'));
 }

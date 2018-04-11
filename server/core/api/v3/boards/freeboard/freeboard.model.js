@@ -8,13 +8,14 @@ const FreeboardSchema = new Schema({
     _id             : Number,
     title           : String,
     owner           : {type: Schema.Types.ObjectId, ref : 'User'},
-    content         : Object,
-    text            : String,
+    content         : Object, // quill delta structure
+    text            : String, // for search
     comments        : [{ type: Schema.Types.ObjectId, ref: 'FreeboardComment' }],
     upvoteUsers     : [{ type: Schema.Types.ObjectId, ref: 'User' }],
     viewCount       : Number,
     commentCount    : Number,
     upvoteUserCount : Number,
+    notice : Boolean,
 }, { _id: false, timestamps: true});
 
 FreeboardSchema.index({title : 'text', text : 'text'});

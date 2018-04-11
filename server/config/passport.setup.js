@@ -72,7 +72,8 @@ module.exports = function (app) {
         // passport.user <-- this is id.
         User.findById(id, {}, function (err, user) {
             if(err) return done(err, null);
-            done(err, user.toObject());
+            // done(err, user.toObject()); //TODO: 할필요가 없다. 이미 toObject()가 되어져서 나온다.
+            done(err, user);
         });
     });
 

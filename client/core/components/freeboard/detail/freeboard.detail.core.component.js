@@ -22,17 +22,19 @@ function controller(Freeboard, $stateParams, $timeout, $state, $element, Noty, r
     }
 
     const NOTY_MSG = {
+        FREEBOARD_DELETE_SUCCESS : 'NOTY.FREEBOARD.DELETE_SUCCESS',
         COMMENT_INVALID : 'NOTY.FREEBOARD_COMMENT.INVALID',
         COMMENT_POST_FAIL : 'NOTY.FREEBOARD_COMMENT.POST_FAIL',
     }
 
     $ctrl.$onInit = onInit;
-    $ctrl.$onChanges = onChanges;
 
     // ajax event
     $ctrl.onPostComment = onPostComment;
     $ctrl.onUpvoteFreeboad = onUpvoteFreeboad;
     $ctrl.onModifyFreeboard = onModifyFreeboard;
+    $ctrl.onDeleteFreeboard = onDeleteFreeboard;
+
     $ctrl.goFreeboardList = goFreeboardList;
     
     // view event
@@ -45,15 +47,6 @@ function controller(Freeboard, $stateParams, $timeout, $state, $element, Noty, r
         $timeout(function(){
             $element.find("#first-click").click();
         }, 300)
-    }
-
-    function onChanges() {
-        $timeout(function(){
-            // const contentMessenger = $ctrl.contentMessenger;
-            // if(contentMessenger == undefined) return;
-            // const content = $ctrl.freeboard.content;
-            // contentMessenger.setContents(content);
-        });
     }
 
     /**
@@ -102,8 +95,16 @@ function controller(Freeboard, $stateParams, $timeout, $state, $element, Noty, r
     }
 
     function onDeleteFreeboard() {
+        const id = $stateParams.id;
+        Freeboard.remove(id).then(datas => {
+            Noty.show(NOTY_MSG.FREEBOARD_DELETE_SUCCESS, undefined, 'short', function() {
+                return window.history.back();
+            })
+        }, errors => {
+            Noty.show(`SERVER.${errors.msg2Client}`, 'warning');
+        })
+    };
 
-    }
     /**
      * Event without Ajax(only view change)
      */

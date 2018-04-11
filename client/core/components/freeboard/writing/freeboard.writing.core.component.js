@@ -41,15 +41,12 @@ function controller($state, $element, Freeboard, Noty, CoreUtils, rules, LOG_SET
         if(valid) {
             const content = getContentMessenger().getContents();
             const text = getContentMessenger().getText();
-            Freeboard.save(title, content, text).$promise.then(result => {
+            Freeboard.save(title, content, text).then(datas => {
                 Noty.show(NOTY_MSG.WRITING_SUCCESS, 'info', 500, function() {
                     return $state.go('freeboard.list', {pageIndex : 1});
-                })
-            }, reason => {
-                const statusCode = reason.status;
-                const resultJson = reason.data;
-                if(logFlag) console.log(resultJson.errLog);
-                Noty.show(`NOTY.SERVER.${resultJson.errMsg}`, 'error');
+                });
+            }, errors => {
+                Noty.show(`SERVER.${errors.msg2Client}`, 'error');
             });
         }
     }

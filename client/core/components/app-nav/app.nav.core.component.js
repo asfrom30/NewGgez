@@ -12,7 +12,7 @@ export default angular.module('nav.core.component.module', [])
         controller: controller,
     }).name;
 
-export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $translate, $window, $interval, validator, $element, $timeout) {
+export function controller(AppLogger, User, Freeboard, Noty, LOG_SETTING, $scope, $state, $translate, $window, $interval, validator, $element, $timeout) {
     'ngInject';
 
     var $ctrl = this;
@@ -23,12 +23,15 @@ export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $
     $ctrl.onSignOut = onSignOut;
     $ctrl.onRequestInvitation = onRequestInvitation;
     $ctrl.registerBtg = registerBtg;
-    $ctrl.onSettingSaveChanges = onProfileUpdate;
-    $ctrl.onSettingModalBtn = onSettingModalBtn;
+    $ctrl.onProfileUpdate = onProfileUpdate;
     // non-ajax event
     $ctrl.goRandomPage = goRandomPage;
     $ctrl.goFreeBoard = goFreeBoard;
     $ctrl.changeLang = changeLang;
+    $ctrl.onClickNotice = onClickNotice;
+
+    // ajax events : modal btn
+    $ctrl.onSettingModalBtn = onSettingModalBtn;
     // non-ajax event : modal btn
     $ctrl.onSignUpModalBtn = onSignUpModalBtn;
     $ctrl.onSignInModalBtn = onSignInModalBtn;
@@ -38,19 +41,19 @@ export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $
 
     const ajaxFlags = {
         invitation: false,
-        updateProfile : false,
+        updateProfile: false,
     }
 
     let authBusyFlag = false;
 
 
     $ctrl.$onInit = function () {
-
         $ctrl.ajaxFlags = ajaxFlags;
         $ctrl.register = {};
         $ctrl.signIn = {};
         $ctrl.formErrors = {}; // reset
         updateUserSignInStatus();
+        updateNotice();
         initForDev();
     }
 
@@ -68,6 +71,16 @@ export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $
         }, errors => {
             if (errors.msg2Client) Noty.show(`SERVER.${errors.msg2Client}`, 'error');
         });
+    }
+
+    function updateNotice() {
+        const params = { page: 1, notice: true }
+
+        Freeboard.fetchPage(params).then(datas => {
+            $ctrl.notices = datas;
+        }, errors => {
+            console.log(errors);
+        })
     }
 
     function goRandomPage() {
@@ -117,8 +130,9 @@ export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $
     // need ajax
     function onSettingModalBtn() {
         // reset state
+        $ctrl.enable = {};
         setUpdateProfileFlag(false);
-        
+
         // di
         const $_spinner = $element.find("#account-setting-spinner");
         showElement($_spinner);
@@ -238,27 +252,8 @@ export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $
 
     function registerBtg() {
 
-        //FIXME: CHANGE CODE based on Cheking Event. not interval
+        //FIXME: CHANGE CODE based on Cheking Browser Window Event. not interval
         // bnetWindow.addEventListener('hashchange', function(e){console.log('hash changed')});
-
-        // const timeout = 30;
-        // let time = 0;
-        // const authTimer = $interval(function() {
-        //     if(time > timeout) {
-        //         $interval.cancel(authTimer);
-        //         bnetWindow.close();
-        //         Noty.show('time out');
-        //     } else {
-        //         const result = bnetWindow.result;
-        //         if(result == undefined) {
-        //             time++;
-        //         } else {
-        //             $interval.cancel(authTimer);
-        //             bnetWindow.close();
-        //         }
-        //     }
-        // }, 1000);
-
         if (authBusyFlag) return Noty.show('already_request', 'error');
         const bnetWindow = $window.open("/api/oauth/bnet", "_blank", "width=300,height=500");
         const timeout = 30;
@@ -275,68 +270,66 @@ export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $
             }
 
             const result = bnetWindow.result;
-            if (result == undefined) {
-                time++;
-            } else {
-                bnetWindow.close();
-                $interval.cancel(authTimer);
-                authBusyFlag = false;
-                $ctrl.battleTag = result.battletag;
-            }
+            if(!result) return time ++
+
+            bnetWindow.close();
+            $interval.cancel(authTimer);
+            authBusyFlag = false;
+            $ctrl.userProfile.battleTag = result.battletag;
         }, 1000);
     }
 
-
     function onProfileUpdate() {
-
         // client validate
         const userProfile = $ctrl.userProfile;
-        if(!isValidUserProfile(userProfile)) return;
-        
+        if (!isValidUserProfile(userProfile)) return;
+
         setUpdateProfileFlag(true);
 
         User.updateProfile(userProfile).then(datas => {
             updateUserProfile(datas.userProfile);
-            // $(dom.accountSettingModal).modal('hide');
-            // return Noty.show(notyMsg.SAVE_CHANGES_SUCCESS, 'info');
+            // close modal and noty to client
+            return Noty.show(notyMsg.SAVE_CHANGES_SUCCESS, 'info', 'short', function() {
+                $(dom.accountSettingModal).modal('hide');
+            });
         }, errors => {
             Noty.show(`SERVER.${errors.msg2Client}`, 'error');
-        }).then(() =>{
+        }).then(() => {
             setUpdateProfileFlag(false);
-            // updateView();
+            updateView();
         });
     }
 
+    function onClickNotice(noticeId) {
+        $state.go(`freeboard.detail`, { id: noticeId }, { reload: true });
+    }
 
     /** Unit Function */
     function isValidUserProfile(userProfile) {
+        resetAllFormErrors();
 
-        return true;
-
-        if(!userProfile) return;
-        userProfile.userName = '변경된이름12345';
-        
-
+        // DI
         const battletag = $ctrl.battleTag;
         const password = $ctrl.tempPassword;
         const passwordConfirm = $ctrl.tempPassword2;
-
-        const body = {};
-
+        
         // client form validate
-        if (battletag) body.battletag = battletag;
-        if (password || passwordConfirm) {
-            if (password === passwordConfirm) {
-                body.password = password;
-            } else {
-                return Noty.show('INCORRECT_PASSWORD_CONFIRM ', 'error');
-            }
-        }
+        const length = userProfile.userName;
+        if (length < 2 || 10 < length) $ctrl.formErrors.setting.userName = true;
+        // if (battletag) body.battletag = battletag;
+        // if (password || passwordConfirm) {
+        //     if (password === passwordConfirm) {
+        //         body.password = password;
+        //     } else {
+        //         return Noty.show('INCORRECT_PASSWORD_CONFIRM ', 'error');
+        //     }
+        // }
+
+        const hasError = hasAnyValidateError($ctrl.formErrors.setting);
+        return !hasError;
     }
 
     function updateUserProfile(userProfile) {
-        console.log('update profile');
-        console.log(userProfile);
         if (userProfile == undefined) return $ctrl.userProfile == undefined;
         $ctrl.userProfile = userProfile;
         updateView();
@@ -346,6 +339,13 @@ export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $
         $ctrl.signIn = {};
     }
 
+    function resetAllFormErrors() {
+        $ctrl.formErrors = {};
+        $ctrl.formErrors.signIn = {};
+        $ctrl.formErrors.signUp = {};
+        $ctrl.formErrors.setting = {};
+
+    }
     function resetSignInFormErrors() {
         $ctrl.formErrors = $ctrl.formErrors || {};
         $ctrl.formErrors.signIn = {};
@@ -427,7 +427,7 @@ export function controller(AppLogger, User, Noty, LOG_SETTING, $scope, $state, $
     }
 
     function updateView() {
-        if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') return  $scope.$apply();
-        if(logFlag) console.log('$scope.$apply() update view fail');
+        if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') return $scope.$apply();
+        if (logFlag) console.log('$scope.$apply() update view fail');
     }
 }

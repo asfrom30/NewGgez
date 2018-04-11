@@ -5,27 +5,30 @@
         <!-- title -->
         <h1 class="title wb-break-word">{{$ctrl.freeboard.title}}</h1>
         <!-- owner info -->
-        <div class="freeboard-user-profile">
-            <div class="flex freeboard-user-profile__upper">
-                <img class="freeboard-user-profile__tier-img" ng-src="{{$ctrl.freeboard.owner.cptpt | tierImageSrc}}"/>
-                <img class="freeboard-user-profile__hero-img" ng-src="{{$ctrl.freeboard.owner.most | heroImageSrc}}"/>
+        <div  class="freeboard-user-profile">
+            <div ng-show="!$ctrl.freeboard.owner" translate>FREEBOARD.DETAIL.NO_OWNER_PROFILE</div>
+            <div ng-show="$ctrl.freeboard.owner" class="flex freeboard-user-profile__upper">
+                <img ng-show="$ctrl.freeboard.owner.cptpt" class="freeboard-user-profile__tier-img p-2" ng-src="{{$ctrl.freeboard.owner.cptpt | tierImageSrc}}"/>
+                <img class="freeboard-user-profile__hero-img p-2" ng-src="{{$ctrl.freeboard.owner.most | heroImageSrc}}"/>
                 <div class="freeboard-user-profile__names row-2 row-2--collect">
-                    <div>{{$ctrl.freeboard.owner.username}}</div>
+                    <div>{{$ctrl.freeboard.owner.userName}}</div>
                     <div>{{$ctrl.freeboard.owner.battleName}}</div>
                 </div>
             </div>
-            <div class="flex freeboard-user-profile__lower">
+            <div class="flex freeboard-user-profile__lower m-t-10">
                 <div class="flex f-wh-center"><span translate>FREEBOARD.DETAIL.CREATED_AT</span> : {{$ctrl.freeboard.createdAt | isoTimeFilter}}</div>
                 <div class="flex f-wh-center"><span translate>FREEBOARD.DETAIL.VIEW_COUNT</span> : {{$ctrl.freeboard.viewCount | defaultValue : 0}}</div>
                 <div class="flex f-wh-center"><span translate>FREEBOARD.DETAIL.UPVOTE_COUNT</span> : {{$ctrl.freeboard.upvoteCount | defaultValue : 0}}</div>
             </div>
         </div>
         <!-- content -->
-        <quill-render delta="$ctrl.freeboard.content"></quill-render>
+        <div class="m-t-10 p-3" style="border : 1px solid grey;">
+            <quill-render delta="$ctrl.freeboard.content"></quill-render>
+        </div>
     </div>
 
     <!-- comment list-->
-    <div class="freeboard-comment">
+    <div ng-show="$ctrl.freeboard.comments.length != 0" class="freeboard-comment">
         <div class="freeboard-comment__repeat" ng-repeat="comment in $ctrl.freeboard.comments">
             <div class="freeboard-comment__content">{{comment.content}}</div>
             <div class="freeboard-comment__info flex">
@@ -35,7 +38,7 @@
         </div>
     </div>
 
-    <!-- comment -->
+    <!-- comment post -->
     <div class="freeboard-comment-writer">
         <div class="form-group">
             <label for="comment">Comment:</label>
@@ -51,13 +54,13 @@
     <div class="fixed-bottom-padding"></div>
     <div class="fixed-bottom fixed-bottom--freeboard fixed-bottom--static-in-desktop flex order-1 f-w-between f-h-center">
         <div class="flex">
-            <button type="button" class="btn btn-outline-info m-l-5" translate>FREEBOARD.DETAIL.MODIFY</button>
-            <button type="button" class="btn btn-outline-info m-l-3" translate>FREEBOARD.DETAIL.DELETE</button>
+            <!-- <button type="button" class="btn btn-outline-info m-l-5" ng-click="$ctrl.onModifyFreeboard()" translate>FREEBOARD.DETAIL.MODIFY</button> -->
+            <button type="button" class="btn btn-outline-info m-l-3" ng-click="$ctrl.onDeleteFreeboard()" translate>FREEBOARD.DETAIL.DELETE</button>
         </div>
         <div class="flex">
             <button type="button" class="btn btn-outline-warning m-r-3" ng-click="$ctrl.onUpvoteFreeboad()" translate>FREEBOARD.DETAIL.UPVOTE</button>
             <button type="button" class="btn btn-outline-success m-r-3" ng-click="$ctrl.onWriteComment()" translate>FREEBOARD.DETAIL.WRITE_COMMENT</button>
-            <button type="button" class="btn btn-outline-light m-r-5" ng-click="$ctrl.goFreeboardList()" translate>FREEBOARD.DETAIL.GO_LIST</button>
+            <button type="button" class="btn btn-outline-light m-r-5" ng-click="$ctrl.goFreeboardList()" translate>FREEBOARD.DETAIL.BACKWARD</button>
         </div>
     </div>
 </div>

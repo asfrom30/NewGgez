@@ -5,12 +5,11 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
-        require: true,
+        required: true,
         trim: true,
     },
     userName: {
         type: String,
-        required: true,
         unique: false,
         trim: true
     },
@@ -21,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     battleName: {
         type: String,
         trim: true
+    },
+    role : {
+        type: String,
+        default: 'user'
     },
     password: {
         type: String,

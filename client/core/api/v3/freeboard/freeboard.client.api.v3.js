@@ -51,12 +51,47 @@ function Controller(logFlag, Freeboard, FreeboardComment) {
     this.fetchPage = fetchPage;
     this.fetchDetail = fetchDetail;
     this.save = save;
+    this.remove = remove;
     this.saveComment = saveComment;
     this.upvote = upvote;
 
-    function fetchPage(pageIndex) {
+    function save(title, content, text) {
         return new Promise((resolve, reject) => {
-            Freeboard.getPage({ page: pageIndex }).$promise.then(ngResources => {
+            Freeboard.save({title : title, content : content, text : text}).$promise.then(response => {
+                resolve(response.datas);
+            }, reason => {
+                if (logFlag) console.error(reason.data.devLogs);
+                reject(reason.data.errors);
+            })
+        });
+    }
+
+    function remove(id) {
+        return new Promise((resolve, reject) => {
+            Freeboard.remove({id : id}).$promise.then(response => {
+                resolve(response.datas);
+            }, reason => {
+                if(logFlag) console.log(reason.data.devLogs);
+                reject(reason.data.errors);
+            })
+        })
+    }
+
+    /**
+     * 
+     * @param {*} params 
+     * const params = {
+            page : Int,
+            notice : Boolean,
+            keyword : String,
+            startDate : String{YYYYMMDD},
+            endDate : String{YYYYMMDD},
+            order : String{vote, comment, view}
+        }
+     */
+    function fetchPage(params) {
+        return new Promise((resolve, reject) => {
+            Freeboard.getPage(params).$promise.then(ngResources => {
                 resolve(ngResources);
             }, reason => {
                 const statusCode = reason.status;
@@ -82,10 +117,6 @@ function Controller(logFlag, Freeboard, FreeboardComment) {
 
     function saveComment(id, content) {
         return FreeboardComment.save({id : id, content : content});
-    }
-
-    function save(title, content, text) {
-        return Freeboard.save({title : title, content : content, text : text});
     }
 
     function upvote(id) {

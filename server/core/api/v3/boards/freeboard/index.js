@@ -9,11 +9,12 @@ const controller = require('./freeboard.controller');
 router.param('id', controller.findById);
 
 /* Freeboard Api */
-router.get ('/', controller.getPageQuery); // ?page=1
-router.get('/:id', controller.read);
+router.get ('/', controller.query); // ?page=1
 router.post('/', coreController.checkAuth, controller.save);
-// router.modify('/', controller.update);
 
+router.get('/:id', controller.read);
+router.delete('/:id', coreController.checkAuth, controller.delete);
+// modify
 router.get('/:id/upvote', coreController.checkAuth, controller.upvote);
 
 module.exports = router;

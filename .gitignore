@@ -6,6 +6,10 @@ tmp
 .DS_Store
 .idea
 
+/* project extras */
+.sandbox
+.skeleton
+
 /* dev */
 /client/assets
 
@@ -22,13 +26,11 @@ server-cron/.report
 server-cron/.smtp
 
 
-/* sandbox */
-sandbox
+
 
 /* secret */
+.secrets
 /server/config/environment
 /server-cron/config/environment
-
-.secrets
 
 stat-map-builder

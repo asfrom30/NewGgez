@@ -314,11 +314,11 @@
 }
 
 @media (min-width: 768px) {
-    .fixed-bottom--hide-in-desktop {
+    .hide-in-desktop {
         display: none;
     }
 
-    .fixed-bottom--static-in-desktop {
+    .static-in-desktop {
         position : static; 
     }
 }

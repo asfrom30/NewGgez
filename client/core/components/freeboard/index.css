@@ -189,18 +189,12 @@
     text-overflow: ellipsis;
 }
 
-.fixed-bottom--freeboard__search-box {
-    bottom : var(--fixed-bottom-height);
+.fixed-bottom--freeboard__box {
+    background-color: var(--gray-dark);
+    bottom : 0px;
     height: 50px;
     width : 100%;
 }
-
-.fixed-bottom--freeboard__sort-box {
-    bottom : var(--fixed-bottom-height);
-    height: 50px;
-    width : 100%;
-}
-
 
 /** freeboard control */
 @media (max-width: 767px) {
@@ -213,4 +207,9 @@
     height: 40px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* */
+.padding-for-fixed-bottom--fb {
+    height: 100px;
 }

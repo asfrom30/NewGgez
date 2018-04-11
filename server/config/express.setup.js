@@ -132,8 +132,8 @@ export default function (app) {
         browserSync.init({
             open: false,
             logFileChanges: false,
-            proxy: `https://localhost:${config.port}`,
-            // proxy: `http://localhost:${config.port}`,
+            // proxy: `https://localhost:${config.port}`,
+            proxy: `http://localhost:${config.port}`,
             ws: true,
             middleware: [
                 webpackDevMiddleware(compiler, {
@@ -169,6 +169,4 @@ export default function (app) {
     // if(env === 'development' || env === 'test') {
     //     app.use(errorHandler()); // Error handler - has to be last
     // }
-
-    console.log('express setting ');
 }

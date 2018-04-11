@@ -1,3 +1,4 @@
+/* default ignores */
 /logs/*
 !.gitkeep
 node_modules/
@@ -6,31 +7,27 @@ tmp
 .DS_Store
 .idea
 
+/* project secret */
+.secrets
+
 /* project extras */
 .sandbox
 .skeleton
 
-/* dev */
-/client/assets
-
-/* dist */
+/* project dist */
 /.tmp
 /dist
 /dist.dryrun
 
-/* ops */
-.ssh/**
+/* app secrets */
+server/config/environment
 
+server-cron/config/environment
 server-cron/.log
 server-cron/.report
 server-cron/.smtp
 
-
-
-
-/* secret */
-.secrets
-/server/config/environment
-/server-cron/config/environment
-
 stat-map-builder
+
+/* app extras */
+/client/assets

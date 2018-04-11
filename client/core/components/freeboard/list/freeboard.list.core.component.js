@@ -28,6 +28,10 @@ function controller($scope, $state, $stateParams, $element, User, Freeboard, Not
         WRITING_NEED_USER_LOGIN: 'NOTY.FREEBOARD.WRITING_NEED_USER_LOGIN'
     }
 
+    $ctrl.ajaxFlags = {
+        onLoadNext : false,
+    }
+
     // lifecycle method
     $ctrl.$onInit = onInit;
     // ajax event method
@@ -71,6 +75,7 @@ function controller($scope, $state, $stateParams, $element, User, Freeboard, Not
         })
     }
 
+    //FIXME: CRITICAL ISSUE
     function onLoadNext() {
 
         if ($ctrl.pageIndex == 'last') return;
@@ -78,11 +83,13 @@ function controller($scope, $state, $stateParams, $element, User, Freeboard, Not
 
         const pageIndex = ++$ctrl.pageIndex;
         Freeboard.busy = true;
+        $ctrl.ajaxFlags.onLoadNext = true;
 
         const params = { page: pageIndex };
         Freeboard.fetchPage(params).then(response => {
 
             Freeboard.busy = false;
+            $ctrl.ajaxFlags.onLoadNext = false;
             if (response.length == 0) return $ctrl.pageIndex = 'last';
 
             $ctrl.freeboards = $ctrl.freeboards.concat(response);

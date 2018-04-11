@@ -14,7 +14,7 @@ const logScope = 'app-route-config';
 export function routeConfig($stateProvider, $urlServiceProvider) {
 
     /* otherwise redirect to index */
-    // $urlServiceProvider.rules.otherwise({ state: 'index' });
+    $urlServiceProvider.rules.otherwise({ state: 'index' });
 
     /* Index Component */
     $stateProvider.state(getIndexState());

@@ -292,11 +292,11 @@ gulp.task('serve:bluehost:dryrun', function () {
         .pipe(gulp.dest(paths.logs.ssh));
 });
 
-/** remote prodrun and dryrun */
+/** Remote Run */
 gulp.task('remote:bluehost:run:server', function () {
     return gulpSSH
         .shell([`cd ${remotePath.bluehost.node}`
-            , 'npm install'
+            , 'npm install --production'
             , `npm run server:prod`
         ], { filePath: 'shell.log' })
         .pipe(gulp.dest(paths.logs.ssh));
@@ -305,7 +305,7 @@ gulp.task('remote:bluehost:run:server', function () {
 gulp.task('remote:bluehost:run:cron', function () {
     return gulpSSH
         .shell([`cd ${remotePath.bluehost.node}/${cronPath}`
-            , 'npm install'
+            , 'npm install --production'
             , `npm run pm2:prod`
         ], { filePath: 'shell.log' })
         .pipe(gulp.dest(paths.logs.ssh))
@@ -350,11 +350,11 @@ gulp.task('deploy:client:simple', cb => {
  ********************/
 gulp.task('auto:deploy:all', cb => {
     runSequence(
-        // run server
-        'build:all',
-        // 'deploy:all',
-        // install nodemodules and child node modules
-        // run server
+        'build:all:!node_modules',
+        'remote:bluehost:clean:all',
+        'remote:bluehost:copy:all',
+        'remote:bluehost:run:server',
+        'remote:bluehost:run:cron',
     );
 });
 
@@ -407,7 +407,7 @@ gulp.task('auto:deploy:client', cb => {
 gulp.task('auto:deploy:client:simple', cb => {
     runSequence(
         'build:client:simple',
-        // 'remote:bluehost:clean:client:simple', //TODO: not yet impl for keep lecacy code
+        'remote:bluehost:clean:client!assets',
         'remote:bluehost:copy:client:simple',
         cb,
     );
@@ -670,13 +670,21 @@ gulp.task('test:client', done => {
  ********************/
 
 /* Remote clean */
+gulp.task('remote:bluehost:clean:all', function () {
+    return gulpSSH
+        .shell([`cd ${remotePath.bluehost.node}`,
+        `rm -rf ${remotePath.bluehost.node}`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
+});
+
 gulp.task('remote:bluehost:clean:package.json', function () {
     return gulpSSH
         .shell([`cd ${remotePath.bluehost.node}/${serverPath}`,
         `rm -rf ${remotePath.bluehost.node}/package.json`
         ], { filePath: 'shell.log' })
         .pipe(gulp.dest(paths.logs.ssh))
-})
+});
 
 gulp.task('remote:bluehost:clean:server', function () {
     return gulpSSH
@@ -690,7 +698,7 @@ gulp.task('remote:bluehost:clean:server', function () {
 gulp.task('remote:bluehost:clean:cron', function () {
     return gulpSSH
         .shell([`cd ${remotePath.bluehost.node}/${cronPath}`,
-            `shopt -s extglob`,
+        `shopt -s extglob`,
         `rm -rf ${remotePath.bluehost.node}/${cronPath}/!(node_modules)`
         ], { filePath: 'shell.log' })
         .pipe(gulp.dest(paths.logs.ssh))
@@ -698,8 +706,18 @@ gulp.task('remote:bluehost:clean:cron', function () {
 
 gulp.task('remote:bluehost:clean:client', function () {
     return gulpSSH
-        .shell([`cd ${remotePath.bluehost.node}/${cronPath}`,
+        .shell([`cd ${remotePath.bluehost.node}/${clientPath}`,
+        `shopt -s extglob`,
         `rm -rf ${remotePath.bluehost.node}/${clientPath}`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
+});
+
+gulp.task('remote:bluehost:clean:client!assets', function () {
+    return gulpSSH
+        .shell([`cd ${remotePath.bluehost.node}/${clientPath}`,
+        `shopt -s extglob`,
+        `rm -rf ${remotePath.bluehost.node}/${clientPath}/!(assets)`
         ], { filePath: 'shell.log' })
         .pipe(gulp.dest(paths.logs.ssh))
 })
@@ -714,6 +732,12 @@ gulp.task('remote:bluehost:clean:dryrun', function () {
 
 
 /* SSH FILE MOVE : LOCAL TO REMOTE */
+gulp.task('remote:bluehost:copy:all', function () {
+    return gulp
+        .src([`${paths.dist}/**/*`, `!${paths.dist}/node_modules/**`, `!${paths.dist}/${cronPath}/node_modules/**`], { dot: true })
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.node}`));
+});
+
 gulp.task('remote:bluehost:copy:package.json', function () {
     return gulp
         .src(`${paths.dist}/package.json`)
@@ -722,7 +746,7 @@ gulp.task('remote:bluehost:copy:package.json', function () {
 
 gulp.task('remote:bluehost:copy:server', function () {
     return gulp
-        .src([`${paths.dist}/${serverPath}/**/*`, `!${paths.dist}/${serverPath}/node_modules/**`], { dot: true })
+        .src([`${paths.dist}/${serverPath}/**/*`, `!${paths.dist}/node_modules/**`], { dot: true })
         .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${serverPath}`))
 });
 

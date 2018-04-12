@@ -90,13 +90,16 @@ function controller($scope, $state, $stateParams, $element, User, Freeboard, Not
 
             Freeboard.busy = false;
             $ctrl.ajaxFlags.onLoadNext = false;
-            if (response.length == 0) return $ctrl.pageIndex = 'last';
+            if (response.length < 10) {
+                updateView();
+                return $ctrl.pageIndex = 'last';
+            }
 
             $ctrl.freeboards = $ctrl.freeboards.concat(response);
             updateView();
         }, reason => {
-
-        })
+            console.log(reason);
+        });
     }
 
     function onSort() {

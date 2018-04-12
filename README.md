@@ -45,8 +45,8 @@
 
 
 # Technical Report
-* 한국어로 된 기술문서를 보시려면 [여기로](./.md/README_kr.md)
-* Technical document in english link is [here](./.md/README_en.md)
+* 한국어로 된 기술문서를 보시려면 [여기로](./.github/README_kr.md)
+* Technical document in english link is [here](./.github/README_en.md)
 
 # as-was vs as-is
 <table style="text-align:center">

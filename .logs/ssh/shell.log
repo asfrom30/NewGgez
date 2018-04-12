@@ -1,0 +1,10 @@
+Last login: Thu Apr 12 01:02:40 2018 from 125.136.230.89
+cd /home/ggezkr/node/client
+shopt -s extglob
+rm -rf /home/ggezkr/node/client/!(assets)
+exit
+]0;ggezkr@server.ggez.kr:ggezkr@server.ggez.kr [~]# cd /home/ggezkr/node/client
+]0;ggezkr@server.ggez.kr:ggezkr@server.ggez.kr [client]# shopt -s extglob
+]0;ggezkr@server.ggez.kr:ggezkr@server.ggez.kr [client]# rm -rf /home/ggezkr/node/client/!(assets)
+]0;ggezkr@server.ggez.kr:ggezkr@server.ggez.kr [client]# exit
+logout

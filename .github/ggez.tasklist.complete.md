@@ -54,13 +54,6 @@
 		: 크롤링할때 log 시간나오게 할것.
 	* daily data를 일괄로 받아서 내 서버에 저장하는 기능 만들기...
 
-## Gulp 명령어...
-: gulp에서 어떻게 npm 명령어를 가져오지? npm install, npm run webpack-dev-server
-: webpack mode는 node_env_process : webpack (api 더미 모드 사용때문에...)
-: npm webpack:dev -> .tmp
-: npm webpack:dist -> dist
-: npm webpakc:test
-
 ## Deploy
 - [x] set node and mongodb in bluehost
 - [x] make simple index.html. using filezilla
@@ -73,7 +66,6 @@
 - [x] deploy pipe line 구축할것(배포 자동화.)
 - [x] npm script에 pm2 적용할것. deploy 모드에서.
 
-# Bug fix
 
 
 

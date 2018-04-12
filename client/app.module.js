@@ -1,16 +1,12 @@
 'use strict';
 
-/* expose global variable */
-require("expose-loader?$!jquery");
-require("expose-loader?$!popper.js");
+/* import bootstrap css */
+// require('bootstrap/dist/css/bootstrap.css');
 
-/* Using bootstrap */
-//TODO: need to replace regex pattern in webpack.common.config (do not apply this bootstrap), see more bootstrap css in webpack https://getbootstrap.com/docs/4.0/getting-started/webpack/
-require('bootstrap/dist/css/bootstrap.css'); 
-require('bootstrap/dist/js/bootstrap.min.js');
-/* use ui-bootstrap */
-// need bootstrap css
-// import uiBootStrap from 'angular1-ui-bootstrap4';
+/** Expose package */
+require("expose-loader?$!jquery");
+require("expose-loader?d3!d3");
+
 // import ngAnimate from 'angular-animate';
 // import ngTouch from 'angular-touch';
 
@@ -25,6 +21,9 @@ import ngResource from 'angular-resource';
 // import 'angular-socket-io';
 // import 'angular-validation-match';
 
+/* Call Angular Add on */
+import ngInfinteScroll from 'ng-infinite-scroll';
+
 /* import configs */
 import i18nConfig from './configs/app.i18n.config';
 import { routeConfig } from './configs/app.route.config.js';
@@ -35,6 +34,7 @@ import constants from './app.constants';
 import CommonsModule from './commons/commons.module';
 /* App Core */
 import appCore from './core/core.module';
+
 /* Version */
 // Declare app level module which depends on views, and components
 
@@ -45,10 +45,11 @@ angular.module('ggezkrApp', [ngResource,
   
   constants,
 
-  /* Common */
-  CommonsModule,
+  /* ng component */
+  'infinite-scroll',
 
-  appCore,
+  /* Common */
+  CommonsModule, appCore,
 
   // 'myApp.version',
 ])
@@ -58,4 +59,4 @@ angular.module('ggezkrApp', [ngResource,
   'ngInject';
   $rootScope.CONST = CONST;
   $('#indicator-in-index-page').hide();
-});;
+});

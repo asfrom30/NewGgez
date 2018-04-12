@@ -14,7 +14,7 @@ export default angular.module('components.index', [])
         controller : indexCtrl,
         bindings : {
             currentPlayer : "=",
-            indexInformation : '<'
+            indexInformation : '<',
             // bindCurrentPlayer : "&",
         }
     }).name;
@@ -64,10 +64,11 @@ export function indexCtrl(AppLogger, $window, $element, $rootScope, $scope, Ajax
 
     /* View */
     function initView() {
-        scrollDownAnimateInit();
+        initScrollDownAnimate();
+
     }
 
-    function scrollDownAnimateInit() {
+    function initScrollDownAnimate() {
         $(function() {
             $('a[href*="#"]').on('click', function(e) {
                 e.preventDefault();

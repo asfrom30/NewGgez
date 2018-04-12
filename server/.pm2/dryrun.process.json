@@ -1,0 +1,12 @@
+{
+    "apps": [{
+        "name": "server:dryrun",
+        "script": "./server/index.js",
+        "watch": false,
+        "autorestart" : false,
+        "env": {
+            "NODE_ENV": "production",
+            "dryrun" : true
+        }
+    }]
+}

@@ -181,6 +181,12 @@
 * gulp-git으로 버전관리?
 
 # Roadmap
+### Freeboard
+* freeboard search
+    * wild card search i.e) "*ab" will match "abcd"
+        * In now, only be able to match whole word.
+    * owner search (how to create index to reference filed)
+    * 
 ## Technical
 * Check Mongoose Schema how many memories uses.
     * Sometimes. register mulitple collection one schema...

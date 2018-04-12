@@ -2,7 +2,6 @@
 
 import './d3.tester.html'
 import angular from 'angular';
-import * as d3 from 'd3';
 
 export function D3Tester($scope, $element, $attrs) {
     

@@ -1,5 +1,6 @@
 import RESOURCE from './resource/resource.const';
 
+import rules from './rules/rules.const'
 import statMap from './map/stat-map';
 import heroIndexes from './indexes/hero-indexes';
 import tierIndexes from './indexes/tier-indexes';
@@ -8,6 +9,7 @@ import tierIndexes from './indexes/tier-indexes';
 import summaryPageLabel from './label/lang/ko-kr/summary.page.label';
 
 export default {
+    rules : rules,
     label : {
         summaryPageLabel : summaryPageLabel,
     },

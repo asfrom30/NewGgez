@@ -6,7 +6,6 @@ import AppLogger from './logger/logger.core.utils.service';
 
 import moment from 'moment';
 import noty from 'noty';
-import 'noty/lib/noty.css';
 
 export function ajaxIndicator(msg){
 

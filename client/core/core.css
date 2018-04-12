@@ -1,6 +1,7 @@
 /* App Bacground Color */
 html, body {
     background: black;
+    color : white;
 }
 
 /* App Font size */
@@ -8,6 +9,17 @@ html, body {
 
 @media (min-width: 768px) {
     :root {font-size : 16px;}
+}
+
+/* CSS Global Variables */
+:root {
+    --margin-for-header : 40px;
+}
+
+@media (min-width: 768px) {
+    :root {
+        --margin-for-header : 53px;
+    }
 }
 
 /* App Font */

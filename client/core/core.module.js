@@ -4,6 +4,8 @@ import angular from 'angular'
 
 require('./core.css');
 
+
+
 import CoreComponent from './components/core.component.module';
 import CoreApi from './api/core.api.module';
 import CoreUtils from './utils/core.utils.module';

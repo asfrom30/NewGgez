@@ -1,4 +1,0 @@
-const moment = require('moment');
-// 
-
-console.log(moment().format('YYMMDD hh:mm:ss'));

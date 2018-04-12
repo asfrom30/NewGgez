@@ -14,7 +14,7 @@ export default angular
         }
     }).name;
 
-export function HeroDetailCtrl($timeout, $filter, $location, $state, $element, AppLogger, Ajax, CONFIG, $scope, $stateParams, Analyzer, CoreUtils, tierIndexes){
+export function HeroDetailCtrl($timeout, $filter, $location, $state, $element, AppLogger, Ajax, $scope, $stateParams, Analyzer, CoreUtils, tierIndexes){
     //$ctrl.cache.dataSets.label[]
     //$ctrl.cache.dataSets.p1[p1Index, heroIndex]
     //$ctrl.cache.dataSets.p2[p2Index, heroIndex]

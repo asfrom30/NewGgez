@@ -1,8 +1,12 @@
 'use strict';
 
 exports = module.exports = {
+
+  // date format
+  dateFormat : 'YYYYMMDD',
+  
   // List of user roles
-  userRoles: ['guest', 'user', 'admin'],
+  userRoles: ['user', 'admin'],
 
   // List of region
   regions : ["kr", "eu", "cn", "us"],

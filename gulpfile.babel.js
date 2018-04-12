@@ -15,21 +15,37 @@ import http from 'http';
 import del from 'del';
 import through2 from 'through2';
 import webpack from 'webpack-stream';
-// import makeWebpackConfig from './webpack.make'; // depreacted in webpack 4.0.
 
 import grunt from 'grunt';
 import open from 'open';
-import {Server as KarmaServer} from 'karma';
-import {protractor, webdriver_update} from 'gulp-protractor';
-import {Instrumenter} from 'isparta';
+import { Server as KarmaServer } from 'karma';
+import { protractor, webdriver_update } from 'gulp-protractor';
+import { Instrumenter } from 'isparta';
 
 var plugins = gulpLoadPlugins();
 var config;
 
+// local shell
+import localShell from 'gulp-shell';
+
+// ssh and remote shell
+import GulpSSH from 'gulp-ssh';
+import GulpSshConfig from './.secrets/ssh/bluehost/config';
+var gulpSSH = new GulpSSH({
+    ignoreErrors: false,
+    sshConfig: GulpSshConfig
+});
+
 const clientPath = 'client';
 const serverPath = 'server';
 const cronPath = 'server-cron';
+
 const paths = {
+    secrets: `.secrets/**`,
+    package: {
+        root: [`package.json`, `package-lock.json`],
+        dist: [`dist/package.json`, `dist/package-lock.json`]
+    },
     client: {
         assets: `${clientPath}/assets/**/*`,
         images: `${clientPath}/assets/images/**/*`,
@@ -46,90 +62,47 @@ const paths = {
     },
     server: {
         scripts: [
-          `${serverPath}/**/!(*.spec|*.integration).js`,
-          `!${serverPath}/config/local.env.sample.js`,
+            `${serverPath}/**/!(*.spec|*.integration).js`,
         ],
-        json: [`${serverPath}/**/*.json`],
+        extras: [
+            `${serverPath}/**/!(*.js)`,
+            `!${cronPath}/node_modules/**`,
+        ],
         test: {
-          integration: [`${serverPath}/**/*.integration.js`, 'mocha.global.js'],
-          unit: ['mocha.global.before.js', `${serverPath}/**/*.spec.js`, 'mocha.global.after.js']
+            integration: [`${serverPath}/**/*.integration.js`, 'mocha.global.js'],
+            unit: ['mocha.global.before.js', `${serverPath}/**/*.spec.js`, 'mocha.global.after.js']
         }
     },
-    cron : {
-        // gulp src doesn't include if folder name starts with .
+    cron: {
         scripts: [
             `${cronPath}/**/!(*.spec|*.integration).js`,
-            `!${cronPath}/config/local.env.sample.js`,
             `!${cronPath}/node_modules/**`,
-            // `!${cronPath}/package.json`, // json file is start with .js
-            // `!${cronPath}/package-lock.json` ,
-          ],
-          json: [`${cronPath}/**/*.json`],
-          ini: [`${cronPath}/**/*.ini`],
-          test: {
+        ],
+        extras: [
+            `${cronPath}/**/!(*.js)`,
+            `!${cronPath}/node_modules/**`,
+        ],
+        test: {
             integration: [`${cronPath}/**/*.integration.js`, 'mocha.global.js'],
             unit: ['mocha.global.before.js', `${cronPath}/**/*.spec.js`, 'mocha.global.after.js']
-          }
+        }
     },
     karma: 'karma.conf.js',
-    dist: 'dist'
+    dist: 'dist',
+    logs: {
+        ssh: './.logs/ssh'
+    }
 };
 
 const remotePath = {
-    bluehost : {
-        node : '/home/ggezkr/node'
+    bluehost: {
+        node: '/home/ggezkr/node',
+        dryrun: '/home/ggezkr/node-dryrun'
     }
 }
 
-/********************
- * Custom Task
- ********************/
-gulp.task('auto:deploy:server', cb => {
-    runSequence(
-        'build:server', // run sequence need cb param for next task.
-        'remote:bluehost:clean:package.json',
-        'remote:bluehost:clean:server',
-        'remote:bluehost:copy:server',
-        'remote:bluehost:copy:package.json',
-        'remote:bluehost:run:server',
-        cb
-    )
-});
-
-gulp.task('auto:deploy:cron', cb => {
-    runSequence(
-        'build:cron',
-        /*TODO: pm2 stop needed */
-        /* clean remote */
-        'remote:bluehost:clean:cron', // clean without node_modules.
-        /* move dev to remote file */ 
-        'remote:bluehost:copy:cron',
-        'remote:bluehost:copy:pm2',
-        'remote:bluehost:copy:smtp',
-        /* remote run (install and run pm2)*/
-        'remote:bluehost:run:cron',
-        cb
-    );
-});
-
-gulp.task('auto:deploy:client', cb => {
-    runSequence(
-        'build:client',
-        'remote:bluehost:clean:client',
-        'remote:bluehost:copy:client',
-        cb
-    );
-});
-
-gulp.task('auto:deploy:client:simple', cb => {
-    runSequence(
-        'build:client:simple',
-        // 'remote:bluehost:clean:client:simple', //TODO: not yet impl
-        'remote:bluehost:copy:client:simple',
-        cb
-    );
-});
-
+// TODO:gulp file splitting
+// import remoteDryrun from './.gulp/remote/dryrun.remote';
 
 /********************
  * Reusable pipelines
@@ -171,27 +144,117 @@ gulp.task('env:all', () => {
 
 gulp.task('env:test', () => {
     plugins.env({
-        vars: {NODE_ENV: 'test'}
+        vars: { NODE_ENV: 'test' }
     });
 });
 
 gulp.task('env:prod', () => {
     plugins.env({
-        vars: {NODE_ENV: 'prod'}
+        vars: { NODE_ENV: 'prod' }
     });
 });
 
 
+/*************
+ * Build Tasks
+ *************/
+gulp.task('build:all', cb => {
+    return runSequence(
+        'clean:dist',
+        ['update:package', 'copy:.secrets', 'build:server', 'build:client', 'build:cron'],
+        'npm:install:dist',
+        cb
+    )
+});
+
+gulp.task('build:all:!node_modules', cb => {
+    return runSequence(
+        'clean:dist:!node_modules',
+        ['update:package', 'copy:.secrets', 'build:server', 'build:client', 'build:cron'],
+        cb
+    )
+});
+
+
+// gulp.task('build', cb => {
+//     runSequence(
+//         [
+//             'clean:dist',
+//             'clean:tmp'
+//         ],
+//         'inject',
+//         'transpile:server',
+//         [
+//             'build:images'
+//         ],
+//         [
+//             'copy:extras',
+//             'copy:assets',
+//             'copy:fonts:dist',
+//             'copy:dist:server:extras',
+//             'webpack:dist'
+//         ],
+//         'revReplaceWebpack',
+//         cb);
+// });
+
+gulp.task('build:server', cb => {
+    return runSequence(
+        'clean:dist:server',
+        ['transpile:server', 'copy:dist:server:extras'],
+        cb
+    )
+});
+
+// includes cron package.json update for standalone
+gulp.task('build:cron', cb => {
+    return runSequence(
+        'clean:dist:cron',
+        ['transpile:cron', 'copy:dist:cron:extras'],
+        cb
+    )
+})
+
+gulp.task('build:client', cb => {
+    return runSequence(
+        'clean:dist:client',
+        // 'inject', // no need any more
+        'build:images',
+        [
+            'copy:extras',
+            'copy:assets',
+            'copy:fonts:dist',
+            'webpack:dist'
+        ],
+        'revReplaceWebpack',
+        cb
+    )
+})
+
+gulp.task('build:client:simple', cb => {
+    return runSequence(
+        'clean:dist:client:simple',
+        'inject',
+        [
+            'copy:extras',
+            'webpack:dist'
+        ],
+        'revReplaceWebpack',
+        // inject,
+        cb
+    )
+});
+
 /********************
- * Main Tasks
+ * Run Tasks
  ********************/
-// serve is for development
+/** development run */
 gulp.task('serve', cb => {
     runSequence(
         [
             'clean:tmp',
             // 'lint:scripts',
-            'inject',
+            // 'inject',
             'copy:fonts:dev',
             'env:all'
         ],
@@ -217,79 +280,138 @@ gulp.task('serve:debug', cb => {
         cb
     );
 });
- 
-gulp.task('build', cb => {
+
+gulp.task('serve:dist', localShell.task('cd dist && npm run server:prod'));
+
+gulp.task('serve:bluehost:dryrun', function () {
+    return gulpSSH
+        .shell([`cd ${remotePath.bluehost.dryrun}`
+            , 'npm install -- production'
+            , `npm run server:dryrun`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh));
+});
+
+/** Remote Run */
+gulp.task('remote:bluehost:run:server', function () {
+    return gulpSSH
+        .shell([`cd ${remotePath.bluehost.node}`
+            , 'npm install --production'
+            , `npm run server:prod`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh));
+});
+
+gulp.task('remote:bluehost:run:cron', function () {
+    return gulpSSH
+        .shell([`cd ${remotePath.bluehost.node}/${cronPath}`
+            , 'npm install --production'
+            , `npm run pm2:prod`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
+});
+
+/********************
+ * Deploy Tasks
+ ********************/
+
+gulp.task('deploy:all', cb => {
     runSequence(
-        [
-            'clean:dist',
-            'clean:tmp'
-        ],
-        'inject',
-        'transpile:server',
-        [
-            'build:images'
-        ],
-        [
-            'copy:extras',
-            'copy:assets',
-            'copy:fonts:dist',
-            'copy:server',
-            'webpack:dist'
-        ],
-        'revReplaceWebpack',
-        cb);
+        cb
+    );
 });
 
-gulp.task('build:client', cb => {
-    return runSequence(
-        'clean:dist:client',
-        'inject',
-        'build:images',
-        [
-        'copy:extras',
-        'copy:assets',
-        'copy:fonts:dist',
-        'webpack:dist'
-        ],
-        'revReplaceWebpack',
-        // inject,
-        cb
-    )
+gulp.task('deploy:all:dryrun', cb => {
+    runSequence(
+        'remote:bluehost:clean:dryrun',
+        'remote:bluehost:copy:dryrun',
+        cb,
+    );
 })
 
-gulp.task('build:client:simple', cb => {
-    return runSequence(
-        'clean:dist:client:simple',
-        'inject',
-        [
-        'copy:extras',
-        'webpack:dist'
-        ],
-        'revReplaceWebpack',
-        // inject,
+gulp.task('deploy:client', cb => {
+    runSequence(
+        'remote:bluehost:clean:client', // clean all aseets and js files
+        'remote:bluehost:copy:client',
         cb
-    )
-})
+    );
+});
+
+gulp.task('deploy:client:simple', cb => {
+    runSequence(
+        'remote:bluehost:copy:client:simple',
+        cb,
+    );
+});
 
 
-gulp.task('build:server', cb => {
-    return runSequence(
-        ['clean:dist:server', 'clean:dist:package'],
-        ['transpile:server','copy:server'],
+/********************
+ * Auto Tasks - build, deploy, run
+ ********************/
+gulp.task('auto:deploy:all', cb => {
+    runSequence(
+        'build:all:!node_modules',
+        'remote:bluehost:clean:all',
+        'remote:bluehost:copy:all',
+        'remote:bluehost:run:server',
+        'remote:bluehost:run:cron',
+    );
+});
+
+gulp.task('auto:deploy:all:dryrun', cb => {
+    runSequence(
+        'build:all:!node_modules',
+        'deploy:all:dryrun',
+        'serve:bluehost:dryrun',
+        cb,
+    );
+});
+
+gulp.task('auto:deploy:server', cb => {
+    runSequence(
+        'build:server',
+        'remote:bluehost:clean:package.json', // run sequence need cb param for next task.
+        'remote:bluehost:clean:server',
+        'remote:bluehost:copy:server',
+        'remote:bluehost:copy:package.json',
+        'remote:bluehost:run:server',
         cb
     )
 });
 
-gulp.task('build:cron', cb => {
-    return runSequence(
-        'clean:dist:cron', // clean dist cron folder
-        'transpile:cron', // copy *.js file without *.spec.js, *.integration.js
-        'copy:cron', // copy package.json, .pm2 files, .ini file
+gulp.task('auto:deploy:cron', cb => {
+    runSequence(
+        'build:cron',
+        /*TODO: pm2 stop needed */
+        /* clean remote */
+        'remote:bluehost:clean:cron', // clean without node_modules.
+        /* move dev to remote file */
+        'remote:bluehost:copy:cron',
+        'remote:bluehost:copy:pm2',
+        'remote:bluehost:copy:smtp',
+        /* remote run (install and run pm2)*/
+        'remote:bluehost:run:cron',
         cb
-    )
-})
+    );
+});
 
+gulp.task('auto:deploy:client', cb => {
+    runSequence(
+        'build:client',
+        'remote:bluehost:clean:client', // clean all aseets and js files
+        'remote:bluehost:copy:client',
+        cb
+    );
+});
 
+gulp.task('auto:deploy:client:simple', cb => {
+    runSequence(
+        'build:client:simple',
+        'remote:bluehost:clean:client!assets',
+        'remote:bluehost:copy:client:simple',
+        cb,
+    );
+});
 
 
 /********************
@@ -325,72 +447,90 @@ gulp.task('start:client', cb => {
     });
 });
 
+gulp.task('update:package', cb => {
+    return runSequence(
+        'clean:dist:package.json',
+        'copy:dist:package.json',
+        cb
+    )
+})
+
+/* npm install */
+gulp.task('npm:install:dist', localShell.task('cd dist && npm install --production'));
+
 /* Clean */
-gulp.task('clean:tmp', () => del(['.tmp/**/*'], {dot: true}));
-gulp.task('clean:dist', () => del([`${paths.dist}/!(.git*|.openshift|Procfile|node_modules)**`], {dot: true}));
-gulp.task('clean:dist:server', () => del([`${paths.dist}/${serverPath}/**`], {dot: true}));
+gulp.task('clean:tmp', () => del(['.tmp/**/*'], { dot: true }));
+// clean dist folder except node_modules, server-cron node_modules
+gulp.task('clean:dist', () => del([`${paths.dist}/!(.git*|.openshift|Procfile)**`,], { dot: true }));
+gulp.task('clean:dist:!node_modules', () => del([`${paths.dist}/!(.git*|.openshift|Procfile|node_modules)**`, `!${paths.dist}/${cronPath}`, `!${paths.dist}/${cronPath}/node_modules`], { dot: true }));
+gulp.task('clean:dist:package.json', () => del(paths.package.dist, { dot: true }));
+gulp.task('clean:dist:server', () => del([`${paths.dist}/${serverPath}/**`], { dot: true }));
+gulp.task('clean:dist:cron', () => del([`${paths.dist}/${cronPath}/!(.git*|.openshift|Procfile|node_modules)**`], { dot: true }));
+gulp.task('clean:dist:client', () => del([`${paths.dist}/${clientPath}/**`], { dot: true }));
+gulp.task('clean:dist:client:simple', () => del([`${paths.dist}/${clientPath}/!(assets)`], { dot: true }));
 
-gulp.task('clean:dist:client', () => del([`${paths.dist}/${clientPath}/**`], {dot: true}));
-gulp.task('clean:dist:client:simple', () => del([`${paths.dist}/${clientPath}/!(assets)`], {dot: true}));
+/**
+ * Copy and Transpile Files
+ */
 
-gulp.task('clean:dist:cron', () => del([`${paths.dist}/${cronPath}/!(.git*|.openshift|Procfile|node_modules)**`], {dot: true}));
-gulp.task('clean:dist:package', () => del([`${paths.dist}/package.json`], {dot: true}));
+/* Copy common secrets */
+gulp.task('copy:.secrets', () => {
+    return gulp.src(paths.secrets, { cwdbase: true })
+        .pipe(gulp.dest(paths.dist));
+})
 
 /* Server */
-/* move server files without spec.js to dist */
+/* move root package.json files */
+gulp.task('copy:dist:package.json', () => {
+    return gulp.src(paths.package.root, { cwdbase: true })
+        .pipe(gulp.dest(paths.dist));
+});
+/* Transpile Javascript files (move server files without spec.js to dist) */
 gulp.task('transpile:server', () => {
-    return gulp.src(_.union(paths.server.scripts, paths.server.json))
+    return gulp.src(_.union(paths.server.scripts), { dot: true })
         .pipe(transpileServer())
         .pipe(gulp.dest(`${paths.dist}/${serverPath}`));
 });
+/* Copy all files to server folder(html, json... those type of files can not be transfiled. just copy and move) */
+gulp.task('copy:dist:server:extras', () => {
+    return gulp.src(paths.server.extras, { cwdbase: true, dot: true, nodir: true })
+        .pipe(gulp.dest(paths.dist));
+});
 
+/* Cron Server */
 gulp.task('transpile:cron', () => {
-    return gulp.src(_.union(paths.cron.scripts))
+    return gulp.src(_.union(paths.cron.scripts), { dot: true })
         .pipe(transpileServer())
         .pipe(gulp.dest(`${paths.dist}/${cronPath}`));
 });
 
-/* Move package.json file from dev to dist */
-gulp.task('copy:server', () => {
-    return gulp.src([
-        'package.json',
-        `${serverPath}/.pm2/**`,
-    ], {cwdbase: true})
-        .pipe(gulp.dest(paths.dist));
-});
-
-gulp.task('copy:cron', () => {
-    
-    return gulp.src(_.union([
-        `${paths.cron.json}`,
-        `${cronPath}/*.ini`,
-        `${cronPath}/.pm2/**`,
-        `${cronPath}/.smtp/**`
-    ]), {cwdbase: true})
+// 
+gulp.task('copy:dist:cron:extras', () => {
+    return gulp.src(paths.cron.extras, { cwdbase: true, dot: true, nodir: true })
         .pipe(gulp.dest(paths.dist));
 });
 
 /* Client : Webpack */
-gulp.task('webpack:dev', function() {
-    const webpackDevConfig = require('./webpack.dev');
+gulp.task('webpack:dev', function () {
+    const webpackDevConfig = require('./.webpack/webpack.dev');
     return gulp.src(webpackDevConfig.entry.bundle)
         .pipe(plugins.plumber())
         .pipe(webpack(webpackDevConfig))
         .pipe(gulp.dest('.tmp'));
 });
 
-gulp.task('webpack:dist', function() {
-    const webpackDistConfig = require('./webpack.prod');
+gulp.task('webpack:dist', function () {
+    const webpackDistConfig = require('./.webpack/webpack.prod');
     return gulp.src(webpackDistConfig.entry.bundle)
         .pipe(webpack(webpackDistConfig))
         .on('error', (err) => {
-          this.emit('end'); // Recover from errors
+            this.emit('end'); // Recover from errors
         })
         .pipe(gulp.dest(`${paths.dist}/client`));
 });
 
-gulp.task('webpack:test', function() {
-    const webpackTestConfig = require('./webpack.test');
+gulp.task('webpack:test', function () {
+    const webpackTestConfig = require('./.webpack/webpack.test');
     return gulp.src(webpackTestConfig.entry)
         .pipe(webpack(webpackTestConfig))
         .pipe(gulp.dest('.tmp'));
@@ -399,18 +539,17 @@ gulp.task('webpack:test', function() {
 gulp.task('build:images', () => {
     return gulp.src(paths.client.images)
         .pipe(plugins.imagemin([
-            plugins.imagemin.optipng({optimizationLevel: 5}),
-            plugins.imagemin.jpegtran({progressive: true}),
-            plugins.imagemin.gifsicle({interlaced: true}),
-            plugins.imagemin.svgo({plugins: [{removeViewBox: false}]})
+            plugins.imagemin.optipng({ optimizationLevel: 5 }),
+            plugins.imagemin.jpegtran({ progressive: true }),
+            plugins.imagemin.gifsicle({ interlaced: true }),
+            plugins.imagemin.svgo({ plugins: [{ removeViewBox: false }] })
         ]))
         // .pipe(plugins.rev())
-        .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets/images`))
         // .pipe(plugins.rev.manifest(`${paths.dist}/${paths.client.revManifest}`, {
-            // base: `${paths.dist}/${clientPath}/assets`,
-            // merge: true
+        // base: `${paths.dist}/${clientPath}/assets`,
+        // merge: true
         // }))
-        .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets`));
+        .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets/images`))
 });
 
 /* */
@@ -421,7 +560,7 @@ gulp.task('inject', cb => {
 gulp.task('inject:css', () => {
     return gulp.src(paths.client.mainStyle)
         .pipe(plugins.inject(
-            gulp.src(_.union(paths.client.styles, ['!' + paths.client.mainStyle]), {read: false})
+            gulp.src(_.union(paths.client.styles, ['!' + paths.client.mainStyle]), { read: false })
                 .pipe(plugins.sort()),
             {
                 starttag: '/* inject:css */',
@@ -441,14 +580,14 @@ gulp.task('inject:css', () => {
  * turns 'bootstrap/fonts/font.woff' into 'bootstrap/font.woff'
  */
 function flatten() {
-    return through2.obj(function(file, enc, next) {
-        if(!file.isDirectory()) {
+    return through2.obj(function (file, enc, next) {
+        if (!file.isDirectory()) {
             try {
                 let dir = path.dirname(file.relative).split(path.sep)[0];
                 let fileName = path.normalize(path.basename(file.path));
                 file.path = path.join(file.base, path.join(dir, fileName));
                 this.push(file);
-            } catch(e) {
+            } catch (e) {
                 this.emit('error', new Error(e));
             }
         }
@@ -480,9 +619,9 @@ gulp.task('copy:assets', () => {
         .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets`));
 });
 
-gulp.task('revReplaceWebpack', function() {
+gulp.task('revReplaceWebpack', function () {
     return gulp.src('dist/client/app.*.js')
-        .pipe(plugins.revReplace({manifest: gulp.src(`${paths.dist}/${paths.client.revManifest}`)}))
+        .pipe(plugins.revReplace({ manifest: gulp.src(`${paths.dist}/${paths.client.revManifest}`) }))
         .pipe(gulp.dest('dist/client'));
 });
 
@@ -512,13 +651,13 @@ gulp.task('test:server:integration', () => {
     //     vars: {NODE_ENV: 'test'}
     // });
     return gulp.src(paths.server.test.integration)
-    .pipe(mocha());
+        .pipe(mocha());
 })
 
 gulp.task('test:client', done => {
     new KarmaServer({
-      configFile: `${__dirname}/${paths.karma}`,
-      singleRun: true
+        configFile: `${__dirname}/${paths.karma}`,
+        singleRun: true
     }, err => {
         done(err);
         process.exit(err);
@@ -529,52 +668,77 @@ gulp.task('test:client', done => {
 /********************
  * Remote Task
  ********************/
-import GulpSSH from 'gulp-ssh';
-import GulpSshConfig from './.ssh/bluehost/config';
 
-var gulpSSH = new GulpSSH({
-    ignoreErrors: false,
-    sshConfig: GulpSshConfig
+/* Remote clean */
+gulp.task('remote:bluehost:clean:all', function () {
+    return gulpSSH
+        .shell([`cd ${remotePath.bluehost.node}`,
+        `rm -rf ${remotePath.bluehost.node}`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
 });
- 
-/* REMOTE DELETE FORDER AND FILES */
-gulp.task('remote:bluehost:clean:package.json', function(){
+
+gulp.task('remote:bluehost:clean:package.json', function () {
     return gulpSSH
         .shell([`cd ${remotePath.bluehost.node}/${serverPath}`,
-            `rm -rf ${remotePath.bluehost.node}/package.json`
-            ], {filePath: 'shell.log'})
-        .pipe(gulp.dest('logs'))
+        `rm -rf ${remotePath.bluehost.node}/package.json`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
+});
 
-})
-
-gulp.task('remote:bluehost:clean:server', function(){
+gulp.task('remote:bluehost:clean:server', function () {
     return gulpSSH
         .shell([`cd ${remotePath.bluehost.node}/${serverPath}`,
-            `rm -rf ${remotePath.bluehost.node}/${serverPath}`
-            ], {filePath: 'shell.log'})
-        .pipe(gulp.dest('logs'))
+        `rm -rf ${remotePath.bluehost.node}/${serverPath}`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
 
 })
 
-gulp.task('remote:bluehost:clean:cron', function(){
+gulp.task('remote:bluehost:clean:cron', function () {
     return gulpSSH
         .shell([`cd ${remotePath.bluehost.node}/${cronPath}`,
-            `shopt -s extglob`,
-            `rm -rf ${remotePath.bluehost.node}/${cronPath}/!(node_modules)`
-            ], {filePath: 'shell.log'})
-        .pipe(gulp.dest('logs'))
+        `shopt -s extglob`,
+        `rm -rf ${remotePath.bluehost.node}/${cronPath}/!(node_modules)`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
 })
 
-gulp.task('remote:bluehost:clean:client', function(){
+gulp.task('remote:bluehost:clean:client', function () {
     return gulpSSH
-        .shell([`cd ${remotePath.bluehost.node}/${cronPath}`,
-            `rm -rf ${remotePath.bluehost.node}/${clientPath}`
-            ], {filePath: 'shell.log'})
-        .pipe(gulp.dest('logs'))
+        .shell([`cd ${remotePath.bluehost.node}/${clientPath}`,
+        `shopt -s extglob`,
+        `rm -rf ${remotePath.bluehost.node}/${clientPath}`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
+});
+
+gulp.task('remote:bluehost:clean:client!assets', function () {
+    return gulpSSH
+        .shell([`cd ${remotePath.bluehost.node}/${clientPath}`,
+        `shopt -s extglob`,
+        `rm -rf ${remotePath.bluehost.node}/${clientPath}/!(assets)`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
 })
+
+gulp.task('remote:bluehost:clean:dryrun', function () {
+    return gulpSSH
+        .shell([`cd ${remotePath.bluehost.dryrun}`,
+        `rm -rf ${remotePath.bluehost.dryrun}`
+        ], { filePath: 'shell.log' })
+        .pipe(gulp.dest(paths.logs.ssh))
+});
+
 
 /* SSH FILE MOVE : LOCAL TO REMOTE */
-gulp.task('remote:bluehost:copy:package.json', function() {
+gulp.task('remote:bluehost:copy:all', function () {
+    return gulp
+        .src([`${paths.dist}/**/*`, `!${paths.dist}/node_modules/**`, `!${paths.dist}/${cronPath}/node_modules/**`], { dot: true })
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.node}`));
+});
+
+gulp.task('remote:bluehost:copy:package.json', function () {
     return gulp
         .src(`${paths.dist}/package.json`)
         .pipe(gulpSSH.dest(`${remotePath.bluehost.node}`))
@@ -582,58 +746,45 @@ gulp.task('remote:bluehost:copy:package.json', function() {
 
 gulp.task('remote:bluehost:copy:server', function () {
     return gulp
-      .src([`${paths.dist}/${serverPath}/**/*`, `!${paths.dist}/${serverPath}/node_modules/**`], {dot: true}) //move all files without spec.js, integration.js, node_modules
-      .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${serverPath}`))
+        .src([`${paths.dist}/${serverPath}/**/*`, `!${paths.dist}/node_modules/**`], { dot: true })
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${serverPath}`))
 });
 
 gulp.task('remote:bluehost:copy:cron', function () {
     return gulp
-      .src([`${paths.dist}/${cronPath}/**/*`, `!${paths.dist}/${cronPath}/node_modules/**`]) //move all files without spec.js, integration.js, node_modules
-      .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${cronPath}`))
+        .src([`${paths.dist}/${cronPath}/**/*`, `!${paths.dist}/${cronPath}/node_modules/**`]) //move all files without spec.js, integration.js, node_modules
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${cronPath}`))
 });
 
 gulp.task('remote:bluehost:copy:client', function () {
     return gulp
-      .src(`${paths.dist}/${clientPath}/**/*`) //move all files without spec.js, integration.js, node_modules
-      .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${clientPath}`))
+        .src(`${paths.dist}/${clientPath}/**/*`) //move all files without spec.js, integration.js, node_modules
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${clientPath}`))
 });
 
 gulp.task('remote:bluehost:copy:client:simple', function () {
     return gulp
-      .src([`${paths.dist}/${clientPath}/!(assets)`]) // not included other folder, different glop
-      .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${clientPath}`))
+        .src([`${paths.dist}/${clientPath}/!(assets)`]) // not included other folder, different glop
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${clientPath}`))
 });
 
 //FIXME: name change needed copy:pm2 -> copy:cron:pm2
 gulp.task('remote:bluehost:copy:pm2', function () {
     return gulp
-      .src([`${paths.dist}/${cronPath}/.pm2/**`])
-      .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${cronPath}/.pm2`))
+        .src([`${paths.dist}/${cronPath}/.pm2/**`])
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${cronPath}/.pm2`))
 });
 
 gulp.task('remote:bluehost:copy:smtp', function () {
     return gulp
-      .src([`${paths.dist}/${cronPath}/.smtp/**`])
-      .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${cronPath}/.smtp`))
+        .src([`${paths.dist}/${cronPath}/.smtp/**`])
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.node}/${cronPath}/.smtp`))
 });
 
-/* REMOTE SHELL COMMAND */
-gulp.task('remote:bluehost:run:server', function () {
-    return gulpSSH
-        .shell([`cd ${remotePath.bluehost.node}`
-                , 'npm install'
-                , `npm run server:prod`
-            ], {filePath: 'shell.log'})
-        .pipe(gulp.dest('logs'))
-});
-
-gulp.task('remote:bluehost:run:cron', function () {
-    return gulpSSH
-        .shell([`cd ${remotePath.bluehost.node}/${cronPath}`
-                , 'npm install'
-                , `npm run pm2:prod`
-            ], {filePath: 'shell.log'})
-        .pipe(gulp.dest('logs'))
+gulp.task('remote:bluehost:copy:dryrun', function () {
+    return gulp
+        .src([`${paths.dist}/**/*`, `!${paths.dist}/node_modules/**`, `!${paths.dist}/${cronPath}/node_modules/**`], { dot: true }) // root node_modules and server-cron node_modules both not moved
+        .pipe(gulpSSH.dest(`${remotePath.bluehost.dryrun}`))
 });
 
 /** TODO: test:util */
@@ -673,4 +824,6 @@ function whenServerReady(cb) {
         }),
         100);
 }
+
+
 

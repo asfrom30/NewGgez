@@ -1,5 +1,5 @@
 <div class="overlay-parent">
-    <div class="overlay-child flex f-align-w-center f-align-h-center">
+    <div class="overlay-child flex f-w-center f-h-center">
         <div class="element">Please, select hero</div>
         <div class="background" style="background-color: black; opacity: 0.7"></div>
     </div>
@@ -30,13 +30,13 @@
                         <div class="td-down">{{tableRow[3].score | lowerNumberFormat : "0.00"}}</div>
                     </td> 
                     <td>
-                        <div class="flex flex-wh-center">
-                            <div class="result-percent flex f-align-h-baseline">
+                        <div class="flex f-wh-center">
+                            <div class="result-percent flex f-h-baseline">
                                 <up-down-symbol class="result-up-down-arrow" value="$ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point)"></up-down-symbol>
                                 <div class="result-percent-text">{{ $ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | percentForResult | abs }}</div>
                                 <div class="result-percent-symbol">{{ $ctrl.calcPercent(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | percentSymbolForResult}}</div>
                             </div>
-                            <div class="result-diff flex f-align-h-baseline" style="display: none">
+                            <div class="result-diff flex f-h-baseline" style="display: none">
                                 <up-down-symbol class="result-up-down-arrow" value="$ctrl.calcDiff(tableRow[$ctrl.indexes.a].score, tableRow[$ctrl.indexes.b].score)"></up-down-symbol>
                                 <div class="result-percent-text">{{ $ctrl.calcDiff(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | upperNumberFormat : "0.0" | abs }}</div>
                                 <div class="result-percent-symbol">{{ $ctrl.calcDiff(tableRow[$ctrl.indexes.a].point, tableRow[$ctrl.indexes.b].point) | ptSymbolForResult}}</div>

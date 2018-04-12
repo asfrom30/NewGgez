@@ -1,0 +1,49 @@
+app-nav {
+    color:black;
+}
+nav button.custom {
+    height:30px;
+    width:30px; 
+    vertical-align:middle;
+    border-width: 1px;
+    border-color:rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    background-color: transparent;
+    padding : 0.25rem 0.25rem;
+    opacity: 0.8
+}
+
+@media (min-width: 768px) {
+    nav button.custom {
+        height:40px;
+        width:40px; 
+    }
+}
+
+/* Custom Bootstrap */
+app-nav .btn-group.inline-block.show {
+    display: inline-block;
+}
+
+app-nav .btn-group .dropdown-menu.show.align-right {
+    left : auto;
+    right: 0;
+}
+
+@media (min-width: 992px) {
+    app-nav .right-align {
+        order: 2;
+    }
+    app-nav .left-align {
+        order: 1;
+    }
+}
+
+
+.btn--battle-net {
+    width: 40px;
+    background-image: url('/assets/images/extras/blizzard-battle-net.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}

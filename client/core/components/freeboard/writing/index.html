@@ -1,0 +1,13 @@
+<div class="freeboard-writing">
+    <input type="text" class="freeboard-writing__title form-control" placeholder="{{ 'FREEBOARD.WRITING.TITLE_PLACE_HOLDER' | translate }}" ng-model="$ctrl.title">
+    <div class="freeboard-writing__content">
+        <text-editor content-messenger="$ctrl.contentMessenger"></text-editor>
+    </div>
+    <div class="fixed-bottom static-in-desktop fixed-bottom--freeboard flex f-w-end f-h-center">
+        <div>
+            <!-- <button type="button" class="btn btn-outline-warning fixed-bottom--freeboard__btn" ng-click="$ctrl.onTempPost()" translate>FREEBOARD.WRITING.TEMPORARY_SAVE</button> -->
+            <button type="button" class="btn btn-outline-success fixed-bottom--freeboard__btn" ng-click="$ctrl.onPost()" translate>FREEBOARD.WRITING.WRITE</button>
+            <button type="button" class="btn btn-outline-danger fixed-bottom--freeboard__btn m-r-5" ng-click="$ctrl.onCancle()" translate>FREEBOARD.WRITING.CANCEL</button>
+        </div>
+    </div>
+</div>

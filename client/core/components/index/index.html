@@ -1,9 +1,9 @@
 <app-nav></app-nav>
 <div id="index" class="ui-route-index">
-    <section id="search-section" class="flex flex-column f-align-h-center w-100-pct h-100-pct">
+    <section id="search-section" class="flex flex--column f-h-center w-100-pct h-100-pct">
     <loop-banner class="margin-for-app-nav"></loop-banner>
         <div class="padding"></div>
-        <div class="display-info-container flex f-align-w-center f-align-h-end">
+        <div class="display-info-container flex f-w-center f-h-end">
             <div>
                 <div>Total Players</div>
                 <div><animate-number number="$ctrl.indexInformation.totalPlayers" time="1000" has-comma="true"></animate-number></div>  
@@ -37,16 +37,18 @@
                         <a class="dropdown-item" ng-click="$ctrl.region='cn'">cn</a>
                     </div>
                 </div> -->
-                <span class="input-group-addon" id="sizing-addon2">PC</span>
-                <span class="input-group-addon" id="sizing-addon2">KR</span>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">PC</span>
+                    <span class="input-group-text">KR</span>
+                </div>
                 <input type="btn" class="form-control no-border" ng-model="$ctrl.input" placeholder="Input your btg" ng-enter="$ctrl.search()" aria-label="Btg input with dropdown button" >
-                <span class="input-group-btn">
+                <div class="input-group-append">
                     <button type="button" class="btn btn-secondary" ng-click="$ctrl.search()"><i class="material-icons">search</i></button>
-                </span>
+                </div>
             </div>
         </div>
         <div class="player-table-container">
-            <div id="no-result-in-searched-player" class="flex f-align-w-center" style="display:none; color: white; margin-top : 5px">
+            <div id="no-result-in-searched-player" class="flex f-w-center" style="display:none; color: white; margin-top : 5px">
                 검색결과가 없습니다.
             </div>
             <table class="w-100-pct display-none" style="color:white; text-align:center;">

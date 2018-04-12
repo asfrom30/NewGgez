@@ -5,10 +5,12 @@ import angular from 'angular';
 /* Old version */
 import Const from './const/constants';
 import statMapConst from './const/statmap/statmap.const';
-import CONFIG from './const/config/const.config';
 
 /* New Version */
 import constants from './const/constants';
+
+import LOG_SETTING from './const/settings/app.log.setting';
+import AJAX_SETTING from './const/settings/app.ajax.setting'
 
 export default angular.module('ggezkrApp.constants', [])
     .constant('THINGS_ROOT', '/path/to/this/thing/')
@@ -18,10 +20,9 @@ export default angular.module('ggezkrApp.constants', [])
     .constant('THINGS_D3_COMPONENT', '/components/d3/')
     .constant('THINGS_VIEWS', '/views/')
 
-    // App Setting Constant
-    
-    .constant('CONFIG', CONFIG)
-
+    /* Setting */
+    .constant('LOG_SETTING', LOG_SETTING)
+    .constant('AJAX_SETTING', AJAX_SETTING)
     /* Must be replaced with CONST_LABEL, CONST_RESOURCE*/
     .constant('CONST', Const)
 
@@ -38,6 +39,8 @@ export default angular.module('ggezkrApp.constants', [])
     .constant('statMap', constants.statMap)
     .constant('heroIndexes', constants.heroIndexes)
     .constant('tierIndexes', constants.tierIndexes)
+
+    .constant('rules', constants.rules)
 
     .name;
 
